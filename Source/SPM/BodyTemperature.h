@@ -26,7 +26,7 @@ public:
 
 	void CoolDown(float DeltaTime);
 	void HeatUp(float DeltaTime);
-	static void ShareTemp();
+	void ShareTemp();
 
 private:	
 	UPROPERTY(EditAnywhere, Category = "Temperature")
@@ -48,6 +48,8 @@ private:
 	bool bHugging = false;
 	
 	float Temp;
+
+	UBodyTemperature* OtherPlayerTemp;
 	
 };
 

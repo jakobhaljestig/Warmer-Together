@@ -10,7 +10,6 @@ UBodyTemperature::UBodyTemperature()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	Temp = MaxTemp;
 }
 
 
@@ -18,7 +17,14 @@ UBodyTemperature::UBodyTemperature()
 void UBodyTemperature::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	Temp = MaxTemp;
 
+	OtherPlayerTemp = GetOwner()->GetComponentByClass<UBodyTemperature>();
+	if (OtherPlayerTemp == nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Character must have BodyTemp component"));
+	}
 }
 
 
@@ -71,5 +77,5 @@ void UBodyTemperature::HeatUp(float DeltaTime)
 
 void UBodyTemperature::ShareTemp()
 {
-	// Temp = FMath::Lerp(Temp, GetOwner()->OtherPlayer->Temp, ShareTempRate);
+	Temp = FMath::Lerp(Temp, OtherPlayerTemp->Temp, ShareTempRate);
 }
