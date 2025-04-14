@@ -6,9 +6,6 @@
 #include "CharacterBase.h"
 #include "CharacterSmall.generated.h"
 
-/**
- * 
- */
 UCLASS()
 class SPM_API ACharacterSmall : public ACharacterBase
 {

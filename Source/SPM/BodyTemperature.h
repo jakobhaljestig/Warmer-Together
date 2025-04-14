@@ -26,7 +26,7 @@ public:
 
 	void CoolDown(float DeltaTime);
 	void HeatUp(float DeltaTime);
-	static void ShareTemp();
+	void ShareTemp();
 
 private:	
 	UPROPERTY(EditAnywhere, Category = "Temperature")
@@ -39,15 +39,18 @@ private:
 	float HeatUpRate = 2.f;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
-	float ShareTempRate = 0.1f;
-
-	UPROPERTY(EditAnywhere, Category = "Temperature")
 	bool bShouldCoolDown = false;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
+	bool bShouldHeatUp = false;
+
+	UPROPERTY(EditAnywhere, Category = "Temperature")
 	bool bHugging = false;
-	
+
+	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float Temp;
-	
+
+	UBodyTemperature* TempBig = nullptr;
+	UBodyTemperature* TempSmall = nullptr;
 };
 

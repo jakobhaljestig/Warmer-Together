@@ -10,3 +10,4 @@ void ACharacterBig::Move(const FInputActionValue& Value)
 
 	UE_LOG(LogTemp, Warning, TEXT("CharacterBig i Moving"));
 }
+
