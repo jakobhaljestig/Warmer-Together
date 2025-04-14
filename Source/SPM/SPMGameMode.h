@@ -13,6 +13,15 @@ class ASPMGameMode : public AGameModeBase
 
 public:
 	ASPMGameMode();
+
+	virtual void BeginPlay() override;
+
+protected:
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Players")
+	TSubclassOf<APawn> Player1PawnClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Players")
+	TSubclassOf<APawn> Player2PawnClass;
 };
 
 
