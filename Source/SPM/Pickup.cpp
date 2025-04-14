@@ -71,8 +71,8 @@ void UPickup::Release()
 		GrabbedActor->Tags.Remove("Grabbed");
 		
 		PhysicsHandle->ReleaseComponent();
-		GrabbedActor->SetActorRelativeLocation(FVector(GetComponentLocation() + GetForwardVector() * GrabDistance));
-		GrabbedActor->SetActorRelativeRotation(FRotator(0, 0, 0));
+		GrabbedActor->SetActorLocation(FVector(GetComponentLocation() + GetForwardVector() * GrabDistance));
+		GrabbedActor->SetActorRotation(FRotator(0, 0, 0));
 	}
 
 }
