@@ -3,14 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "SPMCharacter.h"
-#include "Player1Character.generated.h"
+#include "CharacterBase.h"
+#include "CharacterSmall.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SPM_API APlayer1Character : public ASPMCharacter
+class SPM_API ACharacterSmall : public ACharacterBase
 {
 	GENERATED_BODY()
 	

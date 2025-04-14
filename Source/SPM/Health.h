@@ -6,8 +6,6 @@
 #include "Components/ActorComponent.h"
 #include "Health.generated.h"
 
-class ACharacterBase;
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPM_API UHealth : public UActorComponent
 {
