@@ -3,6 +3,10 @@
 
 #include "BodyTemperature.h"
 
+#include "CharacterBig.h"
+#include "CharacterSmall.h"
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values for this component's properties
 UBodyTemperature::UBodyTemperature()
 {
@@ -10,23 +14,15 @@ UBodyTemperature::UBodyTemperature()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
+	Temp = MaxTemp;
 }
-
 
 // Called when the game starts
 void UBodyTemperature::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	Temp = MaxTemp;
-
-	OtherPlayerTemp = GetOwner()->GetComponentByClass<UBodyTemperature>();
-	if (OtherPlayerTemp == nullptr)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Character must have BodyTemp component"));
-	}
 }
-
 
 // Called every frame
 void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -44,18 +40,18 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
         	if (Temp > 0)
         	{
         		CoolDown(DeltaTime);
+        		UE_LOG(LogTemp, Warning, TEXT("Temperature cooldown started"));
         	}
         	if (Temp == 0)
         	{
         		// Health down
+        		UE_LOG(LogTemp, Warning, TEXT("Temperature is 0"));
         	}
         }
-		else
+		if (bShouldHeatUp && Temp < MaxTemp)
         {
-         	if (Temp < MaxTemp)
-         	{
-         		HeatUp(DeltaTime);
-         	}
+			UE_LOG(LogTemp, Warning, TEXT("HeatUp"));
+         	HeatUp(DeltaTime);
         }
 	}
 }
@@ -69,13 +65,22 @@ void UBodyTemperature::CoolDown(float DeltaTime)
 	}
 }
 
-
 void UBodyTemperature::HeatUp(float DeltaTime)
 {
 	Temp = Temp + DeltaTime * CoolDownRate;
+	if (Temp > MaxTemp)
+	{
+		Temp = MaxTemp;
+	}
 }
 
 void UBodyTemperature::ShareTemp()
 {
-	Temp = FMath::Lerp(Temp, OtherPlayerTemp->Temp, ShareTempRate);
+	if (TempBig == nullptr || TempSmall == nullptr)
+	{
+		TempBig = Cast<ACharacterBig>(UGameplayStatics::GetPlayerCharacter(this, 0))->GetComponentByClass<UBodyTemperature>();
+		TempSmall = Cast<ACharacterSmall>(UGameplayStatics::GetPlayerCharacter(this, 1))->GetComponentByClass<UBodyTemperature>();
+	}
+	Temp = (TempBig->Temp + TempSmall->Temp) / 2;
+	bHugging = false;
 }

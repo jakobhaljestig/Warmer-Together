@@ -6,6 +6,9 @@
 #include "GameFramework/GameModeBase.h"
 #include "SPMGameMode.generated.h"
 
+class ACharacterBig;
+class ACharacterSmall;
+
 UCLASS(minimalapi)
 class ASPMGameMode : public AGameModeBase
 {

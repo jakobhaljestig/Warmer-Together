@@ -125,3 +125,8 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+
+void ACharacterBase::Hug(const FInputActionValue& Value)
+{
+	
+}
