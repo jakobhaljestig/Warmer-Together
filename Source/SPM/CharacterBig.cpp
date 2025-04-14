@@ -4,3 +4,9 @@
 #include "CharacterBig.h"
 
 
+void ACharacterBig::Move(const FInputActionValue& Value)
+{
+	Super::Move(Value);
+
+	UE_LOG(LogTemp, Warning, TEXT("CharacterBig i Moving"));
+}
