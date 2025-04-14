@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Components/PawnNoiseEmitterComponent.h"
 #include "CharacterBase.generated.h"
 
 class USpringArmComponent;
@@ -44,6 +45,7 @@ class ACharacterBase : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+
 public:
 	ACharacterBase();
 	
@@ -55,9 +57,6 @@ protected:
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-
-	
-	void Hug(const FInputActionValue& Value);
 			
 
 protected:
@@ -72,6 +71,8 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	ACharacterBase* OtherPlayer;
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Noise")
+	class UPawnNoiseEmitterComponent* NoiseEmitter;
+
 };
 
