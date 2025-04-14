@@ -1,6 +1,8 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "CharacterBase.h"
+
+#include "BodyTemperature.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -130,5 +132,5 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 
 void ACharacterBase::Hug(const FInputActionValue& Value)
 {
-	
+	GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }

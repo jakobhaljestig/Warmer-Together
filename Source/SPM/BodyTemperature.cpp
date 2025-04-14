@@ -28,32 +28,22 @@ void UBodyTemperature::BeginPlay()
 void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (bHugging)
-	{
-		ShareTemp();
-	}
-	else
-	{
-		if (bShouldCoolDown)
+	
+	if (bShouldCoolDown)
+    {
+        if (Temp > 0)
         {
-        	if (Temp > 0)
-        	{
-        		CoolDown(DeltaTime);
-        		UE_LOG(LogTemp, Warning, TEXT("Temperature cooldown started"));
-        	}
-        	if (Temp == 0)
-        	{
-        		// Health down
-        		UE_LOG(LogTemp, Warning, TEXT("Temperature is 0"));
-        	}
+        	CoolDown(DeltaTime);
         }
-		if (bShouldHeatUp && Temp < MaxTemp)
+        if (Temp == 0)
         {
-			UE_LOG(LogTemp, Warning, TEXT("HeatUp"));
-         	HeatUp(DeltaTime);
+        	// Health down
         }
-	}
+    }
+	if (bShouldHeatUp && Temp < MaxTemp)
+    {
+        HeatUp(DeltaTime);
+    }
 }
 
 void UBodyTemperature::CoolDown(float DeltaTime)
