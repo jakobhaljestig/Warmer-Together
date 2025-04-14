@@ -27,7 +27,7 @@ public:
 
 
 private:
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Health")
 	float MaxHealth = 100;
 
 	float Health;

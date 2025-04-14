@@ -31,20 +31,36 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	{
 		ShareTemp();
 	}
-	if (bShouldCoolDown && Temp > 0)
+	else
 	{
-		CoolDown(DeltaTime);
+		if (bShouldCoolDown)
+        {
+        	if (Temp > 0)
+        	{
+        		CoolDown(DeltaTime);
+        	}
+        	if (Temp == 0)
+        	{
+        		// Health down
+        	}
+        }
+		else
+        {
+         	if (Temp < MaxTemp)
+         	{
+         		HeatUp(DeltaTime);
+         	}
+        }
 	}
-	if (Temp == 0)
-	{
-		// Health down
-	}
-	
 }
 
 void UBodyTemperature::CoolDown(float DeltaTime)
 {
 	Temp = Temp - DeltaTime * CoolDownRate;
+	if (Temp < 0)
+	{
+		Temp = 0;
+	}
 }
 
 

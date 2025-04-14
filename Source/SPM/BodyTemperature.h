@@ -28,31 +28,26 @@ public:
 	void HeatUp(float DeltaTime);
 	static void ShareTemp();
 
-private:
-	UPROPERTY(EditAnywhere)
-	UBodyTemperature* OtherPlayersBodyTemperature;
-	
-	UPROPERTY(EditAnywhere)
+private:	
+	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float MaxTemp = 100.f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float CoolDownRate = 0.5f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float HeatUpRate = 2.f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float ShareTempRate = 0.1f;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Temperature")
 	bool bShouldCoolDown = false;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, Category = "Temperature")
 	bool bHugging = false;
 	
 	float Temp;
-
-	
 	
 };
 
