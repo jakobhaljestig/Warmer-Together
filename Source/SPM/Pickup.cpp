@@ -71,11 +71,27 @@ void UPickup::Release()
 		GrabbedActor->Tags.Remove("Grabbed");
 		
 		PhysicsHandle->ReleaseComponent();
-		GrabbedActor->SetActorLocation(FVector(GetComponentLocation() + GetForwardVector() * GrabDistance));
+		GrabbedActor->SetActorLocation(FVector(GetOwner()->GetActorLocation() + GetForwardVector() * GrabDistance));
 		GrabbedActor->SetActorRotation(FRotator(0, 0, 0));
 	}
 
 }
+
+void UPickup::Throw()
+{
+	UPhysicsHandleComponent* PhysicsHandle = GetPhysicsHandle();
+	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent() && Holding)
+	{
+		Holding = false;
+		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
+		GrabbedActor->Tags.Remove("Grabbed");
+		UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(PhysicsHandle->GetGrabbedComponent()->GetOwner());
+		PhysicsHandle->ReleaseComponent();
+		PrimitiveComponent->AddImpulse(GetOwner()->GetActorForwardVector() * ThrowingForce);
+		
+	}
+}
+
 UPhysicsHandleComponent* UPickup::GetPhysicsHandle() const
 {
 	UPhysicsHandleComponent* Result = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
@@ -114,7 +130,7 @@ void UPickup::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
 		FVector TargetLocation = GetOwner()->GetActorLocation() + FVector(0, 0, GrabDistance);
-		PhysicsHandle->GetGrabbedComponent()->SetWorldLocation(TargetLocation);
+		PhysicsHandle->GetGrabbedComponent()->SetRelativeLocation(TargetLocation);
 		PhysicsHandle->GetGrabbedComponent()->SetRelativeRotation(FRotator(0, 0, 0));
 	}
 }

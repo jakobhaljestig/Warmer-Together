@@ -5,7 +5,6 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Components/SceneComponent.h"
-#include "Components/SphereComponent.h"
 #include "Engine/World.h"
 
 #include "PhysicsEngine/PhysicsHandleComponent.h"
@@ -34,6 +33,9 @@ public:
 	UFUNCTION(BlueprintCallable)
 	void Release();
 
+	UFUNCTION(BlueprintCallable)
+	void Throw();
+
 
 private:
 	UPROPERTY(EditAnywhere)
@@ -41,6 +43,9 @@ private:
 
 	UPROPERTY(EditAnywhere)
 	float GrabRadius = 100;
+
+	UPROPERTY(EditAnywhere)
+	float ThrowingForce = 100;
 	
 	UPROPERTY(EditAnywhere)
 	bool Holding = false;
