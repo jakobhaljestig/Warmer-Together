@@ -11,22 +11,36 @@ class SPM_API AWeatherController : public AActor
 	GENERATED_BODY()
 
 public:	
+	// Konstruktor
 	AWeatherController();
 	
 protected:
+	// Kallas när spelet startar eller när aktören spawnas
 	virtual void BeginPlay() override;
 
-
 public:	
+	// Kallas varje frame
 	virtual void Tick(float DeltaTime) override;
 
-	// Uppdatera när playerns performance uppdateras ig
+	// Uppdatera spelarens prestation
+	UFUNCTION(BlueprintCallable, Category = "Weather")
 	void UpdatePlayerPerformance(const FPerformance& PlayerPerformance);
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+
+	// Väder-systemet som referens
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weather")
 	UAdaptiveWeatherSystem* WeatherSystem;
 
+	UFUNCTION(BlueprintCallable)
+	void SimulateBadPerformance();
+
+	UFUNCTION(BlueprintCallable)
+	void SimulateGoodPerformance();
+
+	UPROPERTY(EditAnywhere, Category = "Weather VFX")
+	class AExponentialHeightFog* FogActor;
+
+
 private:
-	//referenser till vfx osv
-	void ApplyWeatherToEnvironment();
+	// Funktion för att applicera väderförändringar på miljön
+	void ApplyWeatherToEnvironment() const;
 };
