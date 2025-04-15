@@ -8,6 +8,11 @@ UAdaptiveWeatherSystem::UAdaptiveWeatherSystem()
 	// Kan initialisera standardvärden här
 }
 
+void UAdaptiveWeatherSystem::BeginPlay()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Adaptive Weather System Started"));
+}
+
 // Initialize kallas när subsystemet startas
 void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -29,7 +34,13 @@ void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformanc
 {
 	CurrentPerformance = NewPerformance;
 	EvaluatePerformanceAndAdjustWeather();
+
+	UE_LOG(LogTemp, Warning, TEXT("Performance Updated: Deaths=%d, AvgTime=%.1f, TimeNearHeat=%.1f"),
+		CurrentPerformance.DeathCount,
+		CurrentPerformance.AveragePuzzleTime,
+		CurrentPerformance.TimeNearHeat);
 }
+
 
 const FWeatherState& UAdaptiveWeatherSystem::GetCurrentWeather() const
 {
@@ -38,14 +49,23 @@ const FWeatherState& UAdaptiveWeatherSystem::GetCurrentWeather() const
 
 void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 {
-	// Här justeras vädret baserat på prestation
 	float PerformanceScore = CurrentPerformance.RecentPerformanceScore();
-	// Justera väder på basis av score
+    
+	// Logga PerformanceScore för att kontrollera om det varierar som förväntat
+	UE_LOG(LogTemp, Warning, TEXT("Performance Score: %.2f"), PerformanceScore);
+
 	CurrentWeather.Temperature = FMath::Lerp(-30.0f, 0.0f, PerformanceScore);
 	CurrentWeather.WindSpeed = FMath::Lerp(20.0f, 5.0f, PerformanceScore);
 	CurrentWeather.SnowIntensity = FMath::Lerp(1.0f, 0.2f, PerformanceScore);
-	CurrentWeather.Visibility = FMath::Lerp(0.3f, 1.0f, PerformanceScore);
+	CurrentWeather.Visibility = FMath::Lerp(0.3f, 1.0f, PerformanceScore); // Här justeras Visibility
 	CurrentWeather.WeatherLevel = FMath::RoundToInt(FMath::Lerp(3.0f, 1.0f, PerformanceScore));
+
+	UE_LOG(LogTemp, Warning, TEXT("Weather Updated: Temp=%.1f, Wind=%.1f, Snow=%.1f, Vis=%.1f, Level=%d"),
+		CurrentWeather.Temperature,
+		CurrentWeather.WindSpeed,
+		CurrentWeather.SnowIntensity,
+		CurrentWeather.Visibility,
+		CurrentWeather.WeatherLevel);
 }
 
 // Detta kan ersättas med en timer för uppdatering per interval om du inte vill att det ska ticka varje frame.

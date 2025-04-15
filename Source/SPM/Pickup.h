@@ -12,7 +12,7 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SPM_API UPickup : public USceneComponent
+class SPM_API UPickup : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -27,11 +27,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	UFUNCTION(BlueprintCallable)
-	void Grab();
 
 	UFUNCTION(BlueprintCallable)
-	void Release();
+	void PickUpOrDrop();
 
 	UFUNCTION(BlueprintCallable)
 	void Throw();
@@ -39,10 +37,10 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
-	float GrabDistance = 150;
+	float GrabDistance = 200.f;
 
 	UPROPERTY(EditAnywhere)
-	float GrabRadius = 100;
+	float GrabRadius = 50.f;
 
 	UPROPERTY(EditAnywhere)
 	float ThrowingForce = 750.f;
@@ -56,5 +54,11 @@ private:
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
 
 	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
+	
+	void Grab();
+	
+	void Drop(float Force);
+
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 	
 };
