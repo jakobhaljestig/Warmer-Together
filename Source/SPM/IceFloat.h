@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "CountdownTimer.h"
 #include "IceFloat.generated.h"
 
 UCLASS()
@@ -23,16 +24,14 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "IceFloat")
 	void BreakObject();
 
-	UFUNCTION(BlueprintCallable, Category = "IceFloat")
-	void RepawnObject();
 
 private:
 
-	void CountDown(float Timer); 
+	CountdownTimer Timer;
+
+	void RespawnObject();
 	
-	FTimerHandle CountDownTimer;
-	
-	float RespawnTime = 5.0f;
+	float RespawnTime = 2.5f;
 	float BreakTime = 2.0f;
 	
 

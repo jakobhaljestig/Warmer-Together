@@ -25,13 +25,26 @@ void AIceFloat::Tick(float DeltaTime)
 
 }
 
-void AIceFloat::RepawnObject()
-{
-	
-}
-
+//Ska göra bättre hantering av breaking sen 
 void AIceFloat::BreakObject()
 {
-	
+	UE_LOG(LogTemp, Warning, TEXT("Breaking Object"));
+	Timer.Start(GetWorld(), BreakTime, [this]()->void
+	{
+		SetActorHiddenInGame(true);
+		SetActorEnableCollision(false);
+
+		Timer.Start(GetWorld(), RespawnTime, [this]()->void
+			{
+				RespawnObject();
+			});
+	});
+}
+
+void AIceFloat::RespawnObject()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Respawning Object"));
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
 }
 
