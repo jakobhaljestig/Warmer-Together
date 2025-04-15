@@ -5,6 +5,7 @@
 #include "CharacterSmall.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
+#include "CharacterPlayerController.h"
 
 ASPMGameMode::ASPMGameMode()
 {
@@ -31,6 +32,7 @@ void ASPMGameMode::BeginPlay()
 	}
 
 	//Spawna player 2
+	
 	APlayerController* Player2Controller = UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
 	if (Player2Controller && Player2PawnClass)
 	{

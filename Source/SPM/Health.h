@@ -23,6 +23,9 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
+	float GetHealthPercentage() const { return Health / MaxHealth * 100.0f; }
+
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Health")
