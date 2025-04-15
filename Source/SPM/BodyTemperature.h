@@ -29,7 +29,7 @@ public:
 	void ShareTemp();
 
 	UFUNCTION(BlueprintCallable)
-	float GetTemp() const { return Temp; }
+	float GetTempPercentage() const { return Temp / MaxTemp * 100.0f; }
 
 private:	
 	UPROPERTY(EditAnywhere, Category = "Temperature")
