@@ -26,6 +26,7 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	}
 }
 
+//Implementera check för att se om något är över karaktären. 
 
 void ACharacterSmall::Crawl (const FInputActionValue& Value)
 {
