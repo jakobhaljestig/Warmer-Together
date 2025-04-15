@@ -28,6 +28,9 @@ public:
 	void HeatUp(float DeltaTime);
 	void ShareTemp();
 
+	UFUNCTION(BlueprintCallable)
+	float GetTemp() const { return Temp; }
+
 private:	
 	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float MaxTemp = 100.f;
