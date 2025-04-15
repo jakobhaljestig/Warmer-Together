@@ -12,6 +12,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "WeatherController.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -60,6 +62,48 @@ ACharacterBase::ACharacterBase()
 
 //////////////////////////////////////////////////////////////////////////
 // Input
+
+void ACharacterBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	WeatherController = Cast<AWeatherController>(UGameplayStatics::GetActorOfClass(GetWorld(), AWeatherController::StaticClass()));
+	BodyTempComponent = FindComponentByClass<UBodyTemperature>();
+	
+	CurrentMovementSpeed = BaseMovementSpeed;
+}
+
+
+
+void ACharacterBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (!AdaptiveWeatherSystem || !BodyTempComponent)
+		return;
+
+	const FWeatherState& CurrentWeather = AdaptiveWeatherSystem->GetCurrentWeather();
+
+	// Kyla påverkar kroppstemperatur
+	float TempFactor = FMath::Clamp(-CurrentWeather.Temperature / 30.0f, 0.0f, 1.0f);
+	float CoolingRate = BaseCoolingRate * TempFactor;
+	BodyTempComponent->CoolDown(DeltaTime);
+
+	//Vind påverkar rörelse
+	if (CurrentWeather.WindSpeed > WindResistanceThreshold)
+	{
+		float WindFactor = FMath::Clamp(CurrentWeather.WindSpeed / MaxWindSpeed, 0.0f, 1.0f);
+		CurrentMovementSpeed = BaseMovementSpeed * (1.0f - WindFactor * 0.4f); // upp till -40%
+	}
+	else
+	{
+		CurrentMovementSpeed = BaseMovementSpeed;
+	}
+
+	//Snö påverkar sikt
+	//UpdateVisibility(CurrentWeather.Visibility);
+}
+
 
 void ACharacterBase::NotifyControllerChanged()
 {
@@ -134,3 +178,17 @@ void ACharacterBase::Hug(const FInputActionValue& Value)
 {
 	GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
+
+void ACharacterBase::OnDeath() const
+{
+	if (AWeatherController* WC = GetWorld()->SpawnActor<AWeatherController>())
+	{
+		FPerformance Perf;
+		Perf.DeathCount = 1;
+		WC->UpdatePlayerPerformance(Perf);
+	}
+}
+
+
+
+
