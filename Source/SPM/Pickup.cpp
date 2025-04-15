@@ -52,7 +52,6 @@ void UPickup::Grab(){
 	else if (HasHit)
 	{	Holding = true;
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
-		HitComponent->SetSimulatePhysics(true);
 		AActor* HitActor = HitResult.GetActor();
 		HitActor->Tags.Add("Grabbed");
 		HitActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
