@@ -24,7 +24,7 @@ void UPickup::BeginPlay()
 	
 	SetRelativeLocation(GetOwner()->GetActorLocation());
 	SetRelativeRotation(GetOwner()->GetActorRotation());
-	UPhysicsHandleComponent *PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(FName("PhysicsHandle"));
+	UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
 	if (PhysicsHandle == nullptr)
 	{
 		return;
