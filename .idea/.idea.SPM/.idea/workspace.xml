@@ -13,16 +13,11 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmall.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmall.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ThirdPerson/Input/IMC_Player1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ThirdPerson/Input/IMC_Player1.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ThirdPerson/Input/IMC_Player2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ThirdPerson/Input/IMC_Player2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBig.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBig.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBig.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBig.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterSmall.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterSmall.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CountdownTimer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CountdownTimer.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,7 +43,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="cidr-memory-view://6" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://2" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/Delegates/DelegateInstancesImpl.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
@@ -189,6 +184,7 @@
       <workItem from="1744647521685" duration="439000" />
       <workItem from="1744705136415" duration="1893000" />
       <workItem from="1744707435515" duration="4314000" />
+      <workItem from="1744712324632" duration="1658000" />
     </task>
     <servers />
   </component>

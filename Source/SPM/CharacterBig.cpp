@@ -15,8 +15,8 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// För test
-		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Started, this, &ACharacterBig::Crouch);
-		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Completed, this, &ACharacterBig::StopCrouch);
+		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Started, this, &ACharacterBig::Crawl);
+		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Completed, this, &ACharacterBig::StopCrawl);
 	
 	}
 	else
@@ -26,12 +26,12 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 }
 
 //För test
-void ACharacterBig::Crouch (const FInputActionValue& Value)
+void ACharacterBig::Crawl (const FInputActionValue& Value)
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Big  is Crouching"));
 }
 
-void ACharacterBig::StopCrouch(const FInputActionValue& Value)
+void ACharacterBig::StopCrawl(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Big is not Crouching"));
 }

@@ -17,6 +17,7 @@ class SPM_API ACharacterSmall : public ACharacterBase
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
-	void Crouch (const FInputActionValue& Value);
-	void StopCrouch(const FInputActionValue& Value);
+	void Crawl (const FInputActionValue& Value);
+	void StopCrawl(const FInputActionValue& Value);
+	
 };
