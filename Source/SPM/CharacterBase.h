@@ -5,7 +5,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "SPMCharacter.generated.h"
+#include "Components/PawnNoiseEmitterComponent.h"
+#include "CharacterBase.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
@@ -16,7 +17,7 @@ struct FInputActionValue;
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
 
 UCLASS(config=Game)
-class ASPMCharacter : public ACharacter
+class ACharacterBase : public ACharacter
 {
 	GENERATED_BODY()
 
@@ -44,18 +45,20 @@ class ASPMCharacter : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+
 public:
-	ASPMCharacter();
+	ACharacterBase();
 	
 
 protected:
 
 	/** Called for movement input */
-	void Move(const FInputActionValue& Value);
+	virtual void Move(const FInputActionValue& Value);
 
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
-			
+
+	void Hug(const FInputActionValue& Value);
 
 protected:
 
@@ -68,5 +71,9 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Noise")
+	class UPawnNoiseEmitterComponent* NoiseEmitter;
+
 };
 
