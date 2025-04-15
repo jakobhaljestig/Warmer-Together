@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "CharacterBase.h"
+#include "InputActionValue.h"
 #include "CharacterBig.generated.h"
 
 class UInputMappingContext;
@@ -16,15 +17,22 @@ class SPM_API ACharacterBig : public ACharacterBase
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* CrawlAction;
+	UInputAction* GrabAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ThrowAction;
 
 public:
 
 protected:
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	void ToggleGrab(const FInputActionValue& Value);
+	void Throw(const FInputActionValue& Value);
+
+	bool IsHolding = false;
 	
-	void Crawl (const FInputActionValue& Value);
-	void StopCrawl(const FInputActionValue& Value);
+	
 	
 };
