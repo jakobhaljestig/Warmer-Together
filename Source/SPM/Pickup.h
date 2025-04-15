@@ -27,11 +27,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	UFUNCTION(BlueprintCallable)
-	void Grab();
 
 	UFUNCTION(BlueprintCallable)
-	void Release();
+	void PickUpOrDrop();
 
 	UFUNCTION(BlueprintCallable)
 	void Throw();
@@ -56,5 +54,11 @@ private:
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
 
 	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
+	
+	void Grab();
+	
+	void Drop(float Force);
+
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 	
 };
