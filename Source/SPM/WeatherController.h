@@ -12,16 +12,17 @@ class SPM_API AWeatherController : public AActor
 
 public:	
 	AWeatherController();
-
+	
 protected:
 	virtual void BeginPlay() override;
+
 
 public:	
 	virtual void Tick(float DeltaTime) override;
 
 	// Uppdatera när playerns performance uppdateras ig
 	void UpdatePlayerPerformance(const FPerformance& PlayerPerformance);
-
+	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UAdaptiveWeatherSystem* WeatherSystem;
 

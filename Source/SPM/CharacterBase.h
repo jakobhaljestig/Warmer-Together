@@ -8,6 +8,10 @@
 #include "Components/PawnNoiseEmitterComponent.h"
 #include "CharacterBase.generated.h"
 
+class UPerformanceTracker;
+class UBodyTemperature;
+class UAdaptiveWeatherSystem;
+class UBodyTemplate;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -29,7 +33,7 @@ class ACharacterBase : public ACharacter
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
 	UCameraComponent* FollowCamera;
 	
-	/** MappingContext */
+	/* MappingContext */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputMappingContext* DefaultMappingContext;
 
@@ -49,9 +53,12 @@ class ACharacterBase : public ACharacter
 public:
 	ACharacterBase();
 	
+	void Tick(float DeltaTime);
 
 protected:
 
+	virtual void BeginPlay() override;
+	
 	/** Called for movement input */
 	virtual void Move(const FInputActionValue& Value);
 
@@ -60,6 +67,40 @@ protected:
 
 	void Hug(const FInputActionValue& Value);
 
+	void OnDeath() const;
+	
+	// Kroppstemperatur
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
+	UBodyTemperature* BodyTempComponent;
+
+	UPROPERTY()
+	UAdaptiveWeatherSystem* AdaptiveWeatherSystem;
+
+	// Rörelse
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float BaseMovementSpeed = 600.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	float CurrentMovementSpeed;
+
+	// Kylningsfaktor
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature")
+	float BaseCoolingRate = 5.0f;
+
+	// Vind
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
+	float WindResistanceThreshold = 10.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
+	float MaxWindSpeed = 25.0f;
+
+	// Sikt
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
+	class APostProcessVolume* PostProcessVolume;
+
+	// Siktmetod
+	void UpdateVisibility(float VisibilityFactor);
+
 protected:
 
 	virtual void NotifyControllerChanged() override;
@@ -67,6 +108,7 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
+	
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
@@ -74,6 +116,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Noise")
 	class UPawnNoiseEmitterComponent* NoiseEmitter;
+
+	// Referens till vår performance-tracker
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
+	UPerformanceTracker* PerformanceTracker;
 
 };
 
