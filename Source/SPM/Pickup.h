@@ -45,7 +45,10 @@ private:
 	float GrabRadius = 100;
 
 	UPROPERTY(EditAnywhere)
-	float ThrowingForce = 100;
+	float ThrowingForce = 750.f;
+
+	UPROPERTY(EditAnywhere)
+	float DroppingForce = 350.f;
 	
 	UPROPERTY(EditAnywhere)
 	bool Holding = false;
@@ -53,4 +56,5 @@ private:
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
 
 	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
+	
 };

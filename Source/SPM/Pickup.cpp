@@ -3,6 +3,9 @@
 
 #include "Pickup.h"
 
+#include "Engine/StaticMeshActor.h"
+#include "Gameframework/CharacterMovementComponent.h"
+
 // Sets default values for this component's properties
 UPickup::UPickup()
 {
@@ -18,7 +21,8 @@ UPickup::UPickup()
 void UPickup::BeginPlay()
 {
 	Super::BeginPlay();
-
+	SetRelativeLocation(GetOwner()->GetActorLocation());
+	SetRelativeRotation(GetOwner()->GetActorRotation());
 	UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
 	if (PhysicsHandle == nullptr)
 	{
@@ -69,10 +73,9 @@ void UPickup::Release()
 		Holding = false;
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
-		
+		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * DroppingForce);
 		PhysicsHandle->ReleaseComponent();
-		GrabbedActor->SetActorLocation(FVector(GetOwner()->GetActorLocation() + GetForwardVector() * GrabDistance));
-		GrabbedActor->SetActorRotation(FRotator(0, 0, 0));
+		
 	}
 
 }
@@ -85,9 +88,9 @@ void UPickup::Throw()
 		Holding = false;
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
-		UPrimitiveComponent* PrimitiveComponent = Cast<UPrimitiveComponent>(PhysicsHandle->GetGrabbedComponent()->GetOwner());
+		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * ThrowingForce);
 		PhysicsHandle->ReleaseComponent();
-		PrimitiveComponent->AddImpulse(GetOwner()->GetActorForwardVector() * ThrowingForce);
+		
 		
 	}
 }
@@ -106,9 +109,6 @@ bool UPickup::GetGrabbableInReach(FHitResult& OutHitResult) const
 {
 	FVector Start = GetOwner()->GetActorLocation();
 	FVector End = Start + GetForwardVector() * 100;
-	DrawDebugLine(GetWorld(), Start, End, FColor::Red);
-	DrawDebugSphere(GetWorld(), End, 10, 10, FColor::Blue, false, 5);
-
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(GrabRadius);
 	return GetWorld()->SweepSingleByChannel(
 		OutHitResult,
@@ -118,20 +118,15 @@ bool UPickup::GetGrabbableInReach(FHitResult& OutHitResult) const
 		Sphere);
 }
 
-
-
 // Called every frame
 void UPickup::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	FVector Start = GetComponentLocation();
-	FVector End = Start + GetForwardVector() * GrabDistance;
-	DrawDebugLine(GetWorld(), Start, End, FColor::Red);
 	UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
 	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
 		FVector TargetLocation = GetOwner()->GetActorLocation() + FVector(0, 0, GrabDistance);
 		PhysicsHandle->GetGrabbedComponent()->SetRelativeLocation(TargetLocation);
-		PhysicsHandle->GetGrabbedComponent()->SetRelativeRotation(FRotator(0, 0, 0));
+		PhysicsHandle->GetGrabbedComponent()->SetRelativeRotation(FRotator(GetOwner()->GetActorRotation()));
 	}
 }
 
