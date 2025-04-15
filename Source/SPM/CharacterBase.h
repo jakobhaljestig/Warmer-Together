@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BodyTemperature.h"
+#include "Health.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Components/PawnNoiseEmitterComponent.h"
@@ -114,9 +116,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Noise")
-	class UPawnNoiseEmitterComponent* NoiseEmitter;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
 	UBodyTemperature* BodyTemperatureComponent;

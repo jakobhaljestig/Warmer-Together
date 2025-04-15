@@ -24,12 +24,14 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	void IsNearHeat(bool bIsNearHeat);
+	
 	void CoolDown(float DeltaTime);
 	void HeatUp(float DeltaTime);
 	void ShareTemp();
 
 	UFUNCTION(BlueprintCallable)
-	float GetTempPercentage() const { return Temp / MaxTemp * 100.0f; }
+	float GetTempPercentage() const { return Temp / MaxTemp; }
 
 private:	
 	UPROPERTY(EditAnywhere, Category = "Temperature")
@@ -42,10 +44,7 @@ private:
 	float HeatUpRate = 2.f;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
-	bool bShouldCoolDown = false;
-
-	UPROPERTY(EditAnywhere, Category = "Temperature")
-	bool bShouldHeatUp = false;
+	bool bNearHeat = false;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
 	bool bHugging = false;
@@ -55,5 +54,8 @@ private:
 
 	UBodyTemperature* TempBig = nullptr;
 	UBodyTemperature* TempSmall = nullptr;
+
+	bool bFrozen = false;
+	bool bDisplayFreezeEffect = false;
 };
 
