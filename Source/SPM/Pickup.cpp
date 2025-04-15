@@ -3,8 +3,8 @@
 
 #include "Pickup.h"
 
-#include "Engine/StaticMeshActor.h"
-#include "Gameframework/CharacterMovementComponent.h"
+#include "MovieSceneTracksComponentTypes.h"
+
 
 // Sets default values for this component's properties
 UPickup::UPickup()
@@ -21,17 +21,15 @@ UPickup::UPickup()
 void UPickup::BeginPlay()
 {
 	Super::BeginPlay();
+	UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
 	
-	SetRelativeLocation(GetOwner()->GetActorLocation());
-	SetRelativeRotation(GetOwner()->GetActorRotation());
-	UPhysicsHandleComponent *PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(FName("PhysicsHandle"));
 	if (PhysicsHandle == nullptr)
 	{
 		return;
 	}
 
-	FVector TargetLocation = GetComponentLocation() + GetForwardVector() * GrabDistance;
-	PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetComponentRotation());
+	FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * GrabDistance;
+	PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetOwner()->GetActorRotation());
 	
 }
 void UPickup::Grab(){
@@ -52,13 +50,14 @@ void UPickup::Grab(){
 	else if (HasHit)
 	{	Holding = true;
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
+		HitComponent->SetSimulatePhysics(false);
 		AActor* HitActor = HitResult.GetActor();
 		HitActor->Tags.Add("Grabbed");
-		HitActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		PhysicsHandle->GrabComponentAtLocation(
 			HitComponent,
 			NAME_None,
 			HitResult.ImpactPoint);
+		HitActor->AttachToComponent(this->GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 	}
 
 
@@ -73,7 +72,9 @@ void UPickup::Release()
 		Holding = false;
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
-		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * DroppingForce);
+		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * DroppingForce + FVector(0,0, 1) * DroppingForce);
+		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
+		PhysicsHandle->GetGrabbedComponent()->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
 		PhysicsHandle->ReleaseComponent();
 		
 	}
@@ -88,7 +89,9 @@ void UPickup::Throw()
 		Holding = false;
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
-		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * ThrowingForce);
+		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * ThrowingForce + FVector(0,0, 1) * DroppingForce);
+		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
+		PhysicsHandle->GetGrabbedComponent()->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
 		PhysicsHandle->ReleaseComponent();
 		
 		
@@ -108,7 +111,7 @@ UPhysicsHandleComponent* UPickup::GetPhysicsHandle() const
 bool UPickup::GetGrabbableInReach(FHitResult& OutHitResult) const
 {
 	FVector Start = GetOwner()->GetActorLocation();
-	FVector End = Start + GetForwardVector() * 100;
+	FVector End = Start + GetOwner()->GetActorForwardVector() * GrabDistance;
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(GrabRadius);
 	return GetWorld()->SweepSingleByChannel(
 		OutHitResult,
@@ -124,9 +127,9 @@ void UPickup::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 	UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
 	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
-		FVector TargetLocation = GetOwner()->GetActorLocation() + FVector(0, 0, GrabDistance);
+		FVector TargetLocation = GetOwner()->GetActorLocation() + FVector(0,0,GrabDistance);
 		PhysicsHandle->GetGrabbedComponent()->SetRelativeLocation(TargetLocation);
-		PhysicsHandle->GetGrabbedComponent()->SetRelativeRotation(FRotator(GetOwner()->GetActorRotation()));
+		PhysicsHandle->GetGrabbedComponent()->SetWorldRotation(this->GetOwner()->GetActorRotation());
 	}
 }
 

@@ -12,7 +12,7 @@
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SPM_API UPickup : public USceneComponent
+class SPM_API UPickup : public UActorComponent
 {
 	GENERATED_BODY()
 
@@ -39,10 +39,10 @@ public:
 
 private:
 	UPROPERTY(EditAnywhere)
-	float GrabDistance = 150;
+	float GrabDistance = 200.f;
 
 	UPROPERTY(EditAnywhere)
-	float GrabRadius = 100;
+	float GrabRadius = 50.f;
 
 	UPROPERTY(EditAnywhere)
 	float ThrowingForce = 750.f;
