@@ -21,7 +21,7 @@ void AWeatherController::UpdatePlayerPerformance(const FPerformance& PlayerPerfo
 {
 	if (WeatherSystem)
 	{
-		WeatherSystem->RegisterPerformanceEvent(PlayerPerformance);
+		WeatherSystem->UpdatePerformance(PlayerPerformance);
 	}
 }
 

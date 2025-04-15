@@ -8,6 +8,10 @@
 #include "Components/PawnNoiseEmitterComponent.h"
 #include "CharacterBase.generated.h"
 
+class UPerformanceTracker;
+class UBodyTemperature;
+class UAdaptiveWeatherSystem;
+class UBodyTemplate;
 class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
@@ -112,6 +116,10 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Noise")
 	class UPawnNoiseEmitterComponent* NoiseEmitter;
+
+	// Referens till vår performance-tracker
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
+	UPerformanceTracker* PerformanceTracker;
 
 };
 

@@ -12,8 +12,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "PerformanceTracker.h"
 #include "WeatherController.h"
-#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -67,7 +67,6 @@ void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
 
-	WeatherController = Cast<AWeatherController>(UGameplayStatics::GetActorOfClass(GetWorld(), AWeatherController::StaticClass()));
 	BodyTempComponent = FindComponentByClass<UBodyTemperature>();
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
@@ -84,24 +83,24 @@ void ACharacterBase::Tick(float DeltaTime)
 
 	const FWeatherState& CurrentWeather = AdaptiveWeatherSystem->GetCurrentWeather();
 
-	// Kyla påverkar kroppstemperatur
+	// Temperatur påverkar kroppstemperatur
 	float TempFactor = FMath::Clamp(-CurrentWeather.Temperature / 30.0f, 0.0f, 1.0f);
-	float CoolingRate = BaseCoolingRate * TempFactor;
-	BodyTempComponent->CoolDown(DeltaTime);
+	BodyTempComponent->CoolDown(DeltaTime * TempFactor * BaseCoolingRate);
 
-	//Vind påverkar rörelse
+	// Vind påverkar rörelse
 	if (CurrentWeather.WindSpeed > WindResistanceThreshold)
 	{
 		float WindFactor = FMath::Clamp(CurrentWeather.WindSpeed / MaxWindSpeed, 0.0f, 1.0f);
-		CurrentMovementSpeed = BaseMovementSpeed * (1.0f - WindFactor * 0.4f); // upp till -40%
+		CurrentMovementSpeed = BaseMovementSpeed * (1.0f - WindFactor * 0.4f);
 	}
 	else
 	{
 		CurrentMovementSpeed = BaseMovementSpeed;
 	}
 
-	//Snö påverkar sikt
-	//UpdateVisibility(CurrentWeather.Visibility);
+	// Snö påverkar sikt – detta kan styra t.ex. dimma, post-process etc
+	// UpdateVisibility(CurrentWeather.Visibility);
+
 }
 
 
@@ -181,12 +180,10 @@ void ACharacterBase::Hug(const FInputActionValue& Value)
 
 void ACharacterBase::OnDeath() const
 {
-	if (AWeatherController* WC = GetWorld()->SpawnActor<AWeatherController>())
-	{
-		FPerformance Perf;
-		Perf.DeathCount = 1;
-		WC->UpdatePlayerPerformance(Perf);
-	}
+	// Registrera död
+	PerformanceTracker->RegisterDeath();
+
+	// Andra dödslogik, som att återställa karaktär, respawn, osv.
 }
 
 
