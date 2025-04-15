@@ -15,9 +15,16 @@ class SPM_API ACharacterBig : public ACharacterBase
 {
 	GENERATED_BODY()
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* CrawlAction;
+
 public:
-	void Move(const FInputActionValue& Value) override;
+
+protected:
 	
+	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
+	void Crouch (const FInputActionValue& Value);
+	void StopCrouch(const FInputActionValue& Value);
 	
 };
