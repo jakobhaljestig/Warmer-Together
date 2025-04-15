@@ -1,26 +1,31 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 #pragma once
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "AdaptiveWeatherSystem.h"
 #include "WeatherController.generated.h"
 
 UCLASS()
 class SPM_API AWeatherController : public AActor
 {
 	GENERATED_BODY()
-	
+
 public:	
-	// Sets default values for this actor's properties
 	AWeatherController();
 
 protected:
-	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 public:	
-	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	// Uppdatera när playerns performance uppdateras ig
+	void UpdatePlayerPerformance(const FPerformance& PlayerPerformance);
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UAdaptiveWeatherSystem* WeatherSystem;
+
+private:
+	//referenser till vfx osv
+	void ApplyWeatherToEnvironment();
 };

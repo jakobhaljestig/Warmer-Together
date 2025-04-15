@@ -13,7 +13,11 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SPM.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/SPM.uproject" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/AdaptiveWeatherSystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/AdaptiveWeatherSystem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/AdaptiveWeatherSystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/AdaptiveWeatherSystem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/FPerformance.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/FPerformance.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/WeatherController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/WeatherController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/WeatherController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/WeatherController.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -39,13 +43,14 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="cidr-memory-view://4" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://5" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/AdaptiveWeatherSystem.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/FPerformance.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/WeatherController.cpp" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="MetaFilesCheckinStateConfiguration" checkMetaFiles="true" />
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 0
@@ -181,13 +186,14 @@
       <workItem from="1744644322595" duration="2040000" />
       <workItem from="1744647521685" duration="439000" />
       <workItem from="1744702174414" duration="601000" />
-      <workItem from="1744704120420" duration="1814000" />
+      <workItem from="1744704120420" duration="5325000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
   </component>
+  <component name="UnityCheckinConfiguration" checkUnsavedScenes="true" />
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />

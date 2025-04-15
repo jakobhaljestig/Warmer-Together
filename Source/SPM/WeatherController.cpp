@@ -1,27 +1,43 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "WeatherController.h"
 
-// Sets default values
 AWeatherController::AWeatherController()
 {
- 	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	WeatherSystem = CreateDefaultSubobject<UAdaptiveWeatherSystem>(TEXT("AdaptiveWeatherSystem"));
 }
 
-// Called when the game starts or when spawned
 void AWeatherController::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
 void AWeatherController::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+}
+
+void AWeatherController::UpdatePlayerPerformance(const FPerformance& PlayerPerformance)
+{
+	if (WeatherSystem)
+	{
+		WeatherSystem->RegisterPerformanceEvent(PlayerPerformance);
+	}
+}
+
+//kan ju kallas i tick men känns överdrivet då den kanske inte behövs så ofta
+void AWeatherController::ApplyWeatherToEnvironment()
+{
+	if (!WeatherSystem) return;
+
+	const FWeatherState& Weather = WeatherSystem->GetCurrentWeather();
+
+	// Här uppdateras snö, vind, dimma osv.
+	//SnowParticleSystem->SetFloatParameter("SnowAmount", CurrentWeather.SnowIntensity);
+	
+	// Ändra global post process
+	//PostProcessVolume->Settings.FogDensity = 1.0f - CurrentWeather.Visibility;
 
 }
+
 
