@@ -21,9 +21,10 @@ UPickup::UPickup()
 void UPickup::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	SetRelativeLocation(GetOwner()->GetActorLocation());
 	SetRelativeRotation(GetOwner()->GetActorRotation());
-	UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
+	UPhysicsHandleComponent *PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(FName("PhysicsHandle"));
 	if (PhysicsHandle == nullptr)
 	{
 		return;
