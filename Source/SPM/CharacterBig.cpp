@@ -2,10 +2,37 @@
 
 
 #include "CharacterBig.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "InputActionValue.h"
 
 
-void ACharacterBig::Move(const FInputActionValue& Value)
+
+void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
-	Super::Move(Value);
+	Super::SetupPlayerInputComponent(PlayerInputComponent);
+	// Set up action bindings
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
+		
+		// För test
+		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Started, this, &ACharacterBig::Crouch);
+		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Completed, this, &ACharacterBig::StopCrouch);
+	
+	}
+	else
+	{
+		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
+	}
+}
+
+//För test
+void ACharacterBig::Crouch (const FInputActionValue& Value)
+{
+	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Big  is Crouching"));
+}
+
+void ACharacterBig::StopCrouch(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Big is not Crouching"));
 }
 
