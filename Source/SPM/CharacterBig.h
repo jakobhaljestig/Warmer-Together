@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "CharacterBase.h"
 #include "InputActionValue.h"
+#include "Pickup.h"
 #include "CharacterBig.generated.h"
 
 class UInputMappingContext;
@@ -16,6 +17,8 @@ class SPM_API ACharacterBig : public ACharacterBase
 {
 	GENERATED_BODY()
 
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* GrabAction;
 
@@ -23,8 +26,14 @@ class SPM_API ACharacterBig : public ACharacterBase
 	UInputAction* ThrowAction;
 
 public:
+	
 
 protected:
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pickup")
+	UPickup* PickupComponent;
+
+	void BeginPlay() override;
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
