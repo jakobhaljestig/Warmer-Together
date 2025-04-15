@@ -37,7 +37,7 @@ void UAdaptiveWeatherSystem::TickComponent(float DeltaTime, ELevelTick TickType,
 	}
 }
 
-void UAdaptiveWeatherSystem::RegisterPerformanceEvent(const FPerformance& NewPerformance)
+void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformance)
 {
 	CurrentPerformance = NewPerformance;
 }

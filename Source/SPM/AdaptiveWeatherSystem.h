@@ -21,7 +21,7 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	// Uppdaterar prestationen, t.ex. efter att någon dör eller gör något bra?
-	void RegisterPerformanceEvent(const FPerformance& NewPerformance);
+	void UpdatePerformance(const FPerformance& NewPerformance);
 
 	// Returnerar väderstatus, t.ex om det redan är dåligt väder behövs det inte adderas mer
 	const FWeatherState& GetCurrentWeather() const;
