@@ -10,6 +10,7 @@
 
 class UPerformanceTracker;
 class UBodyTemperature;
+class UHealth;
 class UAdaptiveWeatherSystem;
 class UBodyTemplate;
 class USpringArmComponent;
@@ -116,6 +117,12 @@ public:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Noise")
 	class UPawnNoiseEmitterComponent* NoiseEmitter;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
+	UBodyTemperature* BodyTemperatureComponent;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	UHealth* HealthComponent;
 
 	// Referens till vår performance-tracker
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")

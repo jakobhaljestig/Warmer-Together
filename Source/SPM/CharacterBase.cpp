@@ -11,6 +11,7 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Health.h"
 #include "InputActionValue.h"
 #include "PerformanceTracker.h"
 #include "WeatherController.h"
@@ -55,8 +56,8 @@ ACharacterBase::ACharacterBase()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	NoiseEmitter = CreateDefaultSubobject<UPawnNoiseEmitterComponent>(TEXT("PawnNoiseEmitter"));
-	PerformanceTracker = CreateDefaultSubobject<UPerformanceTracker>(TEXT("PerformanceTracker"));
-
+	BodyTempComponent = CreateDefaultSubobject<UBodyTemperature>(TEXT("BodyTemperature"));
+	HealthComponent = CreateDefaultSubobject<UHealth>(TEXT("Health"));
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
