@@ -12,6 +12,8 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
+#include "PerformanceTracker.h"
+#include "WeatherController.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -60,6 +62,49 @@ ACharacterBase::ACharacterBase()
 
 //////////////////////////////////////////////////////////////////////////
 // Input
+
+void ACharacterBase::BeginPlay()
+{
+	Super::BeginPlay();
+
+	BodyTempComponent = FindComponentByClass<UBodyTemperature>();
+	
+	CurrentMovementSpeed = BaseMovementSpeed;
+}
+
+
+
+void ACharacterBase::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	UAdaptiveWeatherSystem* WeatherSystemInstance = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
+
+	if (!WeatherSystemInstance || !BodyTempComponent)
+		return;
+
+	const FWeatherState& CurrentWeather = WeatherSystemInstance->GetCurrentWeather();
+
+	// Temperatur påverkar kroppstemperatur
+	float TempFactor = FMath::Clamp(-CurrentWeather.Temperature / 30.0f, 0.0f, 1.0f);
+	BodyTempComponent->CoolDown(DeltaTime * TempFactor * BaseCoolingRate);
+
+	// Vind påverkar rörelse
+	if (CurrentWeather.WindSpeed > WindResistanceThreshold)
+	{
+		float WindFactor = FMath::Clamp(CurrentWeather.WindSpeed / MaxWindSpeed, 0.0f, 1.0f);
+		CurrentMovementSpeed = BaseMovementSpeed * (1.0f - WindFactor * 0.4f);
+	}
+	else
+	{
+		CurrentMovementSpeed = BaseMovementSpeed;
+	}
+	
+	// Snö påverkar sikt – detta kan styra t.ex. dimma, post-process etc
+	// UpdateVisibility(CurrentWeather.Visibility);
+
+}
+
 
 void ACharacterBase::NotifyControllerChanged()
 {
@@ -134,3 +179,15 @@ void ACharacterBase::Hug(const FInputActionValue& Value)
 {
 	GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
+
+void ACharacterBase::OnDeath() const
+{
+	// Registrera död
+	PerformanceTracker->RegisterDeath();
+
+	// Andra dödslogik, som att återställa karaktär, respawn, osv.
+}
+
+
+
+
