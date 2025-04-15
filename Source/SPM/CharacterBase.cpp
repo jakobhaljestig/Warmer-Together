@@ -78,10 +78,12 @@ void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (!AdaptiveWeatherSystem || !BodyTempComponent)
+	UAdaptiveWeatherSystem* WeatherSystemInstance = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
+
+	if (!WeatherSystemInstance || !BodyTempComponent)
 		return;
 
-	const FWeatherState& CurrentWeather = AdaptiveWeatherSystem->GetCurrentWeather();
+	const FWeatherState& CurrentWeather = WeatherSystemInstance->GetCurrentWeather();
 
 	// Temperatur påverkar kroppstemperatur
 	float TempFactor = FMath::Clamp(-CurrentWeather.Temperature / 30.0f, 0.0f, 1.0f);
@@ -97,7 +99,7 @@ void ACharacterBase::Tick(float DeltaTime)
 	{
 		CurrentMovementSpeed = BaseMovementSpeed;
 	}
-
+	
 	// Snö påverkar sikt – detta kan styra t.ex. dimma, post-process etc
 	// UpdateVisibility(CurrentWeather.Visibility);
 

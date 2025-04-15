@@ -1,45 +1,34 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
-
 #include "AdaptiveWeatherSystem.h"
+#include "Engine/World.h"
+#include "TimerManager.h"
 
-// Sets default values for this component's properties
+// Konstruktor
 UAdaptiveWeatherSystem::UAdaptiveWeatherSystem()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
+	// Kan initialisera standardvärden här
 }
 
-
-// Called when the game starts
-void UAdaptiveWeatherSystem::BeginPlay()
+// Initialize kallas när subsystemet startas
+void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
-	Super::BeginPlay();
+	Super::Initialize(Collection);
 
-	// ...
-	
+	// Eventuella initialiseringar av vädersystemet här
+	TimeSinceLastUpdate = 0.0f;
 }
 
-
-// Called every frame
-void UAdaptiveWeatherSystem::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+// Deinitialize kallas när subsystemet tas bort eller stängs av
+void UAdaptiveWeatherSystem::Deinitialize()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	Super::Deinitialize();
 
-	TimeSinceLastUpdate += DeltaTime;
-	if (TimeSinceLastUpdate >= UpdateInterval)
-	{
-		EvaluatePerformanceAndAdjustWeather();
-		TimeSinceLastUpdate = 0.0f;
-	}
+	// Eventuella städoperationer här
 }
 
 void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformance)
 {
 	CurrentPerformance = NewPerformance;
+	EvaluatePerformanceAndAdjustWeather();
 }
 
 const FWeatherState& UAdaptiveWeatherSystem::GetCurrentWeather() const
@@ -49,26 +38,30 @@ const FWeatherState& UAdaptiveWeatherSystem::GetCurrentWeather() const
 
 void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 {
-	float Score = CurrentPerformance.RecentPerformanceScore();
-
-	// Anpassa vädret efter prestation
-	CurrentWeather.Temperature = FMath::Lerp(-30.0f, 0.0f, Score); //dålig prestation = -30 C, bra = 0
-	CurrentWeather.WindSpeed   = FMath::Lerp(20.0f, 5.0f, Score); //dålig stark vind 20m/s, bra lugn vind 5m/s
-	CurrentWeather.SnowIntensity = FMath::Lerp(1.0f, 0.2f, Score); //dålig mycket snö, bra lite snö
-	CurrentWeather.Visibility = FMath::Lerp(0.3f, 1.0f, Score); //dålig låg sikt (vfx dimma osv), bra god sikt
-	CurrentWeather.WeatherLevel = FMath::RoundToInt(FMath::Lerp(3.0f, 1.0f, Score)); //konverterar vädret till nivå ex. 3 == storm, 1 == lugnt. Avrundas till int 1,2,3 beroende på hur bra spelaren spelar.
-
-	/*
-	*if (playerDeathsLast10Min > threshold || puzzleFailRateHigh)
-	*{
-	makeWeatherEasier();
-	}
-	else if (playersDoingWell)
-	{
-	increaseWeatherChallenge();
-	}
-	 */
+	// Här justeras vädret baserat på prestation
+	float PerformanceScore = CurrentPerformance.RecentPerformanceScore();
+	// Justera väder på basis av score
+	CurrentWeather.Temperature = FMath::Lerp(-30.0f, 0.0f, PerformanceScore);
+	CurrentWeather.WindSpeed = FMath::Lerp(20.0f, 5.0f, PerformanceScore);
+	CurrentWeather.SnowIntensity = FMath::Lerp(1.0f, 0.2f, PerformanceScore);
+	CurrentWeather.Visibility = FMath::Lerp(0.3f, 1.0f, PerformanceScore);
+	CurrentWeather.WeatherLevel = FMath::RoundToInt(FMath::Lerp(3.0f, 1.0f, PerformanceScore));
 }
+
+// Detta kan ersättas med en timer för uppdatering per interval om du inte vill att det ska ticka varje frame.
+void UAdaptiveWeatherSystem::Tick(float DeltaTime)
+{
+	// Uppdatera tiden som har gått och gör väderuppdatering om det har gått tillräckligt lång tid
+	TimeSinceLastUpdate += DeltaTime;
+
+	if (TimeSinceLastUpdate >= UpdateInterval)
+	{
+		// Kalla på metoder för att uppdatera väder och prestationen
+		EvaluatePerformanceAndAdjustWeather();
+		TimeSinceLastUpdate = 0.0f;
+	}
+}
+
 
 
 
