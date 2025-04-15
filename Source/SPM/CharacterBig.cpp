@@ -4,9 +4,10 @@
 #include "CharacterBig.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Pickup.h"
 #include "InputActionValue.h"
 
-
+UPickup* pickup;
 
 void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -15,8 +16,8 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// För test
-		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Started, this, &ACharacterBig::Crouch);
-		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Completed, this, &ACharacterBig::StopCrouch);
+		EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, this, &ACharacterBig::ToggleGrab);
+		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Ongoing, this, &ACharacterBig::Throw);
 	
 	}
 	else
@@ -26,13 +27,31 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 }
 
 //För test
-void ACharacterBig::Crouch (const FInputActionValue& Value)
+void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Big  is Crouching"));
+	if (IsHolding)
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Release triggered"));
+		//pickup->Release();
+		IsHolding = false;
+	}else
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Grab triggered"));
+		//pickup->Grab();
+		IsHolding = true;
+	}
+	
 }
 
-void ACharacterBig::StopCrouch(const FInputActionValue& Value)
+void ACharacterBig::Throw(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Big is not Crouching"));
+	if (IsHolding)
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Throwing triggered"));
+		IsHolding = false;
+	}
+
 }
+
+
 

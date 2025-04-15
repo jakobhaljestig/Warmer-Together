@@ -6,7 +6,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-
+#include "GameFramework/CharacterMovementComponent.h"
 
 
 void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
@@ -16,8 +16,8 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Started, this, &ACharacterSmall::Crouch);
-		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Completed, this, &ACharacterSmall::StopCrouch);
+		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Started, this, &ACharacterSmall::Crawl);
+		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Completed, this, &ACharacterSmall::StopCrawl);
 	
 	}
 	else
@@ -26,13 +26,18 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	}
 }
 
+//Implementera check för att se om något är över karaktären. 
 
-void ACharacterSmall::Crouch (const FInputActionValue& Value)
+void ACharacterSmall::Crawl (const FInputActionValue& Value)
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Crouching"));
+	GetCharacterMovement()->MaxWalkSpeed = 250.0f;
+	ACharacter::Crouch(true);
 }
 
-void ACharacterSmall::StopCrouch(const FInputActionValue& Value)
+void ACharacterSmall::StopCrawl(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is not Crouching"));
+	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+	ACharacter::UnCrouch(true);
 }
