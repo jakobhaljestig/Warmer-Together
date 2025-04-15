@@ -1,15 +1,14 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
 #include "SPMGameMode.h"
-#include "CharacterBase.h"
+#include "CharacterBig.h"
+#include "CharacterSmall.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
 
 ASPMGameMode::ASPMGameMode()
 {
-	
-		DefaultPawnClass = nullptr;
-	
+	DefaultPawnClass = nullptr;
 }
 
 //SKAPA BUILDER KLASS NORA??
@@ -30,7 +29,6 @@ void ASPMGameMode::BeginPlay()
 			UE_LOG(LogTemp, Warning, TEXT("Player 1 spawned and Possessed"));
 		}
 	}
-
 
 	//Spawna player 2
 	APlayerController* Player2Controller = UGameplayStatics::CreatePlayer(GetWorld(), 1, true);

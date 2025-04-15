@@ -3,6 +3,10 @@
 
 #include "BodyTemperature.h"
 
+#include "CharacterBig.h"
+#include "CharacterSmall.h"
+#include "Kismet/GameplayStatics.h"
+
 // Sets default values for this component's properties
 UBodyTemperature::UBodyTemperature()
 {
@@ -13,45 +17,33 @@ UBodyTemperature::UBodyTemperature()
 	Temp = MaxTemp;
 }
 
-
 // Called when the game starts
 void UBodyTemperature::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 }
-
 
 // Called every frame
 void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	if (bHugging)
-	{
-		ShareTemp();
-	}
-	else
-	{
-		if (bShouldCoolDown)
+	
+	if (bShouldCoolDown)
+    {
+        if (Temp > 0)
         {
-        	if (Temp > 0)
-        	{
-        		CoolDown(DeltaTime);
-        	}
-        	if (Temp == 0)
-        	{
-        		// Health down
-        	}
+        	CoolDown(DeltaTime);
         }
-		else
+        if (Temp == 0)
         {
-         	if (Temp < MaxTemp)
-         	{
-         		HeatUp(DeltaTime);
-         	}
+        	// Health down
         }
-	}
+    }
+	if (bShouldHeatUp && Temp < MaxTemp)
+    {
+        HeatUp(DeltaTime);
+    }
 }
 
 void UBodyTemperature::CoolDown(float DeltaTime)
@@ -63,13 +55,22 @@ void UBodyTemperature::CoolDown(float DeltaTime)
 	}
 }
 
-
 void UBodyTemperature::HeatUp(float DeltaTime)
 {
 	Temp = Temp + DeltaTime * CoolDownRate;
+	if (Temp > MaxTemp)
+	{
+		Temp = MaxTemp;
+	}
 }
 
 void UBodyTemperature::ShareTemp()
 {
-	// Temp = FMath::Lerp(Temp, GetOwner()->OtherPlayer->Temp, ShareTempRate);
+	if (TempBig == nullptr || TempSmall == nullptr)
+	{
+		TempBig = Cast<ACharacterBig>(UGameplayStatics::GetPlayerCharacter(this, 0))->GetComponentByClass<UBodyTemperature>();
+		TempSmall = Cast<ACharacterSmall>(UGameplayStatics::GetPlayerCharacter(this, 1))->GetComponentByClass<UBodyTemperature>();
+	}
+	Temp = (TempBig->Temp + TempSmall->Temp) / 2;
+	bHugging = false;
 }
