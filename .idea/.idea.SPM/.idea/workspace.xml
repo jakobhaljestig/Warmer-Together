@@ -12,18 +12,11 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/Source/SPM/CountdownTimer.cpp" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/Source/SPM/CountdownTimer.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_IceFloat.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_IceFloat.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/7/J7/LA0M8H8CGJL0HVIPTDEMTZ.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/7/J7/LA0M8H8CGJL0HVIPTDEMTZ.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/7/W8/UL99318TB4PH0XM2YCXEAD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/7/W8/UL99318TB4PH0XM2YCXEAD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/9/PT/EZ214UBXUVOEZI3N8W3O96.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/9/PT/EZ214UBXUVOEZI3N8W3O96.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/D/DE/SWSI13675DVYIZ0N4NF7Y3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/D/DE/SWSI13675DVYIZ0N4NF7Y3.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/F/0K/Y6WZQA35ARISYIYYB2JS1D.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/F/0K/Y6WZQA35ARISYIYYB2JS1D.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBig.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBig.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/IceFloat.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/IceFloat.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/IceFloat.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/IceFloat.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/Jakob/Jakob.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Jakob/Jakob.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/Jakob/Room1.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Jakob/Room1.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/Jakob/Room2.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Jakob/Room2.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/Jakob/Room3.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Jakob/Room3.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +47,9 @@
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
   </component>
+  <component name="ProblemsViewState">
+    <option name="selectedTabId" value="Toolset" />
+  </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
   &quot;associatedIndex&quot;: 0
@@ -65,10 +61,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "C/C++ Project.SPM.executor": "Debug",
+    "C/C++ Project.SPM.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Nora",
+    "git-widget-placeholder": "Jakob",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -189,6 +185,7 @@
       <workItem from="1744644322595" duration="2040000" />
       <workItem from="1744647521685" duration="439000" />
       <workItem from="1744705136415" duration="1893000" />
+      <workItem from="1744713260837" duration="1389000" />
     </task>
     <servers />
   </component>
