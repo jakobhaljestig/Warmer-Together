@@ -14,6 +14,8 @@ class SPM_API UAdaptiveWeatherSystem : public UGameInstanceSubsystem
 
 public:	
 	UAdaptiveWeatherSystem();
+	
+	static void BeginPlay();
 
 public:	
 	// Uppdaterar systemet varje frame, inte nödvändigt om vi inte vill ha varje tick, men kan användas för periodiska uppdateringar
