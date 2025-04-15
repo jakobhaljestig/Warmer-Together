@@ -24,7 +24,7 @@ void UPickup::BeginPlay()
 	
 	SetRelativeLocation(GetOwner()->GetActorLocation());
 	SetRelativeRotation(GetOwner()->GetActorRotation());
-	UPhysicsHandleComponent *PhysicsHandle = CreateDefaultSubobject<UPhysicsHandleComponent>(FName("PhysicsHandle"));
+	UPhysicsHandleComponent *PhysicsHandle = GetPhysicsHandle();
 	if (PhysicsHandle == nullptr)
 	{
 		return;
@@ -52,7 +52,6 @@ void UPickup::Grab(){
 	else if (HasHit)
 	{	Holding = true;
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
-		HitComponent->SetSimulatePhysics(true);
 		AActor* HitActor = HitResult.GetActor();
 		HitActor->Tags.Add("Grabbed");
 		HitActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
