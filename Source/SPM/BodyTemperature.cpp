@@ -4,6 +4,7 @@
 #include "BodyTemperature.h"
 
 #include "CharacterBig.h"
+#include "CharacterPlayerController.h"
 #include "CharacterSmall.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -29,21 +30,45 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	if (bShouldCoolDown)
+	if (!bNearHeat)
     {
         if (Temp > 0)
         {
         	CoolDown(DeltaTime);
         }
+		if (GetTempPercentage() < 0.3 && !bDisplayFreezeEffect)
+		{
+			bDisplayFreezeEffect = true;
+			Cast<ACharacterPlayerController>(Cast<APawn>(GetOwner())->GetController())->DisplayFreezeEffect(bDisplayFreezeEffect);
+		}
+		if (GetTempPercentage() >= 0.3 && bDisplayFreezeEffect)
+		{
+			bDisplayFreezeEffect = false;
+			Cast<ACharacterPlayerController>(Cast<APawn>(GetOwner())->GetController())->DisplayFreezeEffect(bDisplayFreezeEffect);
+		}
         if (Temp == 0)
         {
-        	// Health down
+        	if (!bFrozen)
+        	{
+        		bFrozen = true;
+        		GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
+        	}
         }
     }
-	if (bShouldHeatUp && Temp < MaxTemp)
+	if (bNearHeat && Temp < MaxTemp)
     {
         HeatUp(DeltaTime);
+		if (bFrozen)
+		{
+			bFrozen = false;
+			GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
+		}
     }
+}
+
+void UBodyTemperature::IsNearHeat(bool bIsNearHeat)
+{
+	bNearHeat = bIsNearHeat;
 }
 
 void UBodyTemperature::CoolDown(float DeltaTime)
@@ -66,6 +91,11 @@ void UBodyTemperature::HeatUp(float DeltaTime)
 
 void UBodyTemperature::ShareTemp()
 {
+	if (bFrozen)
+	{
+		bFrozen = false;
+		GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
+	}
 	if (TempBig == nullptr || TempSmall == nullptr)
 	{
 		TempBig = Cast<ACharacterBig>(UGameplayStatics::GetPlayerCharacter(this, 0))->GetComponentByClass<UBodyTemperature>();

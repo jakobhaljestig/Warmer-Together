@@ -89,8 +89,8 @@ void ACharacterBase::Tick(float DeltaTime)
 	const FWeatherState& CurrentWeather = WeatherSystemInstance->GetCurrentWeather();
 
 	// Temperatur påverkar kroppstemperatur
-	float TempFactor = FMath::Clamp(-CurrentWeather.Temperature / 30.0f, 0.0f, 1.0f);
-	BodyTempComponent->CoolDown(DeltaTime * TempFactor * BaseCoolingRate);
+	// float TempFactor = FMath::Clamp(-CurrentWeather.Temperature / 30.0f, 0.0f, 1.0f);
+	// BodyTempComponent->CoolDown(DeltaTime * TempFactor * BaseCoolingRate);
 
 	// Vind påverkar rörelse
 	if (CurrentWeather.WindSpeed > WindResistanceThreshold)
@@ -107,7 +107,6 @@ void ACharacterBase::Tick(float DeltaTime)
 	// UpdateVisibility(CurrentWeather.Visibility);
 
 }
-
 
 void ACharacterBase::NotifyControllerChanged()
 {

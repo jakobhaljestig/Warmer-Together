@@ -28,6 +28,24 @@ void UHealth::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	
+	if (bFrozen)
+	{
+		UpdateHealthOnFrozen(DeltaTime);
+	}
+}
+
+void UHealth::IsFrozen(bool bShouldBeFrozen)
+{
+	bFrozen = bShouldBeFrozen;
+}
+
+
+void UHealth::UpdateHealthOnFrozen(float DeltaTime)
+{
+	Health = Health - DeltaTime * HealthDownRate;
+	if (Health <= 0)
+	{
+		Health = 0;
+	}
 }
 

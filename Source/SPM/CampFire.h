@@ -7,6 +7,8 @@
 #include "GameFramework/Actor.h"
 #include "CampFire.generated.h"
 
+class USphereComponent;
+
 UCLASS()
 class SPM_API ACampFire : public AActor
 {
@@ -27,13 +29,16 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-	
-	static void OnPlayerEnterHeatZone(ACharacterBase* Player);
-	static void OnPlayerExitHeatZone(ACharacterBase* Player);
 
+	UFUNCTION(BlueprintCallable)
+	static void OnPlayerEnterHeatZone(ACharacterBase* Player);
+
+	UFUNCTION(BlueprintCallable)
+	static void OnPlayerExitHeatZone(ACharacterBase* Player);
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Fire")
 	float Radius = 5.f;
+	
 
 };

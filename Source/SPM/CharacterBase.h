@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BodyTemperature.h"
+#include "Health.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "Components/PawnNoiseEmitterComponent.h"

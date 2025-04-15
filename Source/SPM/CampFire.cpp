@@ -3,7 +3,9 @@
 #include "CampFire.h"
 #include "CharacterBase.h"
 #include "PerformanceTracker.h"
-
+#include "Components/SphereComponent.h"
+#include "Components/StaticMeshComponent.h"
+#include "Components/PrimitiveComponent.h"
 
 // Sets default values
 ACampFire::ACampFire()
@@ -31,13 +33,13 @@ void ACampFire::Tick(float DeltaTime)
 void ACampFire::OnPlayerEnterHeatZone(ACharacterBase* Player)
 {
 	// När spelaren går in i värmezonen
-	Player->PerformanceTracker->SetIsNearHeat(true);
+	// Player->PerformanceTracker->SetIsNearHeat(true);
+	Player->GetComponentByClass<UBodyTemperature>()->IsNearHeat(true);
 }
 
 void ACampFire::OnPlayerExitHeatZone(ACharacterBase* Player)
 {
 	// När spelaren går ut ur värmezonen
-	Player->PerformanceTracker->SetIsNearHeat(false);
+	// Player->PerformanceTracker->SetIsNearHeat(false);
+	Player->GetComponentByClass<UBodyTemperature>()->IsNearHeat(false);
 }
-
-

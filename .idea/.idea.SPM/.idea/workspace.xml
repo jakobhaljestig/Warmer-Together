@@ -12,20 +12,21 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/.name" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmall.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmall.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GameMode.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Freeze_ScreenOverlay/WB_FreezeEffect.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterPlayerController.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterPlayerController.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WB_HUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/UI/WB_HUD.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ThirdPerson/Maps/ThirdPersonMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ThirdPerson/Maps/ThirdPersonMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SPM.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SPM.sln.DotSettings.user" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/BodyTemperature.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BodyTemperature.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/BodyTemperature.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BodyTemperature.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CampFire.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CampFire.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CampFire.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CampFire.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterPlayerController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterPlayerController.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterPlayerController.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/Health.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/Health.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/Health.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/Health.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/SPM.Build.cs" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/SPM.Build.cs" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/SPMGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/SPMGameMode.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,6 +52,10 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/Delegates/DelegateInstancesImpl.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
@@ -200,6 +205,7 @@
       <workItem from="1744716895673" duration="1180000" />
       <workItem from="1744718510338" duration="3149000" />
       <workItem from="1744721751686" duration="5849000" />
+      <workItem from="1744729436425" duration="8650000" />
     </task>
     <servers />
   </component>

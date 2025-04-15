@@ -24,14 +24,21 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	float GetHealthPercentage() const { return Health / MaxHealth * 100.0f; }
+	float GetHealthPercentage() const { return Health / MaxHealth; }
 
+	void UpdateHealthOnFrozen(float DeltaTime);
+
+	void IsFrozen(bool bShouldBeFrozen);
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Health")
 	float MaxHealth = 100;
 
+	UPROPERTY(EditAnywhere, Category = "Health")
+	float HealthDownRate = 1.f;
+	
 	float Health;
+	bool bFrozen = false;
 
 	
 };
