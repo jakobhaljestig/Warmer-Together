@@ -68,7 +68,7 @@ void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 		CurrentWeather.WeatherLevel);
 }
 
-// Detta kan ersättas med en timer för uppdatering per interval om du inte vill att det ska ticka varje frame.
+// Detta kan ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame.
 void UAdaptiveWeatherSystem::Tick(float DeltaTime)
 {
 	// Uppdatera tiden som har gått och gör väderuppdatering om det har gått tillräckligt lång tid
