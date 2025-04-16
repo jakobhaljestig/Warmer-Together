@@ -81,6 +81,7 @@ protected:
 	// Kroppstemperatur
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
 	UBodyTemperature* BodyTempComponent;
+	
 
 	UPROPERTY()
 	UAdaptiveWeatherSystem* AdaptiveWeatherSystem;
@@ -127,8 +128,8 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
-	UBodyTemperature* BodyTemperatureComponent;
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
+	UBodyTemperature* BodyTemperatureComponent;*/
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UHealth* HealthComponent;

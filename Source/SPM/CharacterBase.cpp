@@ -203,12 +203,13 @@ void ACharacterBase::BeginHug(const FInputActionValue& Value)
 		float Distance = FVector::Dist(Player1->GetActorLocation(), Player2->GetActorLocation());
 
 		if (Distance <= HugDistance)
-		{
-			UE_LOG(LogTemplateCharacter, Warning, TEXT("Both Character's are hugging"));
+		{	
 			Player1->Hug();
-			Player2->Hug();
+		}else
+		{
+			UE_LOG(LogTemplateCharacter, Warning, TEXT("Distance too big between players"));
 		}
-		UE_LOG(LogTemplateCharacter, Warning, TEXT("Distance to big between players"));
+		
 	}else{
 		UE_LOG(LogTemplateCharacter, Warning, TEXT("Only 1 character hugging"));
 	}
@@ -223,8 +224,16 @@ void ACharacterBase::EndHug(const FInputActionValue& Value)
 
 void ACharacterBase::Hug()
 {
-	
-	GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
+	UE_LOG(LogTemplateCharacter, Warning, TEXT("Characters are hugging"));
+	if (BodyTempComponent)
+    	{
+    		BodyTempComponent->ShareTemp();
+    	}
+    	else
+    	{
+    		UE_LOG(LogTemplateCharacter, Error, TEXT("BodyTempComponent is nullptr!"));
+    	}
+	//GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
 
 void ACharacterBase::OnDeath() const
