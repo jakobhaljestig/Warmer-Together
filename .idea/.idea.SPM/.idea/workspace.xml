@@ -14,13 +14,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Materials/M_SnowStamp.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Materials/M_SnowStamp.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Materials/M_SnowSurface.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Materials/M_SnowSurface.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/Nellie/Nellie_Map.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Nellie/Nellie_Map.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SPM.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/SPM.uproject" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -222,7 +218,7 @@
       <workItem from="1744729436425" duration="8650000" />
       <workItem from="1744739680659" duration="520000" />
       <workItem from="1744785465098" duration="2633000" />
-      <workItem from="1744807181678" duration="3480000" />
+      <workItem from="1744807181678" duration="3584000" />
     </task>
     <servers />
   </component>
