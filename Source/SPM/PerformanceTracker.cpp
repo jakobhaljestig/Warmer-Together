@@ -9,7 +9,18 @@ UPerformanceTracker::UPerformanceTracker()
 void UPerformanceTracker::BeginPlay()
 {
 	Super::BeginPlay();
+
+	if (const UGameInstance* GameInstance = GetWorld()->GetGameInstance())
+	{
+		WeatherUpdater = Cast<IWeatherUpdaterInterface>(GameInstance->GetSubsystem<UAdaptiveWeatherSystem>());
+		
+		if (!WeatherUpdater)
+		{
+			UE_LOG(LogTemp, Error, TEXT("WeatherUpdaterInterface not found!"));
+		}
+	}
 }
+
 
 void UPerformanceTracker::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
@@ -20,13 +31,15 @@ void UPerformanceTracker::TickComponent(float DeltaTime, ELevelTick TickType, FA
 		TimeNearHeat += DeltaTime;
 	}
 
-	// Uppdatera Performance-structen
+	// uppdatera Performance-structen
 	Performance.TimeNearHeat = TimeNearHeat;
+
+	//bör ej uppdateras i tick men får vara här så länge tills vi har en puzzlemanager
 	Performance.AveragePuzzleTime = TotalPuzzles > 0 ? TotalPuzzleTime / TotalPuzzles : 0.0f;
 
-	if (WeatherSystem)
+	if (WeatherUpdater)
 	{
-		WeatherSystem->UpdatePerformance(Performance);
+		WeatherUpdater->UpdatePerformance(Performance);
 	}
 }
 

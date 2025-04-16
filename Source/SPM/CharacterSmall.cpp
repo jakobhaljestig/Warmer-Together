@@ -41,3 +41,20 @@ void ACharacterSmall::StopCrawl(const FInputActionValue& Value)
 	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
 	ACharacter::UnCrouch(true);
 }
+
+void ACharacterSmall::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (GetVelocity().X < 50 && GetVelocity().Z > -50 && GetVelocity().Y < 50)
+	{
+		for (UActorComponent* Component : this->GetComponents())
+		{
+			if (UPrimitiveComponent* PrimComp = Cast<UPrimitiveComponent>(Component))
+			{
+				PrimComp->SetSimulatePhysics(false);
+			}
+		}
+	}
+}
+

@@ -52,6 +52,9 @@ class ACharacterBase : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* HugAction;
+
 
 public:
 	ACharacterBase();
@@ -68,7 +71,10 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	void Hug(const FInputActionValue& Value);
+	void BeginHug(const FInputActionValue& Value);
+	void EndHug(const FInputActionValue& Value);
+
+	void Hug();
 
 	void OnDeath() const;
 
@@ -77,6 +83,7 @@ protected:
 	// Kroppstemperatur
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
 	UBodyTemperature* BodyTempComponent;
+	
 
 	UPROPERTY()
 	UAdaptiveWeatherSystem* AdaptiveWeatherSystem;
@@ -111,11 +118,14 @@ protected:
 	// Sikt
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	class APostProcessVolume* PostProcessVolume;
+	
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsTryingToHug = true;
+
 
 	// Siktmetod
 	void UpdateVisibility(float VisibilityFactor);
-
-protected:
+	
 
 	virtual void NotifyControllerChanged() override;
 
@@ -137,6 +147,18 @@ public:
 	// Referens till vår performance-tracker
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
 	UPerformanceTracker* PerformanceTracker;
+
+	//Mini Respawning
+	UPROPERTY(BlueprintReadWrite, Category = "Respawn")
+    FVector LastSafeLocation;
+
+	UFUNCTION(BlueprintCallable, Category = "Respawn")
+	void RespawnToLastSafeLocation();
+
+private:
+	void updateLastSafeLocation();
+
+	
 
 };
 
