@@ -3,6 +3,8 @@
 
 #include "Pickup.h"
 
+#include "CharacterSmall.h"
+
 
 // Sets default values for this component's properties
 UPickup::UPickup()
@@ -44,8 +46,9 @@ void UPickup::Grab(){
 	if (HasHit)
 	{	Holding = true;
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
-		HitComponent->SetSimulatePhysics(false);
+		
 		AActor* HitActor = HitResult.GetActor();
+		HitComponent->SetSimulatePhysics(false);
 		HitActor->Tags.Add("Grabbed");
 		PhysicsHandle->GrabComponentAtLocation(
 			HitComponent,
@@ -67,7 +70,6 @@ void UPickup::Drop(float Force)
 		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
 		PhysicsHandle->GetGrabbedComponent()->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
 		PhysicsHandle->ReleaseComponent();
-		
 	}
 
 }
