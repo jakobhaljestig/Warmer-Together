@@ -68,8 +68,6 @@ ACharacterBase::ACharacterBase()
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	BodyTempComponent = FindComponentByClass<UBodyTemperature>();
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
 }
@@ -189,6 +187,16 @@ void ACharacterBase::OnDeath() const
 	// Andra dödslogik, som att återställa karaktär, respawn, osv.
 }
 
+void ACharacterBase::SetCheckpointLocation(FVector Location)
+{
+	CheckpointLocation = Location;
+}
+
+void ACharacterBase::RespawnAtCheckpoint()
+{
+	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
+	SetActorLocation(NewLocation);
+}
 
 
 

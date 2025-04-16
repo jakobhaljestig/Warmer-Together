@@ -58,6 +58,10 @@ public:
 	
 	void Tick(float DeltaTime);
 
+	void SetCheckpointLocation(FVector Location);
+	
+	void RespawnAtCheckpoint();
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -71,6 +75,7 @@ protected:
 	void Hug(const FInputActionValue& Value);
 
 	void OnDeath() const;
+	
 	
 	// Kroppstemperatur
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
@@ -104,6 +109,7 @@ protected:
 	// Siktmetod
 	void UpdateVisibility(float VisibilityFactor);
 
+
 protected:
 
 	virtual void NotifyControllerChanged() override;
@@ -117,9 +123,6 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
-	UBodyTemperature* BodyTemperatureComponent;
-
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UHealth* HealthComponent;
 
@@ -127,5 +130,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
 	UPerformanceTracker* PerformanceTracker;
 
+private:
+	UPROPERTY(VisibleAnywhere)
+	FVector CheckpointLocation;
+	
 };
 

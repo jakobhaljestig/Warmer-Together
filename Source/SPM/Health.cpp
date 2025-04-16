@@ -3,6 +3,8 @@
 
 #include "Health.h"
 
+#include "CharacterBase.h"
+
 // Sets default values for this component's properties
 UHealth::UHealth()
 {
@@ -31,6 +33,11 @@ void UHealth::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 	if (bFrozen)
 	{
 		UpdateHealthOnFrozen(DeltaTime);
+	}
+	if (Health <= 0)
+	{
+		Health = MaxHealth;
+		Cast<ACharacterBase>(GetOwner())->RespawnAtCheckpoint();
 	}
 }
 
