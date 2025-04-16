@@ -41,3 +41,4 @@ void ACharacterSmall::StopCrawl(const FInputActionValue& Value)
 	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
 	ACharacter::UnCrouch(true);
 }
+

@@ -49,6 +49,7 @@ void UPickup::Grab(){
 		
 		AActor* HitActor = HitResult.GetActor();
 		HitComponent->SetSimulatePhysics(false);
+		HitComponent->WakeAllRigidBodies();
 		HitActor->Tags.Add("Grabbed");
 		PhysicsHandle->GrabComponentAtLocation(
 			HitComponent,
@@ -71,6 +72,7 @@ void UPickup::Drop(float Force)
 		PhysicsHandle->GetGrabbedComponent()->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
 		PhysicsHandle->ReleaseComponent();
 	}
+	
 
 }
 //Call drop with more force
