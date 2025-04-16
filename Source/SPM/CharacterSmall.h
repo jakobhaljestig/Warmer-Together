@@ -19,7 +19,5 @@ protected:
 	
 	void Crawl (const FInputActionValue& Value);
 	void StopCrawl(const FInputActionValue& Value);
-
-public:
-	void Tick(float DeltaTime);
+	
 };
