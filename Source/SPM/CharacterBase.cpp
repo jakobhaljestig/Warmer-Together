@@ -263,4 +263,23 @@ void ACharacterBase::updateLastSafeLocation()
 
 }
 
+void ACharacterBase::Landed(const FHitResult& Hit)
+{
+	Super::Landed(Hit);
+
+	UE_LOG(LogTemp, Warning, TEXT("landed"));
+
+	// Calculate fall distance
+	float FallHeight = LastGroundedZ - GetActorLocation().Z;
+	float FallDistanceMeters = FallHeight / 100.0f; 
+	
+	if (FallDistanceMeters > 4.0f) // 10 meters min for fall damage
+	{
+		float FallDamage = (FallDistanceMeters - 4.0f) * FallDamageMultiplier; 
+		HealthComponent->TakeDamage(FallDamage);
+		UE_LOG(LogTemp, Warning, TEXT("Threshold reached"));
+	}
+
+}
+
 
