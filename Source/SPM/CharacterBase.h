@@ -114,8 +114,7 @@ protected:
 
 	// Siktmetod
 	void UpdateVisibility(float VisibilityFactor);
-
-protected:
+	
 
 	virtual void NotifyControllerChanged() override;
 
@@ -128,8 +127,8 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
-	UBodyTemperature* BodyTemperatureComponent;*/
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
+	UBodyTemperature* BodyTemperatureComponent;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UHealth* HealthComponent;
@@ -138,8 +137,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
 	UPerformanceTracker* PerformanceTracker;
 
+	//Mini Respawning
+	UPROPERTY(BlueprintReadWrite, Category = "Respawn")
+    FVector LastSafeLocation;
+
+	UFUNCTION(BlueprintCallable, Category = "Respawn")
+	void RespawnToLastSafeLocation();
+
 private:
-	float CalculateDistanceBetweenPlayers() const;
+	void updateLastSafeLocation();
+
+	
 
 };
 

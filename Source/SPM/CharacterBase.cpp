@@ -81,6 +81,8 @@ void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+	updateLastSafeLocation();
+
 	UAdaptiveWeatherSystem* WeatherSystemInstance = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 
 	if (!WeatherSystemInstance || !BodyTempComponent)
@@ -244,14 +246,21 @@ void ACharacterBase::OnDeath() const
 	// Andra dödslogik, som att återställa karaktär, respawn, osv.
 }
 
-float ACharacterBase::CalculateDistanceBetweenPlayers() const
+void ACharacterBase::RespawnToLastSafeLocation()
 {
-	ACharacter* CharacterBig = UGameplayStatics::GetPlayerCharacter(this, 0);
-	ACharacter* CharacterSmall = UGameplayStatics::GetPlayerCharacter(this, 1);
-	float Distance = FVector::Dist(CharacterBig->GetActorLocation(), CharacterSmall->GetActorLocation());
-	return Distance;
+	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
+void ACharacterBase::updateLastSafeLocation()
+{
+	if (!GetCharacterMovement()->IsFalling())
+	{
+		if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 50.0f)
+		{
+			LastSafeLocation = GetActorLocation();
+		}
+	}
 
+}
 
 
