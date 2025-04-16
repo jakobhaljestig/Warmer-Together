@@ -71,6 +71,8 @@ protected:
 	void Hug(const FInputActionValue& Value);
 
 	void OnDeath() const;
+
+	void Landed(const FHitResult& Hit);
 	
 	// Kroppstemperatur
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
@@ -85,6 +87,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float CurrentMovementSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
+	float FallDamageMultiplier = 10.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fall Damage")
+	float FallDamageThreshold = 10.0f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
+	float LastGroundedZ = 0.0f;
 
 	// Kylningsfaktor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature")

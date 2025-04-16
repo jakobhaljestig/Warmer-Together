@@ -105,6 +105,12 @@ void ACharacterBase::Tick(float DeltaTime)
 	// Snö påverkar sikt – detta kan styra t.ex. dimma, post-process etc
 	// UpdateVisibility(CurrentWeather.Visibility);
 
+	// Update the height when the character is grounded
+	if (GetCharacterMovement()->IsMovingOnGround())
+	{
+		LastGroundedZ = GetActorLocation().Z;
+	}
+
 }
 
 void ACharacterBase::NotifyControllerChanged()
@@ -187,6 +193,25 @@ void ACharacterBase::OnDeath() const
 	PerformanceTracker->RegisterDeath();
 
 	// Andra dödslogik, som att återställa karaktär, respawn, osv.
+}
+
+void ACharacterBase::Landed(const FHitResult& Hit)
+{
+	Super::Landed(Hit);
+
+	UE_LOG(LogTemp, Warning, TEXT("landed"));
+
+	// Calculate fall distance
+	float FallHeight = LastGroundedZ - GetActorLocation().Z;
+	float FallDistanceMeters = FallHeight / 100.0f; 
+	
+	if (FallDistanceMeters > 4.0f) // 10 meters min for fall damage
+	{
+		float FallDamage = (FallDistanceMeters - 4.0f) * FallDamageMultiplier; 
+		HealthComponent->TakeDamage(FallDamage);
+		UE_LOG(LogTemp, Warning, TEXT("Threshold reached"));
+	}
+
 }
 
 
