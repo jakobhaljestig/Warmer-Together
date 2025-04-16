@@ -4,11 +4,12 @@
 #include "Components/ActorComponent.h"
 #include "FPerformance.h"
 #include "FWeatherState.h"
+#include "WeatherUpdaterInterface.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "AdaptiveWeatherSystem.generated.h"
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SPM_API UAdaptiveWeatherSystem : public UGameInstanceSubsystem
+class SPM_API UAdaptiveWeatherSystem : public UGameInstanceSubsystem, public IWeatherUpdaterInterface
 {
 	GENERATED_BODY()
 
@@ -22,7 +23,7 @@ public:
 	virtual void Deinitialize() override;
 
 	// Uppdaterar prestationen, t.ex. efter att någon dör eller gör något bra
-	void UpdatePerformance(const FPerformance& NewPerformance);
+	virtual void UpdatePerformance(const FPerformance& NewPerformance) override;
 
 	// Returnerar väderstatus, t.ex om det redan är dåligt väder behövs det inte adderas mer
 	const FWeatherState& GetCurrentWeather() const;
