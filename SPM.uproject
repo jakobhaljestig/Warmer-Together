@@ -21,6 +21,10 @@
 			"TargetAllowList": [
 				"Editor"
 			]
+		},
+		{
+			"Name": "NaniteDisplacedMesh",
+			"Enabled": true
 		}
 	]
 }
