@@ -15,6 +15,7 @@
 #include "InputActionValue.h"
 #include "PerformanceTracker.h"
 #include "WeatherController.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -133,6 +134,10 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACharacterBase::Move);
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACharacterBase::Look);
+		
+		EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Started, this, &ACharacterBase::BeginHug);
+        EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Completed, this, &ACharacterBase::EndHug);
+
 	}
 	else
 	{
@@ -176,8 +181,49 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 	}
 }
 
-void ACharacterBase::Hug(const FInputActionValue& Value)
+void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
+	bIsTryingToHug = true;
+	UE_LOG(LogTemplateCharacter, Warning, TEXT("Hug mapping is working"));
+
+	ACharacter* Char1 = UGameplayStatics::GetPlayerCharacter(this, 0);
+	ACharacter* Char2 = UGameplayStatics::GetPlayerCharacter(this, 1);
+
+	if (!Char1 || !Char2 || Char1 == Char2) return;
+
+	ACharacterBase* Player1 = Cast<ACharacterBase>(Char1);
+	ACharacterBase* Player2 = Cast<ACharacterBase>(Char2);
+
+	if (!Player1 || !Player2) return;
+
+	const float HugDistance = 200.0f; // Kanske inte hårdkoda avständ
+
+	if (Player1->bIsTryingToHug && Player2->bIsTryingToHug)
+	{
+		float Distance = FVector::Dist(Player1->GetActorLocation(), Player2->GetActorLocation());
+
+		if (Distance <= HugDistance)
+		{
+			UE_LOG(LogTemplateCharacter, Warning, TEXT("Both Character's are hugging"));
+			Player1->Hug();
+			Player2->Hug();
+		}
+		UE_LOG(LogTemplateCharacter, Warning, TEXT("Distance to big between players"));
+	}else{
+		UE_LOG(LogTemplateCharacter, Warning, TEXT("Only 1 character hugging"));
+	}
+
+}
+
+void ACharacterBase::EndHug(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemplateCharacter, Warning, TEXT("Hug has ended"));
+	bIsTryingToHug = false;
+}
+
+void ACharacterBase::Hug()
+{
+	
 	GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
 
@@ -187,6 +233,14 @@ void ACharacterBase::OnDeath() const
 	PerformanceTracker->RegisterDeath();
 
 	// Andra dödslogik, som att återställa karaktär, respawn, osv.
+}
+
+float ACharacterBase::CalculateDistanceBetweenPlayers() const
+{
+	ACharacter* CharacterBig = UGameplayStatics::GetPlayerCharacter(this, 0);
+	ACharacter* CharacterSmall = UGameplayStatics::GetPlayerCharacter(this, 1);
+	float Distance = FVector::Dist(CharacterBig->GetActorLocation(), CharacterSmall->GetActorLocation());
+	return Distance;
 }
 
 

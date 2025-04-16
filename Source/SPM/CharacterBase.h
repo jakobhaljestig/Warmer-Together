@@ -52,6 +52,9 @@ class ACharacterBase : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* HugAction;
+
 
 public:
 	ACharacterBase();
@@ -68,7 +71,10 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	void Hug(const FInputActionValue& Value);
+	void BeginHug(const FInputActionValue& Value);
+	void EndHug(const FInputActionValue& Value);
+
+	void Hug();
 
 	void OnDeath() const;
 	
@@ -100,6 +106,10 @@ protected:
 	// Sikt
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	class APostProcessVolume* PostProcessVolume;
+	
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsTryingToHug = true;
+
 
 	// Siktmetod
 	void UpdateVisibility(float VisibilityFactor);
@@ -126,6 +136,9 @@ public:
 	// Referens till vår performance-tracker
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
 	UPerformanceTracker* PerformanceTracker;
+
+private:
+	float CalculateDistanceBetweenPlayers() const;
 
 };
 
