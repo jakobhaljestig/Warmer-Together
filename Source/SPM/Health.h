@@ -38,7 +38,7 @@ private:
 	float MaxHealth = 100;
 
 	UPROPERTY(EditAnywhere, Category = "Health")
-	float HealthDownRate = 1.f;
+	float HealthDownRate = 5.f;
 	
 	float Health;
 	bool bFrozen = false;

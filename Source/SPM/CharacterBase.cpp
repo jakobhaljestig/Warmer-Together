@@ -19,8 +19,6 @@
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
-//////////////////////////////////////////////////////////////////////////
-// ASPMCharacter
 
 ACharacterBase::ACharacterBase()
 {
@@ -63,19 +61,13 @@ ACharacterBase::ACharacterBase()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
-
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	BodyTempComponent = FindComponentByClass<UBodyTemperature>();
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
+	CheckpointLocation = GetActorLocation();
 }
-
-
 
 void ACharacterBase::Tick(float DeltaTime)
 {
@@ -251,6 +243,17 @@ void ACharacterBase::OnDeath() const
 	// Andra dödslogik, som att återställa karaktär, respawn, osv.
 }
 
+void ACharacterBase::SetCheckpointLocation(FVector Location)
+{
+	CheckpointLocation = Location;
+}
+
+void ACharacterBase::RespawnAtCheckpoint()
+{
+	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
+	SetActorLocation(NewLocation);
+}
+
 void ACharacterBase::RespawnToLastSafeLocation()
 {
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
@@ -290,5 +293,4 @@ void ACharacterBase::Landed(const FHitResult& Hit)
 		UE_LOG(LogTemp, Warning, TEXT("Threshold reached %f"),FallDamage);
 	} 
 }
-
 

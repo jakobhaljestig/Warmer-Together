@@ -151,13 +151,18 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Respawn")
     FVector LastSafeLocation;
 
+	void SetCheckpointLocation(FVector Location);
+	
+	void RespawnAtCheckpoint();
+	
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
 
 private:
 	void UpdateLastSafeLocation();
 
-	
+	UPROPERTY(VisibleAnywhere, Category = "Respawn")
+	FVector CheckpointLocation;
 
 };
 
