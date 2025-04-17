@@ -11,7 +11,7 @@
  * 
  */
 UINTERFACE(MinimalAPI)
-class SPM_API UWeatherUpdaterInterface : public UInterface
+class UWeatherUpdaterInterface : public UInterface
 {
 	GENERATED_BODY()
 	
