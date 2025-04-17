@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "AdaptiveWeatherSystem.h"
+#include "NiagaraComponent.h"
+#include "NiagaraFunctionLibrary.h"
 #include "WeatherController.generated.h"
 
 UCLASS()
@@ -38,6 +40,9 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Weather VFX")
 	class AExponentialHeightFog* FogActor;
+
+	UPROPERTY(EditAnywhere, Category = "Weather VFX")
+	class UNiagaraComponent* SnowParticleSystem;
 
 
 private:
