@@ -82,7 +82,7 @@ void UBodyTemperature::CoolDown(float DeltaTime)
 
 void UBodyTemperature::HeatUp(float DeltaTime)
 {
-	Temp = Temp + DeltaTime * CoolDownRate;
+	Temp = Temp + DeltaTime * HeatUpRate;
 	if (Temp > MaxTemp)
 	{
 		Temp = MaxTemp;
