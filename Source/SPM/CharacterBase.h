@@ -126,6 +126,9 @@ protected:
 	void UpdateVisibility(float VisibilityFactor);
 	
 
+protected:
+
+
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -163,6 +166,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Respawn")
 	FVector CheckpointLocation;
-
+	
+	
 };
 
