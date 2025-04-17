@@ -81,7 +81,11 @@ void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UpdateLastSafeLocation();
+	if (GetCharacterMovement()->IsMovingOnGround())
+	{
+		LastGroundedZ = GetActorLocation().Z;
+	}
+	updateLastSafeLocation();
 
 	UAdaptiveWeatherSystem* WeatherSystemInstance = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 
@@ -251,7 +255,7 @@ void ACharacterBase::RespawnToLastSafeLocation()
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
-void ACharacterBase::UpdateLastSafeLocation()
+void ACharacterBase::updateLastSafeLocation()
 {
 	if (!GetCharacterMovement()->IsFalling())
 	{
@@ -267,19 +271,17 @@ void ACharacterBase::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);
 
-	UE_LOG(LogTemp, Warning, TEXT("landed"));
-
 	// Calculate fall distance
 	float FallHeight = LastGroundedZ - GetActorLocation().Z;
 	float FallDistanceMeters = FallHeight / 100.0f; 
 	
-	if (FallDistanceMeters > 4.0f) // 10 meters min for fall damage
+	if (FallDistanceMeters > FallDamageThreshold) // meters min for fall damage
 	{
-		float FallDamage = (FallDistanceMeters - 4.0f) * FallDamageMultiplier; 
+		float FallDamage = 50.f + ((FallDistanceMeters - FallDamageThreshold) * FallDamageMultiplier); 
 		HealthComponent->TakeDamage(FallDamage);
-		UE_LOG(LogTemp, Warning, TEXT("Threshold reached"));
-	}
-
+		UE_LOG(LogTemp, Warning, TEXT("Threshold reached %f"),FallDistanceMeters);
+		UE_LOG(LogTemp, Warning, TEXT("Threshold reached %f"),FallDamage);
+	} 
 }
 
 
