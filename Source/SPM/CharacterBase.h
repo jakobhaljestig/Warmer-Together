@@ -95,10 +95,10 @@ protected:
 	float CurrentMovementSpeed;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
-	float FallDamageMultiplier = 10.0f;
+	float FallDamageMultiplier = 5.0f;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fall Damage")
-	float FallDamageThreshold = 10.0f;
+	float FallDamageThreshold = 6.0f;
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
 	float LastGroundedZ = 0.0f;
