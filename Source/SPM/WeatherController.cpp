@@ -11,7 +11,7 @@ AWeatherController::AWeatherController()
 
 	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
 	
-	SnowParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("SnowParticleSystem"));
+	SnowParticleSystem = CreateDefaultSubobject<UNiagaraComponent>(TEXT("SnowParticleSystem"));
 	SnowParticleSystem -> SetupAttachment(RootComponent);
 	SnowParticleSystem -> bAutoActivate = false;
 }
@@ -57,6 +57,19 @@ void AWeatherController::UpdatePlayerPerformance(const FPerformance& PlayerPerfo
 
 void AWeatherController::SimulateBadPerformance()
 {
+
+	UE_LOG(LogTemp, Warning, TEXT("[WeatherController] SimulateBadPerformance CALLED"));
+
+	// Kolla om det är AI eller manuell anrop
+	if (GetOwner())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Called by: %s"), *GetOwner()->GetName());
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Called directly or from AI/BT!"));
+	}
+	
 	if (!WeatherSystem)
 	{
 		UE_LOG(LogTemp, Error, TEXT("WeatherSystem is NULL in SimulateBadPerformance"));
@@ -67,10 +80,10 @@ void AWeatherController::SimulateBadPerformance()
 	BadPerf.DeathCount = 5;  // Flera dödsfall
 	BadPerf.AveragePuzzleTime = 50.0f;  // Längre tid för att lösa pussel
 	BadPerf.TimeNearHeat = 0.0f;  // Liten tid nära värmekälla
-
-	if (SnowParticleSystem && !SnowParticleSystem->IsActive())
+	
+	if (SnowParticleSystem)
 	{
-		SnowParticleSystem -> ActivateSystem();
+		SnowParticleSystem -> Activate();
 	}
 	
 	WeatherSystem->UpdatePerformance(BadPerf);
@@ -86,6 +99,11 @@ void AWeatherController::SimulateGoodPerformance()
 		GoodPerf.DeathCount = 0;  // Inget dödsfall
 		GoodPerf.AveragePuzzleTime = 10.0f;  // Snabb tid för att lösa pussel
 		GoodPerf.TimeNearHeat = 999.0f;  // Mycket tid nära värmekälla
+
+		if (SnowParticleSystem)
+		{
+			SnowParticleSystem -> Deactivate();
+		}
 
 		WeatherSystem->UpdatePerformance(GoodPerf);
 		UE_LOG(LogTemp, Warning, TEXT("Simulated good performance sent to WeatherSystem."));
@@ -106,7 +124,6 @@ void AWeatherController::ApplyWeatherToEnvironment() const
 		FogComponent->SetFogDensity(NewFogDensity);
 	}
 
-	//snöintensitet
 }
 
 
