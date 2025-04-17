@@ -8,6 +8,12 @@
 AWeatherController::AWeatherController()
 {
 	PrimaryActorTick.bCanEverTick = true;
+
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("RootComponent"));
+	
+	SnowParticleSystem = CreateDefaultSubobject<UParticleSystemComponent>(TEXT("SnowParticleSystem"));
+	SnowParticleSystem -> SetupAttachment(RootComponent);
+	SnowParticleSystem -> bAutoActivate = false;
 }
 
 void AWeatherController::BeginPlay()
@@ -27,6 +33,8 @@ void AWeatherController::BeginPlay()
 	}
 
 	EnableInput(GetWorld()->GetFirstPlayerController());
+
+	
 }
 
 void AWeatherController::Tick(float DeltaTime)
@@ -60,6 +68,11 @@ void AWeatherController::SimulateBadPerformance()
 	BadPerf.AveragePuzzleTime = 50.0f;  // Längre tid för att lösa pussel
 	BadPerf.TimeNearHeat = 0.0f;  // Liten tid nära värmekälla
 
+	if (SnowParticleSystem && !SnowParticleSystem->IsActive())
+	{
+		SnowParticleSystem -> ActivateSystem();
+	}
+	
 	WeatherSystem->UpdatePerformance(BadPerf);
 	UE_LOG(LogTemp, Warning, TEXT("Simulated bad performance sent to WeatherSystem."));
 }
@@ -92,6 +105,8 @@ void AWeatherController::ApplyWeatherToEnvironment() const
 		float NewFogDensity = FMath::Clamp(1.0f - Weather.Visibility, 0.1f, 5.0f);  // Justera för att undvika 0.0
 		FogComponent->SetFogDensity(NewFogDensity);
 	}
+
+	//snöintensitet
 }
 
 
