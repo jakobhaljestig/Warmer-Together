@@ -275,16 +275,6 @@ void ACharacterBase::UpdateLastSafeLocation()
 	}
 
 }
-void ACharacterBase::SetCheckpointLocation(FVector Location)
-{
-	CheckpointLocation = Location;
-}
-
-void ACharacterBase::RespawnAtCheckpoint()
-{
-	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
-	SetActorLocation(NewLocation);
-}
 
 void ACharacterBase::Landed(const FHitResult& Hit)
 {

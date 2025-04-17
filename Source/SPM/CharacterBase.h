@@ -166,10 +166,7 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Respawn")
 	FVector CheckpointLocation;
-
-private:
-	UPROPERTY(VisibleAnywhere)
-	FVector CheckpointLocation;
+	
 	
 };
 
