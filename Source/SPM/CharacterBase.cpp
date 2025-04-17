@@ -258,12 +258,18 @@ void ACharacterBase::RespawnToLastSafeLocation()
 
 void ACharacterBase::UpdateLastSafeLocation()
 {
-	if (!GetCharacterMovement()->IsFalling())
+	if (GetCharacterMovement()->IsMovingOnGround())
 	{
-		if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 50.0f)
+		AActor* Ground = GetCharacterMovement() -> CurrentFloor.HitResult.GetActor();
+
+		if (!Ground-> ActorHasTag(TEXT("IgnoreLastSafeLocation")))
 		{
-			LastSafeLocation = GetActorLocation();
+			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 50.0f)
+			{
+				LastSafeLocation = GetActorLocation();
+			}
 		}
+		
 	}
 
 }
