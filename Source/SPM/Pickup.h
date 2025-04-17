@@ -61,12 +61,15 @@ protected:
 	void PhysicsGrab(FHitResult HitResult);
 
 	ECollisionChannel TraceChannel;
+	
 private:
 	UPROPERTY(EditAnywhere)
 	float ThrowingForce = 750.f;
 
 	UPROPERTY(EditAnywhere)
 	float DroppingForce = 350.f;
+
+	
 
 	
 };

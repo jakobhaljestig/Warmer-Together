@@ -10,13 +10,13 @@
  * 
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SPM_API UPushPull : public UPickup
+class SPM_API UPush : public UPickup
 {
 	GENERATED_BODY()
 	
 
 	public:
-	UPushPull();
+	UPush();
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	virtual void GrabAndRelease() override;

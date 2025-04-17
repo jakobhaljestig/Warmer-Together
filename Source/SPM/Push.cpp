@@ -3,13 +3,13 @@
 
 #include "PushPull.h"
 
-UPushPull::UPushPull()
+UPush::UPush()
 {
 	PrimaryComponentTick.bCanEverTick = true;
 	TraceChannel = ECC_GameTraceChannel2;
 }
 
-void UPushPull::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UPush::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
@@ -19,7 +19,7 @@ void UPushPull::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorC
 	}
 }
 
-void UPushPull::GrabAndRelease()
+void UPush::GrabAndRelease()
 {
 	if (PhysicsHandle == nullptr)
 	{
@@ -36,7 +36,7 @@ void UPushPull::GrabAndRelease()
 	}
 }
 
-void UPushPull::StartPushing()
+void UPush::StartPushing()
 {
 	if (PhysicsHandle == nullptr)
 	{
@@ -51,7 +51,7 @@ void UPushPull::StartPushing()
 		PhysicsGrab(HitResult);
 	}
 }
-void UPushPull::StopPushing()
+void UPush::StopPushing()
 {
 	if (Holding)
 	{

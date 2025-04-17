@@ -82,5 +82,8 @@ void ACampFire::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherA
 		int32 OtherBodyIndex)
 {
 	ACharacterBase* Player = Cast<ACharacterBase>(OtherActor);
-	Player->GetComponentByClass<UBodyTemperature>()->IsNearHeat(false);
+	if (Player)
+	{
+		Player->GetComponentByClass<UBodyTemperature>()->IsNearHeat(false);
+	}
 }

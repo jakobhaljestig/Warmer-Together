@@ -14,6 +14,7 @@
 #include "Health.h"
 #include "InputActionValue.h"
 #include "PerformanceTracker.h"
+#include "PushPull.h"
 #include "WeatherController.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -137,6 +138,8 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Started, this, &ACharacterBase::BeginHug);
         EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Completed, this, &ACharacterBase::EndHug);
 
+		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::TogglePush);
+
 	}
 	else
 	{
@@ -233,6 +236,12 @@ void ACharacterBase::Hug()
     		UE_LOG(LogTemplateCharacter, Error, TEXT("BodyTempComponent is nullptr!"));
     	}
 	//GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
+}
+
+void ACharacterBase::TogglePush()
+{
+	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Toggled"));
+	PushComponent->GrabAndRelease();
 }
 
 void ACharacterBase::OnDeath() const
