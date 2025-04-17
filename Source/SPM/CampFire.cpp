@@ -65,15 +65,17 @@ void ACampFire::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
 	ACharacterBase* Player = Cast<ACharacterBase>(OtherActor);
-	Player->GetComponentByClass<UBodyTemperature>()->IsNearHeat(true);
-	if (!bCheckpointActivated)
+	if (Player)
 	{
-
-		bCheckpointActivated = true;
-
-
-		Player->SetCheckpointLocation(GetActorLocation());
+		Player->GetComponentByClass<UBodyTemperature>()->IsNearHeat(true);
+        if (!bCheckpointActivated)
+        {
+        	bCheckpointActivated = true;
+        	
+        	Player->SetCheckpointLocation(GetActorLocation());
+        }
 	}
+	
 }
 
 void ACampFire::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
