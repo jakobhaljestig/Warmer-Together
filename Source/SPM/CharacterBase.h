@@ -109,7 +109,7 @@ protected:
 	class APostProcessVolume* PostProcessVolume;
 	
 	UPROPERTY(BlueprintReadOnly)
-	bool bIsTryingToHug = true;
+	bool bIsTryingToHug = false;
 
 
 	// Siktmetod
