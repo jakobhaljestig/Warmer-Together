@@ -29,36 +29,46 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UFUNCTION(BlueprintCallable)
-	void PickUpOrDrop();
+	virtual void GrabAndRelease();
 
 	UFUNCTION(BlueprintCallable)
 	void Throw();
 
+	virtual void Grab();
+	
+	virtual void Drop(float Force);
 
-private:
+protected:
 	UPROPERTY(EditAnywhere)
 	float GrabDistance = 200.f;
 
 	UPROPERTY(EditAnywhere)
 	float GrabRadius = 50.f;
 
+	
+	
+	UPROPERTY(EditAnywhere)
+	bool Holding = false;
+
+	bool Lifting = false;
+
+	UPhysicsHandleComponent* GetPhysicsHandle() const;
+
+	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
+
+	UPhysicsHandleComponent* PhysicsHandle = nullptr;
+
+	void PhysicsGrab(FHitResult HitResult);
+
+	ECollisionChannel TraceChannel;
+private:
 	UPROPERTY(EditAnywhere)
 	float ThrowingForce = 750.f;
 
 	UPROPERTY(EditAnywhere)
 	float DroppingForce = 350.f;
-	
-	UPROPERTY(EditAnywhere)
-	bool Holding = false;
 
-	UPhysicsHandleComponent* GetPhysicsHandle() const;
-
-	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
-	
-	void Grab();
-	
-	void Drop(float Force);
-
-	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 	
 };
+
+
