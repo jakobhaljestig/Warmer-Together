@@ -7,7 +7,6 @@
 #include "Health.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "Components/PawnNoiseEmitterComponent.h"
 #include "CharacterBase.generated.h"
 
 class UPerformanceTracker;
