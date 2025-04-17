@@ -48,13 +48,12 @@ private:
 	bool bNearHeat = false;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
-	bool bHugging = false;
-
-	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float Temp;
 
-	UBodyTemperature* TempBig = nullptr;
-	UBodyTemperature* TempSmall = nullptr;
+	UPROPERTY()
+	UBodyTemperature* TempBigPlayer;
+	UPROPERTY()
+	UBodyTemperature* TempSmallPlayer;
 
 	bool bFrozen = false;
 	bool bDisplayFreezeEffect = false;

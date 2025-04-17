@@ -66,9 +66,8 @@ void ACharacterBase::BeginPlay()
 	Super::BeginPlay();
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
+	CheckpointLocation = GetActorLocation();
 }
-
-
 
 void ACharacterBase::Tick(float DeltaTime)
 {

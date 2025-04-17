@@ -69,9 +69,9 @@ void ACampFire::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	if (!bCheckpointActivated)
 	{
 		bCheckpointActivated = true;
+		
 		Player->SetCheckpointLocation(GetActorLocation());
 	}
-	
 }
 
 void ACampFire::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,

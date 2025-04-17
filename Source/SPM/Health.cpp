@@ -32,7 +32,7 @@ void UHealth::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 
 	if (bFrozen)
 	{
-		UpdateHealthOnFrozen(DeltaTime);
+		TakeDamage(DeltaTime * HealthDownRate);
 	}
 	if (Health <= 0)
 	{
