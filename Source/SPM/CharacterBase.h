@@ -155,7 +155,7 @@ public:
 	void RespawnToLastSafeLocation();
 
 private:
-	void updateLastSafeLocation();
+	void UpdateLastSafeLocation();
 
 	
 

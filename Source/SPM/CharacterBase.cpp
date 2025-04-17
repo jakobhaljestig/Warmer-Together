@@ -81,7 +81,7 @@ void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	updateLastSafeLocation();
+	UpdateLastSafeLocation();
 
 	UAdaptiveWeatherSystem* WeatherSystemInstance = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 
@@ -251,7 +251,7 @@ void ACharacterBase::RespawnToLastSafeLocation()
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
-void ACharacterBase::updateLastSafeLocation()
+void ACharacterBase::UpdateLastSafeLocation()
 {
 	if (!GetCharacterMovement()->IsFalling())
 	{
