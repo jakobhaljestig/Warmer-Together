@@ -60,10 +60,6 @@ public:
 	
 	void Tick(float DeltaTime);
 
-	void SetCheckpointLocation(FVector Location);
-	
-	void RespawnAtCheckpoint();
-
 protected:
 
 	virtual void BeginPlay() override;
@@ -80,7 +76,8 @@ protected:
 	void Hug();
 
 	void OnDeath() const;
-	
+
+	void Landed(const FHitResult& Hit);
 	
 	// Kroppstemperatur
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
@@ -96,6 +93,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float CurrentMovementSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
+	float FallDamageMultiplier = 5.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fall Damage")
+	float FallDamageThreshold = 6.0f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
+	float LastGroundedZ = 0.0f;
 
 	// Kylningsfaktor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature")
@@ -113,7 +119,7 @@ protected:
 	class APostProcessVolume* PostProcessVolume;
 	
 	UPROPERTY(BlueprintReadOnly)
-	bool bIsTryingToHug = true;
+	bool bIsTryingToHug = false;
 
 
 	// Siktmetod
@@ -121,6 +127,7 @@ protected:
 	
 
 protected:
+
 
 	virtual void NotifyControllerChanged() override;
 
@@ -133,6 +140,9 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
+	UBodyTemperature* BodyTemperatureComponent;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UHealth* HealthComponent;
 
@@ -144,13 +154,18 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Respawn")
     FVector LastSafeLocation;
 
+	void SetCheckpointLocation(FVector Location);
+	
+	void RespawnAtCheckpoint();
+	
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
 
 private:
-	void updateLastSafeLocation();
+	void UpdateLastSafeLocation();
 
-	
+	UPROPERTY(VisibleAnywhere, Category = "Respawn")
+	FVector CheckpointLocation;
 
 private:
 	UPROPERTY(VisibleAnywhere)

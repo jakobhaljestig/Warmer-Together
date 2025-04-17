@@ -68,10 +68,12 @@ void ACampFire::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* Othe
 	Player->GetComponentByClass<UBodyTemperature>()->IsNearHeat(true);
 	if (!bCheckpointActivated)
 	{
-		//bCheckpointActivated = true;
+
+		bCheckpointActivated = true;
+
+
 		Player->SetCheckpointLocation(GetActorLocation());
 	}
-	
 }
 
 void ACampFire::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,

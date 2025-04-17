@@ -59,4 +59,6 @@ private:
 	float TriggerRadius = 500;
 
 	bool bCheckpointActivated = false;
+
+	
 };
