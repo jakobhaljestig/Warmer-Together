@@ -45,8 +45,9 @@ void ACharacterSmall::StopCrawl(const FInputActionValue& Value)
 void ACharacterSmall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (GetVelocity().X < 50 && GetVelocity().Z > -50 && GetVelocity().Y < 50)
+    
+    //Stop simulating physics after being thrown
+	if (GetVelocity().Length() < 300)
 	{
 		for (UActorComponent* Component : this->GetComponents())
 		{
