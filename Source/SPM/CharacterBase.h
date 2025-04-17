@@ -7,7 +7,6 @@
 #include "Health.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "Components/PawnNoiseEmitterComponent.h"
 #include "CharacterBase.generated.h"
 
 class UPerformanceTracker;
@@ -52,15 +51,14 @@ class ACharacterBase : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* LookAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* HugAction;
+
 
 public:
 	ACharacterBase();
 	
 	void Tick(float DeltaTime);
-
-	void SetCheckpointLocation(FVector Location);
-	
-	void RespawnAtCheckpoint();
 
 protected:
 
@@ -72,14 +70,19 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
-	void Hug(const FInputActionValue& Value);
+	void BeginHug(const FInputActionValue& Value);
+	void EndHug(const FInputActionValue& Value);
+
+	void Hug();
 
 	void OnDeath() const;
-	
+
+	void Landed(const FHitResult& Hit);
 	
 	// Kroppstemperatur
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
 	UBodyTemperature* BodyTempComponent;
+	
 
 	UPROPERTY()
 	UAdaptiveWeatherSystem* AdaptiveWeatherSystem;
@@ -90,6 +93,15 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float CurrentMovementSpeed;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
+	float FallDamageMultiplier = 10.0f;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fall Damage")
+	float FallDamageThreshold = 10.0f;
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
+	float LastGroundedZ = 0.0f;
 
 	// Kylningsfaktor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature")
@@ -105,12 +117,14 @@ protected:
 	// Sikt
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	class APostProcessVolume* PostProcessVolume;
+	
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsTryingToHug = true;
+
 
 	// Siktmetod
 	void UpdateVisibility(float VisibilityFactor);
-
-
-protected:
+	
 
 	virtual void NotifyControllerChanged() override;
 
@@ -123,6 +137,9 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
+	UBodyTemperature* BodyTemperatureComponent;
+
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
 	UHealth* HealthComponent;
 
@@ -130,9 +147,17 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
 	UPerformanceTracker* PerformanceTracker;
 
+	//Mini Respawning
+	UPROPERTY(BlueprintReadWrite, Category = "Respawn")
+    FVector LastSafeLocation;
+
+	UFUNCTION(BlueprintCallable, Category = "Respawn")
+	void RespawnToLastSafeLocation();
+
 private:
-	UPROPERTY(VisibleAnywhere)
-	FVector CheckpointLocation;
+	void updateLastSafeLocation();
+
 	
+
 };
 

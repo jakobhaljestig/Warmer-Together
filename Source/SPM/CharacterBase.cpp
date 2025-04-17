@@ -15,11 +15,10 @@
 #include "InputActionValue.h"
 #include "PerformanceTracker.h"
 #include "WeatherController.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
-//////////////////////////////////////////////////////////////////////////
-// ASPMCharacter
 
 ACharacterBase::ACharacterBase()
 {
@@ -62,9 +61,6 @@ ACharacterBase::ACharacterBase()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
-//////////////////////////////////////////////////////////////////////////
-// Input
-
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
@@ -77,6 +73,8 @@ void ACharacterBase::BeginPlay()
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+
+	updateLastSafeLocation();
 
 	UAdaptiveWeatherSystem* WeatherSystemInstance = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 
@@ -131,6 +129,10 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACharacterBase::Move);
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACharacterBase::Look);
+		
+		EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Started, this, &ACharacterBase::BeginHug);
+        EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Completed, this, &ACharacterBase::EndHug);
+
 	}
 	else
 	{
@@ -174,9 +176,59 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 	}
 }
 
-void ACharacterBase::Hug(const FInputActionValue& Value)
+void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
-	GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
+	bIsTryingToHug = true;
+	UE_LOG(LogTemplateCharacter, Warning, TEXT("Hug mapping is working"));
+
+	ACharacter* Char1 = UGameplayStatics::GetPlayerCharacter(this, 0);
+	ACharacter* Char2 = UGameplayStatics::GetPlayerCharacter(this, 1);
+
+	if (!Char1 || !Char2 || Char1 == Char2) return;
+
+	ACharacterBase* Player1 = Cast<ACharacterBase>(Char1);
+	ACharacterBase* Player2 = Cast<ACharacterBase>(Char2);
+
+	if (!Player1 || !Player2) return;
+
+	const float HugDistance = 200.0f; // Kanske inte hårdkoda avständ
+
+	if (Player1->bIsTryingToHug && Player2->bIsTryingToHug)
+	{
+		float Distance = FVector::Dist(Player1->GetActorLocation(), Player2->GetActorLocation());
+
+		if (Distance <= HugDistance)
+		{	
+			Player1->Hug();
+		}else
+		{
+			UE_LOG(LogTemplateCharacter, Warning, TEXT("Distance too big between players"));
+		}
+		
+	}else{
+		UE_LOG(LogTemplateCharacter, Warning, TEXT("Only 1 character hugging"));
+	}
+
+}
+
+void ACharacterBase::EndHug(const FInputActionValue& Value)
+{
+	UE_LOG(LogTemplateCharacter, Warning, TEXT("Hug has ended"));
+	bIsTryingToHug = false;
+}
+
+void ACharacterBase::Hug()
+{
+	UE_LOG(LogTemplateCharacter, Warning, TEXT("Characters are hugging"));
+	if (BodyTempComponent)
+    	{
+    		BodyTempComponent->ShareTemp();
+    	}
+    	else
+    	{
+    		UE_LOG(LogTemplateCharacter, Error, TEXT("BodyTempComponent is nullptr!"));
+    	}
+	//GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
 
 void ACharacterBase::OnDeath() const
@@ -198,5 +250,39 @@ void ACharacterBase::RespawnAtCheckpoint()
 	SetActorLocation(NewLocation);
 }
 
+void ACharacterBase::RespawnToLastSafeLocation()
+{
+	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
+}
 
+void ACharacterBase::updateLastSafeLocation()
+{
+	if (!GetCharacterMovement()->IsFalling())
+	{
+		if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 50.0f)
+		{
+			LastSafeLocation = GetActorLocation();
+		}
+	}
+
+}
+
+void ACharacterBase::Landed(const FHitResult& Hit)
+{
+	Super::Landed(Hit);
+
+	UE_LOG(LogTemp, Warning, TEXT("landed"));
+
+	// Calculate fall distance
+	float FallHeight = LastGroundedZ - GetActorLocation().Z;
+	float FallDistanceMeters = FallHeight / 100.0f; 
+	
+	if (FallDistanceMeters > 4.0f) // 10 meters min for fall damage
+	{
+		float FallDamage = (FallDistanceMeters - 4.0f) * FallDamageMultiplier; 
+		HealthComponent->TakeDamage(FallDamage);
+		UE_LOG(LogTemp, Warning, TEXT("Threshold reached"));
+	}
+
+}
 

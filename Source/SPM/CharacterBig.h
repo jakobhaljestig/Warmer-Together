@@ -40,7 +40,7 @@ protected:
 	void ToggleGrab(const FInputActionValue& Value);
 	void Throw(const FInputActionValue& Value);
 
-	bool IsHolding = false;
+	bool IsH = false;
 	
 	
 	

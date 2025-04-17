@@ -9,6 +9,7 @@ public:
 	void CancelTimer();
 
 private:
+	
 	FTimerHandle TimerHandle;
 	TFunction<void()> OnFinished;
 

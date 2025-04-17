@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "FPerformance.h"
+#include "WeatherUpdaterInterface.h"
 #include "PerformanceTracker.generated.h"
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -32,7 +33,8 @@ private:
 	bool bIsNearHeat = false;
 
 	FPerformance Performance;
-	class UAdaptiveWeatherSystem* WeatherSystem;
+
+	IWeatherUpdaterInterface* WeatherUpdater = nullptr;
 
 };
 
