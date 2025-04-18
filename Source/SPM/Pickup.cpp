@@ -3,8 +3,6 @@
 
 #include "Pickup.h"
 
-#include "CharacterSmall.h"
-
 
 UPickup::UPickup()
 {

@@ -10,6 +10,8 @@
  * 
  */
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+
+//Todo: Should inherit from superclass mentioned in Pickup.h
 class SPM_API UPush : public UPickup
 {
 	GENERATED_BODY()

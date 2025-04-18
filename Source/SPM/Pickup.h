@@ -5,13 +5,15 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Components/SceneComponent.h"
-#include "Engine/World.h"
 
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 #include "Pickup.generated.h"
 
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
+
+
+//Todo: Create a Superclass to handle grabbing for both Pickup and Push
 class SPM_API UPickup : public UActorComponent
 {
 	GENERATED_BODY()
@@ -39,27 +41,34 @@ public:
 	virtual void Drop(float Force);
 
 protected:
+	//Todo: Move to superclass
 	UPROPERTY(EditAnywhere)
 	float GrabDistance = 200.f;
 
+	//Todo: Move to superclass
 	UPROPERTY(EditAnywhere)
 	float GrabRadius = 50.f;
 
-	
-	
-	UPROPERTY(EditAnywhere)
+	//Todo: Move to superclass
+	UPROPERTY(VisibleAnywhere)
 	bool Holding = false;
-
+	
+	UPROPERTY(VisibleAnywhere)
 	bool Lifting = false;
 
+	//Todo: Should belong to the Superclass, which should create its own PhysicsHandle. This 
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
 
+	//Todo: Move to superclass
 	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
 
+	//Todo: Move to superclass
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
 
+	//Todo: Make Separate Component For Grab That Pickup And Push Can Use Instead
 	void PhysicsGrab(FHitResult HitResult);
 
+	//Todo: Move to superclass, should be editable to determine which tracechannel the subclasses want to use
 	ECollisionChannel TraceChannel;
 	
 private:
