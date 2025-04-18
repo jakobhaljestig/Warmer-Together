@@ -8,6 +8,16 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+void ACharacterSmall::BeginPlay()
+{
+	Super::BeginPlay();
+	
+	GetCharacterMovement()->JumpZVelocity = 900.0f; 
+	GetCharacterMovement()->AirControl = 0.35f;
+	GetCharacterMovement()->BrakingDecelerationFalling = 0.0f;
+
+}
+
 
 void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -15,9 +25,12 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
-		// Jumping
+		
 		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Started, this, &ACharacterSmall::Crawl);
 		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Completed, this, &ACharacterSmall::StopCrawl);
+
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterSmall::Sprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterSmall::StopSprint);
 	
 	}
 	else
@@ -42,11 +55,22 @@ void ACharacterSmall::StopCrawl(const FInputActionValue& Value)
 	ACharacter::UnCrouch(true);
 }
 
+void ACharacterSmall::Sprint(const FInputActionValue& Value)
+{
+	GetCharacterMovement()->MaxWalkSpeed = 800.0f;
+}
+
+void ACharacterSmall::StopSprint(const FInputActionValue& Value)
+{
+	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+}
+
 void ACharacterSmall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (GetVelocity().X < 50 && GetVelocity().Z > -50 && GetVelocity().Y < 50)
+    
+    //Stop simulating physics after being thrown
+	if (GetVelocity().Length() < 300)
 	{
 		for (UActorComponent* Component : this->GetComponents())
 		{
