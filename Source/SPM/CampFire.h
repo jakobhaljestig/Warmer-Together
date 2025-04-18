@@ -7,7 +7,9 @@
 #include "GameFramework/Actor.h"
 #include "CampFire.generated.h"
 
+class UStaticMeshComponent;
 class USphereComponent;
+class UParticleSystemComponent;
 
 UCLASS()
 class SPM_API ACampFire : public AActor
@@ -30,15 +32,33 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	/*
 	UFUNCTION(BlueprintCallable)
 	static void OnPlayerEnterHeatZone(ACharacterBase* Player);
 
 	UFUNCTION(BlueprintCallable)
 	static void OnPlayerExitHeatZone(ACharacterBase* Player);
+	*/
+	
+	UFUNCTION(BlueprintCallable)
+	void OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+	                    int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UFUNCTION(BlueprintCallable)
+	void OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,
+						int32 OtherBodyIndex);
 
 private:
-	UPROPERTY(EditAnywhere, Category = "Fire")
-	float Radius = 5.f;
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	UStaticMeshComponent* Mesh;
 	
+	UPROPERTY(VisibleAnywhere, Category = "Components")
+	USphereComponent* TriggerComp;
 
+	UPROPERTY(EditAnywhere)
+	float TriggerRadius = 500;
+
+	bool bCheckpointActivated = false;
+
+	
 };

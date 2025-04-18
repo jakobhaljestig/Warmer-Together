@@ -26,34 +26,34 @@ public:
 
 	void IsNearHeat(bool bIsNearHeat);
 	
-	void CoolDown(float DeltaTime);
-	void HeatUp(float DeltaTime);
 	void ShareTemp();
 
 	UFUNCTION(BlueprintCallable)
 	float GetTempPercentage() const { return Temp / MaxTemp; }
 
-private:	
+private:
+	void CoolDown(float DeltaTime);
+	void HeatUp(float DeltaTime);
+	
 	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float MaxTemp = 100.f;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
-	float CoolDownRate = 0.5f;
+	float CoolDownRate = 2.5f;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
-	float HeatUpRate = 2.f;
+	float HeatUpRate = 20.f;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
 	bool bNearHeat = false;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
-	bool bHugging = false;
-
-	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float Temp;
 
-	UBodyTemperature* TempBig = nullptr;
-	UBodyTemperature* TempSmall = nullptr;
+	UPROPERTY()
+	UBodyTemperature* TempBigPlayer;
+	UPROPERTY()
+	UBodyTemperature* TempSmallPlayer;
 
 	bool bFrozen = false;
 	bool bDisplayFreezeEffect = false;
