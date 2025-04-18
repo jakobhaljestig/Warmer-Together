@@ -30,15 +30,12 @@ public:
 
 	void IsFrozen(bool bShouldBeFrozen);
 
-	UFUNCTION(BlueprintCallable, Category = "Health")
-	void TakeDamage(float Damage);
-
 private:
 	UPROPERTY(EditAnywhere, Category = "Health")
 	float MaxHealth = 100;
 
 	UPROPERTY(EditAnywhere, Category = "Health")
-	float HealthDownRate = 5.f;
+	float HealthDownRate = 1.f;
 	
 	float Health;
 	bool bFrozen = false;

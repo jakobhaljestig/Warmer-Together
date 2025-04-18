@@ -82,7 +82,7 @@ void UBodyTemperature::CoolDown(float DeltaTime)
 
 void UBodyTemperature::HeatUp(float DeltaTime)
 {
-	Temp = Temp + DeltaTime * HeatUpRate;
+	Temp = Temp + DeltaTime * CoolDownRate;
 	if (Temp > MaxTemp)
 	{
 		Temp = MaxTemp;
@@ -96,15 +96,11 @@ void UBodyTemperature::ShareTemp()
 		bFrozen = false;
 		GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
 	}
-	if (!TempBigPlayer || !TempSmallPlayer)
+	if (TempBig == nullptr || TempSmall == nullptr)
 	{
-		TempBigPlayer = Cast<ACharacterBig>(UGameplayStatics::GetPlayerCharacter(this, 0))->GetComponentByClass<UBodyTemperature>();
-		TempSmallPlayer = Cast<ACharacterSmall>(UGameplayStatics::GetPlayerCharacter(this, 1))->GetComponentByClass<UBodyTemperature>();
+		TempBig = Cast<ACharacterBig>(UGameplayStatics::GetPlayerCharacter(this, 0))->GetComponentByClass<UBodyTemperature>();
+		TempSmall = Cast<ACharacterSmall>(UGameplayStatics::GetPlayerCharacter(this, 1))->GetComponentByClass<UBodyTemperature>();
 	}
-	else
-	{
-		float MeanTemp = (TempBigPlayer->Temp + TempSmallPlayer->Temp) / 2;
-		TempBigPlayer->Temp = MeanTemp;
-		TempSmallPlayer->Temp = MeanTemp;
-	}
+	Temp = (TempBig->Temp + TempSmall->Temp) / 2;
+	bHugging = false;
 }

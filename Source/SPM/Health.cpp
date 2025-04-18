@@ -3,8 +3,6 @@
 
 #include "Health.h"
 
-#include "CharacterBase.h"
-
 // Sets default values for this component's properties
 UHealth::UHealth()
 {
@@ -32,12 +30,7 @@ void UHealth::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 
 	if (bFrozen)
 	{
-		TakeDamage(DeltaTime * HealthDownRate);
-	}
-	if (Health <= 0)
-	{
-		Health = MaxHealth;
-		Cast<ACharacterBase>(GetOwner())->RespawnAtCheckpoint();
+		UpdateHealthOnFrozen(DeltaTime);
 	}
 }
 
@@ -53,29 +46,6 @@ void UHealth::UpdateHealthOnFrozen(float DeltaTime)
 	if (Health <= 0)
 	{
 		Health = 0;
-	}
-}
-
-void UHealth::TakeDamage(float Damage)
-{
-
-	UE_LOG(LogTemp, Warning, TEXT("Take damage"));
-	if (Damage <= 0.0f || Health <= 0.0f)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Return"));
-		return; // om HP är under/ lika med 0 så görs inget
-	}
-
-	// decrease HP
-	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
-
-	UE_LOG(LogTemp, Warning, TEXT("decrease HP"));
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Health: %f"), Health));
-	
-	if (Health <= 0.0f)
-	{
-		// Kalla på die-metod
-		UE_LOG(LogTemp, Warning, TEXT("Player is dead."));
 	}
 }
 

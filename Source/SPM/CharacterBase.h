@@ -82,8 +82,6 @@ protected:
 	void TogglePush();
 
 	void OnDeath() const;
-
-	void Landed(const FHitResult& Hit);
 	
 	// Kroppstemperatur
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
@@ -102,15 +100,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float CurrentMovementSpeed;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
-	float FallDamageMultiplier = 5.0f;
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Fall Damage")
-	float FallDamageThreshold = 6.0f;
-	
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
-	float LastGroundedZ = 0.0f;
-
 	// Kylningsfaktor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature")
 	float BaseCoolingRate = 5.0f;
@@ -127,15 +116,12 @@ protected:
 	class APostProcessVolume* PostProcessVolume;
 	
 	UPROPERTY(BlueprintReadOnly)
-	bool bIsTryingToHug = false;
+	bool bIsTryingToHug = true;
 
 
 	// Siktmetod
 	void UpdateVisibility(float VisibilityFactor);
 	
-
-protected:
-
 
 	virtual void NotifyControllerChanged() override;
 
@@ -162,19 +148,13 @@ public:
 	UPROPERTY(BlueprintReadWrite, Category = "Respawn")
     FVector LastSafeLocation;
 
-	void SetCheckpointLocation(FVector Location);
-	
-	void RespawnAtCheckpoint();
-	
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
 
 private:
-	void UpdateLastSafeLocation();
+	void updateLastSafeLocation();
 
-	UPROPERTY(VisibleAnywhere, Category = "Respawn")
-	FVector CheckpointLocation;
 	
-	
+
 };
 

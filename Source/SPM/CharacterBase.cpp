@@ -20,6 +20,8 @@
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
+//////////////////////////////////////////////////////////////////////////
+// ASPMCharacter
 
 ACharacterBase::ACharacterBase()
 {
@@ -62,24 +64,25 @@ ACharacterBase::ACharacterBase()
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
 }
 
+//////////////////////////////////////////////////////////////////////////
+// Input
+
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	BodyTempComponent = FindComponentByClass<UBodyTemperature>();
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
-	CheckpointLocation = GetActorLocation();
 }
+
+
 
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	if (GetCharacterMovement()->IsMovingOnGround())
-	{
-		LastGroundedZ = GetActorLocation().Z;
-	}
-	
-	UpdateLastSafeLocation();
+	updateLastSafeLocation();
 
 	UAdaptiveWeatherSystem* WeatherSystemInstance = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 
@@ -251,54 +254,22 @@ void ACharacterBase::OnDeath() const
 
 	// Andra dödslogik, som att återställa karaktär, respawn, osv.
 }
-void ACharacterBase::SetCheckpointLocation(FVector Location)
-{
-	CheckpointLocation = Location;
-}
-
-void ACharacterBase::RespawnAtCheckpoint()
-{
-	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
-	SetActorLocation(NewLocation);
-}
 
 void ACharacterBase::RespawnToLastSafeLocation()
 {
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
-void ACharacterBase::UpdateLastSafeLocation()
+void ACharacterBase::updateLastSafeLocation()
 {
-	if (GetCharacterMovement()->IsMovingOnGround())
+	if (!GetCharacterMovement()->IsFalling())
 	{
-		AActor* Ground = GetCharacterMovement() -> CurrentFloor.HitResult.GetActor();
-
-		if (!Ground-> ActorHasTag(TEXT("IgnoreLastSafeLocation")))
+		if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 50.0f)
 		{
-			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 50.0f)
-			{
-				LastSafeLocation = GetActorLocation();
-			}
+			LastSafeLocation = GetActorLocation();
 		}
-		
 	}
 
 }
 
-void ACharacterBase::Landed(const FHitResult& Hit)
-{
-	Super::Landed(Hit);
-
-	// Calculate fall distance
-	float FallHeight = LastGroundedZ - GetActorLocation().Z;
-	float FallDistanceMeters = FallHeight / 100.0f; 
-	
-	if (FallDistanceMeters > FallDamageThreshold) // meters min for fall damage
-	{
-		float FallDamage = 50.f + ((FallDistanceMeters - FallDamageThreshold) * FallDamageMultiplier); 
-		HealthComponent->TakeDamage(FallDamage);
-		UE_LOG(LogTemp, Warning, TEXT("Threshold reached %f"),FallDistanceMeters);
-		UE_LOG(LogTemp, Warning, TEXT("Threshold reached %f"),FallDamage);
-	} 
-}
 

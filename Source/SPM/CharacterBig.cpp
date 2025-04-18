@@ -39,7 +39,7 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 //För test
 void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 {
-	PickupComponent->GrabAndRelease();
+	PickupComponent->PickUpOrDrop();
 }
 
 void ACharacterBig::Throw(const FInputActionValue& Value)

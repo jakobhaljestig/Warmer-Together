@@ -14,21 +14,12 @@ class SPM_API ACharacterSmall : public ACharacterBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* CrawlAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* SprintAction;
-
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
 	void Crawl (const FInputActionValue& Value);
 	void StopCrawl(const FInputActionValue& Value);
-
-	void Sprint(const FInputActionValue& Value);
-	void StopSprint(const FInputActionValue& Value);
-	
 public:
 	void Tick(float DeltaTime);
-
-	void BeginPlay() override;
 
 };
