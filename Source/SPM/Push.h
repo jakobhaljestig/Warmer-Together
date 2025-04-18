@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Pickup.h"
-#include "PushPull.generated.h"
+#include "Push.generated.h"
 
 /**
  * 
