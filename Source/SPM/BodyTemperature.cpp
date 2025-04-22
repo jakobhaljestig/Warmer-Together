@@ -23,6 +23,7 @@ void UBodyTemperature::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	WeatherSystem = GetWorld()->GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 }
 
 // Called every frame
@@ -70,15 +71,47 @@ void UBodyTemperature::IsNearHeat(bool bIsNearHeat)
 {
 	bNearHeat = bIsNearHeat;
 }
-
 void UBodyTemperature::CoolDown(float DeltaTime)
 {
-	Temp = Temp - DeltaTime * CoolDownRate;
-	if (Temp < 0)
+	if (!bNearHeat)
 	{
-		Temp = 0;
+		float TempEffect = 1.0f;
+
+		if (WeatherSystem)
+		{
+			float EnvTemp = WeatherSystem->GetCurrentWeather().Temperature;
+
+			// Exponentiell ökning för att göra nedkylning snabbare när vädret är riktigt kallt
+			if (EnvTemp < 0.0f)
+			{
+				TempEffect = FMath::GetMappedRangeValueClamped(
+					FVector2D(-30.0f, 0.0f),
+					FVector2D(3.0f, 0.5f), // Exponentiellt starkare effekt vid kallt väder
+					EnvTemp
+				);
+			}
+			else
+			{
+				TempEffect = FMath::GetMappedRangeValueClamped(
+					FVector2D(0.0f, 30.0f),
+					FVector2D(0.5f, 0.0f),
+					EnvTemp
+				);
+			}
+		}
+
+		float EffectiveCoolRate = CoolDownRate * TempEffect;
+
+		// Här appliceras snabbare nedkylning vid dålig prestation
+		Temp -= DeltaTime * EffectiveCoolRate;
+
+		if (Temp < 0.0f) Temp = 0.0f;
+
+		//UE_LOG(LogTemp, Warning, TEXT("Cooling: %.2f | Temp=%.2f | Env=%.2f"),
+			//EffectiveCoolRate, Temp, WeatherSystem ? WeatherSystem->GetCurrentWeather().Temperature : -999.0f);
 	}
 }
+
 
 void UBodyTemperature::HeatUp(float DeltaTime)
 {
