@@ -24,6 +24,8 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		{
 			StopPushing();
 		}
+
+		
 	}
 }
 

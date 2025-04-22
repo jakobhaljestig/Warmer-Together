@@ -14,11 +14,10 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmall.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmall.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/GrabComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/GrabComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/LiftComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/LiftComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/LiftComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/LiftComponent.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/PushComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/PushComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -46,6 +45,7 @@
 }</component>
   <component name="HighlightingSettingsPerFile">
     <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/PhysicsEngine/PhysicsHandleComponent.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/Character.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterPlayerController.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -227,7 +227,7 @@
       <workItem from="1744889396878" duration="166000" />
       <workItem from="1744890737973" duration="4181000" />
       <workItem from="1745304825080" duration="1618000" />
-      <workItem from="1745306482789" duration="17015000" />
+      <workItem from="1745306482789" duration="19662000" />
     </task>
     <servers />
   </component>

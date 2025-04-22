@@ -2,9 +2,6 @@
 
 
 #include "GrabComponent.h"
-
-#include "CharacterSmall.h"
-#include "MovieSceneTracksComponentTypes.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values for this component's properties
@@ -73,15 +70,7 @@ bool UGrabComponent::HoldingSomething() const
 void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if (Cast<ACharacterSmall>(PhysicsHandle->GetGrabbedComponent()))
-	{
-		UMovementComponent* MovementComponent = Cast<ACharacterSmall>(PhysicsHandle->GetGrabbedComponent())->GetCharacterMovement();
-		if (Cast<ACharacterSmall>(PhysicsHandle->GetGrabbedComponent())->GetCharacterMovement()->MaxWalkSpeed == 250)
-		{
-			Release();
-		}
-		
-	}
+
 	// ...
 }
 //Grab Object
@@ -124,7 +113,6 @@ void UGrabComponent::Release()
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
 		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
-		PhysicsHandle->GetGrabbedComponent()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 		PhysicsHandle->ReleaseComponent();
 	}
 }

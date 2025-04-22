@@ -3,6 +3,8 @@
 
 #include "LiftComponent.h"
 
+#include "CharacterSmall.h"
+
 
 ULiftComponent::ULiftComponent()
 {
@@ -86,7 +88,14 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		FVector TargetLocation = GetOwner()->GetActorLocation() + FVector(0,0,HoldDistance);
 		PhysicsHandle->GetGrabbedComponent()->SetRelativeLocation(TargetLocation);
 		PhysicsHandle->GetGrabbedComponent()->SetWorldRotation(this->GetOwner()->GetActorRotation());
+
+		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
+		if (!GrabbedActor->Tags.Contains("Grabbed"))
+		{
+			Drop(DroppingForce);
+		}
 	}
+	
 }
 
 
