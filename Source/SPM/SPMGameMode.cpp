@@ -24,7 +24,7 @@ void ASPMGameMode::InitGame(const FString& MapName, const FString& Options, FStr
 	//SG->LoadSaveGame(SelectedSaveSlot);
 }
 
-//SKAPA BUILDER KLASS NORA??
+//SKAPA BUILDER KLASS?
 void ASPMGameMode::BeginPlay()
 {
 	//Spawnar Spelare 1
