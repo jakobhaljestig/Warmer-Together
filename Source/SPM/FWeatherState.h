@@ -26,4 +26,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	int32 WeatherLevel;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
+	float TemperatureEffect = 0.0f;
 };
