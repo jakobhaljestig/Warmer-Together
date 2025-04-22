@@ -14,8 +14,9 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/SPMGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/SPMGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/SPMGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/SPMGameMode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CampFire.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CampFire.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CampFire.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CampFire.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/Health.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/Health.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -229,6 +230,7 @@
       <workItem from="1744884734375" duration="4118000" />
       <workItem from="1744889396878" duration="166000" />
       <workItem from="1744890737973" duration="4181000" />
+      <workItem from="1744987664490" duration="2711000" />
     </task>
     <servers />
   </component>
