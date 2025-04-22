@@ -52,8 +52,7 @@ void UHealth::UpdateHealthOnFrozen(float DeltaTime)
 
 void UHealth::TakeDamage(float Damage)
 {
-
-	//UE_LOG(LogTemp, Warning, TEXT("Take damage"));
+	UE_LOG(LogTemp, Warning, TEXT("Take damage"));
 
 	if (Damage <= 0.0f || Health <= 0.0f)
 	{

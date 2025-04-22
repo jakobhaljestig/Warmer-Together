@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AdaptiveWeatherSystem.h"
 #include "Components/ActorComponent.h"
 #include "BodyTemperature.generated.h"
 
@@ -30,6 +31,12 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float GetTempPercentage() const { return Temp / MaxTemp; }
+
+	// Väder-systemet som referens
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weather")
+	UAdaptiveWeatherSystem* WeatherSystem;
+
+	void SetCoolDownRate(float NewRate) { CoolDownRate = NewRate; }
 
 private:
 	void CoolDown(float DeltaTime);

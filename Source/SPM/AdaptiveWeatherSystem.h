@@ -5,6 +5,8 @@
 #include "FPerformance.h"
 #include "FWeatherState.h"
 #include "WeatherUpdaterInterface.h"
+#include "Engine/ExponentialHeightFog.h"
+#include "NiagaraComponent.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "AdaptiveWeatherSystem.generated.h"
 
@@ -24,7 +26,7 @@ class SPM_API UAdaptiveWeatherSystem : public UGameInstanceSubsystem, public IWe
 public:	
 	UAdaptiveWeatherSystem();
 	
-	static void BeginPlay();
+	virtual void BeginPlay();
 
 public:
 
@@ -39,6 +41,15 @@ public:
 
 	// Returnerar väderstatus, t.ex om det redan är dåligt väder behövs det inte adderas mer
 	const FWeatherState& GetCurrentWeather() const;
+	void InitializeEnvironmentReferences();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
+	AExponentialHeightFog* FogActor;
+
+	UPROPERTY(EditAnywhere, Category = "Weather VFX")
+	class UNiagaraComponent* SnowParticleSystem;
+
+	void ApplyEnvironmentEffects() const;
 
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
@@ -46,6 +57,8 @@ protected:
 private:
 
 	EZoneType CurrentZone = EZoneType::ZONE_NEUTRAL; // Startzon
+
+	void AffectBodyTemperatures() const;
 	
 	void EvaluatePerformanceAndAdjustWeather();
 	
@@ -61,4 +74,7 @@ private:
 	float UpdateInterval = 5.0f;
 
 	float TimeSinceLastUpdate = 0.0f;
+
+	
+
 };
