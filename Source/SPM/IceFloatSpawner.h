@@ -26,7 +26,7 @@ protected:
 
 	//USceneComponent?? 
 	UPROPERTY(EditAnywhere)
-	FVector SpawnPosition;
+	USceneComponent* SpawnPosition;
 
 	UPROPERTY(EditAnywhere)
 	float SpawnInterval;

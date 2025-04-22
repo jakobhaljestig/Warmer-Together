@@ -28,6 +28,9 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+	UPROPERTY(EditAnywhere)
+	USceneComponent* EndReachedPosition;
+
 private:
 	//Path för isflaken kommer från spawnern 
 	FVector StartLocation;

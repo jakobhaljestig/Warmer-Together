@@ -32,5 +32,5 @@ void AMovingIceFloat::CheckIfEndReached()
 {
 	//om flak når slutet
 	OnReachedEnd.Broadcast();
-	Destroy(); //förstör eller bara set to start location 
+	//Destroy(); //förstör eller bara set to start location 
 }

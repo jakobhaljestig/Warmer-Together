@@ -3,11 +3,21 @@
 
 #include "IceFloat.h"
 
+
 // Sets default values
 AIceFloat::AIceFloat()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	//för mesh
+	RootComponent = CreateDefaultSubobject<USceneComponent>(TEXT("Root"));
+	IceMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("IceMesh"));
+	IceMesh->SetupAttachment(RootComponent);
+
+	IceCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("IceCollider"));
+	IceCollider->SetupAttachment(RootComponent);
+	
 
 }
 
