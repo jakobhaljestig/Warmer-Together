@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
 #include "CountdownTimer.h"
+#include  "Components/BoxComponent.h"
 #include "IceFloat.generated.h"
 
 UCLASS()
@@ -18,12 +19,18 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UBoxComponent* IceCollider; 
+	
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UStaticMeshComponent* IceMesh;
+
 public:	
 	virtual void Tick(float DeltaTime) override;
 	
 	UFUNCTION(BlueprintCallable, Category = "IceFloat")
 	void BreakObject();
-
 
 private:
 
