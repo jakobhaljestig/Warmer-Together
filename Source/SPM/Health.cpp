@@ -30,14 +30,9 @@ void UHealth::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (bFrozen)
+	if (bFrozen && Health > 0.0f)
 	{
 		TakeDamage(DeltaTime * HealthDownRate);
-	}
-	if (Health <= 0)
-	{
-		Health = MaxHealth;
-		Cast<ACharacterBase>(GetOwner())->RespawnAtCheckpoint();
 	}
 }
 
@@ -60,6 +55,7 @@ void UHealth::TakeDamage(float Damage)
 {
 
 	UE_LOG(LogTemp, Warning, TEXT("Take damage"));
+	
 	if (Damage <= 0.0f || Health <= 0.0f)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Return"));
@@ -74,8 +70,13 @@ void UHealth::TakeDamage(float Damage)
 	
 	if (Health <= 0.0f)
 	{
-		// Kalla på die-metod
 		UE_LOG(LogTemp, Warning, TEXT("Player is dead."));
+
+		ACharacterBase* OwnerChar = Cast<ACharacterBase>(GetOwner());
+		if (OwnerChar)
+		{
+			OwnerChar->OnDeath(); //dödslogik från characterbase
+		}
 	}
 }
 

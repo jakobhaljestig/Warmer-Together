@@ -25,6 +25,7 @@ public:
 	void RegisterPuzzleSolved(float TimeToSolve);
 	//i campfire
 	void SetIsNearHeat(bool bNearHeat);
+	
 	FORCEINLINE const FPerformance& GetPerformance() const { return Performance; }
 
 

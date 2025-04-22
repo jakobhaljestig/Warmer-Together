@@ -81,8 +81,6 @@ protected:
 
 	void TogglePush();
 
-	void OnDeath() const;
-
 	void Landed(const FHitResult& Hit);
 	
 	// Kroppstemperatur
@@ -168,6 +166,8 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
+
+	void OnDeath();
 
 private:
 	void UpdateLastSafeLocation();

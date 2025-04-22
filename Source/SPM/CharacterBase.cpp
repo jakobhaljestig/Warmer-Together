@@ -244,12 +244,15 @@ void ACharacterBase::TogglePush()
 	PushComponent->GrabAndRelease();
 }
 
-void ACharacterBase::OnDeath() const
+void ACharacterBase::OnDeath()
 {
-	// Registrera död
-	PerformanceTracker->RegisterDeath();
+	if (PerformanceTracker)
+	{
+		PerformanceTracker->RegisterDeath();
+		UE_LOG(LogTemp, Warning, TEXT("Death registered in performance tracker"));
+	}
 
-	// Andra dödslogik, som att återställa karaktär, respawn, osv.
+	RespawnAtCheckpoint();
 }
 void ACharacterBase::SetCheckpointLocation(FVector Location)
 {
