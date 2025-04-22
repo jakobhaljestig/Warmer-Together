@@ -13,9 +13,6 @@ struct FPerformance
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float AveragePuzzleTime = 0.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	float TimeNearHeat = 0.0f;
 	
 
 	// Returnerar värde mellan 0 och 1 (där 1 är "bra")
@@ -26,7 +23,6 @@ struct FPerformance
 
 		score -= DeathCount * 0.2f;
 		score -= AveragePuzzleTime * 0.05f;
-		score += TimeNearHeat * 0.1f;
 
 		return FMath::Clamp(score, 0.0f, 1.0f);
 	}

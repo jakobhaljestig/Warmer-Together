@@ -7,7 +7,6 @@
 #include "WeatherUpdaterInterface.h"
 #include "Engine/ExponentialHeightFog.h"
 #include "NiagaraComponent.h"
-#include "NiagaraFunctionLibrary.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "AdaptiveWeatherSystem.generated.h"
 
