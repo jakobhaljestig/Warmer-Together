@@ -8,7 +8,16 @@
 #include "Pickup.h"
 #include "InputActionValue.h"
 
-UPickup* pickup;
+void ACharacterBig::BeginPlay()
+{
+	Super::BeginPlay();
+	PickupComponent = FindComponentByClass<UPickup>();
+	if (!PickupComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("PickupComponent not valid"));
+	}
+}
+
 
 void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -30,28 +39,12 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 //För test
 void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 {
-	if (IsHolding)
-	{
-		UE_LOG(LogTemplateCharacter, Display, TEXT("Release triggered"));
-		//pickup->Release();
-		IsHolding = false;
-	}else
-	{
-		UE_LOG(LogTemplateCharacter, Display, TEXT("Grab triggered"));
-		//pickup->Grab();
-		IsHolding = true;
-	}
-	
+	PickupComponent->GrabAndRelease();
 }
 
 void ACharacterBig::Throw(const FInputActionValue& Value)
 {
-	if (IsHolding)
-	{
-		UE_LOG(LogTemplateCharacter, Display, TEXT("Throwing triggered"));
-		IsHolding = false;
-	}
-
+	PickupComponent->Throw();
 }
 
 

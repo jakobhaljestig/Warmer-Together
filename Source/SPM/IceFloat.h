@@ -30,9 +30,12 @@ private:
 	CountdownTimer Timer;
 
 	void RespawnObject();
-	
+
+	UPROPERTY(EditAnywhere)
 	float RespawnTime = 2.5f;
-	float BreakTime = 2.0f;
+	
+	UPROPERTY(EditAnywhere)
+	float BreakTime = 1.0f;
 	
 
 };

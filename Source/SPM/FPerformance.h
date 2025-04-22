@@ -17,8 +17,6 @@ struct FPerformance
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float TimeNearHeat = 0.0f;
 	
-	float TotalPuzzleTime;
-	int TotalPuzzles;
 
 	// Returnerar värde mellan 0 och 1 (där 1 är "bra")
 	float RecentPerformanceScore() const

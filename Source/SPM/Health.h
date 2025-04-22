@@ -23,12 +23,27 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	UFUNCTION(BlueprintCallable)
+	float GetHealthPercentage() const { return Health / MaxHealth; }
+
+	void UpdateHealthOnFrozen(float DeltaTime);
+
+	void IsFrozen(bool bShouldBeFrozen);
+
+	UFUNCTION(BlueprintCallable, Category = "Health")
+	void TakeDamage(float Damage);
+
+	void ResetHealth();
 
 private:
 	UPROPERTY(EditAnywhere, Category = "Health")
 	float MaxHealth = 100;
 
+	UPROPERTY(EditAnywhere, Category = "Health")
+	float HealthDownRate = 5.f;
+	
 	float Health;
+	bool bFrozen = false;
 
 	
 };

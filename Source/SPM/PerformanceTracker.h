@@ -3,6 +3,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "FPerformance.h"
+#include "WeatherUpdaterInterface.h"
 #include "PerformanceTracker.generated.h"
 
 UCLASS(ClassGroup=(Custom), meta=(BlueprintSpawnableComponent))
@@ -24,6 +25,9 @@ public:
 	void RegisterPuzzleSolved(float TimeToSolve);
 	//i campfire
 	void SetIsNearHeat(bool bNearHeat);
+	
+	FORCEINLINE const FPerformance& GetPerformance() const { return Performance; }
+
 
 private:
 	int32 TotalPuzzles = 0;
@@ -32,7 +36,8 @@ private:
 	bool bIsNearHeat = false;
 
 	FPerformance Performance;
-	class UAdaptiveWeatherSystem* WeatherSystem;
+
+	IWeatherUpdaterInterface* WeatherUpdater = nullptr;
 
 };
 

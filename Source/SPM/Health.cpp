@@ -3,6 +3,8 @@
 
 #include "Health.h"
 
+#include "CharacterBase.h"
+
 // Sets default values for this component's properties
 UHealth::UHealth()
 {
@@ -18,7 +20,6 @@ UHealth::UHealth()
 void UHealth::BeginPlay()
 {
 	Super::BeginPlay();
-
 	
 }
 
@@ -28,6 +29,57 @@ void UHealth::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	
+	if (bFrozen && Health > 0.0f)
+	{
+		TakeDamage(DeltaTime * HealthDownRate);
+	}
 }
+
+void UHealth::IsFrozen(bool bShouldBeFrozen)
+{
+	bFrozen = bShouldBeFrozen;
+}
+
+
+void UHealth::UpdateHealthOnFrozen(float DeltaTime)
+{
+	Health = Health - DeltaTime * HealthDownRate;
+	if (Health <= 0)
+	{
+		Health = 0;
+	}
+}
+
+void UHealth::TakeDamage(float Damage)
+{
+
+	//UE_LOG(LogTemp, Warning, TEXT("Take damage"));
+
+	if (Damage <= 0.0f || Health <= 0.0f)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Return"));
+		return;
+	}
+
+	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
+	//UE_LOG(LogTemp, Warning, TEXT("decrease HP"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Health: %f"), Health));
+
+	if (Health <= 0.0f)
+	{
+		ACharacterBase* OwnerChar = Cast<ACharacterBase>(GetOwner());
+		if (OwnerChar && !OwnerChar->bHasDied)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Player is dead."));
+			OwnerChar->OnDeath();
+		}
+	}
+}
+
+void UHealth::ResetHealth()
+{
+	Health = MaxHealth;
+	UE_LOG(LogTemp, Warning, TEXT("Health has been reset"));
+}
+
 

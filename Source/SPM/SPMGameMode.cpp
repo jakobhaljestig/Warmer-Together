@@ -5,13 +5,26 @@
 #include "CharacterSmall.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
+#include "CharacterPlayerController.h"
 
 ASPMGameMode::ASPMGameMode()
 {
 	DefaultPawnClass = nullptr;
 }
 
-//SKAPA BUILDER KLASS NORA??
+void ASPMGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+{
+	Super::InitGame(MapName, Options, ErrorMessage);
+
+	// (Save/Load logic moved into new SaveGameSubsystem)
+	//URogueSaveGameSubsystem* SG = GetGameInstance()->GetSubsystem<URogueSaveGameSubsystem>();
+
+	// Optional slot name (Falls back to slot specified in SaveGameSettings class/INI otherwise)
+	//FString SelectedSaveSlot = UGameplayStatics::ParseOption(Options, "SaveGame");
+	//SG->LoadSaveGame(SelectedSaveSlot);
+}
+
+//SKAPA BUILDER KLASS?
 void ASPMGameMode::BeginPlay()
 {
 	//Spawnar Spelare 1
@@ -31,6 +44,7 @@ void ASPMGameMode::BeginPlay()
 	}
 
 	//Spawna player 2
+	
 	APlayerController* Player2Controller = UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
 	if (Player2Controller && Player2PawnClass)
 	{

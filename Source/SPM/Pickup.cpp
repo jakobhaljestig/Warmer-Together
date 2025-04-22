@@ -3,15 +3,14 @@
 
 #include "Pickup.h"
 
+#include "CharacterSmall.h"
 
-// Sets default values for this component's properties
+
 UPickup::UPickup()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	PrimaryComponentTick.bCanEverTick = true;
+	TraceChannel = ECC_GameTraceChannel1;
 }
 
 
@@ -42,32 +41,26 @@ void UPickup::Grab(){
 	FHitResult HitResult;
 	bool HasHit = GetGrabbableInReach(HitResult);
 	if (HasHit)
-	{	Holding = true;
-		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
-		HitComponent->SetSimulatePhysics(false);
-		AActor* HitActor = HitResult.GetActor();
-		HitActor->Tags.Add("Grabbed");
-		PhysicsHandle->GrabComponentAtLocation(
-			HitComponent,
-			NAME_None,
-			HitResult.ImpactPoint);
-		HitActor->AttachToComponent(this->GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+	{
+		Lifting = true;
+		PhysicsGrab(HitResult);
+		
 	}
+	
 }
 //Drop object
 void UPickup::Drop(float Force)
 {
 
-	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
+	if (!Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
-		Holding = false;
+		Lifting = false;
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
 		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * DroppingForce);
 		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
 		PhysicsHandle->GetGrabbedComponent()->DetachFromComponent(FDetachmentTransformRules::KeepRelativeTransform);
 		PhysicsHandle->ReleaseComponent();
-		
 	}
 
 }
@@ -78,8 +71,10 @@ void UPickup::Throw()
 	{
 		return;
 	}
-	
-	Drop(ThrowingForce);
+	if (Lifting)
+	{
+		Drop(ThrowingForce);
+	}
 }
 //Get Physics Handle
 UPhysicsHandleComponent* UPickup::GetPhysicsHandle() const
@@ -102,14 +97,36 @@ bool UPickup::GetGrabbableInReach(FHitResult& OutHitResult) const
 		OutHitResult,
 		Start, End,
 		FQuat::Identity,
-		ECC_GameTraceChannel1,
+		TraceChannel,
 		Sphere);
+	
+}
+//Grab Object using physics handle
+void UPickup::PhysicsGrab(FHitResult HitResult)
+{
+
+	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+	{
+		return;
+	}
+	
+	UPrimitiveComponent* HitComponent = HitResult.GetComponent();
+		
+	AActor* HitActor = HitResult.GetActor();
+	HitComponent->SetSimulatePhysics(false);
+	HitComponent->WakeAllRigidBodies();
+	HitActor->Tags.Add("Grabbed");
+	PhysicsHandle->GrabComponentAtLocation(
+		HitComponent,
+		NAME_None,
+		HitResult.ImpactPoint);
+	HitActor->AttachToComponent(this->GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 }
 
 // Called every frame
 void UPickup::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
-	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
+	if (Lifting && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
 		FVector TargetLocation = GetOwner()->GetActorLocation() + FVector(0,0,GrabDistance);
 		PhysicsHandle->GetGrabbedComponent()->SetRelativeLocation(TargetLocation);
@@ -117,18 +134,18 @@ void UPickup::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 	}
 }
 //Determine if player grabs or drops an object
-void UPickup::PickUpOrDrop()
+void UPickup::GrabAndRelease()
 {
 	if (PhysicsHandle == nullptr)
 	{
 		return;
 	}
 	
-	if (Holding)
+	if (Lifting && !Holding)
 	{
 		Drop(DroppingForce);
 	}
-	else
+	else if (!Holding)
 	{
 		Grab();
 	}
