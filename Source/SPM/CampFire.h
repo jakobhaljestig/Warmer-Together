@@ -58,7 +58,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	float TriggerRadius = 500;
 
-	bool bCheckpointActivated = false;
+	bool bCheckpointActivatedCharacterBig = false;
+	bool bCheckpointActivatedCharacterSmall = false;
 
 	
 };
