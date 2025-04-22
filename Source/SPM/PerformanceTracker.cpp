@@ -30,10 +30,7 @@ void UPerformanceTracker::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	{
 		TimeNearHeat += DeltaTime;
 	}
-
-	// uppdatera Performance-structen
-	Performance.TimeNearHeat = TimeNearHeat;
-
+	
 	//bör ej uppdateras i tick men får vara här så länge tills vi har en puzzlemanager
 	Performance.AveragePuzzleTime = TotalPuzzles > 0 ? TotalPuzzleTime / TotalPuzzles : 0.0f;
 
@@ -65,7 +62,3 @@ void UPerformanceTracker::RegisterPuzzleSolved(float TimeToSolve)
 	TotalPuzzles++;
 }
 
-void UPerformanceTracker::SetIsNearHeat(bool bNear)
-{
-	bIsNearHeat = bNear;
-}

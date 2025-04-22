@@ -36,7 +36,6 @@ void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	FPerformance Perf;
 	Perf.DeathCount = 10;           // många dödsfall
 	Perf.AveragePuzzleTime = 100;   // lång tid
-	Perf.TimeNearHeat = 0.0f;       // ingen värme
 
 	UWorld* World = PlayerChar->GetWorld();
 	if (!World) return;
@@ -54,13 +53,13 @@ void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	{
 		NewZone = EZoneType::ZONE_NEUTRAL; // Milt
 	}
-	else if (Perf.AveragePuzzleTime < 20.0f && Perf.DeathCount == 0 && Perf.TimeNearHeat > 60.0f)
+	else if (Perf.AveragePuzzleTime < 20.0f && Perf.DeathCount == 0)
 	{
 		NewZone = EZoneType::ZONE_INTENSE; // Hårdare
 	}
 
 	UE_LOG(LogTemp, Warning, TEXT("[BTService_AnalyzeWeather] Set zone to %d (Deaths=%d, AvgTime=%.1f, HeatTime=%.1f)"),
-		static_cast<int32>(NewZone), Perf.DeathCount, Perf.AveragePuzzleTime, Perf.TimeNearHeat);
+		static_cast<int32>(NewZone), Perf.DeathCount, Perf.AveragePuzzleTime);
 
 	WeatherSystem->SetCurrentZone(NewZone);
 	*/
