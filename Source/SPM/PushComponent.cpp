@@ -3,7 +3,6 @@
 
 #include "PushComponent.h"
 
-#include "VectorTypes.h"
 
 
 UPushComponent::UPushComponent()
@@ -17,15 +16,14 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
-		FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
-		PhysicsHandle->SetTargetLocation(TargetLocation);
-
-		if ((GetOwner()->GetActorLocation() - PhysicsHandle->GetGrabbedComponent()->GetComponentLocation()).Length() > HoldDistance * 4)
+		if (PhysicsHandle->GetGrabbedComponent()->GetMass() < MaxPushWeight){
+			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
+			PhysicsHandle->SetTargetLocation(TargetLocation);
+		}
+		if ((PhysicsHandle->GetGrabbedComponent()->GetComponentLocation() - GetOwner()->GetActorLocation()).Length() > HoldDistance * 4)
 		{
 			StopPushing();
 		}
-
-		
 	}
 }
 
@@ -49,6 +47,7 @@ void UPushComponent::GrabAndRelease()
 void UPushComponent::StartPushing()
 {
 	Grab();
+	
 }
 //Restores player movement and drops grabbed object
 void UPushComponent::StopPushing()

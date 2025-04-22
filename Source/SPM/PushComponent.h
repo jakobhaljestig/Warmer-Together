@@ -30,5 +30,8 @@ class SPM_API UPushComponent : public UGrabComponent
 	
 	float OriginalMovementSpeed = 0;
 	FRotator OriginalRotationRate = FRotator(0,0,0);
+
+	UPROPERTY(EditAnywhere)
+	float MaxPushWeight = 250;
 	
 };

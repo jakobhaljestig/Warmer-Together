@@ -57,7 +57,7 @@ void ULiftComponent::Drop(float Force)
 void ULiftComponent::GrabEffect()
 {
 	OriginalMovementSpeed = OwnerMovementComponent->MaxWalkSpeed;
-	OwnerMovementComponent->MaxWalkSpeed = 0;
+	OwnerMovementComponent->MaxWalkSpeed = OwnerMovementComponent->MaxWalkSpeed/2;
 	OwnerMovementComponent->SetJumpAllowed(false);
 }
 
