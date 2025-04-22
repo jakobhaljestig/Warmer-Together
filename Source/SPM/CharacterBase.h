@@ -172,13 +172,11 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
 	bool bHasDied = false;
 
-
 private:
 	void UpdateLastSafeLocation();
 
 	UPROPERTY(VisibleAnywhere, Category = "Respawn")
 	FVector CheckpointLocation;
-	
-	
+
 };
 
