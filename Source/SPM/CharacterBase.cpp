@@ -68,6 +68,15 @@ void ACharacterBase::BeginPlay()
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
 	CheckpointLocation = GetActorLocation();
+
+	if (!PerformanceTracker)
+	{
+		PerformanceTracker = FindComponentByClass<UPerformanceTracker>();  // Hitta om den finns på samma objekt
+		if (!PerformanceTracker)
+		{
+			UE_LOG(LogTemp, Error, TEXT("PerformanceTracker not found!"));
+		}
+	}
 }
 
 void ACharacterBase::Tick(float DeltaTime)
@@ -243,17 +252,28 @@ void ACharacterBase::TogglePush()
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Toggled"));
 	PushComponent->GrabAndRelease();
 }
-
 void ACharacterBase::OnDeath()
 {
+	if (bHasDied)
+		return;
+
+	bHasDied = true;
+
+	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
+
 	if (PerformanceTracker)
 	{
 		PerformanceTracker->RegisterDeath();
-		UE_LOG(LogTemp, Warning, TEXT("Death registered in performance tracker"));
 	}
-
-	RespawnAtCheckpoint();
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("PerformanceTracker is null!"));
+	}
+	
+		RespawnAtCheckpoint();
+	
 }
+
 void ACharacterBase::SetCheckpointLocation(FVector Location)
 {
 	CheckpointLocation = Location;
@@ -262,6 +282,13 @@ void ACharacterBase::SetCheckpointLocation(FVector Location)
 void ACharacterBase::RespawnAtCheckpoint()
 {
 	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
+	bHasDied = false;
+	
+	if (HealthComponent)
+	{
+		HealthComponent->ResetHealth();
+	}
+	
 	SetActorLocation(NewLocation);
 }
 

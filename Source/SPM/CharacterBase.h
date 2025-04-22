@@ -169,6 +169,10 @@ public:
 
 	void OnDeath();
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
+	bool bHasDied = false;
+
+
 private:
 	void UpdateLastSafeLocation();
 

@@ -6,6 +6,7 @@
 #include "AIController.h"
 #include "PerformanceTracker.h"
 #include "AdaptiveWeatherSystem.h"
+#include "CharacterBase.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -18,22 +19,21 @@ UBTService_AnalyzeWeather::UBTService_AnalyzeWeather()
 	bNotifyCeaseRelevant = false;
 	
 }
-
 void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	Super::TickNode(OwnerComp, NodeMemory, DeltaSeconds);
 
 	UE_LOG(LogTemp, Warning, TEXT("[AnalyzeWeather] Tick fired"));
 
-	AActor* OwnerActor = OwnerComp.GetAIOwner() ? OwnerComp.GetAIOwner()->GetPawn() : nullptr;
-	if (!OwnerActor) return;
+	ACharacterBase* PlayerChar = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
+	if (!PlayerChar) return;
 
-	UPerformanceTracker* PerfTracker = OwnerActor->FindComponentByClass<UPerformanceTracker>();
+	UPerformanceTracker* PerfTracker = PlayerChar->FindComponentByClass<UPerformanceTracker>();
 	if (!PerfTracker) return;
 
 	const FPerformance& Perf = PerfTracker->GetPerformance();
-	
-	UWorld* World = OwnerActor->GetWorld();
+
+	UWorld* World = PlayerChar->GetWorld();
 	if (!World) return;
 
 	UAdaptiveWeatherSystem* WeatherSystem = World->GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
@@ -51,8 +51,10 @@ void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 		NewZone = EZoneType::ZONE_INTENSE; // Hårdare
 	}
 
-	WeatherSystem->SetCurrentZone(NewZone);
-
 	UE_LOG(LogTemp, Warning, TEXT("[BTService_AnalyzeWeather] Set zone to %d (Deaths=%d, AvgTime=%.1f, HeatTime=%.1f)"),
 		static_cast<int32>(NewZone), Perf.DeathCount, Perf.AveragePuzzleTime, Perf.TimeNearHeat);
+
+	WeatherSystem->SetCurrentZone(NewZone);
+	
 }
+
