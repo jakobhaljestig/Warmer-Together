@@ -44,7 +44,7 @@ private:
 
 	virtual void GrabEffect() override;
 
-	float OriginalMovementSpeed;
+	float OriginalMovementSpeed = 0;
 
 	
 };

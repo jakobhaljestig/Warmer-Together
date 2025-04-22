@@ -3,6 +3,8 @@
 
 #include "PushComponent.h"
 
+#include "VectorTypes.h"
+
 
 UPushComponent::UPushComponent()
 {
@@ -17,6 +19,11 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 	{
 		FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
 		PhysicsHandle->SetTargetLocation(TargetLocation);
+
+		if ((GetOwner()->GetActorLocation() - PhysicsHandle->GetGrabbedComponent()->GetComponentLocation()).Length() > HoldDistance * 4)
+		{
+			StopPushing();
+		}
 	}
 }
 
@@ -41,6 +48,7 @@ void UPushComponent::StartPushing()
 {
 	Grab();
 }
+//Restores player movement and drops grabbed object
 void UPushComponent::StopPushing()
 {
 	PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
@@ -49,7 +57,7 @@ void UPushComponent::StopPushing()
 	OwnerMovementComponent->RotationRate = OriginalRotationRate;
 	OwnerMovementComponent->SetJumpAllowed(true);
 }
-
+//Restricts player movement
 void UPushComponent::GrabEffect()
 {
 	OriginalMovementSpeed = OwnerMovementComponent->MaxWalkSpeed;
