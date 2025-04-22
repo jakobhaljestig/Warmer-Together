@@ -23,7 +23,7 @@ void ULiftComponent::GrabAndRelease()
 	{
 		Drop(DroppingForce);
 	}
-	else if (!HoldingSomething())
+	else if (!HoldingSomething() && !OwnerMovementComponent->IsFalling())
 	{
 		Lift();
 	}
@@ -80,6 +80,7 @@ void ULiftComponent::Lift()
 // Called every frame
 void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
 		FVector TargetLocation = GetOwner()->GetActorLocation() + FVector(0,0,HoldDistance);

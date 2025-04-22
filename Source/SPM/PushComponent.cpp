@@ -12,10 +12,11 @@ UPushComponent::UPushComponent()
 
 void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
 		FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
-		PhysicsHandle->GetGrabbedComponent()->SetRelativeLocation(TargetLocation);
+		PhysicsHandle->SetTargetLocation(TargetLocation);
 	}
 }
 
@@ -30,7 +31,7 @@ void UPushComponent::GrabAndRelease()
 	{
 		StopPushing();
 	}
-	else if (!HoldingSomething())
+	else if (!HoldingSomething() && !OwnerMovementComponent->IsFalling())
 	{
 		StartPushing();
 	}
