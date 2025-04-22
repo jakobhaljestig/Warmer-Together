@@ -13,6 +13,17 @@ void UAdaptiveWeatherSystem::BeginPlay()
 	UE_LOG(LogTemp, Warning, TEXT("Adaptive Weather System Started"));
 }
 
+void UAdaptiveWeatherSystem::SetCurrentZone(EZoneType NewZone)
+{
+	if (CurrentZone != NewZone)
+	{
+		CurrentZone = NewZone;
+
+		UE_LOG(LogTemp, Warning, TEXT("Weather Zone Updated to: %d"), static_cast<int32>(NewZone));
+		EvaluatePerformanceAndAdjustWeather();
+	}
+}
+
 // Initialize kallas när subsystemet startas
 void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
@@ -35,10 +46,11 @@ void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformanc
 	CurrentPerformance = NewPerformance;
 	EvaluatePerformanceAndAdjustWeather();
 
-	UE_LOG(LogTemp, Warning, TEXT("Performance Updated: Deaths=%d, AvgTime=%.1f, TimeNearHeat=%.1f"),
+	/*UE_LOG(LogTemp, Warning, TEXT("Performance Updated: Deaths=%d, AvgTime=%.1f, TimeNearHeat=%.1f"),
 		CurrentPerformance.DeathCount,
 		CurrentPerformance.AveragePuzzleTime,
 		CurrentPerformance.TimeNearHeat);
+		*/
 }
 
 
@@ -50,22 +62,24 @@ const FWeatherState& UAdaptiveWeatherSystem::GetCurrentWeather() const
 void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 {
 	float PerformanceScore = CurrentPerformance.RecentPerformanceScore();
-    
-	// Logga PerformanceScore för att kontrollera om det varierar som förväntat
-	UE_LOG(LogTemp, Warning, TEXT("Performance Score: %.2f"), PerformanceScore);
 
-	CurrentWeather.Temperature = FMath::Lerp(-30.0f, 0.0f, PerformanceScore);
-	CurrentWeather.WindSpeed = FMath::Lerp(20.0f, 5.0f, PerformanceScore);
-	CurrentWeather.SnowIntensity = FMath::Lerp(1.0f, 0.2f, PerformanceScore);
-	CurrentWeather.Visibility = FMath::Lerp(0.3f, 1.0f, PerformanceScore); // Här justeras Visibility
-	CurrentWeather.WeatherLevel = FMath::RoundToInt(FMath::Lerp(3.0f, 1.0f, PerformanceScore));
+	float ZoneModifier = 1.0f;
+	switch (CurrentZone)
+	{
+	case EZoneType::ZONE_NEUTRAL: ZoneModifier = 0.5f; break;
+	case EZoneType::ZONE_MEDIUM: ZoneModifier = 1.0f; break;
+	case EZoneType::ZONE_INTENSE: ZoneModifier = 1.5f; break;
+	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Weather Updated: Temp=%.1f, Wind=%.1f, Snow=%.1f, Vis=%.1f, Level=%d"),
-		CurrentWeather.Temperature,
-		CurrentWeather.WindSpeed,
-		CurrentWeather.SnowIntensity,
-		CurrentWeather.Visibility,
-		CurrentWeather.WeatherLevel);
+	float AdjustedScore = FMath::Clamp(PerformanceScore * (1.0f / ZoneModifier), 0.0f, 1.0f);
+
+	// Anpassa vädret
+	CurrentWeather.Temperature = FMath::Lerp(-30.0f, 0.0f, AdjustedScore);
+	CurrentWeather.WindSpeed = FMath::Lerp(20.0f, 5.0f, AdjustedScore);
+	CurrentWeather.SnowIntensity = FMath::Lerp(1.0f, 0.2f, AdjustedScore);
+	CurrentWeather.Visibility = FMath::Lerp(0.3f, 1.0f, AdjustedScore);
+	CurrentWeather.WeatherLevel = FMath::RoundToInt(FMath::Lerp(3.0f, 1.0f, AdjustedScore));
+
 }
 
 // Detta kan ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame.
