@@ -6,8 +6,7 @@
 #include "IceFloat.h"
 #include "MovingIceFloat.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE(FOnReachedEnd);
-
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnReachedEnd, AMovingIceFloat*, IceFloat);
 /**
  * 
  */
@@ -19,11 +18,14 @@ class SPM_API AMovingIceFloat : public AIceFloat
 public:
 	AMovingIceFloat();
 
-	FOnReachedEnd OnReachedEnd;
+	//FOnReachedEnd OnReachedEnd;
 
 	virtual void Tick(float DeltaTime) override;
 
 	void MoveIceFloat(float DeltaTime);
+
+	UPROPERTY(BlueprintAssignable)
+	FOnReachedEnd OnReachedEnd;
 
 protected:
 	virtual void BeginPlay() override;
@@ -35,7 +37,12 @@ private:
 	//Path för isflaken kommer från spawnern 
 	FVector StartLocation;
 	FVector EndLocation;
+
+	bool ReachedEnd = false; 
 	
-	void CheckIfEndReached();
+	void EndReached();
+
+	UPROPERTY(EditAnywhere, Category = "Movement")
+	float MovementSpeed; 
 	
 };

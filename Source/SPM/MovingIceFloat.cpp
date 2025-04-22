@@ -3,6 +3,8 @@
 
 #include "MovingIceFloat.h"
 
+
+
 AMovingIceFloat::AMovingIceFloat()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -11,26 +13,29 @@ AMovingIceFloat::AMovingIceFloat()
 void AMovingIceFloat::BeginPlay()
 {
 	Super::BeginPlay();
+	
 	//Tar location från där spawner sätter location in world 
 	StartLocation = GetActorLocation();
+	EndLocation = EndReachedPosition->GetComponentLocation();
 }
 
 void AMovingIceFloat::Tick(float DeltaTime)
 {
 	MoveIceFloat(DeltaTime);
-	
-	CheckIfEndReached();
 }
 
 void AMovingIceFloat::MoveIceFloat(float DeltaTime)
 {
-	
+	FVector CurrentLocation =  StartLocation;
+	/*Fixa flak movement till end location
+	 * if()
+	 * EndReached();
+	 */
 }
 
 
-void AMovingIceFloat::CheckIfEndReached()
+void AMovingIceFloat::EndReached()
 {
-	//om flak når slutet
-	OnReachedEnd.Broadcast();
-	//Destroy(); //förstör eller bara set to start location 
+	OnReachedEnd.Broadcast(this);
+	UE_LOG(LogTemp, Warning, TEXT("EndLocation Reached"));
 }

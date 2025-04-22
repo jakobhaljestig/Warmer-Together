@@ -22,17 +22,14 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AMovingIceFloat> MovingIceFloatClass;
-
-
-	//USceneComponent?? 
-	UPROPERTY(EditAnywhere)
+	
+	//USceneComponent för att sätta ut in world, omvandlar till Fvector i cpp-filen 
+	UPROPERTY(EditAnywhere, Category = "Spawner")
 	USceneComponent* SpawnPosition;
 
+	//Intervall av tid då isflak spawnas 
 	UPROPERTY(EditAnywhere)
 	float SpawnInterval;
-
-	UPROPERTY(EditAnywhere)
-	int NumberOfIceFloats;
 
 public:	
 	// Called every frame
@@ -40,6 +37,17 @@ public:
 
 private:
 	void SpawnIceFloat();
+
+	//Hanterar kopplingen med Delegate, tar emot parameter av det objekt som nåt slutmålet
+	UFUNCTION()
+	void HandleIceFloatReachedEnd(AMovingIceFloat* IceFloat);
+	
+	void RespawnIceFloat(AMovingIceFloat* IceFloat);
+
+	AMovingIceFloat* CurrentIceFloat;
+	
 	FTimerHandle SpawnTimer;
+
+	bool bHasReachedEndPosition = false;
 
 };
