@@ -20,7 +20,6 @@ UHealth::UHealth()
 void UHealth::BeginPlay()
 {
 	Super::BeginPlay();
-
 	
 }
 
@@ -30,14 +29,9 @@ void UHealth::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponen
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (bFrozen)
+	if (bFrozen && Health > 0.0f)
 	{
 		TakeDamage(DeltaTime * HealthDownRate);
-	}
-	if (Health <= 0)
-	{
-		Health = MaxHealth;
-		Cast<ACharacterBase>(GetOwner())->RespawnAtCheckpoint();
 	}
 }
 
@@ -59,22 +53,32 @@ void UHealth::UpdateHealthOnFrozen(float DeltaTime)
 void UHealth::TakeDamage(float Damage)
 {
 	UE_LOG(LogTemp, Warning, TEXT("Take damage"));
+
 	if (Damage <= 0.0f || Health <= 0.0f)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Return"));
-		return; // om HP är under/ lika med 0 så görs inget
+		return;
 	}
 
-	// decrease HP
 	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
+	//UE_LOG(LogTemp, Warning, TEXT("decrease HP"));
+	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Health: %f"), Health));
 
-	UE_LOG(LogTemp, Warning, TEXT("decrease HP"));
-	GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Health: %f"), Health));
-	
 	if (Health <= 0.0f)
 	{
-		// Kalla på die-metod
-		UE_LOG(LogTemp, Warning, TEXT("Player is dead."));
+		ACharacterBase* OwnerChar = Cast<ACharacterBase>(GetOwner());
+		if (OwnerChar && !OwnerChar->bHasDied)
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Player is dead."));
+			OwnerChar->OnDeath();
+		}
 	}
 }
+
+void UHealth::ResetHealth()
+{
+	Health = MaxHealth;
+	UE_LOG(LogTemp, Warning, TEXT("Health has been reset"));
+}
+
 

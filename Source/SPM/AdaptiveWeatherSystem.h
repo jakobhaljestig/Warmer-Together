@@ -8,6 +8,14 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "AdaptiveWeatherSystem.generated.h"
 
+UENUM(BlueprintType)
+enum class EZoneType : uint8
+{
+	ZONE_NEUTRAL UMETA(DisplayName = "Neutral"),
+	ZONE_MEDIUM UMETA(DisplayName = "Medium"),
+	ZONE_INTENSE UMETA(DisplayName = "Intense")
+};
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPM_API UAdaptiveWeatherSystem : public UGameInstanceSubsystem, public IWeatherUpdaterInterface
 {
@@ -18,7 +26,11 @@ public:
 	
 	static void BeginPlay();
 
-public:	
+public:
+
+	void SetCurrentZone(EZoneType NewZone);
+	
+	EZoneType GetCurrentZone() const { return CurrentZone; }
 	// Uppdaterar systemet varje frame, inte nödvändigt om vi inte vill ha varje tick, men kan användas för periodiska uppdateringar
 	virtual void Deinitialize() override;
 
@@ -32,6 +44,8 @@ protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
 private:
+
+	EZoneType CurrentZone = EZoneType::ZONE_NEUTRAL; // Startzon
 	
 	void EvaluatePerformanceAndAdjustWeather();
 	

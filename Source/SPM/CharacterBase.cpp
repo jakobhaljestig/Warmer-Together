@@ -14,6 +14,7 @@
 #include "Health.h"
 #include "InputActionValue.h"
 #include "PerformanceTracker.h"
+#include "Push.h"
 #include "WeatherController.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -67,6 +68,15 @@ void ACharacterBase::BeginPlay()
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
 	CheckpointLocation = GetActorLocation();
+
+	if (!PerformanceTracker)
+	{
+		PerformanceTracker = FindComponentByClass<UPerformanceTracker>();  // Hitta om den finns på samma objekt
+		if (!PerformanceTracker)
+		{
+			UE_LOG(LogTemp, Error, TEXT("PerformanceTracker not found!"));
+		}
+	}
 }
 
 void ACharacterBase::Tick(float DeltaTime)
@@ -136,6 +146,8 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		
 		EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Started, this, &ACharacterBase::BeginHug);
         EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Completed, this, &ACharacterBase::EndHug);
+
+		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::TogglePush);
 
 	}
 	else
@@ -235,13 +247,33 @@ void ACharacterBase::Hug()
 	//GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
 
-void ACharacterBase::OnDeath() const
+void ACharacterBase::TogglePush()
 {
-	// Registrera död
-	PerformanceTracker->RegisterDeath();
-
-	// Andra dödslogik, som att återställa karaktär, respawn, osv.
+	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Toggled"));
+	PushComponent->GrabAndRelease();
 }
+void ACharacterBase::OnDeath()
+{
+	if (bHasDied)
+		return;
+
+	bHasDied = true;
+
+	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
+
+	if (PerformanceTracker)
+	{
+		PerformanceTracker->RegisterDeath();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("PerformanceTracker is null!"));
+	}
+	
+		RespawnAtCheckpoint();
+	
+}
+
 void ACharacterBase::SetCheckpointLocation(FVector Location)
 {
 	CheckpointLocation = Location;
@@ -250,6 +282,13 @@ void ACharacterBase::SetCheckpointLocation(FVector Location)
 void ACharacterBase::RespawnAtCheckpoint()
 {
 	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
+	bHasDied = false;
+	
+	if (HealthComponent)
+	{
+		HealthComponent->ResetHealth();
+	}
+	
 	SetActorLocation(NewLocation);
 }
 

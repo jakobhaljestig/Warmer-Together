@@ -46,6 +46,17 @@ void UPerformanceTracker::TickComponent(float DeltaTime, ELevelTick TickType, FA
 void UPerformanceTracker::RegisterDeath()
 {
 	Performance.DeathCount++;
+	UE_LOG(LogTemp, Warning, TEXT("Performance Updated: DeathCount = %d"), Performance.DeathCount);
+
+	// Kontrollera om WeatherUpdater är null
+	if (WeatherUpdater)
+	{
+		WeatherUpdater->UpdatePerformance(Performance);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("WeatherUpdater is null!"));
+	}
 }
 
 void UPerformanceTracker::RegisterPuzzleSolved(float TimeToSolve)

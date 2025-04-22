@@ -18,6 +18,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
+class UPush;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -54,6 +55,9 @@ class ACharacterBase : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* HugAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* PushAction;
+
 
 public:
 	ACharacterBase();
@@ -75,7 +79,7 @@ protected:
 
 	void Hug();
 
-	void OnDeath() const;
+	void TogglePush();
 
 	void Landed(const FHitResult& Hit);
 	
@@ -83,6 +87,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
 	UBodyTemperature* BodyTempComponent;
 	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Push")
+	UPush* PushComponent;
 
 	UPROPERTY()
 	UAdaptiveWeatherSystem* AdaptiveWeatherSystem;
@@ -160,6 +166,12 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
+
+	void OnDeath();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
+	bool bHasDied = false;
+
 
 private:
 	void UpdateLastSafeLocation();
