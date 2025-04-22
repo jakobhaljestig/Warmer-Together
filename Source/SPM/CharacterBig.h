@@ -5,7 +5,7 @@
 #include "CoreMinimal.h"
 #include "CharacterBase.h"
 #include "InputActionValue.h"
-#include "Pickup.h"
+#include "LiftComponent.h"
 #include "CharacterBig.generated.h"
 
 class UInputMappingContext;
@@ -31,7 +31,7 @@ public:
 protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pickup")
-	UPickup* PickupComponent;
+	ULiftComponent* PickupComponent;
 
 	void BeginPlay() override;
 	

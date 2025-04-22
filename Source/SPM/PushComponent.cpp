@@ -1,0 +1,60 @@
+// Fill out your copyright notice in the Description page of Project Settings.
+
+
+#include "PushComponent.h"
+
+
+UPushComponent::UPushComponent()
+{
+	PrimaryComponentTick.bCanEverTick = true;
+	CollisionChannel = ECC_GameTraceChannel2;
+}
+
+void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
+	{
+		FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
+		PhysicsHandle->GetGrabbedComponent()->SetRelativeLocation(TargetLocation);
+	}
+}
+
+void UPushComponent::GrabAndRelease()
+{
+	if (PhysicsHandle == nullptr)
+	{
+		return;
+	}
+	
+	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
+	{
+		StopPushing();
+	}
+	else if (!HoldingSomething())
+	{
+		StartPushing();
+	}
+}
+
+void UPushComponent::StartPushing()
+{
+	Grab();
+}
+void UPushComponent::StopPushing()
+{
+	PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
+	Release();
+	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
+	OwnerMovementComponent->RotationRate = OriginalRotationRate;
+	OwnerMovementComponent->SetJumpAllowed(true);
+}
+
+void UPushComponent::GrabEffect()
+{
+	OriginalMovementSpeed = OwnerMovementComponent->MaxWalkSpeed;
+	OriginalRotationRate = OwnerMovementComponent->RotationRate;
+	OwnerMovementComponent->MaxWalkSpeed = OwnerMovementComponent->MaxWalkSpeed/4;
+	OwnerMovementComponent->RotationRate = FRotator(0, 0, 0);
+	OwnerMovementComponent->SetJumpAllowed(false);
+}
+

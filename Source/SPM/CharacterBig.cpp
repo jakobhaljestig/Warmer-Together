@@ -5,13 +5,13 @@
 #include "CharacterBig.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Pickup.h"
+#include "LiftComponent.h"
 #include "InputActionValue.h"
 
 void ACharacterBig::BeginPlay()
 {
 	Super::BeginPlay();
-	PickupComponent = FindComponentByClass<UPickup>();
+	PickupComponent = FindComponentByClass<ULiftComponent>();
 	if (!PickupComponent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("PickupComponent not valid"));
