@@ -31,7 +31,12 @@ void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	UPerformanceTracker* PerfTracker = PlayerChar->FindComponentByClass<UPerformanceTracker>();
 	if (!PerfTracker) return;
 
-	const FPerformance& Perf = PerfTracker->GetPerformance();
+	//const FPerformance& Perf = PerfTracker->GetPerformance();
+
+	FPerformance Perf;
+	Perf.DeathCount = 10;           // många dödsfall
+	Perf.AveragePuzzleTime = 100;   // lång tid
+	Perf.TimeNearHeat = 0.0f;       // ingen värme
 
 	UWorld* World = PlayerChar->GetWorld();
 	if (!World) return;
@@ -39,8 +44,11 @@ void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	UAdaptiveWeatherSystem* WeatherSystem = World->GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 	if (!WeatherSystem) return;
 
+	/*
 	// --- Zonlogik: baserad på prestation ---
 	EZoneType NewZone = EZoneType::ZONE_MEDIUM;
+
+	
 
 	if (Perf.DeathCount >= 4 || Perf.AveragePuzzleTime > 45.0f)
 	{
@@ -55,6 +63,17 @@ void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 		static_cast<int32>(NewZone), Perf.DeathCount, Perf.AveragePuzzleTime, Perf.TimeNearHeat);
 
 	WeatherSystem->SetCurrentZone(NewZone);
+	*/
+
+	WeatherSystem->UpdatePerformance(Perf);       // ← sätter vädret baserat på dålig prestation (hårdkodade värden just nu)
+	WeatherSystem->SetCurrentZone(EZoneType::ZONE_NEUTRAL); // ← välj mild zon för extra låg modifiering (milt väder i svår zon gör det ännu värre)
+	WeatherSystem->ApplyEnvironmentEffects();     // visuell uppdatering
+
+	UE_LOG(LogTemp, Warning, TEXT("[TEST] Simulated BAD PERFORMANCE: Snow=%.2f Visibility=%.2f Temp=%.1f"),
+		WeatherSystem->GetCurrentWeather().SnowIntensity,
+		WeatherSystem->GetCurrentWeather().Visibility,
+		WeatherSystem->GetCurrentWeather().Temperature);
+
 	
 }
 
