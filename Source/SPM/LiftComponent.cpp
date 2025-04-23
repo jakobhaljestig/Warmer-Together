@@ -44,7 +44,7 @@ void ULiftComponent::Drop(float Force)
 
 	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
-		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * DroppingForce);
+		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * (Force / 2));
 		OwnerMovementComponent->SetMovementMode(MOVE_Walking);
 		OwnerMovementComponent->SetJumpAllowed(true);
 		OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
