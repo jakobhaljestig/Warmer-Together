@@ -2,6 +2,9 @@
 
 #include "CampFire.h"
 #include "CharacterBase.h"
+#include "CharacterBig.h"
+#include "CharacterSmall.h"
+#include "NiagaraComponent.h"
 #include "PerformanceTracker.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
@@ -64,18 +67,25 @@ void ACampFire::OnPlayerExitHeatZone(ACharacterBase* Player)
 void ACampFire::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	ACharacterBase* Player = Cast<ACharacterBase>(OtherActor);
-	if (Player)
+	if (ACharacterBase* Player = Cast<ACharacterBase>(OtherActor))
 	{
 		Player->GetComponentByClass<UBodyTemperature>()->IsNearHeat(true);
-        if (!bCheckpointActivated)
+        if (!bCheckpointActivatedCharacterBig || !bCheckpointActivatedCharacterSmall)
         {
-        	bCheckpointActivated = true;
-        	
-        	Player->SetCheckpointLocation(GetActorLocation());
+        	const ACharacterBig* PlayerBig = Cast<ACharacterBig>(Player);
+        	const ACharacterSmall* PlayerSmall = Cast<ACharacterSmall>(Player);
+        	if (PlayerBig)
+        	{
+        		bCheckpointActivatedCharacterBig = true;
+                Player->SetCheckpointLocation(GetActorLocation());
+        	}
+        	if (PlayerSmall)
+        	{
+        		bCheckpointActivatedCharacterSmall = true;
+        		Player->SetCheckpointLocation(GetActorLocation());
+        	}
         }
 	}
-	
 }
 
 void ACampFire::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp,

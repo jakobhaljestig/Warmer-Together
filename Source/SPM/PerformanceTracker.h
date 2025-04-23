@@ -23,8 +23,8 @@ public:
 	void RegisterDeath();
 	//i en framtida puzzle actor class
 	void RegisterPuzzleSolved(float TimeToSolve);
-	//i campfire
-	void SetIsNearHeat(bool bNearHeat);
+	
+	
 	FORCEINLINE const FPerformance& GetPerformance() const { return Performance; }
 
 

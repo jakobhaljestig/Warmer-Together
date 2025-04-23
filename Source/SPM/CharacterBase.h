@@ -81,8 +81,6 @@ protected:
 
 	void TogglePush();
 
-	void OnDeath() const;
-
 	void Landed(const FHitResult& Hit);
 	
 	// Kroppstemperatur
@@ -169,12 +167,16 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
 
+	void OnDeath();
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
+	bool bHasDied = false;
+
 private:
 	void UpdateLastSafeLocation();
 
 	UPROPERTY(VisibleAnywhere, Category = "Respawn")
 	FVector CheckpointLocation;
-	
-	
+
 };
 

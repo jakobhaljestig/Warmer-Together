@@ -9,7 +9,6 @@
 
 class UStaticMeshComponent;
 class USphereComponent;
-class UParticleSystemComponent;
 
 UCLASS()
 class SPM_API ACampFire : public AActor
@@ -58,7 +57,8 @@ private:
 	UPROPERTY(EditAnywhere)
 	float TriggerRadius = 500;
 
-	bool bCheckpointActivated = false;
+	bool bCheckpointActivatedCharacterBig = false;
+	bool bCheckpointActivatedCharacterSmall = false;
 
 	
 };

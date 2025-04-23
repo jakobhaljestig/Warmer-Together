@@ -30,10 +30,7 @@ void UPerformanceTracker::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	{
 		TimeNearHeat += DeltaTime;
 	}
-
-	// uppdatera Performance-structen
-	Performance.TimeNearHeat = TimeNearHeat;
-
+	
 	//bör ej uppdateras i tick men får vara här så länge tills vi har en puzzlemanager
 	Performance.AveragePuzzleTime = TotalPuzzles > 0 ? TotalPuzzleTime / TotalPuzzles : 0.0f;
 
@@ -46,6 +43,17 @@ void UPerformanceTracker::TickComponent(float DeltaTime, ELevelTick TickType, FA
 void UPerformanceTracker::RegisterDeath()
 {
 	Performance.DeathCount++;
+	UE_LOG(LogTemp, Warning, TEXT("Performance Updated: DeathCount = %d"), Performance.DeathCount);
+
+	// Kontrollera om WeatherUpdater är null
+	if (WeatherUpdater)
+	{
+		WeatherUpdater->UpdatePerformance(Performance);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("WeatherUpdater is null!"));
+	}
 }
 
 void UPerformanceTracker::RegisterPuzzleSolved(float TimeToSolve)
@@ -54,7 +62,3 @@ void UPerformanceTracker::RegisterPuzzleSolved(float TimeToSolve)
 	TotalPuzzles++;
 }
 
-void UPerformanceTracker::SetIsNearHeat(bool bNear)
-{
-	bIsNearHeat = bNear;
-}
