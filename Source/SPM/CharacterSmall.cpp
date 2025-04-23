@@ -45,6 +45,7 @@ void ACharacterSmall::Crawl (const FInputActionValue& Value)
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Crouching"));
 	GetCharacterMovement()->MaxWalkSpeed = 250.0f;
+	Tags.Remove("Grabbed");
 	ACharacter::Crouch(true);
 }
 

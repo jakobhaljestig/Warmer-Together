@@ -9,7 +9,6 @@
 
 class UStaticMeshComponent;
 class USphereComponent;
-class UParticleSystemComponent;
 
 UCLASS()
 class SPM_API ACampFire : public AActor
