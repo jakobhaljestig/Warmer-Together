@@ -79,7 +79,7 @@ protected:
 
 	void Hug();
 
-	void TogglePush();
+	void TogglePush(const FInputActionValue& Value);
 
 	void Landed(const FHitResult& Hit);
 	
