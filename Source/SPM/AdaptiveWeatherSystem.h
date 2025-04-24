@@ -47,7 +47,16 @@ public:
 	AExponentialHeightFog* FogActor;
 
 	UPROPERTY(EditAnywhere, Category = "Weather VFX")
-	class UNiagaraComponent* SnowParticleSystem;
+	class UNiagaraComponent* SnowLevel3;
+
+	UPROPERTY(EditAnywhere, Category = "Weather VFX")
+	class UNiagaraComponent* SnowLevel2;
+
+	UPROPERTY(EditAnywhere, Category = "Weather VFX")
+	class UNiagaraComponent* SnowLevel1;
+	
+	UPROPERTY(EditAnywhere, Category = "Weather VFX")
+	class UNiagaraComponent* MistParticleSystem;
 
 	void ApplyEnvironmentEffects() const;
 

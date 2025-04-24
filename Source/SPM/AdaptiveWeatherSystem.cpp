@@ -97,8 +97,11 @@ void UAdaptiveWeatherSystem::InitializeEnvironmentReferences()
 		break;
 	}
 
-	// niagarasystemet som finns i scenen (heter NiagaraComponent0, annars hittas ej)
-	bool bFoundSnow = false;
+	// niagarasystemet som finns i scenen
+	bool bFoundSnow3 = false;
+	bool bFoundSnow2 = false;
+	bool bFoundSnow1 = false;
+	bool bFoundMist = false;
 	for (TActorIterator<AActor> It(World); It; ++It)
 	{
 		TArray<UNiagaraComponent*> NiagaraComps;
@@ -106,23 +109,53 @@ void UAdaptiveWeatherSystem::InitializeEnvironmentReferences()
 		for (UNiagaraComponent* Comp : NiagaraComps)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("[Weather] Found Niagara Component: %s"), *Comp->GetName());
-			if (Comp->GetName().Contains(TEXT("NiagaraComponent0")))
+			if (Comp->GetName().Contains(TEXT("Snow3")))
 			{
-				SnowParticleSystem = Comp;
-				UE_LOG(LogTemp, Warning, TEXT("[Weather] Snow Niagara found: %s"), *Comp->GetName());
-				bFoundSnow = true;
+				SnowLevel3 = Comp;
+				UE_LOG(LogTemp, Warning, TEXT("[Weather] Snow Niagara 3 found: %s"), *Comp->GetName());
+				bFoundSnow3 = true;
+				break;
+			}
+
+			if (Comp->GetName().Contains(TEXT("Mist")))
+			{
+				MistParticleSystem = Comp;
+				UE_LOG(LogTemp, Warning, TEXT("[Weather] Mist Niagara found: %s"), *Comp->GetName());
+				bFoundMist = true;
+				break;
+			}
+
+			if (Comp->GetName().Contains(TEXT("Snow2")))
+			{
+				SnowLevel2 = Comp;
+				UE_LOG(LogTemp, Warning, TEXT("[Weather] Snow Niagara 2 found: %s"), *Comp->GetName());
+				bFoundSnow2 = true;
+				break;
+			}
+
+			if (Comp->GetName().Contains(TEXT("Snow1")))
+			{
+				SnowLevel1 = Comp;
+				UE_LOG(LogTemp, Warning, TEXT("[Weather] Snow Niagara 1 found: %s"), *Comp->GetName());
+				bFoundSnow1 = true;
 				break;
 			}
 		}
-		if (bFoundSnow)
+		
+		if (bFoundSnow3 && bFoundMist && bFoundSnow2 && bFoundSnow1)
 		{
 			break;
 		}
 	}
 
-	if (!bFoundSnow)
+	if (!bFoundSnow3 && !bFoundSnow2 && !bFoundSnow1)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[Weather] SnowParticleSystem not found!"));
+	}
+
+	if (!bFoundMist)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[Weather] MistParticleSystem not found!"));
 	}
 }
 
@@ -216,24 +249,36 @@ void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const
 			UE_LOG(LogTemp, Warning, TEXT("Fog updated: %.2f"), NewFogDensity);
 		}
 
-		if (SnowParticleSystem)
+		if (SnowLevel3 && MistParticleSystem && SnowLevel2)
 		{
 			//bör kanske inte vara så låg, men någon utträkning blir tokig. När spelaren dött 2 gånger går den under 0.3 och då avaktiveras snön just nu. 
-			if (Weather.SnowIntensity > 0.3f)
+			if (Weather.SnowIntensity > 0.4f)
 			{
-				SnowParticleSystem->Activate();
-				UE_LOG(LogTemp, Warning, TEXT("Snow Activated"));
+				SnowLevel3->Activate();
+				MistParticleSystem->Activate();
+				UE_LOG(LogTemp, Warning, TEXT("Snow 3 Activated"));
+			}
+			else if (Weather.SnowIntensity > 0.25f)
+			{
+				SnowLevel3->Deactivate();
+				MistParticleSystem->Deactivate();
+				SnowLevel2->Activate();
+				UE_LOG(LogTemp, Warning, TEXT("Snow 3/Mist Deactivated"));
+				UE_LOG(LogTemp, Warning, TEXT("Snow 2 Activated"));
 			}
 			else
 			{
-				SnowParticleSystem->Deactivate();
-				UE_LOG(LogTemp, Warning, TEXT("Snow Deactivated"));
+				SnowLevel2->Deactivate();
+				UE_LOG(LogTemp, Warning, TEXT("Snow 2 Deactivated"));
+				SnowLevel1->Activate();
+				UE_LOG(LogTemp, Warning, TEXT("Snow 1 Activated"));
 			}
 		}
 		else
 		{
 			UE_LOG(LogTemp, Error, TEXT("SnowParticleSystem is NULL!"));
 		}
+	
 }
 
 
