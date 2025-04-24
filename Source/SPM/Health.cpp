@@ -2,9 +2,7 @@
 
 
 #include "Health.h"
-
 #include "CharacterBase.h"
-
 // Sets default values for this component's properties
 UHealth::UHealth()
 {
@@ -52,7 +50,7 @@ void UHealth::UpdateHealthOnFrozen(float DeltaTime)
 
 void UHealth::TakeDamage(float Damage)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Take damage"));
+	//UE_LOG(LogTemp, Warning, TEXT("Take damage"));
 
 	if (Damage <= 0.0f || Health <= 0.0f)
 	{
@@ -63,12 +61,13 @@ void UHealth::TakeDamage(float Damage)
 	Health = FMath::Clamp(Health - Damage, 0.0f, MaxHealth);
 	//UE_LOG(LogTemp, Warning, TEXT("decrease HP"));
 	//GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red, FString::Printf(TEXT("Health: %f"), Health));
+	
 
 	if (Health <= 0.0f)
 	{
 		ACharacterBase* OwnerChar = Cast<ACharacterBase>(GetOwner());
-		if (OwnerChar && !OwnerChar->bHasDied)
-		{
+		
+		if (OwnerChar && !OwnerChar->bHasDied){
 			UE_LOG(LogTemp, Warning, TEXT("Player is dead."));
 			OwnerChar->OnDeath();
 		}
@@ -78,7 +77,9 @@ void UHealth::TakeDamage(float Damage)
 void UHealth::ResetHealth()
 {
 	Health = MaxHealth;
+	bFrozen = false;
 	UE_LOG(LogTemp, Warning, TEXT("Health has been reset"));
 }
+
 
 

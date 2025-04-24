@@ -39,7 +39,7 @@ void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	UE_LOG(LogTemp, Warning, TEXT("[AdaptiveWeatherSystem] Initialized"));
 
-	// Fördröj initiering tills världen är laddad
+	// instatinserar vädret efter 0.5 sekunder, annars hinner inte allt laddas in och snön hittas inte
 	if (UWorld* World = GetWorld())
 	{
 		FTimerHandle TimerHandle;
@@ -47,7 +47,7 @@ void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 			TimerHandle,
 			this,
 			&UAdaptiveWeatherSystem::InitializeEnvironmentReferences,
-			1.0f, // Delay i sekunder
+			0.5f, // Delay i sekunder
 			false
 		);
 	}
@@ -80,6 +80,7 @@ const FWeatherState& UAdaptiveWeatherSystem::GetCurrentWeather() const
 	return CurrentWeather;
 }
 
+//läser in exponentianlheightfog och snow niagara-systemet direkt från scenen
 void UAdaptiveWeatherSystem::InitializeEnvironmentReferences()
 {
 	UWorld* World = GetWorld();
@@ -96,7 +97,7 @@ void UAdaptiveWeatherSystem::InitializeEnvironmentReferences()
 		break;
 	}
 
-	// Hitta Snow Niagara-partikelsystem
+	// niagarasystemet som finns i scenen (heter NiagaraComponent0, annars hittas ej)
 	bool bFoundSnow = false;
 	for (TActorIterator<AActor> It(World); It; ++It)
 	{
@@ -125,7 +126,7 @@ void UAdaptiveWeatherSystem::InitializeEnvironmentReferences()
 	}
 }
 
-
+//påverkar bodytemp baserat på vädernivån, måste nog tweakas lite vart eftersom
 void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
 {
 	UWorld* World = GetWorld();
@@ -152,6 +153,8 @@ void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
 	}
 }
 
+
+//kollar performance score och motifierar zonen däreefter, Vädret går att anpassa, just nu har vi ju bara visability och snöpartiklar (som bara finns som på/av)
 void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 {
 	float PerformanceScore = CurrentPerformance.RecentPerformanceScore();
@@ -177,20 +180,20 @@ void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 
 }
 
-// Detta kan ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame.
+//detta bör ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame
 void UAdaptiveWeatherSystem::Tick(float DeltaTime)
 {
-	// Uppdatera tiden som har gått och gör väderuppdatering om det har gått tillräckligt lång tid
+	// uppdaterar tiden som har gått och gör väderuppdatering om det har gått tillräckligt lång tid
 	TimeSinceLastUpdate += DeltaTime;
 
 	if (TimeSinceLastUpdate >= UpdateInterval)
 	{
-		// Kalla på metoder för att uppdatera väder och prestationen
 		EvaluatePerformanceAndAdjustWeather();
 		TimeSinceLastUpdate = 0.0f;
 	}
 }
 
+//lägger på fog och snow, ytterligare effekter kan läggas till
 void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const
 {
 		const FWeatherState& Weather = GetCurrentWeather();
@@ -215,7 +218,8 @@ void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const
 
 		if (SnowParticleSystem)
 		{
-			if (Weather.SnowIntensity > 0.5f)
+			//bör kanske inte vara så låg, men någon utträkning blir tokig. När spelaren dött 2 gånger går den under 0.3 och då avaktiveras snön just nu. 
+			if (Weather.SnowIntensity > 0.3f)
 			{
 				SnowParticleSystem->Activate();
 				UE_LOG(LogTemp, Warning, TEXT("Snow Activated"));

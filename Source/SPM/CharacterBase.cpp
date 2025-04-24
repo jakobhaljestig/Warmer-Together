@@ -77,6 +77,12 @@ void ACharacterBase::BeginPlay()
 			UE_LOG(LogTemp, Error, TEXT("PerformanceTracker not found!"));
 		}
 	}
+
+	PushComponent = FindComponentByClass<UPushComponent>();
+	if (!PushComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("PickupComponent not valid"));
+	}
 }
 
 void ACharacterBase::Tick(float DeltaTime)
@@ -148,7 +154,7 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
         EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Completed, this, &ACharacterBase::EndHug);
 
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::TogglePush);
-
+		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::TogglePush);
 	}
 	else
 	{
@@ -247,7 +253,7 @@ void ACharacterBase::Hug()
 	//GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
 
-void ACharacterBase::TogglePush()
+void ACharacterBase::TogglePush(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Toggled"));
 	PushComponent->GrabAndRelease();
@@ -261,6 +267,7 @@ void ACharacterBase::OnDeath()
 
 	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
 
+	//metod för att uppdatera performancetracker.cpp
 	if (PerformanceTracker)
 	{
 		PerformanceTracker->RegisterDeath();
@@ -283,11 +290,16 @@ void ACharacterBase::RespawnAtCheckpoint()
 {
 	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
 	bHasDied = false;
-	
+
+	//bör inte ticka ner efter spelaren respawnar, endast kylenivån, sen efter kylenivån är på 0 så ska den börja ticka igen
 	if (HealthComponent)
 	{
 		HealthComponent->ResetHealth();
 	}
+
+	//denna bör dock
+	UBodyTemperature* Temp = Cast<UBodyTemperature>(BodyTempComponent);
+	Temp->ResetTemp();
 	
 	SetActorLocation(NewLocation);
 }
