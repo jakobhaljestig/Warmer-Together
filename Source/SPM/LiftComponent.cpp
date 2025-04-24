@@ -23,7 +23,7 @@ void ULiftComponent::GrabAndRelease()
 	
 	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
-		Drop(DroppingForce);
+		Drop(DroppingForce, VerticalDroppingForce);
 	}
 	else if (!HoldingSomething() && !OwnerMovementComponent->IsFalling())
 	{
@@ -39,12 +39,12 @@ void ULiftComponent::BeginPlay()
 	
 }
 //Drop object
-void ULiftComponent::Drop(float Force)
+void ULiftComponent::Drop(float Force, float VerticalForce)
 {
 
 	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
-		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * (Force / 2));
+		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce);
 		OwnerMovementComponent->SetMovementMode(MOVE_Walking);
 		OwnerMovementComponent->SetJumpAllowed(true);
 		OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
@@ -70,7 +70,7 @@ void ULiftComponent::Throw()
 	}
 	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
-		Drop(ThrowingForce);
+		Drop(ThrowingForce, VerticalThrowingForce);
 	}
 }
 
@@ -92,7 +92,7 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		if (!GrabbedActor->Tags.Contains("Grabbed"))
 		{
-			Drop(DroppingForce);
+			Drop(DroppingForce, VerticalDroppingForce);
 		}
 	}
 	

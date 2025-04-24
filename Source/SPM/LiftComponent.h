@@ -33,7 +33,7 @@ public:
 	void Throw();
 
 	virtual void Lift();
-	virtual void Drop(float Force);
+	virtual void Drop(float Force, float VerticalForce);
 	
 private:
 	UPROPERTY(EditAnywhere)
@@ -42,6 +42,12 @@ private:
 	UPROPERTY(EditAnywhere)
 	float DroppingForce = 350.f;
 
+	UPROPERTY(EditAnywhere)
+	float VerticalThrowingForce = 500.f;
+
+	UPROPERTY(EditAnywhere)
+	float VerticalDroppingForce = 350.f;
+	
 	virtual void GrabEffect() override;
 
 	float OriginalMovementSpeed = 0;

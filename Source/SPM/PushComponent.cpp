@@ -18,23 +18,10 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 	{
 		if (PhysicsHandle->GetGrabbedComponent()->GetMass() < MaxPushWeight){
 			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
-			FHitResult Hit;
-			// Ray Cast out to a certain distance (Reach)
-			FCollisionQueryParams TraceParams(FName(TEXT("")), false, GetOwner());
-			bool HasHit =  GetWorld()->LineTraceSingleByObjectType
-			(
-				Hit,
-				GetOwner()->GetActorLocation(),
-				GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance,
-				FCollisionObjectQueryParams(ECollisionChannel::ECC_WorldDynamic),
-				TraceParams
-			);
-			if (HasHit)
-				PhysicsHandle->SetTargetLocation(Hit.Location);
-			else
-				PhysicsHandle->SetTargetLocation(TargetLocation);
+			PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetOwner()->GetActorRotation());
 		}
-		if ((PhysicsHandle->GetGrabbedComponent()->GetComponentLocation() - GetOwner()->GetActorLocation()).Length() > HoldDistance * 4)
+		FHitResult Hit;
+		if (!GetGrabbableInReach(Hit))
 		{
 			StopPushing();
 		}
