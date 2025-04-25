@@ -222,6 +222,7 @@ void ACharacterBase::BeginHug(const FInputActionValue& Value)
 		if (Distance <= HugDistance)
 		{	
 			Player1->Hug();
+			Player2->Hug();
 		}else
 		{
 			UE_LOG(LogTemplateCharacter, Warning, TEXT("Distance too big between players"));

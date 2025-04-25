@@ -34,6 +34,9 @@ protected:
 	float SpawnInterval = 1.0f;
 
 	UPROPERTY(EditAnywhere)
+	float MovementSpeed = 1.0f;
+
+	UPROPERTY(EditAnywhere)
 	TArray <AMovingIceFloat*> ActiveIceFloats;
 
 	UPROPERTY(EditAnywhere)

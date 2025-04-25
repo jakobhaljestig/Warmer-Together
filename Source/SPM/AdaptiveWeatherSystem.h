@@ -84,6 +84,8 @@ private:
 
 	float TimeSinceLastUpdate = 0.0f;
 
-	
+	float CurrentCoolRate = 1.5f;
+
+	int32 WeatherLevel = GetCurrentWeather().WeatherLevel;
 
 };
