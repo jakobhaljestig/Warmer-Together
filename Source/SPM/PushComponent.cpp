@@ -3,6 +3,7 @@
 
 #include "PushComponent.h"
 
+#include "FallingTree.h"
 
 
 UPushComponent::UPushComponent()
@@ -16,12 +17,14 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
+		
 		if (PhysicsHandle->GetGrabbedComponent()->GetMass() < MaxPushWeight){
 			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
 			PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetOwner()->GetActorRotation());
 		}
+		
 		FHitResult Hit;
-		if (!GetGrabbableInReach(Hit))
+		if (!GetGrabbableInReach(Hit) || Cast<AFallingTree>(PhysicsHandle->GetGrabbedComponent()->GetOwner()))
 		{
 			StopPushing();
 		}

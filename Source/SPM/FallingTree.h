@@ -14,7 +14,7 @@ class SPM_API AFallingTree : public AActor
 public:	
 	// Sets default values for this actor's properties
 	AFallingTree();
-
+	
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -22,14 +22,20 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool Falling = false;
 
 private:
-	UPROPERTY(VisibleAnywhere)
-	UStaticMeshComponent* StaticMesh = nullptr;
+	
 
 	UPROPERTY(EditAnywhere)
 	FRotator FallingAngle;
 
-	void Fall();
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
+	UStaticMeshComponent* Log;
+
+	
+	
 
 };
