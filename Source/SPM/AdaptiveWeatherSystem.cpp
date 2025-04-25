@@ -1,5 +1,6 @@
 #include "AdaptiveWeatherSystem.h"
 
+#include "AssetTypeCategories.h"
 #include "CharacterBase.h"
 #include "EngineUtils.h"
 #include "PerformanceTracker.h"
@@ -60,6 +61,20 @@ void UAdaptiveWeatherSystem::Deinitialize()
 	Super::Deinitialize();
 
 	// Eventuella städoperationer här
+}
+
+
+//detta bör ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame
+void UAdaptiveWeatherSystem::Tick(float DeltaTime)
+{
+	// uppdaterar tiden som har gått och gör väderuppdatering om det har gått tillräckligt lång tid
+	TimeSinceLastUpdate += DeltaTime;
+
+	if (TimeSinceLastUpdate >= UpdateInterval)
+	{
+		EvaluatePerformanceAndAdjustWeather();
+		TimeSinceLastUpdate = 0.0f;
+	}
 }
 
 void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformance)
@@ -164,9 +179,7 @@ void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
 {
 	UWorld* World = GetWorld();
 	if (!World) return;
-
-	int32 WeatherLevel = GetCurrentWeather().WeatherLevel;
-
+	
 	for (FConstPlayerControllerIterator It = World->GetPlayerControllerIterator(); It; ++It)
 	{
 		APlayerController* PC = It->Get();
@@ -177,9 +190,7 @@ void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
 
 		if (UBodyTemperature* BodyTemp = Pawn->FindComponentByClass<UBodyTemperature>())
 		{
-			float CoolRate = WeatherLevel * 0.75f; // t.ex. 0.75 → 2.25
-			BodyTemp->SetCoolDownRate(CoolRate);
-
+			BodyTemp->SetCoolDownRate(CurrentCoolRate);
 			//UE_LOG(LogTemp, Warning, TEXT("[AffectBodyTemperatures] WeatherLevel=%d → CoolRate=%.2f"),
 				//WeatherLevel, CoolRate);
 		}
@@ -209,22 +220,10 @@ void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 	CurrentWeather.Visibility = FMath::Lerp(0.3f, 1.0f, AdjustedScore);
 	CurrentWeather.WeatherLevel = FMath::RoundToInt(FMath::Lerp(3.0f, 1.0f, AdjustedScore));
 
+	CurrentCoolRate = WeatherLevel * 0.75f;
 	AffectBodyTemperatures();
-
 }
 
-//detta bör ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame
-void UAdaptiveWeatherSystem::Tick(float DeltaTime)
-{
-	// uppdaterar tiden som har gått och gör väderuppdatering om det har gått tillräckligt lång tid
-	TimeSinceLastUpdate += DeltaTime;
-
-	if (TimeSinceLastUpdate >= UpdateInterval)
-	{
-		EvaluatePerformanceAndAdjustWeather();
-		TimeSinceLastUpdate = 0.0f;
-	}
-}
 
 //lägger på fog och snow, ytterligare effekter kan läggas till
 void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const

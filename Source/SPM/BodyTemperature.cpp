@@ -122,7 +122,6 @@ void UBodyTemperature::HeatUp(float DeltaTime)
 		Temp = MaxTemp;
 	}
 }
-
 void UBodyTemperature::ShareTemp()
 {
 	if (bFrozen)
@@ -130,18 +129,42 @@ void UBodyTemperature::ShareTemp()
 		bFrozen = false;
 		GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
 	}
-	if (!TempBigPlayer || !TempSmallPlayer)
+
+	ACharacter* Char0 = UGameplayStatics::GetPlayerCharacter(this, 0);
+	ACharacter* Char1 = UGameplayStatics::GetPlayerCharacter(this, 1);
+
+	UBodyTemperature* Temp0 = Char0 ? Char0->FindComponentByClass<UBodyTemperature>() : nullptr;
+	UBodyTemperature* Temp1 = Char1 ? Char1->FindComponentByClass<UBodyTemperature>() : nullptr;
+
+	if (Temp0 && Temp1)
 	{
-		TempBigPlayer = Cast<ACharacterBig>(UGameplayStatics::GetPlayerCharacter(this, 0))->GetComponentByClass<UBodyTemperature>();
-		TempSmallPlayer = Cast<ACharacterSmall>(UGameplayStatics::GetPlayerCharacter(this, 1))->GetComponentByClass<UBodyTemperature>();
+		const float Mean = (Temp0->Temp + Temp1->Temp) / 2.0f;
+		const float HalfTemp = Temp0->MaxTemp * 0.5f;
+		const float TempBoost = Temp0->MaxTemp * 0.05f;
+
+		float NewTemp;
+
+		if (Mean < HalfTemp)
+		{
+			NewTemp = HalfTemp; // höj båda upp till 50%
+			UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Hug boost to 50%% → %.2f"), NewTemp);
+		}
+		else
+		{
+			NewTemp = FMath::Min(Mean + TempBoost, Temp0->MaxTemp); // boosta med 5%
+			UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Hug bonus +5%% → %.2f"), NewTemp);
+		}
+
+		Temp0->Temp = NewTemp;
+		Temp1->Temp = NewTemp;
 	}
 	else
 	{
-		float MeanTemp = (TempBigPlayer->Temp + TempSmallPlayer->Temp) / 2;
-		TempBigPlayer->Temp = MeanTemp;
-		TempSmallPlayer->Temp = MeanTemp;
+		UE_LOG(LogTemp, Error, TEXT("[BodyTemp] Missing temperature components for one or both characters."));
 	}
 }
+
+
 
 void UBodyTemperature::ResetTemp()
 {

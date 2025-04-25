@@ -38,5 +38,8 @@ private:
 
 	IWeatherUpdaterInterface* WeatherUpdater = nullptr;
 
+	float TimeSinceLastDeath = 0.0f;
+
+
 };
 
