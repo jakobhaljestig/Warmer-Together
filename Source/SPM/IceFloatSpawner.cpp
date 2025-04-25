@@ -34,7 +34,7 @@ void AIceFloatSpawner::SpawnIceFloat()
 {
 	if (!MovingIceFloatClass)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("IceFLoatClass is empty"))
+		UE_LOG(LogTemp, Warning, TEXT("IceFloatClass is empty"))
 		return;
 	}
 
@@ -53,6 +53,7 @@ void AIceFloatSpawner::SpawnIceFloat()
 		if (NewFloat)
 		{
 			NewFloat->SetEndTarget(EndTarget->GetActorLocation());
+			NewFloat-> SetMovement(MovementSpeed);
 			NewFloat->OnReachedEnd.AddDynamic(this, &AIceFloatSpawner::HandleIceFloatReachedEnd);
 			ActiveIceFloats.Add(NewFloat);
 		}

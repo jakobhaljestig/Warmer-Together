@@ -51,3 +51,8 @@ void AMovingIceFloat::SetEndTarget(FVector InEndLocation)
 	EndLocation = InEndLocation;
 	UE_LOG(LogTemp, Warning, TEXT("%s received end location: %s"), *GetName(), *EndLocation.ToString());
 }
+
+void AMovingIceFloat::SetMovement (float Speed)
+{
+	MovementSpeed = Speed;
+}
