@@ -66,5 +66,6 @@ private:
 
 	bool bFrozen = false;
 	bool bDisplayFreezeEffect = false;
+	
 };
 

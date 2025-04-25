@@ -72,3 +72,15 @@ void UPerformanceTracker::RegisterPuzzleSolved(float TimeToSolve)
 	TotalPuzzles++;
 }
 
+void UPerformanceTracker::RegisterHug()
+{
+	RecentHugs++;
+}
+
+int32 UPerformanceTracker::GetAndResetRecentHugs()
+{
+	int32 Out =  RecentHugs;
+	RecentHugs = 0;
+	return Out;
+}
+

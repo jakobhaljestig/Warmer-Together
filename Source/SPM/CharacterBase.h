@@ -77,9 +77,9 @@ protected:
 	void BeginHug(const FInputActionValue& Value);
 	void EndHug(const FInputActionValue& Value);
 
-	void Hug();
+	void Hug() const;
 
-	void TogglePush(const FInputActionValue& Value);
+	void TogglePush(const FInputActionValue& Value) const;
 
 	void Landed(const FHitResult& Hit);
 	

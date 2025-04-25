@@ -60,6 +60,8 @@ public:
 
 	void ApplyEnvironmentEffects() const;
 
+	mutable float CachedEnvTemp = 0.0f;
+
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 

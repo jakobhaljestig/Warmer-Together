@@ -180,20 +180,33 @@ void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
 	UWorld* World = GetWorld();
 	if (!World) return;
 	
-	for (FConstPlayerControllerIterator It = World->GetPlayerControllerIterator(); It; ++It)
+	TArray<AActor*> PlayerCharacters;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
+
+	int32 Index = 0;
+	for (AActor* Actor : PlayerCharacters)
 	{
-		APlayerController* PC = It->Get();
-		if (!PC) continue;
+		ACharacterBase* Character = Cast<ACharacterBase>(Actor);
+		if (!Character) continue;
 
-		const APawn* Pawn = PC->GetPawn();
-		if (!Pawn) continue;
-
-		if (UBodyTemperature* BodyTemp = Pawn->FindComponentByClass<UBodyTemperature>())
+		UBodyTemperature* BodyTemp = Character->FindComponentByClass<UBodyTemperature>();
+		if (BodyTemp)
 		{
 			BodyTemp->SetCoolDownRate(CurrentCoolRate);
-			//UE_LOG(LogTemp, Warning, TEXT("[AffectBodyTemperatures] WeatherLevel=%d → CoolRate=%.2f"),
-				//WeatherLevel, CoolRate);
+
+			UE_LOG(LogTemp, Warning, TEXT("[WeatherLog] Character %d - WeatherLevel: %d | CoolDownRate: %.2f | Temp%%: %.1f%%"),
+				Index,
+				CurrentWeather.WeatherLevel,
+				CurrentCoolRate,
+				BodyTemp->GetTempPercentage() * 100.0f
+			);
 		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("[WeatherLog] Character %d - Missing BodyTemperature component!"), Index);
+		}
+
+		Index++;
 	}
 }
 
@@ -204,6 +217,7 @@ void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 	float PerformanceScore = CurrentPerformance.RecentPerformanceScore();
 
 	float ZoneModifier = 1.0f;
+	
 	switch (CurrentZone)
 	{
 	case EZoneType::ZONE_NEUTRAL: ZoneModifier = 0.5f; break;
@@ -215,13 +229,22 @@ void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 
 	// Anpassa vädret
 	CurrentWeather.Temperature = FMath::Lerp(-30.0f, 0.0f, AdjustedScore);
+	CachedEnvTemp = CurrentWeather.Temperature; // Spara så att alla får samma
+
 	CurrentWeather.WindSpeed = FMath::Lerp(20.0f, 5.0f, AdjustedScore);
 	CurrentWeather.SnowIntensity = FMath::Lerp(1.0f, 0.2f, AdjustedScore);
 	CurrentWeather.Visibility = FMath::Lerp(0.3f, 1.0f, AdjustedScore);
 	CurrentWeather.WeatherLevel = FMath::RoundToInt(FMath::Lerp(3.0f, 1.0f, AdjustedScore));
 
-	CurrentCoolRate = WeatherLevel * 0.75f;
+	CurrentCoolRate = CurrentWeather.WeatherLevel * 0.75f;
 	AffectBodyTemperatures();
+
+	UE_LOG(LogTemp, Warning, TEXT("[Weather] Zone=%d | AdjustedScore=%.2f | Temp=%.2f"),
+	static_cast<int32>(CurrentZone),
+	AdjustedScore,
+	CurrentWeather.Temperature);
+
+
 }
 
 
