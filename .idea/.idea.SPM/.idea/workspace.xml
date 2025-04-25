@@ -15,8 +15,6 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/GrabComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/GrabComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/LiftComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/LiftComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,11 +40,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="cidr-memory-view://2" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/Delegates/DelegateInstancesImpl.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/String/FormatStringSan.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/GameFramework/Actor.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/SPM/BTService_CheckHugBehaviour.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/SPM/BTService_CheckHugBehaviour.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterPlayerController.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -75,10 +70,10 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;C/C++ Project.SPM.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ Project.SPM.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Robin&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Nora&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -228,7 +223,9 @@
       <workItem from="1745313195159" duration="3231000" />
       <workItem from="1745391111790" duration="615000" />
       <workItem from="1745563499663" duration="1652000" />
-      <workItem from="1745574388925" duration="3755000" />
+      <workItem from="1745574594905" duration="2036000" />
+      <workItem from="1745577129917" duration="518000" />
+      <workItem from="1745579026878" duration="3735000" />
     </task>
     <servers />
   </component>
