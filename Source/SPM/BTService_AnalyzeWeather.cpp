@@ -16,7 +16,7 @@ UBTService_AnalyzeWeather::UBTService_AnalyzeWeather()
 	Interval = 10.0f;
 	RandomDeviation = 1.0f;
 	bNotifyBecomeRelevant = true;
-	bNotifyCeaseRelevant = false;
+	bNotifyCeaseRelevant = true;
 	
 }
 void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)

@@ -17,7 +17,7 @@ void AIceFloatSpawner::BeginPlay()
 
 	SpawnPosition = GetActorLocation();
 	
-	UE_LOG(LogTemp, Warning, TEXT("BeginPlay: Spawner started with interval %f"), SpawnInterval);
+	//UE_LOG(LogTemp, Warning, TEXT("BeginPlay: Spawner started with interval %f"), SpawnInterval);
 	GetWorld()->GetTimerManager().SetTimer(SpawnTimer, this, &AIceFloatSpawner::SpawnIceFloat, SpawnInterval, true);
 
 	
@@ -63,7 +63,7 @@ void AIceFloatSpawner::SpawnIceFloat()
 
 void AIceFloatSpawner::HandleIceFloatReachedEnd(AMovingIceFloat* IceFloat)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Received delegate - IceFloat has reached the end"))
+	//UE_LOG(LogTemp, Warning, TEXT("Received delegate - IceFloat has reached the end"))
 	IceFloat -> SetActorEnableCollision(false);
 	IceFloat -> SetActorHiddenInGame(true);
 
@@ -93,7 +93,7 @@ void AIceFloatSpawner::RespawnIceFloat()
 	
 	ActiveIceFloats.Add(IceFloat);
 
-	UE_LOG(LogTemp, Warning, TEXT("Respawned ice float from pool"));
+	//UE_LOG(LogTemp, Warning, TEXT("Respawned ice float from pool"));
 }
 	
 
