@@ -29,6 +29,8 @@ public:
 
 	void SetEndTarget (FVector InEndLocation);
 
+	void SetMovement (float Speed);
+
 protected:
 	virtual void BeginPlay() override;
 

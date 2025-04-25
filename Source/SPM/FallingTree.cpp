@@ -3,31 +3,28 @@
 
 #include "FallingTree.h"
 
-
 AFallingTree::AFallingTree()
 {
  	
 	PrimaryActorTick.bCanEverTick = true;
 
+	Log = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Log"));
+	RootComponent = Log;
 }
 
 
 void AFallingTree::BeginPlay()
 {
 	Super::BeginPlay();
-	StaticMesh = GetOwner()->GetComponentByClass<UStaticMeshComponent>();
+
+	
+
 }
 
 
 void AFallingTree::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-	
-	
 }
 
-void AFallingTree::Fall()
-{
-	
-}
 

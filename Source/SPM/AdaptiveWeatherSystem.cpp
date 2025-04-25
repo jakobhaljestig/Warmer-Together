@@ -1,5 +1,6 @@
 #include "AdaptiveWeatherSystem.h"
 
+#include "AssetTypeCategories.h"
 #include "CharacterBase.h"
 #include "EngineUtils.h"
 #include "PerformanceTracker.h"
@@ -60,6 +61,20 @@ void UAdaptiveWeatherSystem::Deinitialize()
 	Super::Deinitialize();
 
 	// Eventuella städoperationer här
+}
+
+
+//detta bör ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame
+void UAdaptiveWeatherSystem::Tick(float DeltaTime)
+{
+	// uppdaterar tiden som har gått och gör väderuppdatering om det har gått tillräckligt lång tid
+	TimeSinceLastUpdate += DeltaTime;
+
+	if (TimeSinceLastUpdate >= UpdateInterval)
+	{
+		EvaluatePerformanceAndAdjustWeather();
+		TimeSinceLastUpdate = 0.0f;
+	}
 }
 
 void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformance)
@@ -164,25 +179,34 @@ void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
 {
 	UWorld* World = GetWorld();
 	if (!World) return;
+	
+	TArray<AActor*> PlayerCharacters;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
 
-	int32 WeatherLevel = GetCurrentWeather().WeatherLevel;
-
-	for (FConstPlayerControllerIterator It = World->GetPlayerControllerIterator(); It; ++It)
+	int32 Index = 0;
+	for (AActor* Actor : PlayerCharacters)
 	{
-		APlayerController* PC = It->Get();
-		if (!PC) continue;
+		ACharacterBase* Character = Cast<ACharacterBase>(Actor);
+		if (!Character) continue;
 
-		const APawn* Pawn = PC->GetPawn();
-		if (!Pawn) continue;
-
-		if (UBodyTemperature* BodyTemp = Pawn->FindComponentByClass<UBodyTemperature>())
+		UBodyTemperature* BodyTemp = Character->FindComponentByClass<UBodyTemperature>();
+		if (BodyTemp)
 		{
-			float CoolRate = WeatherLevel * 0.75f; // t.ex. 0.75 → 2.25
-			BodyTemp->SetCoolDownRate(CoolRate);
+			BodyTemp->SetCoolDownRate(CurrentCoolRate);
 
-			//UE_LOG(LogTemp, Warning, TEXT("[AffectBodyTemperatures] WeatherLevel=%d → CoolRate=%.2f"),
-				//WeatherLevel, CoolRate);
+			UE_LOG(LogTemp, Warning, TEXT("[WeatherLog] Character %d - WeatherLevel: %d | CoolDownRate: %.2f | Temp%%: %.1f%%"),
+				Index,
+				CurrentWeather.WeatherLevel,
+				CurrentCoolRate,
+				BodyTemp->GetTempPercentage() * 100.0f
+			);
 		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("[WeatherLog] Character %d - Missing BodyTemperature component!"), Index);
+		}
+
+		Index++;
 	}
 }
 
@@ -193,6 +217,7 @@ void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 	float PerformanceScore = CurrentPerformance.RecentPerformanceScore();
 
 	float ZoneModifier = 1.0f;
+	
 	switch (CurrentZone)
 	{
 	case EZoneType::ZONE_NEUTRAL: ZoneModifier = 0.5f; break;
@@ -204,27 +229,24 @@ void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 
 	// Anpassa vädret
 	CurrentWeather.Temperature = FMath::Lerp(-30.0f, 0.0f, AdjustedScore);
+	CachedEnvTemp = CurrentWeather.Temperature; // Spara så att alla får samma
+
 	CurrentWeather.WindSpeed = FMath::Lerp(20.0f, 5.0f, AdjustedScore);
 	CurrentWeather.SnowIntensity = FMath::Lerp(1.0f, 0.2f, AdjustedScore);
 	CurrentWeather.Visibility = FMath::Lerp(0.3f, 1.0f, AdjustedScore);
 	CurrentWeather.WeatherLevel = FMath::RoundToInt(FMath::Lerp(3.0f, 1.0f, AdjustedScore));
 
+	CurrentCoolRate = CurrentWeather.WeatherLevel * 0.75f;
 	AffectBodyTemperatures();
 
+	UE_LOG(LogTemp, Warning, TEXT("[Weather] Zone=%d | AdjustedScore=%.2f | Temp=%.2f"),
+	static_cast<int32>(CurrentZone),
+	AdjustedScore,
+	CurrentWeather.Temperature);
+
+
 }
 
-//detta bör ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame
-void UAdaptiveWeatherSystem::Tick(float DeltaTime)
-{
-	// uppdaterar tiden som har gått och gör väderuppdatering om det har gått tillräckligt lång tid
-	TimeSinceLastUpdate += DeltaTime;
-
-	if (TimeSinceLastUpdate >= UpdateInterval)
-	{
-		EvaluatePerformanceAndAdjustWeather();
-		TimeSinceLastUpdate = 0.0f;
-	}
-}
 
 //lägger på fog och snow, ytterligare effekter kan läggas till
 void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const

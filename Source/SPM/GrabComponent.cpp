@@ -2,6 +2,8 @@
 
 
 #include "GrabComponent.h"
+
+#include "FallingTree.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values for this component's properties
@@ -92,8 +94,13 @@ void UGrabComponent::Grab(){
 		{
 			return;
 		}
-	
+		
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
+		if (Cast<AFallingTree>(HitComponent))
+		{
+			Cast<AFallingTree>(HitComponent)->Falling = true;
+			return;
+		}
 		Holding = true;
 		AActor* HitActor = HitResult.GetActor();
 		HitComponent->SetSimulatePhysics(true);
@@ -105,6 +112,7 @@ void UGrabComponent::Grab(){
 			NAME_None,
 			HitResult.ImpactPoint);
 		GrabEffect();
+		
 	}
 	
 }
@@ -114,9 +122,9 @@ void UGrabComponent::Release()
 	if (PhysicsHandle != nullptr && PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
 		Holding = false;
+		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
-		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
 		PhysicsHandle->ReleaseComponent();
 	}
 }

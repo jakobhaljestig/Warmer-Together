@@ -22,6 +22,10 @@ public:
 	UFUNCTION(BlueprintCallable)
 	virtual void GrabAndRelease();
 
+	virtual void Grab();
+
+	virtual void Release();
+
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -30,10 +34,6 @@ protected:
 
 	UPROPERTY(VisibleAnywhere)
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
-
-	virtual void Grab();
-
-	virtual void Release();
 	
 	UPROPERTY(EditAnywhere, Category = "Grab")
 	float GrabDistance = 200.f;

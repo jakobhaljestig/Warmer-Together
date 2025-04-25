@@ -60,6 +60,8 @@ public:
 
 	void ApplyEnvironmentEffects() const;
 
+	mutable float CachedEnvTemp = 0.0f;
+
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
 
@@ -84,6 +86,8 @@ private:
 
 	float TimeSinceLastUpdate = 0.0f;
 
-	
+	float CurrentCoolRate = 1.5f;
+
+	int32 WeatherLevel = GetCurrentWeather().WeatherLevel;
 
 };
