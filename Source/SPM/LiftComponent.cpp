@@ -48,6 +48,7 @@ void ULiftComponent::Drop(float Force, float VerticalForce)
 		OwnerMovementComponent->SetMovementMode(MOVE_Walking);
 		OwnerMovementComponent->SetJumpAllowed(true);
 		OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
+		PhysicsHandle->GetGrabbedComponent()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 		Release();
 		
 	}
@@ -77,6 +78,8 @@ void ULiftComponent::Throw()
 void ULiftComponent::Lift()
 {
 	Grab();
+	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+	PhysicsHandle->GetGrabbedComponent()->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepRelativeTransform);
 
 }
 // Called every frame
