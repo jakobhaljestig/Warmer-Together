@@ -29,8 +29,8 @@ public:
 private:
 	
 
-	UPROPERTY(EditAnywhere)
-	FRotator FallingAngle;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+	float FallingAngle;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category = "Components", meta = (AllowPrivateAccess = "true"))
 	UStaticMeshComponent* Log;
