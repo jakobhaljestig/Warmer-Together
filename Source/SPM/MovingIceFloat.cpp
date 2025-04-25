@@ -13,10 +13,8 @@ AMovingIceFloat::AMovingIceFloat()
 void AMovingIceFloat::BeginPlay()
 {
 	Super::BeginPlay();
-	
 	//Tar location från där spawner sätter location in world 
-	StartLocation = GetActorLocation();
-	EndLocation = EndReachedPosition->GetComponentLocation();
+	//StartLocation = GetActorLocation();
 }
 
 void AMovingIceFloat::Tick(float DeltaTime)
@@ -26,16 +24,30 @@ void AMovingIceFloat::Tick(float DeltaTime)
 
 void AMovingIceFloat::MoveIceFloat(float DeltaTime)
 {
-	FVector CurrentLocation =  StartLocation;
-	/*Fixa flak movement till end location
-	 * if()
-	 * EndReached();
-	 */
+	FVector CurrentLocation = GetActorLocation();
+
+	FVector Direction = (EndLocation - CurrentLocation).GetSafeNormal();
+	FVector NewLocation = CurrentLocation + Direction * MovementSpeed * DeltaTime;
+
+	SetActorLocation(NewLocation);
+
+	if (FVector::Dist(NewLocation, EndLocation) < 10.f) 
+	{
+		EndReached(); 
+	}
 }
 
 
 void AMovingIceFloat::EndReached()
 {
 	OnReachedEnd.Broadcast(this);
+	SetActorTickEnabled(false);
 	UE_LOG(LogTemp, Warning, TEXT("EndLocation Reached"));
+}
+
+void AMovingIceFloat::SetEndTarget(FVector InEndLocation)
+{
+	StartLocation = GetActorLocation();
+	EndLocation = InEndLocation;
+	UE_LOG(LogTemp, Warning, TEXT("%s received end location: %s"), *GetName(), *EndLocation.ToString());
 }

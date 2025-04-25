@@ -71,6 +71,7 @@ void UBodyTemperature::IsNearHeat(bool bIsNearHeat)
 {
 	bNearHeat = bIsNearHeat;
 }
+
 void UBodyTemperature::CoolDown(float DeltaTime)
 {
 	if (!bNearHeat)
@@ -140,4 +141,10 @@ void UBodyTemperature::ShareTemp()
 		TempBigPlayer->Temp = MeanTemp;
 		TempSmallPlayer->Temp = MeanTemp;
 	}
+}
+
+void UBodyTemperature::ResetTemp()
+{
+	Temp = MaxTemp;
+	bFrozen = false;
 }

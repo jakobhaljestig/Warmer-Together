@@ -38,6 +38,8 @@ public:
 
 	void SetCoolDownRate(float NewRate) { CoolDownRate = NewRate; }
 
+	void ResetTemp();
+
 private:
 	void CoolDown(float DeltaTime);
 	void HeatUp(float DeltaTime);

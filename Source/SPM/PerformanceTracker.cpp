@@ -32,7 +32,7 @@ void UPerformanceTracker::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	}
 	
 	//bör ej uppdateras i tick men får vara här så länge tills vi har en puzzlemanager
-	Performance.AveragePuzzleTime = TotalPuzzles > 0 ? TotalPuzzleTime / TotalPuzzles : 0.0f;
+	//Performance.AveragePuzzleTime = TotalPuzzles > 0 ? TotalPuzzleTime / TotalPuzzles : 0.0f;
 
 	if (WeatherUpdater)
 	{
