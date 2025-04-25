@@ -111,6 +111,7 @@ void UGrabComponent::Grab(){
 			HitComponent,
 			NAME_None,
 			HitResult.ImpactPoint);
+		HitActor->AttachToActor(GetOwner(), FAttachmentTransformRules::KeepRelativeTransform);
 		GrabEffect();
 		
 	}
@@ -122,8 +123,10 @@ void UGrabComponent::Release()
 	if (PhysicsHandle != nullptr && PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
 		Holding = false;
+		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
+		PhysicsHandle->GetGrabbedComponent()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
 		PhysicsHandle->ReleaseComponent();
 	}
 }
