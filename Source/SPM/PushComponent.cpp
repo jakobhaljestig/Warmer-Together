@@ -18,9 +18,10 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 	{
 		if (PhysicsHandle->GetGrabbedComponent()->GetMass() < MaxPushWeight){
 			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
-			PhysicsHandle->SetTargetLocation(TargetLocation);
+			PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetOwner()->GetActorRotation());
 		}
-		if ((PhysicsHandle->GetGrabbedComponent()->GetComponentLocation() - GetOwner()->GetActorLocation()).Length() > HoldDistance * 4)
+		FHitResult Hit;
+		if (!GetGrabbableInReach(Hit))
 		{
 			StopPushing();
 		}

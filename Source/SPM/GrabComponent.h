@@ -53,6 +53,7 @@ protected:
 
 	UCharacterMovementComponent* OwnerMovementComponent;
 
+	//Used to trigger different effects upon grabbing something
 	virtual void GrabEffect();
 
 private:
