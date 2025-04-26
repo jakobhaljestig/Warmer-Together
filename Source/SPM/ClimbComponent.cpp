@@ -3,6 +3,9 @@
 
 #include "ClimbComponent.h"
 
+#include "CharacterSmall.h"
+#include "GameFramework/CharacterMovementComponent.h"
+
 // Sets default values for this component's properties
 UClimbComponent::UClimbComponent()
 {
@@ -14,6 +17,15 @@ UClimbComponent::UClimbComponent()
 void UClimbComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	ClimbCharacter = Cast<ACharacter>(GetOwner());
+	if (ClimbCharacter)
+	{
+		MovementComponent = ClimbCharacter->GetCharacterMovement();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("Climb component is null"));
+	}
 }
 
 
@@ -33,16 +45,43 @@ bool UClimbComponent::CanClimb()
 
 void UClimbComponent::StartClimb()
 {
-	//
+	bIsClimbing = true;
+	//MovementComponent -> SetMovementMode(MOVE_Flying); 
 }
 
 void UClimbComponent::StopClimb()
 {
-	//
+	bIsClimbing = false;
+	MovementComponent->SetMovementMode(MOVE_Walking);
 }
 
-bool UClimbComponent::ClimbingInReach (FHitResult& HitResult)
+
+//Ska kolla om objektet framför går att klättra på. 
+bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 {
 	
-	return false; 
+	if (!ClimbCharacter) return false;
+
+	FVector Start = ClimbCharacter->GetActorLocation();
+	FVector ForwardVector = ClimbCharacter->GetActorForwardVector();
+	FVector End = Start + ForwardVector * 100.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
+
+	FCollisionQueryParams TraceParams;
+	TraceParams.AddIgnoredActor(ClimbCharacter); 
+	
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		//ECC_Visibility kankse inte bra
+		ECC_Visibility,
+		TraceParams
+	);
+
+	if (bHit && HitResult.GetActor() -> ActorHasTag("Climbable"))
+	{
+		return true;
+	}
+
+	return false;
 }
