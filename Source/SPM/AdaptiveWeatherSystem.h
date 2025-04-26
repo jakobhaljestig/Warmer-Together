@@ -59,6 +59,7 @@ public:
 	class UNiagaraComponent* MistParticleSystem;
 
 	void ApplyEnvironmentEffects() const;
+	void AggregatePerformance();
 
 	mutable float CachedEnvTemp = 0.0f;
 

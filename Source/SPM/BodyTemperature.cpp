@@ -114,7 +114,7 @@ void UBodyTemperature::CoolDown(float DeltaTime)
 
 	if (WeatherSystem)
 	{
-		float EnvTemp = WeatherSystem->GetCurrentWeather().Temperature;
+		float EnvTemp = WeatherSystem->CachedEnvTemp;
 		UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Character %s | EnvTemp: %.2f"), *GetOwner()->GetName(), EnvTemp);
 	}
 	else

@@ -67,12 +67,10 @@ void UAdaptiveWeatherSystem::Deinitialize()
 //detta bör ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame
 void UAdaptiveWeatherSystem::Tick(float DeltaTime)
 {
-	// uppdaterar tiden som har gått och gör väderuppdatering om det har gått tillräckligt lång tid
 	TimeSinceLastUpdate += DeltaTime;
-
 	if (TimeSinceLastUpdate >= UpdateInterval)
 	{
-		EvaluatePerformanceAndAdjustWeather();
+		AggregatePerformance();
 		TimeSinceLastUpdate = 0.0f;
 	}
 }
@@ -300,8 +298,40 @@ void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const
 		{
 			UE_LOG(LogTemp, Error, TEXT("SnowParticleSystem is NULL!"));
 		}
-	
 }
+
+void UAdaptiveWeatherSystem::AggregatePerformance()
+{
+	TArray<AActor*> PlayerCharacters;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
+
+	int32 TotalDeaths = 0;
+	int32 NumPlayers = 0;
+
+	for (AActor* Actor : PlayerCharacters)
+	{
+		if (ACharacterBase* Character = Cast<ACharacterBase>(Actor))
+		{
+			if (UPerformanceTracker* Tracker = Character->FindComponentByClass<UPerformanceTracker>())
+			{
+				TotalDeaths += Tracker->GetPerformance().DeathCount;
+				NumPlayers++;
+			}
+		}
+	}
+
+	if (NumPlayers > 0)
+	{
+		float AverageDeaths = static_cast<float>(TotalDeaths) / NumPlayers;
+
+		FPerformance AggregatedPerformance;
+		AggregatedPerformance.DeathCount = AverageDeaths; // Snitt-dödsantal!
+
+		CurrentPerformance = AggregatedPerformance;
+		EvaluatePerformanceAndAdjustWeather();
+	}
+}
+
 
 
 
