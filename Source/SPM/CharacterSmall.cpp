@@ -78,18 +78,7 @@ void ACharacterSmall::StopSprint(const FInputActionValue& Value)
 void ACharacterSmall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    
-    //Stop simulating physics after being thrown
-	if (GetVelocity().Length() < 300)
-	{
-		for (UActorComponent* Component : this->GetComponents())
-		{
-			if (UPrimitiveComponent* PrimComp = Cast<UPrimitiveComponent>(Component))
-			{
-				PrimComp->SetSimulatePhysics(false);
-			}
-		}
-	}
+	
 }
 
 void ACharacterSmall::Climb(const FInputActionValue& Value)

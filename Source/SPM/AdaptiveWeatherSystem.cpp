@@ -26,6 +26,13 @@ void UAdaptiveWeatherSystem::BeginPlay()
 
 void UAdaptiveWeatherSystem::SetCurrentZone(EZoneType NewZone)
 {
+
+	if (bIsCooperationDetected && NewZone != EZoneType::ZONE_NEUTRAL)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[Weather] Cooperation detected, ignoring zone change."));
+		return;
+	}
+	
 	CurrentZone = NewZone;
 	EvaluatePerformanceAndAdjustWeather(); 
 	ApplyEnvironmentEffects();      
@@ -271,6 +278,10 @@ void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const
 
 		if (SnowLevel3 && MistParticleSystem && SnowLevel2)
 		{
+			SnowLevel1->Deactivate();
+			SnowLevel2->Deactivate();
+			SnowLevel3->Deactivate();
+			MistParticleSystem->Deactivate();
 			//bör kanske inte vara så låg, men någon utträkning blir tokig. När spelaren dött 2 gånger går den under 0.3 och då avaktiveras snön just nu. 
 			if (Weather.SnowIntensity > 0.4f)
 			{
@@ -280,18 +291,16 @@ void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const
 			}
 			else if (Weather.SnowIntensity > 0.25f)
 			{
-				SnowLevel3->Deactivate();
-				MistParticleSystem->Deactivate();
 				SnowLevel2->Activate();
 				UE_LOG(LogTemp, Warning, TEXT("Snow 3/Mist Deactivated"));
 				UE_LOG(LogTemp, Warning, TEXT("Snow 2 Activated"));
 			}
 			else
 			{
-				SnowLevel2->Deactivate();
-				UE_LOG(LogTemp, Warning, TEXT("Snow 2 Deactivated"));
-				SnowLevel1->Activate();
-				UE_LOG(LogTemp, Warning, TEXT("Snow 1 Activated"));
+					SnowLevel1->Activate();
+					UE_LOG(LogTemp, Warning, TEXT("Snow 3/Mist Deactivated (Low intensity)"));
+					UE_LOG(LogTemp, Warning, TEXT("Snow 2 Deactivated"));
+					UE_LOG(LogTemp, Warning, TEXT("Snow 1 Activated"));
 			}
 		}
 		else

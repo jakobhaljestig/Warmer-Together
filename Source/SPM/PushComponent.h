@@ -27,6 +27,8 @@ class SPM_API UPushComponent : public UGrabComponent
 
 	private:
 	virtual void GrabEffect() override;
+
+	virtual void ReleaseEffect() override;
 	
 	float OriginalMovementSpeed = 0;
 	FRotator OriginalRotationRate = FRotator(0,0,0);

@@ -2,8 +2,6 @@
 
 
 #include "GrabComponent.h"
-
-#include "FallingTree.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values for this component's properties
@@ -14,6 +12,11 @@ UGrabComponent::UGrabComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	// ...
+}
+
+UGrabComponent::~UGrabComponent()
+{
+	
 }
 
 //Determine if player grabs or drops an object
@@ -96,14 +99,8 @@ void UGrabComponent::Grab(){
 		}
 		
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
-		if (Cast<AFallingTree>(HitComponent))
-		{
-			Cast<AFallingTree>(HitComponent)->Falling = true;
-			return;
-		}
 		Holding = true;
 		AActor* HitActor = HitResult.GetActor();
-		HitComponent->SetSimulatePhysics(true);
 		HitComponent->WakeAllRigidBodies();
 		HitActor->Tags.Add("Grabbed");
 		HitActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
@@ -122,10 +119,10 @@ void UGrabComponent::Release()
 	if (PhysicsHandle != nullptr && PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
 		Holding = false;
-		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
 		PhysicsHandle->ReleaseComponent();
+		ReleaseEffect();
 	}
 }
 
@@ -147,6 +144,10 @@ bool UGrabComponent::GetGrabbableInReach(FHitResult& OutHitResult) const
 void UGrabComponent::GrabEffect()
 {
 	
+}
+
+void UGrabComponent::ReleaseEffect()
+{
 }
 
 UPhysicsHandleComponent* UGrabComponent::GetPhysicsHandle() const
