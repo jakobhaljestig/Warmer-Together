@@ -25,11 +25,13 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	//Checka om man kan klättra
-	bool CanClimb();
+	void Climb();
 
-	void StartClimb();
+	void StartClimb(FHitResult Hit);
 
 	void StopClimb();
+
+	void FinishClimbUp();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ClimbSpeed = 200.0f;
@@ -47,7 +49,9 @@ public:
 	bool IsClimbing() const {return bIsClimbing;}
 	
 private:
-	bool bIsClimbing;
+	bool bIsClimbing = false;
+
+	bool bIsOnLedge = false; 
 	
 	bool ClimbingInReach (FHitResult& HitResult) const;
 	
