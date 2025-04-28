@@ -55,9 +55,7 @@ void UPushComponent::StopPushing()
 {
 	PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
 	Release();
-	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
-	OwnerMovementComponent->RotationRate = OriginalRotationRate;
-	OwnerMovementComponent->SetJumpAllowed(true);
+	
 }
 //Restricts player movement
 void UPushComponent::GrabEffect()
@@ -67,5 +65,13 @@ void UPushComponent::GrabEffect()
 	OwnerMovementComponent->MaxWalkSpeed = OwnerMovementComponent->MaxWalkSpeed/4;
 	OwnerMovementComponent->RotationRate = FRotator(0, 0, 0);
 	OwnerMovementComponent->SetJumpAllowed(false);
+}
+
+void UPushComponent::ReleaseEffect()
+{
+	Super::ReleaseEffect();
+	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
+	OwnerMovementComponent->RotationRate = OriginalRotationRate;
+	OwnerMovementComponent->SetJumpAllowed(true);
 }
 
