@@ -3,9 +3,6 @@
 
 #include "PushComponent.h"
 
-#include "FallingTree.h"
-
-
 UPushComponent::UPushComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -21,6 +18,12 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		if (PhysicsHandle->GetGrabbedComponent()->GetMass() < MaxPushWeight){
 			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
 			PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetOwner()->GetActorRotation());
+		}
+		
+		FHitResult Hit;
+		if (!GetGrabbableInReach(Hit))
+		{
+			StopPushing();
 		}
 	}
 }
@@ -45,8 +48,6 @@ void UPushComponent::GrabAndRelease()
 void UPushComponent::StartPushing()
 {
 	Grab();
-	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
-		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
 	
 }
 //Restores player movement and drops grabbed object
@@ -54,6 +55,7 @@ void UPushComponent::StopPushing()
 {
 	PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
 	Release();
+	
 }
 //Restricts player movement
 void UPushComponent::GrabEffect()

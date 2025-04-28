@@ -20,11 +20,15 @@ public:
 	UGrabComponent();
 	virtual ~UGrabComponent() override;
 
+
+	//Toggle's between Grab and Release
 	UFUNCTION(BlueprintCallable)
 	virtual void GrabAndRelease();
 
+	//Grab object
 	virtual void Grab();
 
+	//Release object
 	virtual void Release();
 
 protected:
@@ -53,14 +57,17 @@ protected:
 
 	ECollisionChannel CollisionChannel;
 
+	UPROPERTY(VisibleAnywhere)
 	UCharacterMovementComponent* OwnerMovementComponent;
 
 	//Used to trigger different effects upon grabbing something
 	virtual void GrabEffect();
 
+	//Used to trigger effects upon releasing something
 	virtual void ReleaseEffect();
 
 private:
+	//Gets PhysicsHandleComponent
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
 
 public:	
