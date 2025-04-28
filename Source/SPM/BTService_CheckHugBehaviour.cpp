@@ -5,6 +5,7 @@
 
 #include "CharacterBase.h"
 #include "PerformanceTracker.h"
+#include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 UBTService_CheckHugBehaviour::UBTService_CheckHugBehaviour()
@@ -56,13 +57,24 @@ void UBTService_CheckHugBehaviour::TickNode(UBehaviorTreeComponent& OwnerComp, u
 
 	if (HugAcculuatorTimer >= HugResetTime)
 	{
+		UBlackboardComponent* BlackboardComp = OwnerComp.GetBlackboardComponent();
+		
 		if (HugsInPeriod)
 		{
+			Weather->bIsCooperationDetected = true;
+			
+			if (BlackboardComp)
+			{
+				BlackboardComp->SetValueAsBool(TEXT("bIsCooperationDetected"), true); 
+			}
+			
 			Weather->SetCurrentZone(EZoneType::ZONE_NEUTRAL);
 			UE_LOG(LogTemp, Warning, TEXT("[WeatherAI] Hug cooperation detected! Milder weather applied."));
 		}
 		else
 		{
+			Weather->bIsCooperationDetected = false;
+			BlackboardComp->SetValueAsBool(TEXT("bIsCooperationDetected"), false);
 			UE_LOG(LogTemp, Warning, TEXT("[WeatherAI] Hugs too few (%d), keeping current zone."), HugsInPeriod);
 
 		}

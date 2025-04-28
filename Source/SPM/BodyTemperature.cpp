@@ -114,8 +114,8 @@ void UBodyTemperature::CoolDown(float DeltaTime)
 
 	if (WeatherSystem)
 	{
-		float EnvTemp = WeatherSystem->GetCurrentWeather().Temperature;
-		UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Character %s | EnvTemp: %.2f"), *GetOwner()->GetName(), EnvTemp);
+		float EnvTemp = WeatherSystem->CachedEnvTemp;
+		//UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Character %s | EnvTemp: %.2f"), *GetOwner()->GetName(), EnvTemp);
 	}
 	else
 	{
@@ -152,24 +152,14 @@ void UBodyTemperature::ShareTemp()
 	if (Temp0 && Temp1)
 	{
 		const float Mean = (Temp0->Temp + Temp1->Temp) / 2.0f;
-		const float HalfTemp = Temp0->MaxTemp * 0.5f;
-		const float TempBoost = Temp0->MaxTemp * 0.05f;
 
-		float NewTemp;
-
-		if (Mean < HalfTemp)
+		if (const float HalfTemp = Temp0->MaxTemp * 0.5f; Mean < HalfTemp)
 		{
-			NewTemp = HalfTemp; // höj båda upp till 50%
+			float NewTemp = HalfTemp; // höj båda upp till 50%
 			UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Hug boost to 50%% → %.2f"), NewTemp);
+			Temp0->Temp = NewTemp;
+			Temp1->Temp = NewTemp;
 		}
-		else
-		{
-			NewTemp = FMath::Min(Mean + TempBoost, Temp0->MaxTemp); // boosta med 5%
-			UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Hug bonus +5%% → %.2f"), NewTemp);
-		}
-
-		Temp0->Temp = NewTemp;
-		Temp1->Temp = NewTemp;
 	}
 	else
 	{
@@ -191,4 +181,14 @@ void UBodyTemperature::ResetTemp()
 	}
 
 
+}
+
+void UBodyTemperature::ModifyTemperature(float DeltaTemperature)
+{
+	Temp += DeltaTemperature;
+	double MinTemp = 0;
+	Temp = FMath::Clamp(Temp, MinTemp, MaxTemp);
+
+	UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Modified Temp by %.1f. New Temp: %.1f (%.1f%%)"), 
+		DeltaTemperature, Temp, GetTempPercentage() * 100.0f);
 }

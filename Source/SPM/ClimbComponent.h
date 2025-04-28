@@ -33,19 +33,23 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ClimbSpeed = 200.0f;
-
-
+	
 	UPROPERTY(EditAnywhere)
 	ACharacter* ClimbCharacter;
 
 	//För att påverka movement på Player när den klättrar. 
 	UPROPERTY(EditAnywhere)
 	class UCharacterMovementComponent* MovementComponent;
+
+	ECollisionChannel CollisionChannel;
+
+	//För CharacterSmall Och Input 
+	bool IsClimbing() const {return bIsClimbing;}
 	
 private:
 	bool bIsClimbing;
-
-	bool ClimbingInReach (FHitResult& HitResult);
+	
+	bool ClimbingInReach (FHitResult& HitResult) const;
 	
 
 		

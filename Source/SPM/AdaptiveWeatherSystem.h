@@ -59,8 +59,11 @@ public:
 	class UNiagaraComponent* MistParticleSystem;
 
 	void ApplyEnvironmentEffects() const;
+	void AggregatePerformance();
 
 	mutable float CachedEnvTemp = 0.0f;
+
+	bool bIsCooperationDetected = false;
 
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
@@ -89,5 +92,6 @@ private:
 	float CurrentCoolRate = 1.5f;
 
 	int32 WeatherLevel = GetCurrentWeather().WeatherLevel;
+
 
 };
