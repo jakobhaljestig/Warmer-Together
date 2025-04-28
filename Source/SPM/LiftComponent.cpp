@@ -44,11 +44,14 @@ void ULiftComponent::Drop(float Force, float VerticalForce)
 
 	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
-		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce);
-		OwnerMovementComponent->SetMovementMode(MOVE_Walking);
-		OwnerMovementComponent->SetJumpAllowed(true);
-		OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
-		PhysicsHandle->GetGrabbedComponent()->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(PhysicsHandle->GetGrabbedComponent()->GetOwner())){
+			HeldPlayer->LaunchCharacter(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce, true, true);
+		}
+		else
+		{
+			PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce);	
+		}
+		PhysicsHandle->GetGrabbedComponent()->GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		Release();
 		
 	}
@@ -60,6 +63,14 @@ void ULiftComponent::GrabEffect()
 	OriginalMovementSpeed = OwnerMovementComponent->MaxWalkSpeed;
 	OwnerMovementComponent->MaxWalkSpeed = OwnerMovementComponent->MaxWalkSpeed/2;
 	OwnerMovementComponent->SetJumpAllowed(false);
+}
+
+void ULiftComponent::ReleaseEffect()
+{
+	Super::ReleaseEffect();
+	OwnerMovementComponent->SetMovementMode(MOVE_Walking);
+	OwnerMovementComponent->SetJumpAllowed(true);
+	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
 }
 
 //Call drop with more force
@@ -79,7 +90,7 @@ void ULiftComponent::Lift()
 {
 	Grab();
 	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
-	PhysicsHandle->GetGrabbedComponent()->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepRelativeTransform);
+		PhysicsHandle->GetGrabbedComponent()->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
 
 }
 // Called every frame
@@ -89,7 +100,7 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
 		FVector TargetLocation = GetOwner()->GetActorLocation() + FVector(0,0,HoldDistance);
-		PhysicsHandle->GetGrabbedComponent()->SetRelativeLocation(TargetLocation);
+		PhysicsHandle->GetGrabbedComponent()->SetWorldLocation(TargetLocation);
 		PhysicsHandle->GetGrabbedComponent()->SetWorldRotation(this->GetOwner()->GetActorRotation());
 
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();

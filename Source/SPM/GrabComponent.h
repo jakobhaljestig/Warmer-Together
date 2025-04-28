@@ -18,6 +18,7 @@ class SPM_API UGrabComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UGrabComponent();
+	virtual ~UGrabComponent() override;
 
 	UFUNCTION(BlueprintCallable)
 	virtual void GrabAndRelease();
@@ -47,6 +48,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Grab")
 	bool Holding = false;
 
+	//Looks through all instances of GrabComponent to see if one is holding something
 	bool HoldingSomething() const;
 
 	ECollisionChannel CollisionChannel;
@@ -55,6 +57,8 @@ protected:
 
 	//Used to trigger different effects upon grabbing something
 	virtual void GrabEffect();
+
+	virtual void ReleaseEffect();
 
 private:
 	UPhysicsHandleComponent* GetPhysicsHandle() const;

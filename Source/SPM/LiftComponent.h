@@ -50,6 +50,8 @@ private:
 	
 	virtual void GrabEffect() override;
 
+	virtual void ReleaseEffect() override;
+
 	float OriginalMovementSpeed = 0;
 
 	
