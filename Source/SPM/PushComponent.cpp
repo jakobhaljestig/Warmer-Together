@@ -22,6 +22,12 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
 			PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetOwner()->GetActorRotation());
 		}
+		
+		FHitResult Hit;
+		if (!GetGrabbableInReach(Hit))
+		{
+			StopPushing();
+		}
 	}
 }
 
@@ -45,8 +51,6 @@ void UPushComponent::GrabAndRelease()
 void UPushComponent::StartPushing()
 {
 	Grab();
-	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
-		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
 	
 }
 //Restores player movement and drops grabbed object
@@ -54,6 +58,9 @@ void UPushComponent::StopPushing()
 {
 	PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
 	Release();
+	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
+	OwnerMovementComponent->RotationRate = OriginalRotationRate;
+	OwnerMovementComponent->SetJumpAllowed(true);
 }
 //Restricts player movement
 void UPushComponent::GrabEffect()
@@ -63,13 +70,5 @@ void UPushComponent::GrabEffect()
 	OwnerMovementComponent->MaxWalkSpeed = OwnerMovementComponent->MaxWalkSpeed/4;
 	OwnerMovementComponent->RotationRate = FRotator(0, 0, 0);
 	OwnerMovementComponent->SetJumpAllowed(false);
-}
-
-void UPushComponent::ReleaseEffect()
-{
-	Super::ReleaseEffect();
-	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
-	OwnerMovementComponent->RotationRate = OriginalRotationRate;
-	OwnerMovementComponent->SetJumpAllowed(true);
 }
 
