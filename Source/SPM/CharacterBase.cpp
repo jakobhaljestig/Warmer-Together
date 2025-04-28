@@ -81,7 +81,7 @@ void ACharacterBase::BeginPlay()
 	PushComponent = FindComponentByClass<UPushComponent>();
 	if (!PushComponent)
 	{
-		UE_LOG(LogTemp, Error, TEXT("PickupComponent not valid"));
+		UE_LOG(LogTemp, Error, TEXT("PushComponent not valid"));
 	}
 }
 
@@ -153,8 +153,8 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Started, this, &ACharacterBase::BeginHug);
         EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Completed, this, &ACharacterBase::EndHug);
 
-		//EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::TogglePush);
-		//EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::TogglePush);
+		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::TogglePush);
+		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::TogglePush);
 	}
 	else
 	{
@@ -260,7 +260,7 @@ void ACharacterBase::Hug() const
 	//GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
 
-void ACharacterBase::TogglePush(const FInputActionValue& Value) const
+void ACharacterBase::TogglePush(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Toggled"));
 	PushComponent->GrabAndRelease();
