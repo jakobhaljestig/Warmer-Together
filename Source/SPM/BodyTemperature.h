@@ -40,6 +40,8 @@ public:
 
 	void ResetTemp();
 
+	void ModifyTemperature(float DeltaTemperature);
+
 private:
 	void CoolDown(float DeltaTime);
 	void HeatUp(float DeltaTime);
