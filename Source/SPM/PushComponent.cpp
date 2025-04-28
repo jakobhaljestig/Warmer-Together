@@ -3,9 +3,6 @@
 
 #include "PushComponent.h"
 
-#include "FallingTree.h"
-
-
 UPushComponent::UPushComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
