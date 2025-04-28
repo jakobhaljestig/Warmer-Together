@@ -58,11 +58,13 @@ void UBTService_CheckHugBehaviour::TickNode(UBehaviorTreeComponent& OwnerComp, u
 	{
 		if (HugsInPeriod)
 		{
+			Weather->bIsCooperationDetected = true;
 			Weather->SetCurrentZone(EZoneType::ZONE_NEUTRAL);
 			UE_LOG(LogTemp, Warning, TEXT("[WeatherAI] Hug cooperation detected! Milder weather applied."));
 		}
 		else
 		{
+			Weather->bIsCooperationDetected = false;
 			UE_LOG(LogTemp, Warning, TEXT("[WeatherAI] Hugs too few (%d), keeping current zone."), HugsInPeriod);
 
 		}
