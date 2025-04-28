@@ -53,11 +53,13 @@ protected:
 
 	ECollisionChannel CollisionChannel;
 
+	UPROPERTY(VisibleAnywhere)
 	UCharacterMovementComponent* OwnerMovementComponent;
 
 	//Used to trigger different effects upon grabbing something
 	virtual void GrabEffect();
 
+	//Used to trigger effects opn releasing something
 	virtual void ReleaseEffect();
 
 private:
