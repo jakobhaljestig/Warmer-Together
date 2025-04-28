@@ -192,12 +192,12 @@ void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
 		{
 			BodyTemp->SetCoolDownRate(CurrentCoolRate);
 
-			UE_LOG(LogTemp, Warning, TEXT("[WeatherLog] Character %d - WeatherLevel: %d | CoolDownRate: %.2f | Temp%%: %.1f%%"),
+			/*UE_LOG(LogTemp, Warning, TEXT("[WeatherLog] Character %d - WeatherLevel: %d | CoolDownRate: %.2f | Temp%%: %.1f%%"),
 				Index,
 				CurrentWeather.WeatherLevel,
 				CurrentCoolRate,
 				BodyTemp->GetTempPercentage() * 100.0f
-			);
+			);*/
 		}
 		else
 		{

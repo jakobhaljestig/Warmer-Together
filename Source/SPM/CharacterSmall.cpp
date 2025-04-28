@@ -8,9 +8,16 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+
 void ACharacterSmall::BeginPlay()
 {
 	Super::BeginPlay();
+
+	ClimbingComponent = FindComponentByClass<UClimbComponent>();
+	if (!ClimbingComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Climbing component not valid"));
+	}
 	
 	GetCharacterMovement()->JumpZVelocity = 900.0f; 
 	GetCharacterMovement()->AirControl = 0.35f;
@@ -31,6 +38,8 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterSmall::Sprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterSmall::StopSprint);
+
+		EnhancedInputComponent->BindAction(ClimbAction, ETriggerEvent::Started, this, &ACharacterSmall::Climb);
 	
 	}
 	else
@@ -83,3 +92,7 @@ void ACharacterSmall::Tick(float DeltaTime)
 	}
 }
 
+void ACharacterSmall::Climb(const FInputActionValue& Value)
+{
+	ClimbingComponent->StartClimb();
+}
