@@ -41,6 +41,9 @@ public:
 	UPROPERTY(EditAnywhere)
 	class UCharacterMovementComponent* MovementComponent;
 
+	ECollisionChannel CollisionChannel;
+
+	//För CharacterSmall Och Input 
 	bool IsClimbing() const {return bIsClimbing;}
 	
 private:
