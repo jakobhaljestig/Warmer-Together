@@ -21,7 +21,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		}
 		
 		FHitResult Hit;
-		if (!GetGrabbableInReach(Hit))
+		if (!GetGrabbableInReach(Hit) || OwnerMovementComponent->IsFalling())
 		{
 			StopPushing();
 		}
