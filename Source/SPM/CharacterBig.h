@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "CharacterBase.h"
 #include "InputActionValue.h"
+#include "ClimbComponent.h"
 #include "LiftComponent.h"
 #include "CharacterBig.generated.h"
 
@@ -25,11 +26,11 @@ class SPM_API ACharacterBig : public ACharacterBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ThrowAction;
 
-public:
 	
 
 protected:
-
+	
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pickup")
 	ULiftComponent* PickupComponent;
 
@@ -41,7 +42,5 @@ protected:
 	void Throw(const FInputActionValue& Value);
 
 	bool IsH = false;
-	
-	
 	
 };

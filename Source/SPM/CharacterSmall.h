@@ -31,6 +31,8 @@ protected:
 	void StopSprint(const FInputActionValue& Value);
 
 	void Climb(const FInputActionValue& Value);
+
+	virtual void Move(const FInputActionValue& Value) override;
 	
 public:
 	
@@ -41,5 +43,10 @@ public:
 	//Tror de inte behövs UPROPERTY tbh
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Climb")
 	UClimbComponent* ClimbingComponent;
+
+private:
+	bool bIsClimbing = false;
+	
+	
 
 };

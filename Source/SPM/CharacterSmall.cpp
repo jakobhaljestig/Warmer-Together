@@ -23,6 +23,8 @@ void ACharacterSmall::BeginPlay()
 	GetCharacterMovement()->AirControl = 0.35f;
 	GetCharacterMovement()->BrakingDecelerationFalling = 0.0f;
 
+	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+	
 }
 
 
@@ -48,8 +50,7 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 	}
 }
 
-//Implementera check för att se om något är över karaktären. 
-
+//Implementera check för att se om något är över karaktären.
 void ACharacterSmall::Crawl (const FInputActionValue& Value)
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Crouching"));
@@ -83,5 +84,23 @@ void ACharacterSmall::Tick(float DeltaTime)
 
 void ACharacterSmall::Climb(const FInputActionValue& Value)
 {
-	ClimbingComponent->StartClimb();
+	ClimbingComponent->Climb();
+}
+
+
+void ACharacterSmall::Move(const FInputActionValue& Value)
+{
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	if (Controller != nullptr)
+	{
+		if (ClimbingComponent && ClimbingComponent->IsClimbing())
+		{
+			FVector ClimbDirection = FVector::UpVector;
+			AddMovementInput(ClimbDirection, MovementVector.Y);
+			return;
+		}
+		
+		Super::Move(Value);
+	}
 }
