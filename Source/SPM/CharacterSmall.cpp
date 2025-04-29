@@ -83,5 +83,5 @@ void ACharacterSmall::Tick(float DeltaTime)
 
 void ACharacterSmall::Climb(const FInputActionValue& Value)
 {
-	ClimbingComponent->StartClimb();
+	ClimbingComponent->Climb();
 }

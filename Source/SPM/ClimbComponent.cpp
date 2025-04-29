@@ -33,41 +33,65 @@ void UClimbComponent::BeginPlay()
 void UClimbComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	//Kommentera ut behövs inte tick sen när input läggs till
-	//CanClimb();
+
+	if (bIsClimbing)
+	{
+		FHitResult Hit;
+		if (!ClimbingInReach(Hit))
+		{
+			bIsOnLedge = true;
+		}
+
+		bIsOnLedge = false; 
+	}
 	
 }
 
 //Metoden är rätt värdelös
-bool UClimbComponent::CanClimb()
+void UClimbComponent::Climb()
 {
-	FHitResult Hit;
-	return ClimbingInReach(Hit);
-}
 
-
-void UClimbComponent::StartClimb()
-{
-	
 	FHitResult Hit;
-	if (ClimbingInReach(Hit))
+	if (!bIsClimbing && ClimbingInReach(Hit))
 	{
-		UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Climbing"));
-		/*
-		//IMpactPoint där trace channel träffar objekt 
-		FVector AttachPosition = Hit.ImpactPoint; //Kanske fixA
-		ClimbCharacter->SetActorLocation(AttachPosition);
-
-		//Rotation relevant? troligtvis måste ändå karaktären kolla mot väggen
-		FRotator ClimbRotation = Hit.ImpactPoint.ToOrientationRotator();
-		ClimbRotation.Yaw += 180.f;
-		ClimbCharacter->SetActorRotation(ClimbRotation);
-		
-		bIsClimbing = true;
-		MovementComponent -> SetMovementMode(MOVE_Flying); //ANtar att gravity blir 0*/
+		StartClimb(Hit);
 	}
-
+	else if (bIsClimbing)
+	{
+		StopClimb();
+	}
+	else if (bIsOnLedge)
+	{
+		FinishClimbUp();
+	}
+	
 }
+
+
+void UClimbComponent::StartClimb(FHitResult Hit)
+{
+	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Climbing"));
+		
+	//IMpactPoint där trace channel träffar objekt
+	FVector AttachNormal = Hit.ImpactNormal;
+	FVector AttachPosition = Hit.ImpactPoint + AttachNormal * 20.f; //Kanske fixA, ja..ja fixa
+	ClimbCharacter->SetActorLocation(AttachPosition);
+
+	//ROTATION
+	FRotator WallRotation = Hit.ImpactNormal.ToOrientationRotator();
+	WallRotation.Yaw += 180.f;
+	FRotator FinalRotation = FRotator(0.f, WallRotation.Yaw, 0.f);
+	ClimbCharacter->SetActorRotation(FinalRotation);
+		
+	bIsClimbing = true;
+	MovementComponent -> SetMovementMode(MOVE_Flying); //ANtar att gravity blir 0
+	MovementComponent->GravityScale = 0.0f;
+	MovementComponent->MaxFlySpeed = 200.f;
+	MovementComponent->BrakingDecelerationFlying = 5000.f;
+	MovementComponent->bOrientRotationToMovement = false;
+	
+}
+
 
 void UClimbComponent::StopClimb()
 {
@@ -75,9 +99,30 @@ void UClimbComponent::StopClimb()
 	{
 		bIsClimbing = false;
 		MovementComponent->SetMovementMode(MOVE_Walking);
+		MovementComponent->GravityScale = 1.0f;
+		MovementComponent->MaxWalkSpeed = 500.f;
+		MovementComponent->BrakingDecelerationWalking = 2048.f;
+
+		MovementComponent->bOrientRotationToMovement = true;
 	}
 	
 }
+
+void UClimbComponent::FinishClimbUp()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Finished climbing!"));
+	//STOPPA Uppåt movement? 
+
+	bIsClimbing = false;
+	bIsOnLedge = false;
+	
+	//MovementComponent->SetMovementMode(MOVE_Walking);
+	//MovementComponent->GravityScale = 1.0f;
+	
+	//MovementComponent->bOrientRotationToMovement = true;
+	
+}
+
 
 
 //Ska kolla om objektet framför går att klättra på. 
@@ -89,10 +134,13 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 		return false;
 	}
 
-	FVector Start = ClimbCharacter->GetActorLocation();
+	FVector Start = ClimbCharacter->GetActorLocation()  + FVector(0, 0, 80.f); //Flyttar upp linetrace mer mot huvudet
 	FVector ForwardVector = ClimbCharacter->GetActorForwardVector();
 	FVector End = Start + ForwardVector * 100.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
 
+	FVector HalfSize(30.f, 30.f, 50.f); // bredd, djup, höjd på boxen
+	FQuat Rotation = FQuat::Identity;
+	
 	FCollisionQueryParams TraceParams;
 	TraceParams.AddIgnoredActor(ClimbCharacter);
 
@@ -107,14 +155,25 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 	   5.f        
    );
 
+
+	bool bHit = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		Rotation,
+		ECC_GameTraceChannel3,
+		FCollisionShape::MakeBox(HalfSize),
+		TraceParams
+	);
+	
 	//Använder den mest banala funktionelitet kommer se skit ut i spelet. 
-	bool bHit = GetWorld()->LineTraceSingleByChannel(
+	/*bool bHit = GetWorld()->LineTraceSingleByChannel(
 		HitResult,
 		Start,
 		End,
 		ECC_GameTraceChannel3,
 		TraceParams
-	);
+	);*/
 	
 	if (bHit && HitResult.GetActor() -> ActorHasTag("Climbable"))
 	{
