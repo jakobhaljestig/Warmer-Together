@@ -3,7 +3,6 @@
 
 #include "LevelStreamingController.h"
 
-#include "Engine/LevelScriptActor.h"
 #include "Kismet/GameplayStatics.h"
 
 // Sets default values
@@ -11,7 +10,15 @@ ALevelStreamingController::ALevelStreamingController()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-
+	
+	Rooms = {
+		FName(TEXT("RoomZero")),
+		FName(TEXT("RoomOne")),
+		FName(TEXT("RoomTwo")),
+		FName(TEXT("RoomThree")),
+		FName(TEXT("RoomFour")),
+		FName(TEXT("RoomFive")),
+	};
 }
 
 // Called when the game starts or when spawned
@@ -19,15 +26,8 @@ void ALevelStreamingController::BeginPlay()
 {
 	Super::BeginPlay();
 
-	Rooms = {
-		FName(TEXT("Room0")),
-		FName(TEXT("Room1")),
-		FName(TEXT("Room2")),
-		FName(TEXT("Room3")),
-		FName(TEXT("Room4")),
-	};
-	FLatentActionInfo LatentInfo;
-	UGameplayStatics::LoadStreamLevel(this, Rooms[0], true, false, LatentInfo);
+	LoadLevel(Rooms[0]);
+	LoadLevel(Rooms[1]);
 }
 
 // Called every frame
@@ -40,30 +40,44 @@ void ALevelStreamingController::Tick(float DeltaTime)
 void ALevelStreamingController::SetPlayerBigLevel(const int RoomNumber)
 {
 	PlayerBigRoomNumber = RoomNumber;
+	UpdateLoadedLevels();
 }
 
 void ALevelStreamingController::SetPlayerSmallLevel(const int RoomNumber)
 {
 	PlayerSmallRoomNumber = RoomNumber;
+	UpdateLoadedLevels();
 }
 
 void ALevelStreamingController::UpdateLoadedLevels()
 {
-	FLatentActionInfo LatentInfo;
-
-	if (PlayerBigRoomNumber == PlayerSmallRoomNumber)
+	for (int i = 0; i < Rooms.Num(); i++)
 	{
-		for (int i = 0; i < Rooms.Num(); i++)
+		if (Difference(i, PlayerBigRoomNumber) <= 1 || Difference(i, PlayerSmallRoomNumber) <= 1)
 		{
-			if (i != PlayerBigRoomNumber - 1 || i != PlayerBigRoomNumber || i != PlayerBigRoomNumber + 1)
-			{
-				UGameplayStatics::UnloadStreamLevel(this, Rooms[i], LatentInfo, false);
-			}
-			else
-			{
-				UGameplayStatics::LoadStreamLevel(this, Rooms[i], true, false, LatentInfo);
-			}
+			LoadLevel(Rooms[i]);
+		}
+		else
+		{
+			UnloadLevel(Rooms[i]);
 		}
 	}
+}
+
+void ALevelStreamingController::LoadLevel(const FName RoomName) const
+{
+	const FLatentActionInfo LatentInfo;
+	UGameplayStatics::LoadStreamLevel(this, RoomName, true, false, LatentInfo);
+}
+
+void ALevelStreamingController::UnloadLevel(const FName RoomName) const
+{
+	const FLatentActionInfo LatentInfo;
+	UGameplayStatics::UnloadStreamLevel(this, RoomName, LatentInfo, false);
+}
+
+int ALevelStreamingController::Difference(const int X, const int Y)
+{
+	return FMath::Abs(X - Y);
 }
 

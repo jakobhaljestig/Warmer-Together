@@ -33,6 +33,12 @@ public:
 protected:
 	void UpdateLoadedLevels();
 
+	void LoadLevel(const FName RoomName) const;
+
+	void UnloadLevel(const FName RoomName) const;
+
+	static int Difference(const int X, const int Y);
+
 	UPROPERTY()
 	TArray<FName> Rooms;
 	
