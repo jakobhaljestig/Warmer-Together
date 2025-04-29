@@ -15,16 +15,7 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_RadioTower.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_RadioTower.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Input/IMC_CharacterBig.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Input/IMC_CharacterBig.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/ThirdPerson/Input/IMC_Player1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/ThirdPerson/Input/IMC_Player1.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SPM.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/SPM.uproject" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBig.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBig.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBig.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBig.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/ClimbComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/ClimbComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/ClimbComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/ClimbComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,9 +41,6 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="cidr-memory-view://6" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/CoreUObject/Public/Templates/Casts.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/BTService_CheckHugBehaviour.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/BTService_CheckHugBehaviour.h" root0="FORCE_HIGHLIGHTING" />
@@ -62,6 +50,8 @@
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterPlayerController.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterSmall.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/SPM/InterfaceMiniGamePawn.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/SPM/InterfaceMiniGamePawn.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/SavableObjectInterface.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/SavableObjectInterface.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/WarmerTogetherSaveGame.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -84,10 +74,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "C/C++ Project.SPM.executor": "Debug",
+    "C/C++ Project.SPM.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Nora",
+    "git-widget-placeholder": "Robin",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -144,13 +134,8 @@
       <option name="WORKING_DIRECTORY" value="" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
-      <option name="ENV_FILE_PATHS" value="" />
-      <option name="REDIRECT_INPUT_PATH" value="" />
-      <option name="PTY_MODE" value="Auto" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
-      <option name="AUTO_ATTACH_CHILDREN" value="0" />
-      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/AutomationTool/AutomationTool.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
@@ -167,13 +152,8 @@
       <option name="WORKING_DIRECTORY" value="" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
-      <option name="ENV_FILE_PATHS" value="" />
-      <option name="REDIRECT_INPUT_PATH" value="" />
-      <option name="PTY_MODE" value="Auto" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
-      <option name="AUTO_ATTACH_CHILDREN" value="0" />
-      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
