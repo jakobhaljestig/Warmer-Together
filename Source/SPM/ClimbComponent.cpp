@@ -144,7 +144,7 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 	FCollisionQueryParams TraceParams;
 	TraceParams.AddIgnoredActor(ClimbCharacter);
 
-	DrawDebugLine(
+	/*DrawDebugLine(
 	   GetWorld(),
 	   Start,
 	   End,
@@ -153,7 +153,7 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 	   5.0f,        
 	   0,           
 	   5.f        
-   );
+   );*/
 
 
 	bool bHit = GetWorld()->SweepSingleByChannel(
