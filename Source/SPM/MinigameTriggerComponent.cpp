@@ -42,6 +42,16 @@ void UMinigameTriggerComponent::ZoomIn(UPrimitiveComponent* Actor)
 	Character->GetComponentByClass<UBodyTemperature>()->SetCoolDownRate(0);
 }
 
+void UMinigameTriggerComponent::ZoomOut(UPrimitiveComponent* Actor)
+{
+	ACharacterBase* Character = Cast<ACharacterBase>(Actor->GetOwner());
+	APlayerController* Controller = Cast<APlayerController>(Character->GetController());
+	Character->GetMovementComponent()->Activate();
+	Controller->SetViewTargetWithBlend(Character, 1, VTBlend_EaseOut, 5, true);
+	Character->GetComponentByClass<UBodyTemperature>()->SetCoolDownRate(0.75);
+}
+
+
 // Called every frame
 void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
