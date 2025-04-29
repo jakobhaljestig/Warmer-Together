@@ -8,9 +8,16 @@
 #include "InputActionValue.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
+
 void ACharacterSmall::BeginPlay()
 {
 	Super::BeginPlay();
+
+	ClimbingComponent = FindComponentByClass<UClimbComponent>();
+	if (!ClimbingComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Climbing component not valid"));
+	}
 	
 	GetCharacterMovement()->JumpZVelocity = 900.0f; 
 	GetCharacterMovement()->AirControl = 0.35f;
@@ -31,6 +38,8 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterSmall::Sprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterSmall::StopSprint);
+
+		EnhancedInputComponent->BindAction(ClimbAction, ETriggerEvent::Started, this, &ACharacterSmall::Climb);
 	
 	}
 	else
@@ -45,6 +54,7 @@ void ACharacterSmall::Crawl (const FInputActionValue& Value)
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Crouching"));
 	GetCharacterMovement()->MaxWalkSpeed = 250.0f;
+	Tags.Remove("Grabbed");
 	ACharacter::Crouch(true);
 }
 
@@ -68,17 +78,10 @@ void ACharacterSmall::StopSprint(const FInputActionValue& Value)
 void ACharacterSmall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-    
-    //Stop simulating physics after being thrown
-	if (GetVelocity().Length() < 300)
-	{
-		for (UActorComponent* Component : this->GetComponents())
-		{
-			if (UPrimitiveComponent* PrimComp = Cast<UPrimitiveComponent>(Component))
-			{
-				PrimComp->SetSimulatePhysics(false);
-			}
-		}
-	}
+	
 }
 
+void ACharacterSmall::Climb(const FInputActionValue& Value)
+{
+	ClimbingComponent->Climb();
+}

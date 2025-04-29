@@ -32,33 +32,40 @@ void UPerformanceTracker::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	}
 	
 	//bör ej uppdateras i tick men får vara här så länge tills vi har en puzzlemanager
-	Performance.AveragePuzzleTime = TotalPuzzles > 0 ? TotalPuzzleTime / TotalPuzzles : 0.0f;
+	//Performance.AveragePuzzleTime = TotalPuzzles > 0 ? TotalPuzzleTime / TotalPuzzles : 0.0f;
+	TimeSinceLastDeath += DeltaTime;
 
-	if (WeatherUpdater)
+	if (TimeSinceLastDeath > 60.0f && Performance.DeathCount > 0)
 	{
-		WeatherUpdater->UpdatePerformance(Performance);
+		Performance.DeathCount--;
+		TimeSinceLastDeath = 0.0f;
+		UE_LOG(LogTemp, Display, TEXT("Forgiveness: Reduced DeathCount to %d"), Performance.DeathCount);
 	}
 }
 
 void UPerformanceTracker::RegisterDeath()
 {
 	Performance.DeathCount++;
-	UE_LOG(LogTemp, Warning, TEXT("Performance Updated: DeathCount = %d"), Performance.DeathCount);
-
-	// Kontrollera om WeatherUpdater är null
-	if (WeatherUpdater)
-	{
-		WeatherUpdater->UpdatePerformance(Performance);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("WeatherUpdater is null!"));
-	}
+	TimeSinceLastDeath = 0.0f;
+	UE_LOG(LogTemp, Warning, TEXT("[PerformanceTracker] RegisterDeath called: DeathCount = %d on %s"), Performance.DeathCount, *GetOwner()->GetName());
+	
 }
 
 void UPerformanceTracker::RegisterPuzzleSolved(float TimeToSolve)
 {
 	TotalPuzzleTime += TimeToSolve;
 	TotalPuzzles++;
+}
+
+void UPerformanceTracker::RegisterHug()
+{
+	RecentHugs++;
+}
+
+int32 UPerformanceTracker::GetAndResetRecentHugs()
+{
+	int32 Out =  RecentHugs;
+	RecentHugs = 0;
+	return Out;
 }
 

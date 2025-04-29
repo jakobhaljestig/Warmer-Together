@@ -47,9 +47,23 @@ public:
 	AExponentialHeightFog* FogActor;
 
 	UPROPERTY(EditAnywhere, Category = "Weather VFX")
-	class UNiagaraComponent* SnowParticleSystem;
+	class UNiagaraComponent* SnowLevel3;
+
+	UPROPERTY(EditAnywhere, Category = "Weather VFX")
+	class UNiagaraComponent* SnowLevel2;
+
+	UPROPERTY(EditAnywhere, Category = "Weather VFX")
+	class UNiagaraComponent* SnowLevel1;
+	
+	UPROPERTY(EditAnywhere, Category = "Weather VFX")
+	class UNiagaraComponent* MistParticleSystem;
 
 	void ApplyEnvironmentEffects() const;
+	void AggregatePerformance();
+
+	mutable float CachedEnvTemp = 0.0f;
+
+	bool bIsCooperationDetected = false;
 
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;
@@ -75,6 +89,9 @@ private:
 
 	float TimeSinceLastUpdate = 0.0f;
 
-	
+	float CurrentCoolRate = 1.5f;
+
+	int32 WeatherLevel = GetCurrentWeather().WeatherLevel;
+
 
 };

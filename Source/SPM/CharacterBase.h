@@ -18,7 +18,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
-class UPush;
+class UPushComponent;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -77,9 +77,9 @@ protected:
 	void BeginHug(const FInputActionValue& Value);
 	void EndHug(const FInputActionValue& Value);
 
-	void Hug();
+	void Hug() const;
 
-	void TogglePush();
+	void TogglePush(const FInputActionValue& Value);
 
 	void Landed(const FHitResult& Hit);
 	
@@ -88,7 +88,7 @@ protected:
 	UBodyTemperature* BodyTempComponent;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Push")
-	UPush* PushComponent;
+	UPushComponent* PushComponent;
 
 	UPROPERTY()
 	UAdaptiveWeatherSystem* AdaptiveWeatherSystem;

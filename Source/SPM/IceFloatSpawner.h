@@ -16,20 +16,31 @@ public:
 	// Sets default values for this actor's properties
 	AIceFloatSpawner();
 
+	FVector SpawnPosition;
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AMovingIceFloat> MovingIceFloatClass;
-	
-	//USceneComponent för att sätta ut in world, omvandlar till Fvector i cpp-filen 
-	UPROPERTY(EditAnywhere, Category = "Spawner")
-	USceneComponent* SpawnPosition;
+
+	UPROPERTY(EditInstanceOnly, Category = "Spawner")
+	AActor* EndTarget;
+
 
 	//Intervall av tid då isflak spawnas 
 	UPROPERTY(EditAnywhere)
-	float SpawnInterval;
+	float SpawnInterval = 1.0f;
+
+	UPROPERTY(EditAnywhere)
+	float MovementSpeed = 1.0f;
+
+	UPROPERTY(EditAnywhere)
+	TArray <AMovingIceFloat*> ActiveIceFloats;
+
+	UPROPERTY(EditAnywhere)
+	TArray <AMovingIceFloat*> InactiveIceFloats;
 
 public:	
 	// Called every frame
@@ -42,9 +53,7 @@ private:
 	UFUNCTION()
 	void HandleIceFloatReachedEnd(AMovingIceFloat* IceFloat);
 	
-	void RespawnIceFloat(AMovingIceFloat* IceFloat);
-
-	AMovingIceFloat* CurrentIceFloat;
+	void RespawnIceFloat();
 	
 	FTimerHandle SpawnTimer;
 

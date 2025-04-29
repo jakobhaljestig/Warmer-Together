@@ -14,56 +14,86 @@ AIceFloatSpawner::AIceFloatSpawner()
 void AIceFloatSpawner::BeginPlay()
 {
 	Super::BeginPlay();
+
+	SpawnPosition = GetActorLocation();
 	
+	//UE_LOG(LogTemp, Warning, TEXT("BeginPlay: Spawner started with interval %f"), SpawnInterval);
 	GetWorld()->GetTimerManager().SetTimer(SpawnTimer, this, &AIceFloatSpawner::SpawnIceFloat, SpawnInterval, true);
+
+	
 }
 
 // Called every frame
 void AIceFloatSpawner::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 //Spawnar in isflak tills första isfalket når slutmålet 
 void AIceFloatSpawner::SpawnIceFloat()
 {
-	if (!MovingIceFloatClass || !SpawnPosition)
+	if (!MovingIceFloatClass)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("IceFloatClass is empty"))
 		return;
 	}
 
-	if (!bHasReachedEndPosition)
+	if (InactiveIceFloats.Num() > 0)
 	{
-		FVector SpawnLocation = SpawnPosition->GetComponentLocation();
-		FRotator SpawnRotation = FRotator(0, 0, 0);
-
-		CurrentIceFloat = GetWorld() -> SpawnActor<AMovingIceFloat>(MovingIceFloatClass, SpawnLocation, SpawnRotation);
-		
-		if (CurrentIceFloat)
-		{
-			CurrentIceFloat->OnReachedEnd.AddDynamic(this, &AIceFloatSpawner::HandleIceFloatReachedEnd);
-		}
+		RespawnIceFloat();
+	
 	}else
 	{
-		RespawnIceFloat(CurrentIceFloat);
+		
+		FVector SpawnLocation = SpawnPosition;
+		FRotator SpawnRotation = FRotator(0, 0, 0);
+
+		AMovingIceFloat* NewFloat = GetWorld() -> SpawnActor<AMovingIceFloat>(MovingIceFloatClass, SpawnLocation, SpawnRotation);
+		
+		if (NewFloat)
+		{
+			NewFloat->SetEndTarget(EndTarget->GetActorLocation());
+			NewFloat-> SetMovement(MovementSpeed);
+			NewFloat->OnReachedEnd.AddDynamic(this, &AIceFloatSpawner::HandleIceFloatReachedEnd);
+			ActiveIceFloats.Add(NewFloat);
+		}
 	}
 	
 }
 
 void AIceFloatSpawner::HandleIceFloatReachedEnd(AMovingIceFloat* IceFloat)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Received delegate - IceFloat has reached the end"))
-	bHasReachedEndPosition = true;
-
+	//UE_LOG(LogTemp, Warning, TEXT("Received delegate - IceFloat has reached the end"))
 	IceFloat -> SetActorEnableCollision(false);
 	IceFloat -> SetActorHiddenInGame(true);
-	//Måste troligtvis stoppa movement 
+
+	ActiveIceFloats.Remove(IceFloat);
+	InactiveIceFloats.Add(IceFloat);
+	
 }
 
-void AIceFloatSpawner::RespawnIceFloat(AMovingIceFloat* IceFloat)
+void AIceFloatSpawner::RespawnIceFloat()
 {
+	if (InactiveIceFloats.Num() == 0) return;
+
+	AMovingIceFloat* IceFloat = InactiveIceFloats[0];
+	InactiveIceFloats.RemoveAt(0);
+
+	IceFloat->SetActorLocation(SpawnPosition);
+	IceFloat->SetActorRotation(FRotator::ZeroRotator);
+	IceFloat->SetActorHiddenInGame(false);
+	IceFloat->SetActorEnableCollision(true);
+
+	if (EndTarget)
+	{
+		IceFloat->SetEndTarget(EndTarget->GetActorLocation());
+	}
+
+	IceFloat->SetActorTickEnabled(true);
 	
+	ActiveIceFloats.Add(IceFloat);
+
+	//UE_LOG(LogTemp, Warning, TEXT("Respawned ice float from pool"));
 }
 	
 

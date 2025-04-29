@@ -27,6 +27,12 @@ public:
 	
 	FORCEINLINE const FPerformance& GetPerformance() const { return Performance; }
 
+	int32 RecentHugs = 0;
+
+	void RegisterHug(); // ny funktion
+	int32 GetAndResetRecentHugs();
+
+
 
 private:
 	int32 TotalPuzzles = 0;
@@ -37,6 +43,9 @@ private:
 	FPerformance Performance;
 
 	IWeatherUpdaterInterface* WeatherUpdater = nullptr;
+
+	float TimeSinceLastDeath = 0.0f;
+
 
 };
 

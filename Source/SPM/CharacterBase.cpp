@@ -14,7 +14,8 @@
 #include "Health.h"
 #include "InputActionValue.h"
 #include "PerformanceTracker.h"
-#include "Push.h"
+#include "PushComponent.h"
+//#include "WeatherController.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -75,6 +76,12 @@ void ACharacterBase::BeginPlay()
 		{
 			UE_LOG(LogTemp, Error, TEXT("PerformanceTracker not found!"));
 		}
+	}
+
+	PushComponent = FindComponentByClass<UPushComponent>();
+	if (!PushComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("PushComponent not valid"));
 	}
 }
 
@@ -147,7 +154,7 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
         EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Completed, this, &ACharacterBase::EndHug);
 
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::TogglePush);
-
+		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::TogglePush);
 	}
 	else
 	{
@@ -215,6 +222,7 @@ void ACharacterBase::BeginHug(const FInputActionValue& Value)
 		if (Distance <= HugDistance)
 		{	
 			Player1->Hug();
+			Player2->Hug();
 		}else
 		{
 			UE_LOG(LogTemplateCharacter, Warning, TEXT("Distance too big between players"));
@@ -232,7 +240,7 @@ void ACharacterBase::EndHug(const FInputActionValue& Value)
 	bIsTryingToHug = false;
 }
 
-void ACharacterBase::Hug()
+void ACharacterBase::Hug() const
 {
 	UE_LOG(LogTemplateCharacter, Warning, TEXT("Characters are hugging"));
 	if (BodyTempComponent)
@@ -243,10 +251,16 @@ void ACharacterBase::Hug()
     	{
     		UE_LOG(LogTemplateCharacter, Error, TEXT("BodyTempComponent is nullptr!"));
     	}
+
+	if (PerformanceTracker)
+	{
+		PerformanceTracker->RegisterHug();
+	}
+
 	//GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
 
-void ACharacterBase::TogglePush()
+void ACharacterBase::TogglePush(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Toggled"));
 	PushComponent->GrabAndRelease();
@@ -263,10 +277,13 @@ void ACharacterBase::OnDeath()
 	if (PerformanceTracker)
 	{
 		PerformanceTracker->RegisterDeath();
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("PerformanceTracker is null!"));
+
+		UAdaptiveWeatherSystem* WeatherSystem = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
+		if (WeatherSystem)
+		{
+			int32 PlayerIndex = UGameplayStatics::GetPlayerControllerID(Cast<APlayerController>(GetController()));
+			WeatherSystem->UpdatePerformance(PerformanceTracker->GetPerformance());
+		}
 	}
 	
 		RespawnAtCheckpoint();
@@ -282,11 +299,16 @@ void ACharacterBase::RespawnAtCheckpoint()
 {
 	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
 	bHasDied = false;
-	
+
+	//bör inte ticka ner efter spelaren respawnar, endast kylenivån, sen efter kylenivån är på 0 så ska den börja ticka igen
 	if (HealthComponent)
 	{
 		HealthComponent->ResetHealth();
 	}
+
+	//denna bör dock
+	UBodyTemperature* Temp = Cast<UBodyTemperature>(BodyTempComponent);
+	Temp->ResetTemp();
 	
 	SetActorLocation(NewLocation);
 }

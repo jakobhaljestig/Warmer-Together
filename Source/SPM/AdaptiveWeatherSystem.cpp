@@ -1,5 +1,6 @@
 #include "AdaptiveWeatherSystem.h"
 
+#include "AssetTypeCategories.h"
 #include "CharacterBase.h"
 #include "EngineUtils.h"
 #include "PerformanceTracker.h"
@@ -25,6 +26,13 @@ void UAdaptiveWeatherSystem::BeginPlay()
 
 void UAdaptiveWeatherSystem::SetCurrentZone(EZoneType NewZone)
 {
+
+	if (bIsCooperationDetected && NewZone != EZoneType::ZONE_NEUTRAL)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[Weather] Cooperation detected, ignoring zone change."));
+		return;
+	}
+	
 	CurrentZone = NewZone;
 	EvaluatePerformanceAndAdjustWeather(); 
 	ApplyEnvironmentEffects();      
@@ -39,7 +47,7 @@ void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	UE_LOG(LogTemp, Warning, TEXT("[AdaptiveWeatherSystem] Initialized"));
 
-	// Fördröj initiering tills världen är laddad
+	// instatinserar vädret efter 0.5 sekunder, annars hinner inte allt laddas in och snön hittas inte
 	if (UWorld* World = GetWorld())
 	{
 		FTimerHandle TimerHandle;
@@ -47,7 +55,7 @@ void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 			TimerHandle,
 			this,
 			&UAdaptiveWeatherSystem::InitializeEnvironmentReferences,
-			1.0f, // Delay i sekunder
+			0.5f, // Delay i sekunder
 			false
 		);
 	}
@@ -60,6 +68,18 @@ void UAdaptiveWeatherSystem::Deinitialize()
 	Super::Deinitialize();
 
 	// Eventuella städoperationer här
+}
+
+
+//detta bör ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame
+void UAdaptiveWeatherSystem::Tick(float DeltaTime)
+{
+	TimeSinceLastUpdate += DeltaTime;
+	if (TimeSinceLastUpdate >= UpdateInterval)
+	{
+		AggregatePerformance();
+		TimeSinceLastUpdate = 0.0f;
+	}
 }
 
 void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformance)
@@ -80,6 +100,7 @@ const FWeatherState& UAdaptiveWeatherSystem::GetCurrentWeather() const
 	return CurrentWeather;
 }
 
+//läser in exponentianlheightfog och snow niagara-systemet direkt från scenen
 void UAdaptiveWeatherSystem::InitializeEnvironmentReferences()
 {
 	UWorld* World = GetWorld();
@@ -96,8 +117,11 @@ void UAdaptiveWeatherSystem::InitializeEnvironmentReferences()
 		break;
 	}
 
-	// Hitta Snow Niagara-partikelsystem
-	bool bFoundSnow = false;
+	// niagarasystemet som finns i scenen
+	bool bFoundSnow3 = false;
+	bool bFoundSnow2 = false;
+	bool bFoundSnow1 = false;
+	bool bFoundMist = false;
 	for (TActorIterator<AActor> It(World); It; ++It)
 	{
 		TArray<UNiagaraComponent*> NiagaraComps;
@@ -105,58 +129,100 @@ void UAdaptiveWeatherSystem::InitializeEnvironmentReferences()
 		for (UNiagaraComponent* Comp : NiagaraComps)
 		{
 			UE_LOG(LogTemp, Warning, TEXT("[Weather] Found Niagara Component: %s"), *Comp->GetName());
-			if (Comp->GetName().Contains(TEXT("NiagaraComponent0")))
+			if (Comp->GetName().Contains(TEXT("Snow3")))
 			{
-				SnowParticleSystem = Comp;
-				UE_LOG(LogTemp, Warning, TEXT("[Weather] Snow Niagara found: %s"), *Comp->GetName());
-				bFoundSnow = true;
+				SnowLevel3 = Comp;
+				UE_LOG(LogTemp, Warning, TEXT("[Weather] Snow Niagara 3 found: %s"), *Comp->GetName());
+				bFoundSnow3 = true;
+				break;
+			}
+
+			if (Comp->GetName().Contains(TEXT("Mist")))
+			{
+				MistParticleSystem = Comp;
+				UE_LOG(LogTemp, Warning, TEXT("[Weather] Mist Niagara found: %s"), *Comp->GetName());
+				bFoundMist = true;
+				break;
+			}
+
+			if (Comp->GetName().Contains(TEXT("Snow2")))
+			{
+				SnowLevel2 = Comp;
+				UE_LOG(LogTemp, Warning, TEXT("[Weather] Snow Niagara 2 found: %s"), *Comp->GetName());
+				bFoundSnow2 = true;
+				break;
+			}
+
+			if (Comp->GetName().Contains(TEXT("Snow1")))
+			{
+				SnowLevel1 = Comp;
+				UE_LOG(LogTemp, Warning, TEXT("[Weather] Snow Niagara 1 found: %s"), *Comp->GetName());
+				bFoundSnow1 = true;
 				break;
 			}
 		}
-		if (bFoundSnow)
+		
+		if (bFoundSnow3 && bFoundMist && bFoundSnow2 && bFoundSnow1)
 		{
 			break;
 		}
 	}
 
-	if (!bFoundSnow)
+	if (!bFoundSnow3 && !bFoundSnow2 && !bFoundSnow1)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[Weather] SnowParticleSystem not found!"));
 	}
+
+	if (!bFoundMist)
+	{
+		UE_LOG(LogTemp, Error, TEXT("[Weather] MistParticleSystem not found!"));
+	}
 }
 
-
+//påverkar bodytemp baserat på vädernivån, måste nog tweakas lite vart eftersom
 void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
 {
 	UWorld* World = GetWorld();
 	if (!World) return;
+	
+	TArray<AActor*> PlayerCharacters;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
 
-	int32 WeatherLevel = GetCurrentWeather().WeatherLevel;
-
-	for (FConstPlayerControllerIterator It = World->GetPlayerControllerIterator(); It; ++It)
+	int32 Index = 0;
+	for (AActor* Actor : PlayerCharacters)
 	{
-		APlayerController* PC = It->Get();
-		if (!PC) continue;
+		ACharacterBase* Character = Cast<ACharacterBase>(Actor);
+		if (!Character) continue;
 
-		const APawn* Pawn = PC->GetPawn();
-		if (!Pawn) continue;
-
-		if (UBodyTemperature* BodyTemp = Pawn->FindComponentByClass<UBodyTemperature>())
+		UBodyTemperature* BodyTemp = Character->FindComponentByClass<UBodyTemperature>();
+		if (BodyTemp)
 		{
-			float CoolRate = WeatherLevel * 0.75f; // t.ex. 0.75 → 2.25
-			BodyTemp->SetCoolDownRate(CoolRate);
+			BodyTemp->SetCoolDownRate(CurrentCoolRate);
 
-			//UE_LOG(LogTemp, Warning, TEXT("[AffectBodyTemperatures] WeatherLevel=%d → CoolRate=%.2f"),
-				//WeatherLevel, CoolRate);
+			/*UE_LOG(LogTemp, Warning, TEXT("[WeatherLog] Character %d - WeatherLevel: %d | CoolDownRate: %.2f | Temp%%: %.1f%%"),
+				Index,
+				CurrentWeather.WeatherLevel,
+				CurrentCoolRate,
+				BodyTemp->GetTempPercentage() * 100.0f
+			);*/
 		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("[WeatherLog] Character %d - Missing BodyTemperature component!"), Index);
+		}
+
+		Index++;
 	}
 }
 
+
+//kollar performance score och motifierar zonen däreefter, Vädret går att anpassa, just nu har vi ju bara visability och snöpartiklar (som bara finns som på/av)
 void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 {
 	float PerformanceScore = CurrentPerformance.RecentPerformanceScore();
 
 	float ZoneModifier = 1.0f;
+	
 	switch (CurrentZone)
 	{
 	case EZoneType::ZONE_NEUTRAL: ZoneModifier = 0.5f; break;
@@ -168,29 +234,26 @@ void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 
 	// Anpassa vädret
 	CurrentWeather.Temperature = FMath::Lerp(-30.0f, 0.0f, AdjustedScore);
+	CachedEnvTemp = CurrentWeather.Temperature; // Spara så att alla får samma
+
 	CurrentWeather.WindSpeed = FMath::Lerp(20.0f, 5.0f, AdjustedScore);
 	CurrentWeather.SnowIntensity = FMath::Lerp(1.0f, 0.2f, AdjustedScore);
 	CurrentWeather.Visibility = FMath::Lerp(0.3f, 1.0f, AdjustedScore);
 	CurrentWeather.WeatherLevel = FMath::RoundToInt(FMath::Lerp(3.0f, 1.0f, AdjustedScore));
 
+	CurrentCoolRate = CurrentWeather.WeatherLevel * 0.75f;
 	AffectBodyTemperatures();
 
+	UE_LOG(LogTemp, Warning, TEXT("[Weather] Zone=%d | AdjustedScore=%.2f | Temp=%.2f"),
+	static_cast<int32>(CurrentZone),
+	AdjustedScore,
+	CurrentWeather.Temperature);
+
+
 }
 
-// Detta kan ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame.
-void UAdaptiveWeatherSystem::Tick(float DeltaTime)
-{
-	// Uppdatera tiden som har gått och gör väderuppdatering om det har gått tillräckligt lång tid
-	TimeSinceLastUpdate += DeltaTime;
 
-	if (TimeSinceLastUpdate >= UpdateInterval)
-	{
-		// Kalla på metoder för att uppdatera väder och prestationen
-		EvaluatePerformanceAndAdjustWeather();
-		TimeSinceLastUpdate = 0.0f;
-	}
-}
-
+//lägger på fog och snow, ytterligare effekter kan läggas till
 void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const
 {
 		const FWeatherState& Weather = GetCurrentWeather();
@@ -213,17 +276,31 @@ void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const
 			UE_LOG(LogTemp, Warning, TEXT("Fog updated: %.2f"), NewFogDensity);
 		}
 
-		if (SnowParticleSystem)
+		if (SnowLevel3 && MistParticleSystem && SnowLevel2)
 		{
-			if (Weather.SnowIntensity > 0.5f)
+			SnowLevel1->Deactivate();
+			SnowLevel2->Deactivate();
+			SnowLevel3->Deactivate();
+			MistParticleSystem->Deactivate();
+			//bör kanske inte vara så låg, men någon utträkning blir tokig. När spelaren dött 2 gånger går den under 0.3 och då avaktiveras snön just nu. 
+			if (Weather.SnowIntensity > 0.4f)
 			{
-				SnowParticleSystem->Activate();
-				UE_LOG(LogTemp, Warning, TEXT("Snow Activated"));
+				SnowLevel3->Activate();
+				MistParticleSystem->Activate();
+				UE_LOG(LogTemp, Warning, TEXT("Snow 3 Activated"));
+			}
+			else if (Weather.SnowIntensity > 0.25f)
+			{
+				SnowLevel2->Activate();
+				UE_LOG(LogTemp, Warning, TEXT("Snow 3/Mist Deactivated"));
+				UE_LOG(LogTemp, Warning, TEXT("Snow 2 Activated"));
 			}
 			else
 			{
-				SnowParticleSystem->Deactivate();
-				UE_LOG(LogTemp, Warning, TEXT("Snow Deactivated"));
+					SnowLevel1->Activate();
+					UE_LOG(LogTemp, Warning, TEXT("Snow 3/Mist Deactivated (Low intensity)"));
+					UE_LOG(LogTemp, Warning, TEXT("Snow 2 Deactivated"));
+					UE_LOG(LogTemp, Warning, TEXT("Snow 1 Activated"));
 			}
 		}
 		else
@@ -231,6 +308,39 @@ void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const
 			UE_LOG(LogTemp, Error, TEXT("SnowParticleSystem is NULL!"));
 		}
 }
+
+void UAdaptiveWeatherSystem::AggregatePerformance()
+{
+	TArray<AActor*> PlayerCharacters;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
+
+	int32 TotalDeaths = 0;
+	int32 NumPlayers = 0;
+
+	for (AActor* Actor : PlayerCharacters)
+	{
+		if (ACharacterBase* Character = Cast<ACharacterBase>(Actor))
+		{
+			if (UPerformanceTracker* Tracker = Character->FindComponentByClass<UPerformanceTracker>())
+			{
+				TotalDeaths += Tracker->GetPerformance().DeathCount;
+				NumPlayers++;
+			}
+		}
+	}
+
+	if (NumPlayers > 0)
+	{
+		float AverageDeaths = static_cast<float>(TotalDeaths) / NumPlayers;
+
+		FPerformance AggregatedPerformance;
+		AggregatedPerformance.DeathCount = AverageDeaths; // Snitt-dödsantal!
+
+		CurrentPerformance = AggregatedPerformance;
+		EvaluatePerformanceAndAdjustWeather();
+	}
+}
+
 
 
 

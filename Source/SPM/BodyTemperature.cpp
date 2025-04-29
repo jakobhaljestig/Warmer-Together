@@ -71,6 +71,7 @@ void UBodyTemperature::IsNearHeat(bool bIsNearHeat)
 {
 	bNearHeat = bIsNearHeat;
 }
+
 void UBodyTemperature::CoolDown(float DeltaTime)
 {
 	if (!bNearHeat)
@@ -79,7 +80,7 @@ void UBodyTemperature::CoolDown(float DeltaTime)
 
 		if (WeatherSystem)
 		{
-			float EnvTemp = WeatherSystem->GetCurrentWeather().Temperature;
+			const float EnvTemp = WeatherSystem->CachedEnvTemp;
 
 			// Exponentiell ökning för att göra nedkylning snabbare när vädret är riktigt kallt
 			if (EnvTemp < 0.0f)
@@ -110,6 +111,17 @@ void UBodyTemperature::CoolDown(float DeltaTime)
 		//UE_LOG(LogTemp, Warning, TEXT("Cooling: %.2f | Temp=%.2f | Env=%.2f"),
 			//EffectiveCoolRate, Temp, WeatherSystem ? WeatherSystem->GetCurrentWeather().Temperature : -999.0f);
 	}
+
+	if (WeatherSystem)
+	{
+		float EnvTemp = WeatherSystem->CachedEnvTemp;
+		//UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Character %s | EnvTemp: %.2f"), *GetOwner()->GetName(), EnvTemp);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("[BodyTemp] Character %s | WeatherSystem is NULL!"), *GetOwner()->GetName());
+	}
+
 }
 
 
@@ -122,6 +134,7 @@ void UBodyTemperature::HeatUp(float DeltaTime)
 	}
 }
 
+
 void UBodyTemperature::ShareTemp()
 {
 	if (bFrozen)
@@ -129,15 +142,53 @@ void UBodyTemperature::ShareTemp()
 		bFrozen = false;
 		GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
 	}
-	if (!TempBigPlayer || !TempSmallPlayer)
+
+	ACharacter* Char0 = UGameplayStatics::GetPlayerCharacter(this, 0);
+	ACharacter* Char1 = UGameplayStatics::GetPlayerCharacter(this, 1);
+
+	UBodyTemperature* Temp0 = Char0 ? Char0->FindComponentByClass<UBodyTemperature>() : nullptr;
+	UBodyTemperature* Temp1 = Char1 ? Char1->FindComponentByClass<UBodyTemperature>() : nullptr;
+
+	if (Temp0 && Temp1)
 	{
-		TempBigPlayer = Cast<ACharacterBig>(UGameplayStatics::GetPlayerCharacter(this, 0))->GetComponentByClass<UBodyTemperature>();
-		TempSmallPlayer = Cast<ACharacterSmall>(UGameplayStatics::GetPlayerCharacter(this, 1))->GetComponentByClass<UBodyTemperature>();
+		const float Mean = (Temp0->Temp + Temp1->Temp) / 2.0f;
+
+		if (const float HalfTemp = Temp0->MaxTemp * 0.5f; Mean < HalfTemp)
+		{
+			float NewTemp = HalfTemp; // höj båda upp till 50%
+			UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Hug boost to 50%% → %.2f"), NewTemp);
+			Temp0->Temp = NewTemp;
+			Temp1->Temp = NewTemp;
+		}
 	}
 	else
 	{
-		float MeanTemp = (TempBigPlayer->Temp + TempSmallPlayer->Temp) / 2;
-		TempBigPlayer->Temp = MeanTemp;
-		TempSmallPlayer->Temp = MeanTemp;
+		UE_LOG(LogTemp, Error, TEXT("[BodyTemp] Missing temperature components for one or both characters."));
 	}
+}
+
+
+
+void UBodyTemperature::ResetTemp()
+{
+	Temp = MaxTemp;
+	bFrozen = false;
+
+	if (!WeatherSystem)
+	{
+		WeatherSystem = GetWorld()->GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
+		UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] WeatherSystem reinitialized on ResetTemp"));
+	}
+
+
+}
+
+void UBodyTemperature::ModifyTemperature(float DeltaTemperature)
+{
+	Temp += DeltaTemperature;
+	double MinTemp = 0;
+	Temp = FMath::Clamp(Temp, MinTemp, MaxTemp);
+
+	UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Modified Temp by %.1f. New Temp: %.1f (%.1f%%)"), 
+		DeltaTemperature, Temp, GetTempPercentage() * 100.0f);
 }

@@ -38,6 +38,10 @@ public:
 
 	void SetCoolDownRate(float NewRate) { CoolDownRate = NewRate; }
 
+	void ResetTemp();
+
+	void ModifyTemperature(float DeltaTemperature);
+
 private:
 	void CoolDown(float DeltaTime);
 	void HeatUp(float DeltaTime);
@@ -64,5 +68,6 @@ private:
 
 	bool bFrozen = false;
 	bool bDisplayFreezeEffect = false;
+	
 };
 

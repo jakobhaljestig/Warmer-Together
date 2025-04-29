@@ -13,10 +13,10 @@
 UBTService_AnalyzeWeather::UBTService_AnalyzeWeather()
 {
 	NodeName = "BTService_AnalyzeWeather";
-	Interval = 5.0f;
+	Interval = 10.0f;
 	RandomDeviation = 1.0f;
 	bNotifyBecomeRelevant = true;
-	bNotifyCeaseRelevant = false;
+	bNotifyCeaseRelevant = true;
 	
 }
 void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
@@ -28,44 +28,44 @@ void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	ACharacterBase* PlayerChar = Cast<ACharacterBase>(UGameplayStatics::GetPlayerCharacter(GetWorld(), 0));
 	if (!PlayerChar) return;
 
+	//hittar performance tracker på characters som komponent. 
 	UPerformanceTracker* PerfTracker = PlayerChar->FindComponentByClass<UPerformanceTracker>();
 	if (!PerfTracker) return;
 
-	//const FPerformance& Perf = PerfTracker->GetPerformance();
+	//hämtar performancetrackern från FPerformance, den som uppdaterar spelarens statistik
+	const FPerformance& Perf = PerfTracker->GetPerformance();
 
+	/*
 	FPerformance Perf;
-	Perf.DeathCount = 10;           // många dödsfall
-	Perf.AveragePuzzleTime = 100;   // lång tid
+	Perf.DeathCount = 10; // många dödsfall
+	Perf.AveragePuzzleTime = 100; // lång tid */
 
 	UWorld* World = PlayerChar->GetWorld();
 	if (!World) return;
 
+
+	//läser in väder subsystemet
 	UAdaptiveWeatherSystem* WeatherSystem = World->GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 	if (!WeatherSystem) return;
-
-	/*
+	
 	// --- Zonlogik: baserad på prestation ---
 	EZoneType NewZone = EZoneType::ZONE_MEDIUM;
 
-	
-
-	if (Perf.DeathCount >= 4 || Perf.AveragePuzzleTime > 45.0f)
+	//itereras efter vi har mer statistik, just nu kollar den bara deathcount. 
+	if (Perf.DeathCount >= 2)
 	{
-		NewZone = EZoneType::ZONE_NEUTRAL; // Milt
+		NewZone = EZoneType::ZONE_NEUTRAL; // milt
 	}
-	else if (Perf.AveragePuzzleTime < 20.0f && Perf.DeathCount == 0)
+	else if (Perf.DeathCount == 0)
 	{
-		NewZone = EZoneType::ZONE_INTENSE; // Hårdare
+		NewZone = EZoneType::ZONE_INTENSE; // hårt (snö och dimma)
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("[BTService_AnalyzeWeather] Set zone to %d (Deaths=%d, AvgTime=%.1f, HeatTime=%.1f)"),
-		static_cast<int32>(NewZone), Perf.DeathCount, Perf.AveragePuzzleTime);
+	UE_LOG(LogTemp, Warning, TEXT("[BTService_AnalyzeWeather] Set zone to %d (Deaths=%d)"),
+		static_cast<int32>(NewZone), Perf.DeathCount);
 
 	WeatherSystem->SetCurrentZone(NewZone);
-	*/
-
-	WeatherSystem->UpdatePerformance(Perf);       // ← sätter vädret baserat på dålig prestation (hårdkodade värden just nu)
-	WeatherSystem->SetCurrentZone(EZoneType::ZONE_NEUTRAL); // ← välj mild zon för extra låg modifiering (milt väder i svår zon gör det ännu värre)
+	//WeatherSystem->UpdatePerformance(Perf);       // sätter vädret baserat på dålig prestation (just nu bara deathcount)
 	WeatherSystem->ApplyEnvironmentEffects();     // visuell uppdatering
 
 	UE_LOG(LogTemp, Warning, TEXT("[TEST] Simulated BAD PERFORMANCE: Snow=%.2f Visibility=%.2f Temp=%.1f"),

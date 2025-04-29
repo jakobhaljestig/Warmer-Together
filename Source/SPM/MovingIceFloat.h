@@ -27,18 +27,22 @@ public:
 	UPROPERTY(BlueprintAssignable)
 	FOnReachedEnd OnReachedEnd;
 
+	void SetEndTarget (FVector InEndLocation);
+
+	void SetMovement (float Speed);
+
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere)
-	USceneComponent* EndReachedPosition;
+	
+
 
 private:
 	//Path för isflaken kommer från spawnern 
 	FVector StartLocation;
 	FVector EndLocation;
 
-	bool ReachedEnd = false; 
+	//bool ReachedEnd = false; 
 	
 	void EndReached();
 
