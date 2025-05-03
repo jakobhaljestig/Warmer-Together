@@ -1,5 +1,6 @@
 #include "AdaptiveWeatherSystem.h"
 
+#include "AssetTypeCategories.h"
 #include "CharacterBase.h"
 #include "EngineUtils.h"
 #include "PerformanceTracker.h"
