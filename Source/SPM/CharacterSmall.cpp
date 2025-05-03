@@ -19,9 +19,9 @@ void ACharacterSmall::BeginPlay()
 		UE_LOG(LogTemp, Error, TEXT("Climbing component not valid"));
 	}
 	
-	/*GetCharacterMovement()->JumpZVelocity = 900.0f; 
+	GetCharacterMovement()->JumpZVelocity = 800.0f; 
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->BrakingDecelerationFalling = 0.0f;*/
+	GetCharacterMovement()->BrakingDecelerationFalling = 0.0f;
 
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 	
