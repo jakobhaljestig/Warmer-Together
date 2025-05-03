@@ -48,8 +48,6 @@ void UPushComponent::GrabAndRelease()
 void UPushComponent::StartPushing()
 {
 	Grab();
-	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
-		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
 	
 }
 //Restores player movement and drops grabbed object
