@@ -5,6 +5,7 @@
 
 #include "CharacterBase.h"
 #include "Components/BoxComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
 
 // Sets default values for this component's properties
@@ -23,6 +24,7 @@ void UMinigameTriggerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	TriggerBox = GetOwner()->GetComponentByClass<UBoxComponent>();
+	MiniGamePawn = Cast<APawn>(GetOwner());
 	// ...
 	
 }
@@ -35,20 +37,26 @@ void UMinigameTriggerComponent::StartMiniGame()
 
 void UMinigameTriggerComponent::ZoomIn(UPrimitiveComponent* Actor)
 {
-	ACharacterBase* Character = Cast<ACharacterBase>(Actor->GetOwner());
-	APlayerController* Controller = Cast<APlayerController>(Character->GetController());
-	Character->GetMovementComponent()->Deactivate();
-	Controller->SetViewTargetWithBlend(GetOwner(), 1, VTBlend_EaseIn, 5, true);
-	Character->GetComponentByClass<UBodyTemperature>()->SetCoolDownRate(0);
+	ControllerOwner = Cast<ACharacterBase>(Actor->GetOwner());
+	APlayerController* Controller = Cast<APlayerController>(ControllerOwner->GetController());
+	if (ControllerOwner && Controller)
+	{
+		bActive = true;
+		ControllerOwner->GetComponentByClass<UBodyTemperature>()->SetCoolDownRate(0);
+		Controller->Possess(MiniGamePawn);
+		Controller->SetViewTarget(ControllerOwner);
+		Controller->SetViewTargetWithBlend(MiniGamePawn, 1, VTBlend_EaseIn, 5, true);
+
+	}
 }
 
 void UMinigameTriggerComponent::ZoomOut(UPrimitiveComponent* Actor)
 {
-	ACharacterBase* Character = Cast<ACharacterBase>(Actor->GetOwner());
-	APlayerController* Controller = Cast<APlayerController>(Character->GetController());
-	Character->GetMovementComponent()->Activate();
-	Controller->SetViewTargetWithBlend(Character, 1, VTBlend_EaseOut, 5, true);
-	Character->GetComponentByClass<UBodyTemperature>()->SetCoolDownRate(0.75);
+	bActive = false;
+	ControllerOwner = Cast<ACharacterBase>(Actor->GetOwner());
+	APlayerController* Controller = Cast<APlayerController>(ControllerOwner->GetController());
+	Controller->SetViewTargetWithBlend(ControllerOwner, 1, VTBlend_EaseOut, 5, true);
+	ControllerOwner->GetComponentByClass<UBodyTemperature>()->SetCoolDownRate(0.75);
 }
 
 
@@ -57,18 +65,19 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	TArray<UPrimitiveComponent*> OverlappingActors;
-	if (TriggerBox && !bCompleted)
+	if (TriggerBox && !bCompleted && !bActive)
 	{
 		TriggerBox->GetOverlappingComponents(OverlappingActors);
 		for (UPrimitiveComponent* Actor : OverlappingActors)
 		{
-			if (Cast<ACharacterBase>(Actor->GetOwner()))
+			if (ACharacterBase* Character = Cast<ACharacterBase>(Actor->GetOwner()))
 			{
-				ZoomIn(Actor);
+				if (!Character->GetCharacterMovement()->IsFalling())
+					ZoomIn(Actor);
 			}
 		}
 	}
-	else
+	else 
 	{
 		
 	}
@@ -76,5 +85,6 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	
 	// ...
 }
+
 
 

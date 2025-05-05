@@ -25,19 +25,31 @@ protected:
 	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
 	virtual void StartMiniGame();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* TriggerBox = nullptr;
 
+	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
 	virtual void ZoomIn(UPrimitiveComponent* Actor);
 
+	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
 	virtual void ZoomOut(UPrimitiveComponent* Actor);
+
+	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
+	APawn* MiniGamePawn = nullptr;
+
+	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
+	ACharacter* ControllerOwner = nullptr;
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere)
 	AActor* MiniGameActor;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere)
 	bool bCompleted;
+
+	UPROPERTY(EditAnywhere)
+	bool bActive = false;
 };
