@@ -4,6 +4,7 @@
 #include "MinigameTriggerComponent.h"
 
 #include "CharacterBase.h"
+#include "CharacterPlayerController.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/PawnMovementComponent.h"
