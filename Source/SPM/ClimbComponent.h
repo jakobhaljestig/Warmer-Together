@@ -32,7 +32,7 @@ public:
 	void StopClimb();
 
 	void FinishClimbUp();
-
+ 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	float ClimbSpeed = 200.0f;
 	
@@ -45,15 +45,21 @@ public:
 
 	ECollisionChannel CollisionChannel;
 
-	//För CharacterSmall Och Input 
+	//GETTER för Character Small o Movment
 	bool IsClimbing() const {return bIsClimbing;}
+
+	bool IsOnLedge() const { return bIsOnLedge; }
 	
 private:
 	bool bIsClimbing = false;
 
-	bool bIsOnLedge = false; 
+	bool bIsOnLedge = false;
 	
 	bool ClimbingInReach (FHitResult& HitResult) const;
+
+	bool ClimbingDownInReach (FHitResult& HitResult) const;
+
+	void SetWalking();
 	
 
 		
