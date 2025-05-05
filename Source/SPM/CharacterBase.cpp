@@ -15,7 +15,6 @@
 #include "InputActionValue.h"
 #include "PerformanceTracker.h"
 #include "PushComponent.h"
-//#include "WeatherController.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -83,6 +82,7 @@ void ACharacterBase::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("PushComponent not valid"));
 	}
+	
 }
 
 void ACharacterBase::Tick(float DeltaTime)

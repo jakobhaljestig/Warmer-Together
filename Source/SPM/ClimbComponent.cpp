@@ -116,10 +116,10 @@ void UClimbComponent::FinishClimbUp()
 	bIsClimbing = false;
 	bIsOnLedge = false;
 	
-	//MovementComponent->SetMovementMode(MOVE_Walking);
-	//MovementComponent->GravityScale = 1.0f;
+	MovementComponent->SetMovementMode(MOVE_Walking);
+	MovementComponent->GravityScale = 1.0f;
 	
-	//MovementComponent->bOrientRotationToMovement = true;
+	MovementComponent->bOrientRotationToMovement = true;
 	
 }
 
@@ -138,7 +138,7 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 	FVector ForwardVector = ClimbCharacter->GetActorForwardVector();
 	FVector End = Start + ForwardVector * 100.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
 
-	FVector HalfSize(30.f, 30.f, 50.f); // bredd, djup, höjd på boxen
+	FVector HalfSize(30.f, 30.f, 50.f); 
 	FQuat Rotation = FQuat::Identity;
 	
 	FCollisionQueryParams TraceParams;

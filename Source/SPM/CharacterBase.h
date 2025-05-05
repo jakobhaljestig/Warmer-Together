@@ -92,6 +92,7 @@ protected:
 
 	UPROPERTY()
 	UAdaptiveWeatherSystem* AdaptiveWeatherSystem;
+	
 
 	// Rörelse
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
