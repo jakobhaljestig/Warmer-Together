@@ -16,14 +16,10 @@
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Assets/Whitebox/SM_WBRadioTower.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Whitebox/SM_WBRadioTower.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MovingIceFloat.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_MovingIceFloat.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_RadioTower.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_RadioTower.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/7/2X/MZ8N4B9C88P0A7VP5Z3FMU.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/7/2X/MZ8N4B9C88P0A7VP5Z3FMU.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/D/DE/SWSI13675DVYIZ0N4NF7Y3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/D/DE/SWSI13675DVYIZ0N4NF7Y3.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBig.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBig.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBig.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBig.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterSmall.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterSmall.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/ClimbComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/ClimbComponent.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/ClimbComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/ClimbComponent.h" afterDir="false" />
     </list>
@@ -51,7 +47,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="cidr-memory-view://2" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/BTService_CheckHugBehaviour.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/BTService_CheckHugBehaviour.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -250,6 +246,7 @@
       <workItem from="1745847449200" duration="7179000" />
       <workItem from="1746351923407" duration="1912000" />
       <workItem from="1746433573764" duration="7926000" />
+      <workItem from="1746455685092" duration="2461000" />
     </task>
     <servers />
   </component>

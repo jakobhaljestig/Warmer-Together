@@ -56,6 +56,10 @@ private:
 	bool bIsOnLedge = false;
 	
 	bool ClimbingInReach (FHitResult& HitResult) const;
+
+	bool ClimbingDownInReach (FHitResult& HitResult) const;
+
+	void SetWalking();
 	
 
 		

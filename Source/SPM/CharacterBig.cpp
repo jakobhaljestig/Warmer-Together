@@ -50,15 +50,21 @@ void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 	PickupComponent->GrabAndRelease();
 }
 
+
+
 void ACharacterBig::Throw(const FInputActionValue& Value)
 {
 	PickupComponent->Throw();
 }
 
+
+
 void ACharacterBig::Climb(const FInputActionValue& Value)
 {
 	ClimbingComponent->Climb();
 }
+
+
 
 void ACharacterBig::Move(const FInputActionValue& Value)
 {
