@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Camera/CameraComponent.h"
 #include "Components/ActorComponent.h"
 #include "Components/BoxComponent.h"
 #include "MinigameTriggerComponent.generated.h"

@@ -4,10 +4,9 @@
 #include "MinigameTriggerComponent.h"
 
 #include "CharacterBase.h"
-#include "CharacterPlayerController.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-#include "GameFramework/PawnMovementComponent.h"
+
 
 // Sets default values for this component's properties
 UMinigameTriggerComponent::UMinigameTriggerComponent()
