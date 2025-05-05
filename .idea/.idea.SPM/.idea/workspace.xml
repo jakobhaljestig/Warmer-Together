@@ -15,11 +15,10 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_BalanceLogX.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_BalanceLogX.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_BalanceLogY.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_BalanceLogY.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/1/P7/I4Y4A1T54O1RC01KOG6SVG.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/1/P7/I4Y4A1T54O1RC01KOG6SVG.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/MinigameTriggerComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MinigameTriggerComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/A/RH/7FE621226Z9SAA4NNURC8B.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/A/RH/7FE621226Z9SAA4NNURC8B.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/B/PY/X01FD5HAVW7D4G04CI3YXO.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/B/PY/X01FD5HAVW7D4G04CI3YXO.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
