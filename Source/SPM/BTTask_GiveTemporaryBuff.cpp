@@ -41,33 +41,10 @@ EBTNodeResult::Type UBTTask_GiveTemporaryBuff::ExecuteTask(UBehaviorTreeComponen
 	// Starta timer för att ta bort buffen efter BuffDuration sekunder
 	FTimerHandle TimerHandle;
 	FTimerDelegate TimerDel;
-	TimerDel.BindLambda([this, Player]()
-	{
-		RevertBuff(Player);
-	});
 
 	GetWorld()->GetTimerManager().SetTimer(TimerHandle, TimerDel, BuffDuration, false);
 
 	UE_LOG(LogTemp, Warning, TEXT("[AI] Gave temporary warmth buff of %.1f degrees for %.1f seconds!"), TemperatureBonus, BuffDuration);
 
 	return EBTNodeResult::Succeeded;
-}
-
-void UBTTask_GiveTemporaryBuff::RevertBuff(ACharacterBase* Player)
-{
-	if (!Player) return;
-
-	UBodyTemperature* TempComp = Player->FindComponentByClass<UBodyTemperature>();
-	
-	 
-	if (TempComp)
-	{
-		// Återställ genom att ta bort samma mängd buff
-		TempComp->ModifyTemperature(-TemperatureBonus);
-
-		// Återställ buffstatus
-		bIsBuffActive = false;
-
-		UE_LOG(LogTemp, Warning, TEXT("[AI] Reverted temporary warmth buff of %.1f degrees."), TemperatureBonus);
-	}
 }

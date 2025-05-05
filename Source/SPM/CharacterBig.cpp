@@ -16,12 +16,6 @@ void ACharacterBig::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("PickupComponent not valid"));
 	}
-
-	ClimbingComponent = FindComponentByClass<UClimbComponent>();
-	if (!ClimbingComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Climbing component not valid"));
-	}
 }
 
 
@@ -34,8 +28,6 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		// För test
 		EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, this, &ACharacterBig::ToggleGrab);
 		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Ongoing, this, &ACharacterBig::Throw);
-
-		EnhancedInputComponent->BindAction(ClimbAction, ETriggerEvent::Started, this, &ACharacterBig::Climb);
 	
 	}
 	else
@@ -55,35 +47,4 @@ void ACharacterBig::Throw(const FInputActionValue& Value)
 	PickupComponent->Throw();
 }
 
-void ACharacterBig::Climb(const FInputActionValue& Value)
-{
-	ClimbingComponent->Climb();
-}
-
-
-
-//Overridad funktion för Move för klättringen
-void ACharacterBig::Move(const FInputActionValue& Value)
-{
-	FVector2D MovementVector = Value.Get<FVector2D>();
-
-	if (Controller != nullptr)
-	{
-		if (ClimbingComponent && ClimbingComponent->IsClimbing())
-		{
-			FVector ClimbDirection = FVector::UpVector;
-			AddMovementInput(ClimbDirection, MovementVector.Y);
-			return;
-		}
-		
-		const FRotator Rotation = Controller->GetControlRotation();
-		const FRotator YawRotation(0, Rotation.Yaw, 0);
-
-		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		AddMovementInput(ForwardDirection, MovementVector.Y);
-		AddMovementInput(RightDirection, MovementVector.X);
-	}
-}
 

@@ -27,8 +27,5 @@ public:
 
 	UPROPERTY(EditAnywhere, Category = "Buff")
 	float BuffDuration = 10.0f;
-
-private:
-	static void RevertBuff(ACharacterBase* Player);
 	
 };

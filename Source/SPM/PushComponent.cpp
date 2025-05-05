@@ -21,7 +21,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		}
 		
 		FHitResult Hit;
-		if (!GetGrabbableInReach(Hit))
+		if (!GetGrabbableInReach(Hit) || OwnerMovementComponent->IsFalling())
 		{
 			StopPushing();
 		}
@@ -48,12 +48,15 @@ void UPushComponent::GrabAndRelease()
 void UPushComponent::StartPushing()
 {
 	Grab();
+	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+		PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(true);
 	
 }
 //Restores player movement and drops grabbed object
 void UPushComponent::StopPushing()
 {
 	PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
+	PhysicsHandle->GetGrabbedComponent()->SetSimulatePhysics(false);
 	Release();
 	
 }
