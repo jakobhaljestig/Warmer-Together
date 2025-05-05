@@ -24,7 +24,7 @@ protected:
 	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
 	virtual void StartMiniGame();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* TriggerBox = nullptr;
 
 	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
@@ -33,10 +33,10 @@ protected:
 	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
 	virtual void ZoomOut(UPrimitiveComponent* Actor);
 
-	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	APawn* MiniGamePawn = nullptr;
 
-	UPROPERTY(EditAnywhere, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	ACharacter* ControllerOwner = nullptr;
 
 public:	
