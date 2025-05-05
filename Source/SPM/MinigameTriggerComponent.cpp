@@ -67,7 +67,10 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 				ZoomIn(Actor);
 			}
 		}
-			
+	}
+	else
+	{
+		
 	}
 
 	
