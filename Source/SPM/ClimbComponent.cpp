@@ -40,9 +40,10 @@ void UClimbComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		if (!ClimbingInReach(Hit))
 		{
 			bIsOnLedge = true;
+		}else
+		{
+			bIsOnLedge = false;
 		}
-
-		bIsOnLedge = false; 
 	}
 	
 }
@@ -60,17 +61,17 @@ void UClimbComponent::Climb()
 	{
 		StopClimb();
 	}
-	else if (bIsOnLedge)
+	/*else if (bIsOnLedge && bIsClimbing)
 	{
 		FinishClimbUp();
-	}
+	}*/
 	
 }
 
 
 void UClimbComponent::StartClimb(FHitResult Hit)
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Climbing"));
+	//UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Climbing"));
 		
 	//IMpactPoint där trace channel träffar objekt
 	FVector AttachNormal = Hit.ImpactNormal;
@@ -97,31 +98,71 @@ void UClimbComponent::StopClimb()
 {
 	if (bIsClimbing)
 	{
+		if (bIsOnLedge)
+		{
+			FinishClimbUp();
+			return;
+		}
+
 		bIsClimbing = false;
 		MovementComponent->SetMovementMode(MOVE_Walking);
 		MovementComponent->GravityScale = 1.0f;
 		MovementComponent->MaxWalkSpeed = 500.f;
 		MovementComponent->BrakingDecelerationWalking = 2048.f;
-
 		MovementComponent->bOrientRotationToMovement = true;
 	}
-	
 }
+
 
 void UClimbComponent::FinishClimbUp()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Finished climbing!"));
-	//STOPPA Uppåt movement? 
+	if (!ClimbCharacter) return;
 
+	UE_LOG(LogTemp, Display, TEXT("FinishClimbUp"));
+	FVector Start = ClimbCharacter->GetActorLocation() + FVector(0.f, 0.f, 150.f); //raycast från över  huvuedt
+	FVector Forward = ClimbCharacter->GetActorForwardVector();
+	FVector Direction = (Forward + FVector(0.f, 0.f, -1.5f)).GetSafeNormal(); 
+	FVector End = Start + Direction * 150.f; 
+
+	FHitResult HitResult;
+	FCollisionQueryParams TraceParams;
+	TraceParams.AddIgnoredActor(ClimbCharacter);
+
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		ECC_Visibility,
+		TraceParams
+	);
+
+	DrawDebugLine(GetWorld(),
+		Start,
+		End,
+		FColor::Green,
+		false,
+		2.0f,
+		0,
+		2.0f);
+
+
+	if (bHit)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Found ledge top at: %s"), *HitResult.ImpactPoint.ToString());
+		
+		FVector TargetLocation = HitResult.ImpactPoint + FVector(0.f, 0.f, 50.f);
+		ClimbCharacter->SetActorLocation(TargetLocation);
+	}
+
+	// Återställ movement
 	bIsClimbing = false;
 	bIsOnLedge = false;
-	
+
 	MovementComponent->SetMovementMode(MOVE_Walking);
 	MovementComponent->GravityScale = 1.0f;
-	
 	MovementComponent->bOrientRotationToMovement = true;
-	
 }
+
 
 
 
@@ -144,17 +185,6 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 	FCollisionQueryParams TraceParams;
 	TraceParams.AddIgnoredActor(ClimbCharacter);
 
-	/*DrawDebugLine(
-	   GetWorld(),
-	   Start,
-	   End,
-	   FColor::Red, 
-	   false,       
-	   5.0f,        
-	   0,           
-	   5.f        
-   );*/
-
 
 	bool bHit = GetWorld()->SweepSingleByChannel(
 		HitResult,
@@ -166,18 +196,9 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 		TraceParams
 	);
 	
-	//Använder den mest banala funktionelitet kommer se skit ut i spelet. 
-	/*bool bHit = GetWorld()->LineTraceSingleByChannel(
-		HitResult,
-		Start,
-		End,
-		ECC_GameTraceChannel3,
-		TraceParams
-	);*/
-	
 	if (bHit && HitResult.GetActor() -> ActorHasTag("Climbable"))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Raycast hitting climbing object"));
+		//UE_LOG(LogTemp, Warning, TEXT("Raycast hitting climbing object"));
 		return true;
 	}
 	

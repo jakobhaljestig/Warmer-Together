@@ -174,10 +174,12 @@ public:
 	bool bHasDied = false;
 
 private:
-	void UpdateLastSafeLocation();
+	void UpdatePlayerLocation();
 
 	UPROPERTY(VisibleAnywhere, Category = "Respawn")
 	FVector CheckpointLocation;
+
+	bool bIsOnClimbingEdge = false;
 
 };
 
