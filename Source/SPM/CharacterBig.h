@@ -26,6 +26,9 @@ class SPM_API ACharacterBig : public ACharacterBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ThrowAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ClimbAction;
+
 	
 
 protected:
@@ -41,6 +44,17 @@ protected:
 	void ToggleGrab(const FInputActionValue& Value);
 	void Throw(const FInputActionValue& Value);
 
+	void Climb(const FInputActionValue& Value);
+
 	bool IsH = false;
+
+	void Move(const FInputActionValue& Value) override;
+
+	//Tror de inte behövs UPROPERTY tbh
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Climb")
+	UClimbComponent* ClimbingComponent;
+
+private:
+	bool bIsClimbing = false;
 	
 };
