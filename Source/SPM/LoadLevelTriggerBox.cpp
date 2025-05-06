@@ -13,7 +13,7 @@ ALoadLevelTriggerBox::ALoadLevelTriggerBox()
 
 void ALoadLevelTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
-	if (Cast<ACharacterBig>(OtherActor))
+	if (Cast<ACharacterBig>(OtherActor) && LevelToLoad != "")
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Loading %s"), *LevelToLoad.ToString());
 		const FLatentActionInfo LatentInfo;
