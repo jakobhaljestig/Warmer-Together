@@ -5,6 +5,7 @@
     <projectFile>../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/AutomationTool/AutomationTool.csproj</projectFile>
     <projectFile kind="Docker">../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj</projectFile>
+    <projectFile kind="Docker">C:/Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/SPM.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
@@ -14,18 +15,10 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_EnterLevelTriggerBox.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_EnterLevelTriggerBox.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_LevelStreamingController.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomFive.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomFive.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomFour.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomFour.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomOne.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomOne.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomThree.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomThree.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomTwo.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomTwo.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomZero.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/RoomZero.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/EnterLevelTriggerBox.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/LoadLevelTriggerBox.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/EnterLevelTriggerBox.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/LoadLevelTriggerBox.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/LevelStreamingController.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/LevelStreamingController.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_SnowStorm+Mist.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_SnowStorm+Mist.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_Snow_Level1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_Snow_Level1.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_Snow_Level3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_Snow_Level3.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/SPM.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SPM.sln.DotSettings.user" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +44,8 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Core/Public/Delegates/DelegateInstancesImpl.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://0" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://1" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterPlayerController.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -82,10 +76,11 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;C/C++ Project.SPM.executor&quot;: &quot;Run&quot;,
+    &quot;C/C++ Project.SPM.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Jakob&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Nellie&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -193,6 +188,17 @@
       <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
       <method v="2" />
     </configuration>
+    <configuration name="EpicGames.Perforce.Fixture/Dockerfile (2)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="containerName" value="epicgames.perforce.fixture" />
+          <option name="contextFolderPath" value="D:\School\Github\SPM" />
+          <option name="sourceFilePath" value="C:/Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/Dockerfile" />
+        </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
     <configuration name="EpicGames.Perforce.Fixture/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
@@ -245,6 +251,10 @@
       <workItem from="1745313195159" duration="3231000" />
       <workItem from="1745339147415" duration="4449000" />
       <workItem from="1746449514641" duration="11353000" />
+      <workItem from="1746515869936" duration="66000" />
+      <workItem from="1746516036858" duration="416000" />
+      <workItem from="1746516632704" duration="2492000" />
+      <workItem from="1746520394146" duration="981000" />
     </task>
     <servers />
   </component>
