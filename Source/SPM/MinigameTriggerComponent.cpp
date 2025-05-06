@@ -46,7 +46,6 @@ void UMinigameTriggerComponent::ZoomIn(UPrimitiveComponent* Actor)
 		Controller->Possess(MiniGamePawn);
 		Controller->SetViewTarget(ControllerOwner);
 		Controller->SetViewTargetWithBlend(MiniGamePawn, 1, VTBlend_EaseIn, 5, true);
-
 	}
 }
 
