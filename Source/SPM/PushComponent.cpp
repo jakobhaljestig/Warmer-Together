@@ -14,12 +14,13 @@ UPushComponent::UPushComponent()
 void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent() && PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
+	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
-		
-		FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
-		PhysicsHandle->SetTargetLocation(TargetLocation);
-		
+		if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
+		{
+			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
+			PhysicsHandle->SetTargetLocation(TargetLocation);
+		}
 		FHitResult Hit;
 		if (!GetGrabbableInReach(Hit))
 		{
