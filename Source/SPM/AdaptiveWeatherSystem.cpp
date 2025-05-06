@@ -79,8 +79,7 @@ void UAdaptiveWeatherSystem::Tick(float DeltaTime)
 	{
 		AggregatePerformance();
 		TimeSinceLastUpdate = 0.0f;
-	}
-}
+	}}
 
 void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformance)
 {
@@ -178,6 +177,8 @@ void UAdaptiveWeatherSystem::InitializeEnvironmentReferences()
 		UE_LOG(LogTemp, Error, TEXT("[Weather] MistParticleSystem not found!"));
 	}
 }
+
+
 
 //påverkar bodytemp baserat på vädernivån, måste nog tweakas lite vart eftersom
 void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
