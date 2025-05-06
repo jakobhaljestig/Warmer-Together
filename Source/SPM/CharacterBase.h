@@ -79,7 +79,7 @@ protected:
 
 	void Hug() const;
 
-	void BeginPush(const FInputActionValue& Value);
+	virtual void BeginPush(const FInputActionValue& Value);
 	void EndPush(const FInputActionValue& Value);
 
 	void Landed(const FHitResult& Hit);
@@ -128,6 +128,9 @@ protected:
 	
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsTryingToHug = false;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsPushing = false;
 
 
 	// Siktmetod

@@ -264,11 +264,13 @@ void ACharacterBase::BeginPush(const FInputActionValue& Value)
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
 	PushComponent->StartPushing();
+	bIsPushing = true;
 }
 void ACharacterBase::EndPush(const FInputActionValue& Value) 
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
 	PushComponent->StopPushing();
+	bIsPushing = false;
 }
 void ACharacterBase::OnDeath()
 {
