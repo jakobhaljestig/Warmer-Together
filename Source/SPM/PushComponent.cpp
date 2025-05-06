@@ -21,7 +21,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetOwner()->GetActorRotation());
 		
 		FHitResult Hit;
-		if (!GetGrabbableInReach(Hit) || OwnerMovementComponent->IsFalling())
+		if (!GetGrabbableInReach(Hit))
 		{
 			StopPushing();
 		}
@@ -29,7 +29,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 }
 void UPushComponent::StartPushing()
 {
-	if (!HoldingSomething() && !OwnerMovementComponent->IsFalling())
+	if (!HoldingSomething())
 	{
 		Grab();
 		if (PhysicsHandle->GetGrabbedComponent() && PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>())
