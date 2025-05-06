@@ -7,7 +7,7 @@
 #include "Health.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "CountdownTimer.h"
+#include "SavableObjectInterface.h"
 #include "CharacterBase.generated.h"
 
 
@@ -64,7 +64,7 @@ class ACharacterBase : public ACharacter
 public:
 	ACharacterBase();
 	
-	void Tick(float DeltaTime);
+	virtual void Tick(float DeltaTime) override;
 
 protected:
 
@@ -183,6 +183,9 @@ private:
 
 	UPROPERTY(VisibleAnywhere, Category = "Respawn")
 	FVector CheckpointLocation;
+	
+	UPROPERTY(VisibleAnywhere, Category = "Respawn", SaveGame)
+	FVector SaveGameLocation;
 
 	bool bIsOnClimbingEdge = false;
 
