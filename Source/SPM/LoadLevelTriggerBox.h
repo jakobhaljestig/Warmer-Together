@@ -4,32 +4,24 @@
 
 #include "CoreMinimal.h"
 #include "Engine/TriggerBox.h"
-#include "EnterLevelTriggerBox.generated.h"
-
-class ALevelStreamingController;
+#include "LoadLevelTriggerBox.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class SPM_API AEnterLevelTriggerBox : public ATriggerBox
+class SPM_API ALoadLevelTriggerBox : public ATriggerBox
 {
 	GENERATED_BODY()
 
-protected:
-	virtual void BeginPlay() override;
-
 public:
-	AEnterLevelTriggerBox();
+	ALoadLevelTriggerBox();
 	
 	UFUNCTION()
 	void OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor);
 
-private:
-	UPROPERTY()
-	ALevelStreamingController* LevelStreamingController;
-	
+private:	
 	UPROPERTY(EditAnywhere)
-	int RoomNumber;
+	FName LevelToLoad;
 	
 };

@@ -16,6 +16,12 @@ void ACharacterBig::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("PickupComponent not valid"));
 	}
+
+	ClimbingComponent = FindComponentByClass<UClimbComponent>();
+	if (!ClimbingComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("Climbing component not valid"));
+	}
 }
 
 
@@ -28,6 +34,8 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 		// För test
 		EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, this, &ACharacterBig::ToggleGrab);
 		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Ongoing, this, &ACharacterBig::Throw);
+
+		EnhancedInputComponent->BindAction(ClimbAction, ETriggerEvent::Started, this, &ACharacterBig::Climb);
 	
 	}
 	else
@@ -42,9 +50,38 @@ void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 	PickupComponent->GrabAndRelease();
 }
 
+
+
 void ACharacterBig::Throw(const FInputActionValue& Value)
 {
 	PickupComponent->Throw();
 }
 
 
+
+void ACharacterBig::Climb(const FInputActionValue& Value)
+{
+	ClimbingComponent->Climb();
+}
+
+
+
+void ACharacterBig::Move(const FInputActionValue& Value)
+{
+	FVector2D MovementVector = Value.Get<FVector2D>();
+
+	if (Controller != nullptr)
+	{
+		if (ClimbingComponent && ClimbingComponent->IsClimbing())
+		{
+			if (!ClimbingComponent->IsOnLedge() || MovementVector.Y < 0.f)
+			{
+				FVector ClimbDirection = FVector::UpVector;
+				AddMovementInput(ClimbDirection, MovementVector.Y);
+			}
+			return;
+		}
+		
+		Super::Move(Value);
+	}
+}
