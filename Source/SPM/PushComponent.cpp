@@ -27,35 +27,21 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		}
 	}
 }
-
-void UPushComponent::GrabAndRelease()
-{
-	if (PhysicsHandle == nullptr)
-	{
-		return;
-	}
-	
-	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
-	{
-		StopPushing();
-	}
-	else if (!HoldingSomething() && !OwnerMovementComponent->IsFalling())
-	{
-		StartPushing();
-	}
-}
 //Exists in case something should be added to the execution of push.
 void UPushComponent::StartPushing()
 {
-	Grab();
+	if (!HoldingSomething() && !OwnerMovementComponent->IsFalling())
+		Grab();
 	
 }
 //Restores player movement and drops grabbed object
 void UPushComponent::StopPushing()
 {
-	PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
-	Release();
-	
+	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+	{
+		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
+		Release();	
+	}
 }
 //Restricts player movement
 void UPushComponent::GrabEffect()
