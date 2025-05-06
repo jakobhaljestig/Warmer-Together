@@ -237,7 +237,7 @@ void UClimbComponent::SetWalking()
 {
 	bIsClimbing = false;
 	MovementComponent->SetMovementMode(MOVE_Walking);
-	MovementComponent->GravityScale = 1.0f;
+	MovementComponent->GravityScale = 1.75f;
 	MovementComponent->MaxWalkSpeed = 500.f;
 	MovementComponent->BrakingDecelerationWalking = 2048.f;
 	MovementComponent->bOrientRotationToMovement = true;
