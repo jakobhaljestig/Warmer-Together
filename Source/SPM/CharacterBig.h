@@ -56,5 +56,7 @@ protected:
 
 private:
 	bool bIsClimbing = false;
+
+	void OnDeath() override;
 	
 };
