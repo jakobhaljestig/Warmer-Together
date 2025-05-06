@@ -94,7 +94,7 @@ void ACharacterBase::Tick(float DeltaTime)
 		LastGroundedZ = GetActorLocation().Z;
 	}
 	
-	UpdateLastSafeLocation();
+	UpdatePlayerLocation();
 
 	UAdaptiveWeatherSystem* WeatherSystemInstance = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 
@@ -153,8 +153,8 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Started, this, &ACharacterBase::BeginHug);
         EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Completed, this, &ACharacterBase::EndHug);
 
-		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::TogglePush);
-		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::TogglePush);
+		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::BeginPush);
+		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::EndPush);
 	}
 	else
 	{
@@ -260,10 +260,17 @@ void ACharacterBase::Hug() const
 	//GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
 
-void ACharacterBase::TogglePush(const FInputActionValue& Value)
+void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Toggled"));
-	PushComponent->GrabAndRelease();
+	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
+	PushComponent->StartPushing();
+	bIsPushing = true;
+}
+void ACharacterBase::EndPush(const FInputActionValue& Value) 
+{
+	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
+	PushComponent->StopPushing();
+	bIsPushing = false;
 }
 void ACharacterBase::OnDeath()
 {
@@ -318,7 +325,7 @@ void ACharacterBase::RespawnToLastSafeLocation()
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
-void ACharacterBase::UpdateLastSafeLocation()
+void ACharacterBase::UpdatePlayerLocation()
 {
 	if (GetCharacterMovement()->IsMovingOnGround())
 	{
@@ -326,12 +333,11 @@ void ACharacterBase::UpdateLastSafeLocation()
 
 		if (!Ground-> ActorHasTag(TEXT("IgnoreLastSafeLocation")))
 		{
-			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 50.0f)
+			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
 			{
 				LastSafeLocation = GetActorLocation();
 			}
 		}
-		
 	}
 
 }
