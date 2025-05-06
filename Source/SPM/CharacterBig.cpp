@@ -85,3 +85,9 @@ void ACharacterBig::Move(const FInputActionValue& Value)
 		Super::Move(Value);
 	}
 }
+
+void ACharacterBig::OnDeath()
+{
+	PickupComponent->Drop(0,0);
+	Super::OnDeath();
+}

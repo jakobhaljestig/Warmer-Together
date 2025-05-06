@@ -7,7 +7,9 @@
 #include "Health.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "CountdownTimer.h"
 #include "CharacterBase.generated.h"
+
 
 class UPerformanceTracker;
 class UBodyTemperature;
@@ -139,7 +141,6 @@ protected:
 
 protected:
 
-
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -172,7 +173,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
 
-	void OnDeath();
+	virtual void OnDeath();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
 	bool bHasDied = false;
@@ -184,6 +185,22 @@ private:
 	FVector CheckpointLocation;
 
 	bool bIsOnClimbingEdge = false;
+
+	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
+	//Override canJump()?
+	virtual bool CanJumpInternal_Implementation() const override;
+	
+	virtual void Falling() override;
+	
+	// --- Coyote Time ---
+	FTimerHandle CoyoteTimeHandle;
+	bool bCanUseCoyoteTime = false;
+	
+	UPROPERTY(EditAnywhere, Category = "Jump")
+	float CoyoteTimeDuration = 0.2f; 
+
+	void EnableCoyoteTime();
+	void DisableCoyoteTime();
 
 };
 

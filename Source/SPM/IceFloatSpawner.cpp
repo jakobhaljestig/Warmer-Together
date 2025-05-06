@@ -93,7 +93,7 @@ void AIceFloatSpawner::RespawnIceFloat()
 	
 	ActiveIceFloats.Add(IceFloat);
 
-	UE_LOG(LogTemp, Warning, TEXT("Respawned ice float from pool"));
+	//UE_LOG(LogTemp, Warning, TEXT("Respawned ice float from pool"));
 }
 	
 

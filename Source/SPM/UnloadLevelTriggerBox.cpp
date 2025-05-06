@@ -13,8 +13,7 @@ AUnloadLevelTriggerBox::AUnloadLevelTriggerBox()
 
 void AUnloadLevelTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Collision"));
-	if (Cast<ACharacterBig>(OtherActor))
+	if (Cast<ACharacterBig>(OtherActor) && LevelToUnload != "")
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Unloading %s"), *LevelToUnload.ToString());
 		const FLatentActionInfo LatentInfo;
