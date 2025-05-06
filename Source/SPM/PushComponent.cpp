@@ -3,6 +3,8 @@
 
 #include "PushComponent.h"
 
+#include "PushableProperties.h"
+
 UPushComponent::UPushComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -12,34 +14,41 @@ UPushComponent::UPushComponent()
 void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
+	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent() && PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
 	{
 		
-		if (PhysicsHandle->GetGrabbedComponent()->GetMass() < MaxPushWeight){
-			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
-			PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetOwner()->GetActorRotation());
-		}
+		FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
+		PhysicsHandle->SetTargetLocation(TargetLocation);
 		
 		FHitResult Hit;
-		if (!GetGrabbableInReach(Hit) || OwnerMovementComponent->IsFalling())
+		if (!GetGrabbableInReach(Hit))
 		{
 			StopPushing();
 		}
 	}
 }
-//Exists in case something should be added to the execution of push.
 void UPushComponent::StartPushing()
 {
-	if (!HoldingSomething() && !OwnerMovementComponent->IsFalling())
+	if (!HoldingSomething())
+	{
 		Grab();
+		if (PhysicsHandle->GetGrabbedComponent() && PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>())
+		{
+			PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers += 1;
+		}
+	}
+
 	
 }
-//Restores player movement and drops grabbed object
 void UPushComponent::StopPushing()
 {
 	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
 		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
+		if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>())
+		{
+			PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers -= 1;
+		}
 		Release();	
 	}
 }

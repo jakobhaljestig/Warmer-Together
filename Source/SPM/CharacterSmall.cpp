@@ -45,28 +45,49 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 //Implementera check för att se om något är över karaktären.
 void ACharacterSmall::Crawl (const FInputActionValue& Value)
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Crouching"));
-	GetCharacterMovement()->MaxWalkSpeed = 250.0f;
-	Tags.Remove("Grabbed");
-	ACharacter::Crouch(true);
-	
+	if (!bIsSprinting && !bIsPushing)
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Crouching"));
+		GetCharacterMovement()->MaxWalkSpeed = 250.0f;
+		Tags.Remove("Grabbed");
+		ACharacter::Crouch(true);
+		bIsCrawling = true;
+	}
 }
 
 void ACharacterSmall::StopCrawl(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is not Crouching"));
-	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
-	ACharacter::UnCrouch(true);
+	if (bIsCrawling)
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is not Crouching"));
+		GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+		ACharacter::UnCrouch(true);
+		bIsCrawling = false;
+	}
 }
 
 void ACharacterSmall::Sprint(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = 800.0f;
+	if (!bIsPushing && !bIsCrawling)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 800.0f;
+		bIsSprinting = true;
+	}
 }
 
 void ACharacterSmall::StopSprint(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+	if (bIsSprinting)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+		bIsSprinting = false;
+	}
+}
+
+void ACharacterSmall::BeginPush(const FInputActionValue& Value)
+{
+	if (!bIsSprinting && !bIsCrawling)
+		Super::BeginPush(Value);
 }
 
 void ACharacterSmall::Tick(float DeltaTime)

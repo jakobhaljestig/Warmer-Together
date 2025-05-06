@@ -26,11 +26,18 @@ protected:
 
 	void Sprint(const FInputActionValue& Value);
 	void StopSprint(const FInputActionValue& Value);
+
+	virtual void BeginPush(const FInputActionValue& Value);
 	
 public:
 	void Tick(float DeltaTime);
 
 	void BeginPlay() override;
+
+private:
+	bool bIsSprinting = false;
+
+	bool bIsCrawling = false;
 
 	
 

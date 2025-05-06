@@ -79,7 +79,7 @@ protected:
 
 	void Hug() const;
 
-	void BeginPush(const FInputActionValue& Value);
+	virtual void BeginPush(const FInputActionValue& Value);
 	void EndPush(const FInputActionValue& Value);
 
 	void Landed(const FHitResult& Hit);
@@ -129,6 +129,9 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsTryingToHug = false;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsPushing = false;
+
 
 	// Siktmetod
 	void UpdateVisibility(float VisibilityFactor);
@@ -169,7 +172,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
 
-	void OnDeath();
+	virtual void OnDeath();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
 	bool bHasDied = false;
