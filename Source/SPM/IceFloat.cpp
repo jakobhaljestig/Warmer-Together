@@ -41,8 +41,9 @@ void AIceFloat::BreakObject()
 	UE_LOG(LogTemp, Warning, TEXT("Breaking Object"));
 	Timer.Start(GetWorld(), BreakTime, [this]()->void
 	{
-		SetActorHiddenInGame(true);
 		SetActorEnableCollision(false);
+		SetActorHiddenInGame(true);
+		
 
 		Timer.Start(GetWorld(), RespawnTime, [this]()->void
 			{

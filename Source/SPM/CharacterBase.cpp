@@ -94,7 +94,7 @@ void ACharacterBase::Tick(float DeltaTime)
 		LastGroundedZ = GetActorLocation().Z;
 	}
 	
-	UpdateLastSafeLocation();
+	UpdatePlayerLocation();
 
 	UAdaptiveWeatherSystem* WeatherSystemInstance = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 
@@ -318,7 +318,7 @@ void ACharacterBase::RespawnToLastSafeLocation()
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
-void ACharacterBase::UpdateLastSafeLocation()
+void ACharacterBase::UpdatePlayerLocation()
 {
 	if (GetCharacterMovement()->IsMovingOnGround())
 	{
@@ -326,12 +326,11 @@ void ACharacterBase::UpdateLastSafeLocation()
 
 		if (!Ground-> ActorHasTag(TEXT("IgnoreLastSafeLocation")))
 		{
-			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 50.0f)
+			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
 			{
 				LastSafeLocation = GetActorLocation();
 			}
 		}
-		
 	}
 
 }
