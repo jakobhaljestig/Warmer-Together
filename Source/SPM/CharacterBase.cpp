@@ -292,8 +292,7 @@ void ACharacterBase::OnDeath()
 			WeatherSystem->UpdatePerformance(PerformanceTracker->GetPerformance());
 		}
 	}
-	
-		RespawnAtCheckpoint();
+	RespawnAtCheckpoint();
 	
 }
 
