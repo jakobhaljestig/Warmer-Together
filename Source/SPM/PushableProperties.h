@@ -29,8 +29,11 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	int RequiredNumberOfGrabbers = 0;
+	
+	UPROPERTY(EditAnywhere)
+	int HoldDistance = 100;
 
-	bool CanPush();
+	bool CanPush() const;
 
 		
 };

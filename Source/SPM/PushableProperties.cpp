@@ -31,8 +31,9 @@ void UPushableProperties::TickComponent(float DeltaTime, ELevelTick TickType, FA
 	// ...
 }
 
-bool UPushableProperties::CanPush()
+bool UPushableProperties::CanPush() const
 {
 	return NumberOfGrabbers >= RequiredNumberOfGrabbers;
 }
+
 
