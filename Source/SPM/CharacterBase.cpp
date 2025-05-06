@@ -15,6 +15,7 @@
 #include "InputActionValue.h"
 #include "PerformanceTracker.h"
 #include "PushComponent.h"
+#include "HugComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -56,6 +57,7 @@ ACharacterBase::ACharacterBase()
 
 	BodyTempComponent = CreateDefaultSubobject<UBodyTemperature>(TEXT("BodyTemperature"));
 	HealthComponent = CreateDefaultSubobject<UHealth>(TEXT("Health"));
+	HugComponent = CreateDefaultSubobject<UHugComponent>(TEXT("HugComponent")); 
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -81,6 +83,12 @@ void ACharacterBase::BeginPlay()
 	if (!PushComponent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("PushComponent not valid"));
+	}
+
+	HugComponent = FindComponentByClass<UHugComponent>();
+	if (!HugComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("HugComponent not valid"));
 	}
 	
 }
@@ -222,7 +230,6 @@ void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8
 	}
 }
 
-
 void ACharacterBase::EnableCoyoteTime()
 {
 	bCanUseCoyoteTime = true;
@@ -242,52 +249,21 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
-	bIsTryingToHug = true;
-	UE_LOG(LogTemplateCharacter, Warning, TEXT("Hug mapping is working"));
-
-	ACharacter* Char1 = UGameplayStatics::GetPlayerCharacter(this, 0);
-	ACharacter* Char2 = UGameplayStatics::GetPlayerCharacter(this, 1);
-
-	if (!Char1 || !Char2 || Char1 == Char2) return;
-
-	ACharacterBase* Player1 = Cast<ACharacterBase>(Char1);
-	ACharacterBase* Player2 = Cast<ACharacterBase>(Char2);
-
-	if (!Player1 || !Player2) return;
-
-	const float HugDistance = 200.0f; // Kanske inte hårdkoda avständ
-
-	if (Player1->bIsTryingToHug && Player2->bIsTryingToHug)
-	{
-		float Distance = FVector::Dist(Player1->GetActorLocation(), Player2->GetActorLocation());
-
-		if (Distance <= HugDistance)
-		{	
-			Player1->Hug();
-			Player2->Hug();
-		}else
-		{
-			UE_LOG(LogTemplateCharacter, Warning, TEXT("Distance too big between players"));
-		}
-		
-	}else{
-		UE_LOG(LogTemplateCharacter, Warning, TEXT("Only 1 character hugging"));
-	}
-
+	HugComponent -> TryHug();
 }
 
 void ACharacterBase::EndHug(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemplateCharacter, Warning, TEXT("Hug has ended"));
-	bIsTryingToHug = false;
+	HugComponent -> EndHug();
 }
+
 
 void ACharacterBase::Hug() const
 {
-	UE_LOG(LogTemplateCharacter, Warning, TEXT("Characters are hugging"));
 	if (BodyTempComponent)
-    	{
-    		BodyTempComponent->ShareTemp();
+		{
+		    UE_LOG(LogTemplateCharacter, Warning, TEXT("Characters are hugging"));
+		    BodyTempComponent->ShareTemp();
     	}
     	else
     	{
@@ -298,9 +274,8 @@ void ACharacterBase::Hug() const
 	{
 		PerformanceTracker->RegisterHug();
 	}
-
-	//GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
+
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
@@ -308,12 +283,14 @@ void ACharacterBase::BeginPush(const FInputActionValue& Value)
 	PushComponent->StartPushing();
 	bIsPushing = true;
 }
+
 void ACharacterBase::EndPush(const FInputActionValue& Value) 
 {
 	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
 	PushComponent->StopPushing();
 	bIsPushing = false;
 }
+
 void ACharacterBase::OnDeath()
 {
 	if (bHasDied)
@@ -366,6 +343,7 @@ void ACharacterBase::RespawnToLastSafeLocation()
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
+
 void ACharacterBase::UpdatePlayerLocation()
 {
 	if (GetCharacterMovement()->IsMovingOnGround())
@@ -382,6 +360,7 @@ void ACharacterBase::UpdatePlayerLocation()
 	}
 
 }
+
 
 void ACharacterBase::Landed(const FHitResult& Hit)
 {
