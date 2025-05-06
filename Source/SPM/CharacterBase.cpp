@@ -143,7 +143,7 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacterBase::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACharacterBase::Move);
@@ -197,6 +197,48 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+
+
+bool ACharacterBase::CanJumpInternal_Implementation() const
+{
+	return Super::CanJumpInternal_Implementation() || bCanUseCoyoteTime; 
+}
+
+void ACharacterBase::Falling()
+{
+	Super::Falling();
+	EnableCoyoteTime();
+}
+
+
+
+void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
+{
+	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+
+	if (!bPressedJump && !GetCharacterMovement()->IsFalling())
+	{
+		bCanUseCoyoteTime = false;
+	}
+}
+
+
+void ACharacterBase::EnableCoyoteTime()
+{
+	bCanUseCoyoteTime = true;
+
+	GetWorldTimerManager().SetTimer(CoyoteTimeHandle, this, &ACharacterBase::DisableCoyoteTime, CoyoteTimeDuration, false);
+
+	UE_LOG(LogTemp, Display, TEXT("Coyote Time enabled"));
+}
+
+void ACharacterBase::DisableCoyoteTime()
+{
+	bCanUseCoyoteTime = false;
+	
+	UE_LOG(LogTemp, Display, TEXT("Coyote Time disabled"));
+}
+
 
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
