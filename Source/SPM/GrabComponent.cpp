@@ -15,11 +15,6 @@ UGrabComponent::UGrabComponent()
 	// ...
 }
 
-UGrabComponent::~UGrabComponent()
-{
-	
-}
-
 //Determine if player grabs or drops an object
 void UGrabComponent::GrabAndRelease()
 {

@@ -18,8 +18,6 @@ class SPM_API UGrabComponent : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UGrabComponent();
-	virtual ~UGrabComponent() override;
-
 
 	//Toggle's between Grab and Release
 	UFUNCTION(BlueprintCallable)
