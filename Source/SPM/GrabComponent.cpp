@@ -101,7 +101,6 @@ void UGrabComponent::Grab(){
 			NAME_None,
 			HitResult.ImpactPoint);
 		GrabEffect();
-		HitActor->AttachToActor(GetOwner(),FAttachmentTransformRules::KeepWorldTransform);
 	}
 	
 }
