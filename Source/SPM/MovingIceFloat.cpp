@@ -20,12 +20,13 @@ void AMovingIceFloat::BeginPlay()
 void AMovingIceFloat::Tick(float DeltaTime)
 {
 	MoveIceFloat(DeltaTime);
+	//UE_LOG(LogTemp, Warning, TEXT("Speed: %f"), MovementSpeed);
+
 }
 
 void AMovingIceFloat::MoveIceFloat(float DeltaTime)
 {
 	FVector CurrentLocation = GetActorLocation();
-
 	FVector Direction = (EndLocation - CurrentLocation).GetSafeNormal();
 	FVector NewLocation = CurrentLocation + Direction * MovementSpeed * DeltaTime;
 

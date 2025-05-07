@@ -18,9 +18,6 @@ class SPM_API ACharacterSmall : public ACharacterBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* SprintAction;
 
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* ClimbAction;
-
 protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 	
@@ -30,22 +27,22 @@ protected:
 	void Sprint(const FInputActionValue& Value);
 	void StopSprint(const FInputActionValue& Value);
 
-	void Climb(const FInputActionValue& Value);
-
-	virtual void Move(const FInputActionValue& Value) override;
+	virtual void BeginPush(const FInputActionValue& Value);
 	
 public:
-	
 	void Tick(float DeltaTime);
 
 	void BeginPlay() override;
 
-	//Tror de inte behövs UPROPERTY tbh
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Climb")
-	UClimbComponent* ClimbingComponent;
-
 private:
-	bool bIsClimbing = false;
+	bool bIsSprinting = false;
+
+	bool bIsCrawling = false;
+
+	
+
+
+
 	
 	
 

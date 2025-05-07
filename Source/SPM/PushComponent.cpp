@@ -3,6 +3,8 @@
 
 #include "PushComponent.h"
 
+#include "PushableProperties.h"
+
 UPushComponent::UPushComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
@@ -14,48 +16,42 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
-		
-		if (PhysicsHandle->GetGrabbedComponent()->GetMass() < MaxPushWeight){
-			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * HoldDistance;
-			PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetOwner()->GetActorRotation());
+		if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
+		{
+			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
+			PhysicsHandle->SetTargetLocation(TargetLocation);
 		}
-		
 		FHitResult Hit;
-		if (!GetGrabbableInReach(Hit) || OwnerMovementComponent->IsFalling())
+		if (!GetGrabbableInReach(Hit))
 		{
 			StopPushing();
 		}
 	}
 }
-
-void UPushComponent::GrabAndRelease()
-{
-	if (PhysicsHandle == nullptr)
-	{
-		return;
-	}
-	
-	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
-	{
-		StopPushing();
-	}
-	else if (!HoldingSomething() && !OwnerMovementComponent->IsFalling())
-	{
-		StartPushing();
-	}
-}
-//Exists in case something should be added to the execution of push.
 void UPushComponent::StartPushing()
 {
-	Grab();
+	if (!HoldingSomething())
+	{
+		Grab();
+		if (PhysicsHandle->GetGrabbedComponent() && PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>())
+		{
+			PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers += 1;
+		}
+	}
+
 	
 }
-//Restores player movement and drops grabbed object
 void UPushComponent::StopPushing()
 {
-	PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
-	Release();
-	
+	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+	{
+		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
+		if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>())
+		{
+			PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers -= 1;
+		}
+		Release();	
+	}
 }
 //Restricts player movement
 void UPushComponent::GrabEffect()

@@ -12,16 +12,10 @@
 void ACharacterSmall::BeginPlay()
 {
 	Super::BeginPlay();
-
-	ClimbingComponent = FindComponentByClass<UClimbComponent>();
-	if (!ClimbingComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Climbing component not valid"));
-	}
 	
 	GetCharacterMovement()->JumpZVelocity = 800.0f; 
 	GetCharacterMovement()->AirControl = 0.35f;
-	GetCharacterMovement()->BrakingDecelerationFalling = 0.0f;
+	GetCharacterMovement()->BrakingDecelerationFalling = -1000.0f;
 
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 	
@@ -40,9 +34,7 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterSmall::Sprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterSmall::StopSprint);
-
-		EnhancedInputComponent->BindAction(ClimbAction, ETriggerEvent::Started, this, &ACharacterSmall::Climb);
-	
+		
 	}
 	else
 	{
@@ -53,27 +45,49 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 //Implementera check för att se om något är över karaktären.
 void ACharacterSmall::Crawl (const FInputActionValue& Value)
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Crouching"));
-	GetCharacterMovement()->MaxWalkSpeed = 250.0f;
-	Tags.Remove("Grabbed");
-	ACharacter::Crouch(true);
+	if (!bIsSprinting && !bIsPushing)
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Crouching"));
+		GetCharacterMovement()->MaxWalkSpeed = 250.0f;
+		Tags.Remove("Grabbed");
+		ACharacter::Crouch(true);
+		bIsCrawling = true;
+	}
 }
 
 void ACharacterSmall::StopCrawl(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is not Crouching"));
-	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
-	ACharacter::UnCrouch(true);
+	if (bIsCrawling)
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is not Crouching"));
+		GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+		ACharacter::UnCrouch(true);
+		bIsCrawling = false;
+	}
 }
 
 void ACharacterSmall::Sprint(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = 800.0f;
+	if (!bIsPushing && !bIsCrawling)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 800.0f;
+		bIsSprinting = true;
+	}
 }
 
 void ACharacterSmall::StopSprint(const FInputActionValue& Value)
 {
-	GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+	if (bIsSprinting)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+		bIsSprinting = false;
+	}
+}
+
+void ACharacterSmall::BeginPush(const FInputActionValue& Value)
+{
+	if (!bIsSprinting && !bIsCrawling)
+		Super::BeginPush(Value);
 }
 
 void ACharacterSmall::Tick(float DeltaTime)
@@ -82,25 +96,7 @@ void ACharacterSmall::Tick(float DeltaTime)
 	
 }
 
-void ACharacterSmall::Climb(const FInputActionValue& Value)
-{
-	ClimbingComponent->Climb();
-}
 
 
-void ACharacterSmall::Move(const FInputActionValue& Value)
-{
-	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
-	{
-		if (ClimbingComponent && ClimbingComponent->IsClimbing())
-		{
-			FVector ClimbDirection = FVector::UpVector;
-			AddMovementInput(ClimbDirection, MovementVector.Y);
-			return;
-		}
-		
-		Super::Move(Value);
-	}
-}
+

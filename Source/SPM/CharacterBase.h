@@ -9,6 +9,7 @@
 #include "Logging/LogMacros.h"
 #include "CharacterBase.generated.h"
 
+
 class UPerformanceTracker;
 class UBodyTemperature;
 class UHealth;
@@ -27,6 +28,8 @@ UCLASS(config=Game)
 class ACharacterBase : public ACharacter
 {
 	GENERATED_BODY()
+
+	friend class UHugComponent;
 
 	/** Camera boom positioning the camera behind the character */
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = Camera, meta = (AllowPrivateAccess = "true"))
@@ -60,6 +63,7 @@ class ACharacterBase : public ACharacter
 
 
 public:
+	
 	ACharacterBase();
 	
 	void Tick(float DeltaTime);
@@ -74,33 +78,45 @@ protected:
 	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
 
+	//HUGGING
 	void BeginHug(const FInputActionValue& Value);
 	void EndHug(const FInputActionValue& Value);
-
 	void Hug() const;
 
-	void TogglePush(const FInputActionValue& Value);
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Push")
+	UHugComponent* HugComponent;
+	
+
+	virtual void BeginPush(const FInputActionValue& Value);
+	void EndPush(const FInputActionValue& Value);
+	
 
 	void Landed(const FHitResult& Hit);
 	
-	// Kroppstemperatur
+	// KROPPSTEMPERATUR
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
 	UBodyTemperature* BodyTempComponent;
-	
+
+	//PUSH
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Push")
 	UPushComponent* PushComponent;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsPushing = false;
+	
+
+	//VÄDER
 	UPROPERTY()
 	UAdaptiveWeatherSystem* AdaptiveWeatherSystem;
 	
-
-	// Rörelse
+	// RÖRELSE
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float BaseMovementSpeed = 600.0f;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float CurrentMovementSpeed;
 
+	//FALL DAMAGE
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
 	float FallDamageMultiplier = 5.0f;
 	
@@ -109,10 +125,12 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
 	float LastGroundedZ = 0.0f;
+	
 
 	// Kylningsfaktor
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature")
 	float BaseCoolingRate = 5.0f;
+	
 
 	// Vind
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
@@ -121,20 +139,14 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	float MaxWindSpeed = 25.0f;
 
+	
 	// Sikt
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	class APostProcessVolume* PostProcessVolume;
 	
-	UPROPERTY(BlueprintReadOnly)
-	bool bIsTryingToHug = false;
-
-
-	// Siktmetod
 	void UpdateVisibility(float VisibilityFactor);
 	
-
-protected:
-
+	
 
 	virtual void NotifyControllerChanged() override;
 
@@ -157,6 +169,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
 	UPerformanceTracker* PerformanceTracker;
 
+	//RESPAWNING
+	
 	//Mini Respawning
 	UPROPERTY(BlueprintReadWrite, Category = "Respawn")
     FVector LastSafeLocation;
@@ -168,16 +182,34 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
 
-	void OnDeath();
+	virtual void OnDeath();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
 	bool bHasDied = false;
 
+	
 private:
-	void UpdateLastSafeLocation();
+	void UpdatePlayerLocation();
 
 	UPROPERTY(VisibleAnywhere, Category = "Respawn")
 	FVector CheckpointLocation;
+	
+	
+	// --- Coyote Time ---
+	FTimerHandle CoyoteTimeHandle;
+	bool bCanUseCoyoteTime = false;
+	
+	UPROPERTY(EditAnywhere, Category = "Jump")
+	float CoyoteTimeDuration = 0.2f; 
+
+	void EnableCoyoteTime();
+	void DisableCoyoteTime();
+
+	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
+	
+	virtual bool CanJumpInternal_Implementation() const override;
+	
+	virtual void Falling() override;
 
 };
 

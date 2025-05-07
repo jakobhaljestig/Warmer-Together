@@ -15,6 +15,7 @@
 #include "InputActionValue.h"
 #include "PerformanceTracker.h"
 #include "PushComponent.h"
+#include "HugComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -56,6 +57,7 @@ ACharacterBase::ACharacterBase()
 
 	BodyTempComponent = CreateDefaultSubobject<UBodyTemperature>(TEXT("BodyTemperature"));
 	HealthComponent = CreateDefaultSubobject<UHealth>(TEXT("Health"));
+	HugComponent = CreateDefaultSubobject<UHugComponent>(TEXT("HugComponent")); 
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -82,6 +84,12 @@ void ACharacterBase::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("PushComponent not valid"));
 	}
+
+	HugComponent = FindComponentByClass<UHugComponent>();
+	if (!HugComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("HugComponent not valid"));
+	}
 	
 }
 
@@ -94,7 +102,7 @@ void ACharacterBase::Tick(float DeltaTime)
 		LastGroundedZ = GetActorLocation().Z;
 	}
 	
-	UpdateLastSafeLocation();
+	UpdatePlayerLocation();
 
 	UAdaptiveWeatherSystem* WeatherSystemInstance = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 
@@ -143,7 +151,7 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		// Jumping
-		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacter::Jump);
+		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Started, this, &ACharacterBase::Jump);
 		EnhancedInputComponent->BindAction(JumpAction, ETriggerEvent::Completed, this, &ACharacter::StopJumping);
 		// Moving
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACharacterBase::Move);
@@ -153,8 +161,8 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Started, this, &ACharacterBase::BeginHug);
         EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Completed, this, &ACharacterBase::EndHug);
 
-		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::TogglePush);
-		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::TogglePush);
+		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::BeginPush);
+		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::EndPush);
 	}
 	else
 	{
@@ -198,54 +206,64 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 	}
 }
 
+
+bool ACharacterBase::CanJumpInternal_Implementation() const
+{
+	return Super::CanJumpInternal_Implementation() || bCanUseCoyoteTime; 
+}
+
+void ACharacterBase::Falling()
+{
+	Super::Falling();
+	EnableCoyoteTime();
+}
+
+
+
+void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
+{
+	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
+
+	if (!bPressedJump && !GetCharacterMovement()->IsFalling())
+	{
+		bCanUseCoyoteTime = false;
+	}
+}
+
+void ACharacterBase::EnableCoyoteTime()
+{
+	bCanUseCoyoteTime = true;
+
+	GetWorldTimerManager().SetTimer(CoyoteTimeHandle, this, &ACharacterBase::DisableCoyoteTime, CoyoteTimeDuration, false);
+
+	UE_LOG(LogTemp, Display, TEXT("Coyote Time enabled"));
+}
+
+void ACharacterBase::DisableCoyoteTime()
+{
+	bCanUseCoyoteTime = false;
+	
+	UE_LOG(LogTemp, Display, TEXT("Coyote Time disabled"));
+}
+
+
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
-	bIsTryingToHug = true;
-	UE_LOG(LogTemplateCharacter, Warning, TEXT("Hug mapping is working"));
-
-	ACharacter* Char1 = UGameplayStatics::GetPlayerCharacter(this, 0);
-	ACharacter* Char2 = UGameplayStatics::GetPlayerCharacter(this, 1);
-
-	if (!Char1 || !Char2 || Char1 == Char2) return;
-
-	ACharacterBase* Player1 = Cast<ACharacterBase>(Char1);
-	ACharacterBase* Player2 = Cast<ACharacterBase>(Char2);
-
-	if (!Player1 || !Player2) return;
-
-	const float HugDistance = 200.0f; // Kanske inte hårdkoda avständ
-
-	if (Player1->bIsTryingToHug && Player2->bIsTryingToHug)
-	{
-		float Distance = FVector::Dist(Player1->GetActorLocation(), Player2->GetActorLocation());
-
-		if (Distance <= HugDistance)
-		{	
-			Player1->Hug();
-			Player2->Hug();
-		}else
-		{
-			UE_LOG(LogTemplateCharacter, Warning, TEXT("Distance too big between players"));
-		}
-		
-	}else{
-		UE_LOG(LogTemplateCharacter, Warning, TEXT("Only 1 character hugging"));
-	}
-
+	HugComponent -> TryHug();
 }
 
 void ACharacterBase::EndHug(const FInputActionValue& Value)
 {
-	UE_LOG(LogTemplateCharacter, Warning, TEXT("Hug has ended"));
-	bIsTryingToHug = false;
+	HugComponent -> EndHug();
 }
+
 
 void ACharacterBase::Hug() const
 {
-	UE_LOG(LogTemplateCharacter, Warning, TEXT("Characters are hugging"));
 	if (BodyTempComponent)
-    	{
-    		BodyTempComponent->ShareTemp();
+		{
+		    UE_LOG(LogTemplateCharacter, Warning, TEXT("Characters are hugging"));
+		    BodyTempComponent->ShareTemp();
     	}
     	else
     	{
@@ -256,15 +274,23 @@ void ACharacterBase::Hug() const
 	{
 		PerformanceTracker->RegisterHug();
 	}
-
-	//GetOwner()->GetComponentByClass<UBodyTemperature>()->ShareTemp();
 }
 
-void ACharacterBase::TogglePush(const FInputActionValue& Value)
+
+void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Toggled"));
-	PushComponent->GrabAndRelease();
+	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
+	PushComponent->StartPushing();
+	bIsPushing = true;
 }
+
+void ACharacterBase::EndPush(const FInputActionValue& Value) 
+{
+	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
+	PushComponent->StopPushing();
+	bIsPushing = false;
+}
+
 void ACharacterBase::OnDeath()
 {
 	if (bHasDied)
@@ -285,8 +311,7 @@ void ACharacterBase::OnDeath()
 			WeatherSystem->UpdatePerformance(PerformanceTracker->GetPerformance());
 		}
 	}
-	
-		RespawnAtCheckpoint();
+	RespawnAtCheckpoint();
 	
 }
 
@@ -318,7 +343,8 @@ void ACharacterBase::RespawnToLastSafeLocation()
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
-void ACharacterBase::UpdateLastSafeLocation()
+
+void ACharacterBase::UpdatePlayerLocation()
 {
 	if (GetCharacterMovement()->IsMovingOnGround())
 	{
@@ -326,15 +352,15 @@ void ACharacterBase::UpdateLastSafeLocation()
 
 		if (!Ground-> ActorHasTag(TEXT("IgnoreLastSafeLocation")))
 		{
-			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 50.0f)
+			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
 			{
 				LastSafeLocation = GetActorLocation();
 			}
 		}
-		
 	}
 
 }
+
 
 void ACharacterBase::Landed(const FHitResult& Hit)
 {
