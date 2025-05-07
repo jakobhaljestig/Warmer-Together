@@ -35,6 +35,7 @@ public:
 	EZoneType GetCurrentZone() const { return CurrentZone; }
 	// Uppdaterar systemet varje frame, inte nödvändigt om vi inte vill ha varje tick, men kan användas för periodiska uppdateringar
 	virtual void Deinitialize() override;
+	void OnWeatherUpdateTick();
 
 	// Uppdaterar prestationen, t.ex. efter att någon dör eller gör något bra
 	virtual void UpdatePerformance(const FPerformance& NewPerformance) override;
@@ -42,6 +43,8 @@ public:
 	// Returnerar väderstatus, t.ex om det redan är dåligt väder behövs det inte adderas mer
 	const FWeatherState& GetCurrentWeather() const;
 	void InitializeEnvironmentReferences();
+	FVector GetPlayersMidpoint() const;
+	void UpdateWeatherEffectLocation() const;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	AExponentialHeightFog* FogActor;
@@ -76,8 +79,6 @@ private:
 	
 	void EvaluatePerformanceAndAdjustWeather();
 	
-	void Tick(float DeltaTime);
-
 	UPROPERTY(EditAnywhere, Category = "Weather")
 	FWeatherState CurrentWeather;
 

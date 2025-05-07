@@ -15,7 +15,6 @@
 UAdaptiveWeatherSystem::UAdaptiveWeatherSystem()
 {
 	// Kan initialisera standardvärden här
-	
 }
 
 void UAdaptiveWeatherSystem::BeginPlay()
@@ -55,10 +54,23 @@ void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 			TimerHandle,
 			this,
 			&UAdaptiveWeatherSystem::InitializeEnvironmentReferences,
-			0.5f, // Delay i sekunder
+			0.2f, // Delay i sekunder
 			false
 		);
 	}
+
+	if (UWorld* World = GetWorld())
+	{
+		FTimerHandle UpdateTimerHandle;
+		World->GetTimerManager().SetTimer(
+			UpdateTimerHandle,
+			this,
+			&UAdaptiveWeatherSystem::OnWeatherUpdateTick,
+			UpdateInterval,
+			true
+		);
+	}
+
 }
 
 
@@ -70,17 +82,13 @@ void UAdaptiveWeatherSystem::Deinitialize()
 	// Eventuella städoperationer här
 }
 
-
-//detta bör ersättas med en timer för uppdatering per interval senare då det inte kanske bör uppdateras per frame
-void UAdaptiveWeatherSystem::Tick(float DeltaTime)
+void UAdaptiveWeatherSystem::OnWeatherUpdateTick()
 {
-	TimeSinceLastUpdate += DeltaTime;
-	if (TimeSinceLastUpdate >= UpdateInterval)
-	{
-		AggregatePerformance();
-		TimeSinceLastUpdate = 0.0f;
-	}
+	AggregatePerformance();
+	UpdateWeatherEffectLocation();
 }
+
+
 
 void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformance)
 {
@@ -178,6 +186,89 @@ void UAdaptiveWeatherSystem::InitializeEnvironmentReferences()
 		UE_LOG(LogTemp, Error, TEXT("[Weather] MistParticleSystem not found!"));
 	}
 }
+FVector UAdaptiveWeatherSystem::GetPlayersMidpoint() const
+{
+    TArray<AActor*> PlayerCharacters;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
+
+    if (PlayerCharacters.Num() == 0) return FVector::ZeroVector;
+
+    FVector TotalLocation = FVector::ZeroVector;
+    float MaxDistance = 0.0f;
+
+    // Beräkna den genomsnittliga positionen och maxavståndet mellan spelarna
+    for (int32 i = 0; i < PlayerCharacters.Num(); ++i)
+    {
+        AActor* ActorA = PlayerCharacters[i];
+        for (int32 j = i + 1; j < PlayerCharacters.Num(); ++j)
+        {
+            AActor* ActorB = PlayerCharacters[j];
+            float Dist = FVector::Dist(ActorA->GetActorLocation(), ActorB->GetActorLocation());
+            MaxDistance = FMath::Max(MaxDistance, Dist);
+        }
+
+        TotalLocation += ActorA->GetActorLocation();
+    }
+
+    // Dela med antalet spelare för att få mittpunkten
+    FVector Midpoint = TotalLocation / PlayerCharacters.Num();
+
+    UE_LOG(LogTemp, Warning, TEXT("[WeatherSystem] Midpoint: X=%.1f Y=%.1f Z=%.1f, MaxDistance: %.1f"), 
+        Midpoint.X, Midpoint.Y, Midpoint.Z, MaxDistance);
+
+    return Midpoint;
+}
+
+void UAdaptiveWeatherSystem::UpdateWeatherEffectLocation() const
+{
+    const FVector Midpoint = GetPlayersMidpoint();
+
+    // Beräkna avståndet mellan spelarna för att bestämma skalan
+    TArray<AActor*> PlayerCharacters;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
+
+    float MaxDistance = 0.0f;
+    for (int32 i = 0; i < PlayerCharacters.Num(); ++i)
+    {
+        for (int32 j = i + 1; j < PlayerCharacters.Num(); ++j)
+        {
+            AActor* ActorA = PlayerCharacters[i];
+            AActor* ActorB = PlayerCharacters[j];
+            float Dist = FVector::Dist(ActorA->GetActorLocation(), ActorB->GetActorLocation());
+            MaxDistance = FMath::Max(MaxDistance, Dist);
+        }
+    }
+
+    // Skala snöeffekterna baserat på avståndet
+    float ScaleFactor = FMath::GetMappedRangeValueClamped(FVector2D(0.f, 3000.f), FVector2D(1.0f, 3.0f), MaxDistance);
+    UE_LOG(LogTemp, Warning, TEXT("ScaleFactor: %.2f based on MaxDistance: %.1f"), ScaleFactor, MaxDistance);
+    // Z-skalan fixeras
+    FVector ParticleScale = FVector(ScaleFactor, 2.0f, 3.0f);
+
+    if (SnowLevel1) 
+	{
+		SnowLevel1->SetWorldLocation(Midpoint);
+		SnowLevel1->SetWorldScale3D(ParticleScale);
+	}
+	if (SnowLevel2) 
+	{
+		SnowLevel2->SetWorldLocation(Midpoint);
+		SnowLevel2->SetWorldScale3D(ParticleScale);
+	}
+	if (SnowLevel3) 
+	{
+		SnowLevel3->SetWorldLocation(Midpoint);
+		SnowLevel3->SetWorldScale3D(ParticleScale);
+	}
+
+	if (MistParticleSystem)
+	{
+		MistParticleSystem->SetWorldLocation(Midpoint);
+		MistParticleSystem->SetWorldScale3D(ParticleScale);
+	}
+
+}
+
 
 //påverkar bodytemp baserat på vädernivån, måste nog tweakas lite vart eftersom
 void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
