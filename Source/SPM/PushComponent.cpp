@@ -4,7 +4,6 @@
 #include "PushComponent.h"
 
 #include "PushableProperties.h"
-#include "VectorTypes.h"
 
 UPushComponent::UPushComponent()
 {
