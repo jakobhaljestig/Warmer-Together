@@ -124,7 +124,6 @@ bool UGrabComponent::GetGrabbableInReach(FHitResult& OutHitResult) const
 	FVector Start = GetOwner()->GetActorLocation();
 	FVector End = Start + GetOwner()->GetActorForwardVector() * GrabDistance;
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(GrabRadius);
-	DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 2);
 	return GetWorld()->SweepSingleByChannel(
 		OutHitResult,
 		Start, End,
