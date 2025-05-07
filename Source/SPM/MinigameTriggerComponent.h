@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "MiniGame.h"
 #include "Components/ActorComponent.h"
 #include "Components/BoxComponent.h"
 #include "MinigameTriggerComponent.generated.h"
@@ -45,10 +46,19 @@ public:
 
 	UPROPERTY(EditAnywhere)
 	AActor* MiniGameActor;
+	
+	UPROPERTY(EditAnywhere)
+	APlayerController* Controller;
 
 	UPROPERTY(EditAnywhere)
 	bool bCompleted;
 
 	UPROPERTY(EditAnywhere)
 	bool bActive = false;
+
+	UFUNCTION()
+	bool GetCompletion() const { return bCompleted; }
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UMiniGame* MiniGame;
 };

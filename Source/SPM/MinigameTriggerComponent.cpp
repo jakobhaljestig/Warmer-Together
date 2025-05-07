@@ -38,7 +38,7 @@ void UMinigameTriggerComponent::StartMiniGame()
 void UMinigameTriggerComponent::ZoomIn(UPrimitiveComponent* Actor)
 {
 	ControllerOwner = Cast<ACharacterBase>(Actor->GetOwner());
-	APlayerController* Controller = Cast<APlayerController>(ControllerOwner->GetController());
+	Controller = Cast<APlayerController>(ControllerOwner->GetController());
 	if (ControllerOwner && Controller)
 	{
 		bActive = true;
@@ -53,7 +53,7 @@ void UMinigameTriggerComponent::ZoomOut(UPrimitiveComponent* Actor)
 {
 	bActive = false;
 	ControllerOwner = Cast<ACharacterBase>(Actor->GetOwner());
-	APlayerController* Controller = Cast<APlayerController>(ControllerOwner->GetController());
+	Controller = Cast<APlayerController>(ControllerOwner->GetController());
 	Controller->SetViewTargetWithBlend(ControllerOwner, 1, VTBlend_EaseOut, 5, true);
 	ControllerOwner->GetComponentByClass<UBodyTemperature>()->SetCoolDownRate(0.75);
 }
@@ -76,9 +76,9 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 			}
 		}
 	}
-	else 
+	else if (bCompleted)
 	{
-		
+		Controller->Possess(ControllerOwner);
 	}
 
 	
