@@ -2,6 +2,7 @@
 
 
 #include "GrabComponent.h"
+
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values for this component's properties
@@ -47,12 +48,8 @@ void UGrabComponent::BeginPlay()
 	OwnerMovementComponent = Cast<UCharacterMovementComponent>(GetOwner()->GetComponentByClass(UCharacterMovementComponent::StaticClass()));
 	if (PhysicsHandle == nullptr)
 	{
-		return;
+		UE_LOG(LogTemp, Error, TEXT("No PhysicsHandle"));
 	}
-
-	FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * GrabDistance;
-	PhysicsHandle->SetTargetLocationAndRotation(TargetLocation, GetOwner()->GetActorRotation());
-	
 }
 
 
@@ -109,7 +106,7 @@ void UGrabComponent::Grab(){
 			NAME_None,
 			HitResult.ImpactPoint);
 		GrabEffect();
-		
+		HitActor->AttachToActor(GetOwner(),FAttachmentTransformRules::KeepWorldTransform);
 	}
 	
 }
@@ -132,6 +129,7 @@ bool UGrabComponent::GetGrabbableInReach(FHitResult& OutHitResult) const
 	FVector Start = GetOwner()->GetActorLocation();
 	FVector End = Start + GetOwner()->GetActorForwardVector() * GrabDistance;
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(GrabRadius);
+	DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 2);
 	return GetWorld()->SweepSingleByChannel(
 		OutHitResult,
 		Start, End,
