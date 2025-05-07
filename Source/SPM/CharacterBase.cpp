@@ -362,7 +362,7 @@ void ACharacterBase::UpdatePlayerLocation()
 	{
 		AActor* Ground = GetCharacterMovement() -> CurrentFloor.HitResult.GetActor();
 
-		if (!Ground-> ActorHasTag(TEXT("IgnoreLastSafeLocation")))
+		if (!Ground->ActorHasTag(TEXT("IgnoreLastSafeLocation")))
 		{
 			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
 			{

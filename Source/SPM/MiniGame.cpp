@@ -32,3 +32,18 @@ void UMiniGame::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	// ...
 }
 
+void UMiniGame::GameLoop()
+{
+	
+}
+
+void UMiniGame::ReadInput(const int Input)
+{
+	LastInput = Input;
+}
+
+int UMiniGame::DecideInput()
+{
+	return FMath::RandRange(1, 4);
+}
+
