@@ -5,6 +5,7 @@
     <projectFile>../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/AutomationTool/AutomationTool.csproj</projectFile>
     <projectFile kind="Docker">../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj</projectFile>
+    <projectFile kind="Docker">C:/Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/SPM.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
@@ -13,12 +14,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/projectSettingsUpdater.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmallNew.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmallNew.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_FallingTree.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_FallingTree.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Fog/MI_LocalVolumeFog.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Fog/MI_LocalVolumeFog.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Fog/MI_MountainClouds.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Fog/M_LocalVolumeFog.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Fog/M_MountainClouds.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Fog/SM_CloudDisc_100K.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Fog/T_Noise_Cloud1.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Fog/T_Noise_Cloud2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_Mist01.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_Mist01.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_SnowSlide.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_SnowStorm+Mist.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_SnowStorm+Mist.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_Snow_Level1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Particles/NS_Snow_Level1.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,10 +83,12 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
+    &quot;C++ Project.SPM.executor&quot;: &quot;Run&quot;,
     &quot;C/C++ Project.SPM.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Robin&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Nellie&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -114,6 +124,18 @@
         <option name="TERMINAL_INTERACTION_BEHAVIOR" value="AUTO_DETECT" />
         <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/SPM.vcxproj" />
       </configuration_2>
+      <configuration_3 setup="1">
+        <option name="CONFIGURATION" value="Development Editor" />
+        <option name="PLATFORM" value="Win64" />
+        <option name="CURRENT_LAUNCH_PROFILE" value="Local" />
+        <option name="EXE_PATH" value="$(TargetPath)" />
+        <option name="PROGRAM_PARAMETERS" value="" />
+        <option name="WORKING_DIRECTORY" value="$(ProjectDir)" />
+        <option name="PASS_PARENT_ENVS" value="1" />
+        <option name="USE_EXTERNAL_CONSOLE" value="0" />
+        <option name="TERMINAL_INTERACTION_BEHAVIOR" value="AUTO_DETECT" />
+        <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/SPM.vcxproj" />
+      </configuration_3>
       <option name="DEFAULT_PROJECT_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/SPM.vcxproj" />
       <option name="PROJECT_FILE_PATH" value="$PROJECT_DIR$/Intermediate/ProjectFiles/SPM.vcxproj" />
       <option name="AUTO_SELECT_PRIORITY" value="10010" />
@@ -191,6 +213,17 @@
       <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
       <method v="2" />
     </configuration>
+    <configuration name="EpicGames.Perforce.Fixture/Dockerfile (2)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="containerName" value="epicgames.perforce.fixture" />
+          <option name="contextFolderPath" value="D:\School\Github\SPM" />
+          <option name="sourceFilePath" value="C:/Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/Dockerfile" />
+        </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
     <configuration name="EpicGames.Perforce.Fixture/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
@@ -246,6 +279,9 @@
       <workItem from="1746514345710" duration="116000" />
       <workItem from="1746514490860" duration="849000" />
       <workItem from="1746521208487" duration="1563000" />
+      <workItem from="1746604423813" duration="76000" />
+      <workItem from="1746604562799" duration="987000" />
+      <workItem from="1746605584895" duration="1019000" />
     </task>
     <servers />
   </component>
