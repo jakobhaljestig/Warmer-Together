@@ -45,7 +45,6 @@ void UFreezingTouchComponent::TickComponent(float DeltaTime, ELevelTick TickType
 				{
 					Character->GetComponentByClass<UHealth>()->TakeDamage(CoolDownRate * DeltaTime);
 				}
-				Character->GetComponentByClass<UCharacterMovementComponent>()->SetMovementMode(MOVE_Swimming);
 			}
 		}
 	}
