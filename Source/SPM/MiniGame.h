@@ -20,25 +20,34 @@ protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
 	UPROPERTY(EditAnywhere)
-	bool bIsComplete;
+	bool bIsComplete = false;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
-	float GameSpeed;
+	float GameSpeed = 50.f;
 
-	UPROPERTY(EditAnywhere)
-	float PressTimeLimit;
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	float PressTimeLimit = 3.f;
 
 	UPROPERTY()
 	int LastInput;
 
 	UPROPERTY(EditAnywhere)
-	int RequestedInput;
+	int RequestedInput = 0;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
 	TSubclassOf<UUserWidget> MiniGameWidget;
 
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
-	int CorrectPressesToWin;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	int CorrectPressesToWin = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	int CorrectPresses = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	float CurrentLoopTime = 0;
+
+	UPROPERTY(EditAnywhere)
+	float MaxLoopTime = 10.f;
 	
 
 public:	
@@ -52,7 +61,7 @@ public:
 	void GameLoop();
 
 	UFUNCTION(BlueprintCallable)
-	bool ReadInput(int Input);
+	bool ReadInput(int Input) const;
 
 	UFUNCTION(BlueprintCallable)
 	int DecideInput();

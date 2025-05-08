@@ -29,15 +29,23 @@ void UMiniGame::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	CurrentLoopTime += DeltaTime;
+	if (CurrentLoopTime > MaxLoopTime)
+	{
+		GameLoop();
+	}
 	// ...
 }
 
 void UMiniGame::GameLoop()
 {
-	
+	if (RequestedInput == 0)
+	{
+		RequestedInput = DecideInput();
+	}
 }
 
-bool UMiniGame::ReadInput(const int Input)
+bool UMiniGame::ReadInput(const int Input) const
 {
 	if (Input == RequestedInput)
 	{

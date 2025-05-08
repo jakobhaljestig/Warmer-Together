@@ -63,9 +63,9 @@ void UMinigameTriggerComponent::ZoomOut(UPrimitiveComponent* Actor)
 void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	TArray<UPrimitiveComponent*> OverlappingActors;
 	if (TriggerBox && !bCompleted && !bActive)
 	{
+		TArray<UPrimitiveComponent*> OverlappingActors;
 		TriggerBox->GetOverlappingComponents(OverlappingActors);
 		for (UPrimitiveComponent* Actor : OverlappingActors)
 		{
