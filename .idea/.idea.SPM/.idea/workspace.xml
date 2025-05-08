@@ -14,9 +14,17 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Fog/M_LocalVolumeFog.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Fog/M_LocalVolumeFog.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Fog/T_Noise_Cloud1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Fog/T_Noise_Cloud1.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Materials/MasterMaterials/M_SparkleSnow.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/Materials/MasterMaterials/M_SparkleSnow.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Snow3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Snow3.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/UI_Assets/MainMenu.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Assets/MainMenu.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/AdaptiveWeatherSystem.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/AdaptiveWeatherSystem.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/AdaptiveWeatherSystem.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/AdaptiveWeatherSystem.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/BTService_AnalyzeWeather.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BTService_AnalyzeWeather.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +50,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="cidr-memory-view://3" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterPlayerController.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -61,7 +70,7 @@
     <setting file="file://$PROJECT_DIR$/Source/SPM/WeatherUpdaterInterface.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="Toolset" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -72,21 +81,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;C/C++ Project.SPM.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;origin/jonas&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;SolutionBuilderGeneralOptionsPage&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "C/C++ Project.SPM.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Kajsa",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "SolutionBuilderGeneralOptionsPage",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="C/C++ Project.SPM">
     <configuration name="SPM" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
@@ -247,6 +256,8 @@
       <workItem from="1746521208487" duration="1563000" />
       <workItem from="1746599755140" duration="7357000" />
       <workItem from="1746688148188" duration="707000" />
+      <workItem from="1746698302894" duration="9000" />
+      <workItem from="1746698362880" duration="11368000" />
     </task>
     <servers />
   </component>
@@ -254,6 +265,9 @@
     <option name="version" value="3" />
   </component>
   <component name="UnityProjectConfiguration" hasMinimizedUI="false" />
+  <component name="UnknownFeatures">
+    <option featureType="dependencySupport" implementationName="dotnet:Microsoft.ApplicationInsights" />
+  </component>
   <component name="VcsManagerConfiguration">
     <option name="CLEAR_INITIAL_COMMIT_MESSAGE" value="true" />
   </component>
