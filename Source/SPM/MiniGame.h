@@ -26,10 +26,19 @@ protected:
 	float GameSpeed;
 
 	UPROPERTY(EditAnywhere)
-	float AllowedTimingDifference;
+	float PressTimeLimit;
 
 	UPROPERTY()
 	int LastInput;
+
+	UPROPERTY(EditAnywhere)
+	int RequestedInput;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	TSubclassOf<UUserWidget> MiniGameWidget;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	int CorrectPressesToWin;
 	
 
 public:	
@@ -43,7 +52,7 @@ public:
 	void GameLoop();
 
 	UFUNCTION(BlueprintCallable)
-	void ReadInput(int Input);
+	bool ReadInput(int Input);
 
 	UFUNCTION(BlueprintCallable)
 	int DecideInput();
