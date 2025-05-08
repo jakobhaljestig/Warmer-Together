@@ -128,6 +128,10 @@ void ACharacterBase::Tick(float DeltaTime)
 	
 	// Snö påverkar sikt – detta kan styra t.ex. dimma, post-process etc
 	// UpdateVisibility(CurrentWeather.Visibility);
+	if (GetComponentByClass<UPhysicsHandleComponent>()->GetGrabbedComponent() == nullptr)
+	{
+		bIsPushing = false;
+	}
 
 }
 
