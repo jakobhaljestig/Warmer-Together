@@ -16,7 +16,9 @@
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/BP_MainMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Assets/BP_MainMenu.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/UI_Assets/MainMenu.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Assets/MainMenu.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -246,7 +248,7 @@
       <workItem from="1746514490860" duration="849000" />
       <workItem from="1746521208487" duration="1563000" />
       <workItem from="1746599755140" duration="7357000" />
-      <workItem from="1746688148188" duration="707000" />
+      <workItem from="1746688148188" duration="3137000" />
     </task>
     <servers />
   </component>
