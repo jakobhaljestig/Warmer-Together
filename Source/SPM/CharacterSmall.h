@@ -38,12 +38,5 @@ private:
 	bool bIsSprinting = false;
 
 	bool bIsCrawling = false;
-
 	
-
-
-
-	
-	
-
 };
