@@ -163,6 +163,9 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::BeginPush);
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::EndPush);
+
+		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Aim);
+		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Completed, this, &ACharacterBase::Throw);
 	}
 	else
 	{
@@ -172,22 +175,16 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 void ACharacterBase::Move(const FInputActionValue& Value)
 {
-	// input is a Vector2D
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (Controller != nullptr)
 	{
-		// find out which way is forward
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
 
-		// get forward vector
 		const FVector ForwardDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::X);
-	
-		// get right vector 
 		const FVector RightDirection = FRotationMatrix(YawRotation).GetUnitAxis(EAxis::Y);
-
-		// add movement 
+		
 		AddMovementInput(ForwardDirection, MovementVector.Y);
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
@@ -195,17 +192,16 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 
 void ACharacterBase::Look(const FInputActionValue& Value)
 {
-	// input is a Vector2D
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
-
 	if (Controller != nullptr)
 	{
-		// add yaw and pitch input to controller
 		AddControllerYawInput(LookAxisVector.X);
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
 
+
+//-- Coyote time ---
 
 bool ACharacterBase::CanJumpInternal_Implementation() const
 {
@@ -223,7 +219,6 @@ void ACharacterBase::Falling()
 void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
 {
 	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
-
 	if (!bPressedJump && !GetCharacterMovement()->IsFalling())
 	{
 		bCanUseCoyoteTime = false;
@@ -233,19 +228,16 @@ void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8
 void ACharacterBase::EnableCoyoteTime()
 {
 	bCanUseCoyoteTime = true;
-
 	GetWorldTimerManager().SetTimer(CoyoteTimeHandle, this, &ACharacterBase::DisableCoyoteTime, CoyoteTimeDuration, false);
-
-	UE_LOG(LogTemp, Display, TEXT("Coyote Time enabled"));
 }
 
 void ACharacterBase::DisableCoyoteTime()
 {
 	bCanUseCoyoteTime = false;
-	
-	UE_LOG(LogTemp, Display, TEXT("Coyote Time disabled"));
 }
 
+
+//--- Hugging ---
 
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
@@ -276,6 +268,24 @@ void ACharacterBase::Hug() const
 	}
 }
 
+// --- Kasta Snöboll ---*/
+
+void ACharacterBase::Aim(const FInputActionValue& Value)
+{
+	/**Spawn actor - BP_Ball
+	 *Get socket transform */
+
+	PlayAimAnimation();
+	UE_LOG(LogTemplateCharacter, Error, TEXT("Is aiming"));
+}
+
+void ACharacterBase::Throw(const FInputActionValue& Value)
+{
+	PlayThrowAnimation();
+	UE_LOG(LogTemplateCharacter, Error, TEXT("Is Throwing"));
+}
+
+//--- Pushing ---
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
@@ -291,6 +301,8 @@ void ACharacterBase::EndPush(const FInputActionValue& Value)
 	bIsPushing = false;
 }
 
+
+// --- Death/Respawn/Damage --- 
 void ACharacterBase::OnDeath()
 {
 	if (bHasDied)
@@ -350,7 +362,7 @@ void ACharacterBase::UpdatePlayerLocation()
 	{
 		AActor* Ground = GetCharacterMovement() -> CurrentFloor.HitResult.GetActor();
 
-		if (!Ground->ActorHasTag(TEXT("IgnoreLastSafeLocation")))
+		if (Ground && !Ground->ActorHasTag(TEXT("IgnoreLastSafeLocation")))
 		{
 			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
 			{
