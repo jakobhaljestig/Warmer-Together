@@ -52,7 +52,7 @@ public:
 	void GameLoop();
 
 	UFUNCTION(BlueprintCallable)
-	void ReadInput(int Input);
+	bool ReadInput(int Input);
 
 	UFUNCTION(BlueprintCallable)
 	int DecideInput();
