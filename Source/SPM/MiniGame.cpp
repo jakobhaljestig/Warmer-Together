@@ -44,6 +44,6 @@ void UMiniGame::ReadInput(const int Input)
 
 int UMiniGame::DecideInput()
 {
-	return FMath::RandRange(1, 5);
+	return FMath::RandRange(1, 4);
 }
 

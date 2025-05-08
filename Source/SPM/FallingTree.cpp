@@ -7,9 +7,6 @@ AFallingTree::AFallingTree()
 {
  	
 	PrimaryActorTick.bCanEverTick = true;
-
-	Log = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Log"));
-	RootComponent = Log;
 }
 
 
