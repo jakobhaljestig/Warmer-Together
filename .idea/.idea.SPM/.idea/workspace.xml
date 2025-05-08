@@ -6,6 +6,7 @@
     <projectFile profileName="EpicGames.AspNet">../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.AspNet/EpicGames.AspNet.csproj</projectFile>
     <projectFile kind="Docker">../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj</projectFile>
+    <projectFile kind="Docker">C:/Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/EpicGames.Perforce.Fixture.csproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/SPM.vcxproj</projectFile>
     <projectFile>Intermediate/ProjectFiles/UE5.vcxproj</projectFile>
   </component>
@@ -15,8 +16,8 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Ice/M_Ice.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Ice/M_Ice.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SPM.uproject" beforeDir="false" afterPath="$PROJECT_DIR$/SPM.uproject" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -74,10 +75,11 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "C/C++ Project.SPM.executor": "Run",
+    "C/C++ Project.SPM.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Robin",
+    "git-widget-placeholder": "Nellie",
+    "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -190,6 +192,17 @@
       <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
       <method v="2" />
     </configuration>
+    <configuration name="EpicGames.Perforce.Fixture/Dockerfile (2)" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
+      <deployment type="dockerfile">
+        <settings>
+          <option name="containerName" value="epicgames.perforce.fixture" />
+          <option name="contextFolderPath" value="D:\School\Github\SPM" />
+          <option name="sourceFilePath" value="C:/Program Files/Epic Games/UE_5.5/Engine/Source/Programs/Shared/EpicGames.Perforce.Fixture/Dockerfile" />
+        </settings>
+      </deployment>
+      <EXTENSION ID="com.jetbrains.rider.docker.debug" isFastModeEnabled="true" isSslEnabled="false" />
+      <method v="2" />
+    </configuration>
     <configuration name="EpicGames.Perforce.Fixture/Dockerfile" type="docker-deploy" factoryName="dockerfile" server-name="Docker">
       <deployment type="dockerfile">
         <settings>
@@ -247,6 +260,7 @@
       <workItem from="1746521208487" duration="1563000" />
       <workItem from="1746599755140" duration="7357000" />
       <workItem from="1746688148188" duration="3137000" />
+      <workItem from="1746717885264" duration="1355000" />
     </task>
     <servers />
   </component>
