@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BodyTemperature.h"
 #include "Health.h"
+#include "InputActionValue.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "CharacterBase.generated.h"
@@ -61,6 +62,9 @@ class ACharacterBase : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* PushAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ThrowSnowballAction;
+
 
 public:
 	
@@ -72,11 +76,16 @@ protected:
 
 	virtual void BeginPlay() override;
 	
-	/** Called for movement input */
+	//MOVEMENT + LOOK
 	virtual void Move(const FInputActionValue& Value);
-
-	/** Called for looking input */
 	void Look(const FInputActionValue& Value);
+
+	// RÖRELSE
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
+	float BaseMovementSpeed = 600.0f;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
+	float CurrentMovementSpeed;
 
 	//HUGGING
 	void BeginHug(const FInputActionValue& Value);
@@ -85,13 +94,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Push")
 	UHugComponent* HugComponent;
-	
-
-	virtual void BeginPush(const FInputActionValue& Value);
-	void EndPush(const FInputActionValue& Value);
-	
-
-	void Landed(const FHitResult& Hit);
 	
 	// KROPPSTEMPERATUR
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
@@ -103,18 +105,24 @@ protected:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsPushing = false;
-	
+
+	virtual void BeginPush(const FInputActionValue& Value);
+	void EndPush(const FInputActionValue& Value);
+
+	//---Kasta Snöboll ---
+	void Aim(const FInputActionValue& Value);
+	void Throw(const FInputActionValue& Value);
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Animation")
+	void PlayAimAnimation();
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "Animation")
+	void PlayThrowAnimation();
 
 	//VÄDER
 	UPROPERTY()
 	UAdaptiveWeatherSystem* AdaptiveWeatherSystem;
 	
-	// RÖRELSE
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
-	float BaseMovementSpeed = 600.0f;
-
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
-	float CurrentMovementSpeed;
 
 	//FALL DAMAGE
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
@@ -125,6 +133,8 @@ protected:
 	
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Fall Damage")
 	float LastGroundedZ = 0.0f;
+
+	void Landed(const FHitResult& Hit);
 	
 
 	// Kylningsfaktor
@@ -146,14 +156,14 @@ protected:
 	
 	void UpdateVisibility(float VisibilityFactor);
 	
-	
 
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
-	
+
+	//CAMERA
 	/** Returns CameraBoom subobject **/
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
