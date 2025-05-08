@@ -26,10 +26,19 @@ protected:
 	float GameSpeed;
 
 	UPROPERTY(EditAnywhere)
-	float AllowedTimingDifference;
+	float PressTimeLimit;
 
 	UPROPERTY()
 	int LastInput;
+
+	UPROPERTY(EditAnywhere)
+	int RequestedInput;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	TSubclassOf<UUserWidget> MiniGameWidget;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	int CorrectPressesToWin;
 	
 
 public:	
