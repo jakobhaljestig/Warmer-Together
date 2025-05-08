@@ -50,13 +50,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	APlayerController* Controller;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCompleted;
 
 	UPROPERTY(EditAnywhere)
 	bool bActive = false;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	bool GetCompletion() const { return bCompleted; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)

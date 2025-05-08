@@ -42,7 +42,6 @@ void UMinigameTriggerComponent::ZoomIn(UPrimitiveComponent* Actor)
 	if (ControllerOwner && Controller)
 	{
 		bActive = true;
-		ControllerOwner->GetComponentByClass<UBodyTemperature>()->SetCoolDownRate(0);
 		Controller->Possess(MiniGamePawn);
 		Controller->SetViewTarget(ControllerOwner);
 		Controller->SetViewTargetWithBlend(MiniGamePawn, 1, VTBlend_EaseIn, 5, true);
@@ -52,10 +51,11 @@ void UMinigameTriggerComponent::ZoomIn(UPrimitiveComponent* Actor)
 void UMinigameTriggerComponent::ZoomOut(UPrimitiveComponent* Actor)
 {
 	bActive = false;
-	ControllerOwner = Cast<ACharacterBase>(Actor->GetOwner());
-	Controller = Cast<APlayerController>(ControllerOwner->GetController());
-	Controller->SetViewTargetWithBlend(ControllerOwner, 1, VTBlend_EaseOut, 5, true);
-	ControllerOwner->GetComponentByClass<UBodyTemperature>()->SetCoolDownRate(0.75);
+	if (ControllerOwner && Controller)
+	{
+		Controller->Possess(ControllerOwner);
+	}
+	
 }
 
 
@@ -63,10 +63,21 @@ void UMinigameTriggerComponent::ZoomOut(UPrimitiveComponent* Actor)
 void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if (TriggerBox && !bCompleted && !bActive)
+	TArray<UPrimitiveComponent*> OverlappingActors;
+	TriggerBox->GetOverlappingComponents(OverlappingActors);
+	if (bCompleted && bActive)
 	{
-		TArray<UPrimitiveComponent*> OverlappingActors;
-		TriggerBox->GetOverlappingComponents(OverlappingActors);
+		for (UPrimitiveComponent* Actor : OverlappingActors)
+		{
+			if (ACharacterBase* Character = Cast<ACharacterBase>(Actor->GetOwner()))
+			{
+				if (!Character->GetCharacterMovement()->IsFalling())
+					ZoomOut(Actor);
+			}
+		}
+	}
+	else if (TriggerBox && !bCompleted && !bActive)
+	{
 		for (UPrimitiveComponent* Actor : OverlappingActors)
 		{
 			if (ACharacterBase* Character = Cast<ACharacterBase>(Actor->GetOwner()))
@@ -75,10 +86,6 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 					ZoomIn(Actor);
 			}
 		}
-	}
-	else if (bCompleted)
-	{
-		Controller->Possess(ControllerOwner);
 	}
 
 	

@@ -54,10 +54,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	bool IsComplete() const { return bIsComplete; }
-
-	UFUNCTION()
+	
+	UFUNCTION(BlueprintCallable)
 	void GameLoop();
 
 	UFUNCTION(BlueprintCallable)
@@ -65,4 +65,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	int DecideInput();
+
+	UFUNCTION(BlueprintCallable)
+	bool CheckCorrectPresses();
 };

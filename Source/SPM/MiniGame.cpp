@@ -34,15 +34,21 @@ void UMiniGame::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	{
 		GameLoop();
 	}
+
+	if (CorrectPressesToWin == CorrectPresses)
+	{
+		bIsComplete = true;
+	}
 	// ...
 }
 
 void UMiniGame::GameLoop()
 {
-	if (RequestedInput == 0)
-	{
-		RequestedInput = DecideInput();
-	}
+
+	RequestedInput = DecideInput();
+	LastInput = 0;
+	CorrectPresses++;
+	CurrentLoopTime = 0;
 }
 
 void UMiniGame::ReadInput(const int Input)
@@ -53,5 +59,10 @@ void UMiniGame::ReadInput(const int Input)
 int UMiniGame::DecideInput()
 {
 	return FMath::RandRange(1, 4);
+}
+
+bool UMiniGame::CheckCorrectPresses()
+{
+	return RequestedInput == LastInput;
 }
 
