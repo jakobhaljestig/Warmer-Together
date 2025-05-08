@@ -31,7 +31,7 @@ protected:
 	UPROPERTY()
 	int LastInput;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	int RequestedInput = 0;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
@@ -61,7 +61,7 @@ public:
 	void GameLoop();
 
 	UFUNCTION(BlueprintCallable)
-	bool ReadInput(int Input) const;
+	void ReadInput(int Input);
 
 	UFUNCTION(BlueprintCallable)
 	int DecideInput();

@@ -15,9 +15,10 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/MiniGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MiniGame.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/MiniGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MiniGame.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/MinigameTriggerComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MinigameTriggerComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -247,7 +248,7 @@
       <workItem from="1746514490860" duration="849000" />
       <workItem from="1746521208487" duration="1563000" />
       <workItem from="1746599755140" duration="7357000" />
-      <workItem from="1746694116054" duration="926000" />
+      <workItem from="1746694116054" duration="2327000" />
     </task>
     <servers />
   </component>

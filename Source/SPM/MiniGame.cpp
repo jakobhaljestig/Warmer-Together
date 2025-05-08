@@ -45,16 +45,9 @@ void UMiniGame::GameLoop()
 	}
 }
 
-bool UMiniGame::ReadInput(const int Input) const
+void UMiniGame::ReadInput(const int Input)
 {
-	if (Input == RequestedInput)
-	{
-		return true;
-	}
-	else
-	{
-		return false;
-	}
+	LastInput = Input;
 }
 
 int UMiniGame::DecideInput()
