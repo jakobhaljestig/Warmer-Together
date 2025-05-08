@@ -44,7 +44,6 @@ void UMiniGame::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 void UMiniGame::GameLoop()
 {
-
 	RequestedInput = DecideInput();
 	LastInput = 0;
 	CorrectPresses++;
