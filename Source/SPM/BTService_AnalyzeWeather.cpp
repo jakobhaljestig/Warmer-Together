@@ -66,12 +66,12 @@ void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 
 	WeatherSystem->SetCurrentZone(NewZone);
 	//WeatherSystem->UpdatePerformance(Perf);       // sätter vädret baserat på dålig prestation (just nu bara deathcount)
-	WeatherSystem->ApplyEnvironmentEffects();     // visuell uppdatering
+	//WeatherSystem->ApplyEnvironmentEffects();     // visuell uppdatering
 
-	UE_LOG(LogTemp, Warning, TEXT("[TEST] Simulated BAD PERFORMANCE: Snow=%.2f Visibility=%.2f Temp=%.1f"),
+	/*UE_LOG(LogTemp, Warning, TEXT("[TEST] Simulated BAD PERFORMANCE: Snow=%.2f Visibility=%.2f Temp=%.1f"),
 		WeatherSystem->GetCurrentWeather().SnowIntensity,
 		WeatherSystem->GetCurrentWeather().Visibility,
-		WeatherSystem->GetCurrentWeather().Temperature);
+		WeatherSystem->GetCurrentWeather().Temperature);*/
 
 	
 }

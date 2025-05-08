@@ -29,12 +29,24 @@ void UMiniGame::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
+	CurrentLoopTime += DeltaTime;
+	if (CurrentLoopTime > MaxLoopTime)
+	{
+		GameLoop();
+	}
+
+	if (CorrectPressesToWin == CorrectPresses)
+	{
+		bIsComplete = true;
+	}
 	// ...
 }
 
 void UMiniGame::GameLoop()
 {
-	
+	RequestedInput = DecideInput();
+	LastInput = 0;
+	CurrentLoopTime = 0;
 }
 
 void UMiniGame::ReadInput(const int Input)
@@ -45,5 +57,36 @@ void UMiniGame::ReadInput(const int Input)
 int UMiniGame::DecideInput()
 {
 	return FMath::RandRange(1, 4);
+}
+
+bool UMiniGame::CheckCorrectPresses()
+{
+	if (RequestedInput == LastInput)
+	{
+		CorrectPresses += 1;
+		return true;	
+	}
+	return false;
+}
+
+FText UMiniGame::ShownInput()
+{
+	if (RequestedInput == 1)
+	{
+		return FText::FromString("Y");
+	}
+	if (RequestedInput == 2)
+	{
+		return FText::FromString("B");
+	}
+	if (RequestedInput == 3)
+	{
+		return FText::FromString("X");
+	}
+	if (RequestedInput == 4)
+	{
+		return FText::FromString("A");
+	}
+	return FText::FromString("");
 }
 

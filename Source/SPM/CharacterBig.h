@@ -55,7 +55,11 @@ protected:
 	UClimbComponent* ClimbingComponent;
 
 private:
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool bIsClimbing = false;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool bIsLifting = false;
 
 	void OnDeath() override;
 	
