@@ -16,6 +16,7 @@
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WB_MiniGame.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/UI/WB_MiniGame.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/MiniGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MiniGame.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/MiniGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MiniGame.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/MinigameTriggerComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MinigameTriggerComponent.cpp" afterDir="false" />
@@ -45,6 +46,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/UMG/Public/Components/TextBlock.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterPlayerController.cpp" root0="FORCE_HIGHLIGHTING" />

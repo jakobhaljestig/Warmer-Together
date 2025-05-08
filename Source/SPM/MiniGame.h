@@ -65,4 +65,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	bool CheckCorrectPresses();
+
+	UFUNCTION(BlueprintCallable)
+	FText ShownInput();
 };

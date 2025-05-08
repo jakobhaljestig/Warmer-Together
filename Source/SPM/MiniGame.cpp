@@ -46,7 +46,6 @@ void UMiniGame::GameLoop()
 {
 	RequestedInput = DecideInput();
 	LastInput = 0;
-	CorrectPresses++;
 	CurrentLoopTime = 0;
 }
 
@@ -62,6 +61,32 @@ int UMiniGame::DecideInput()
 
 bool UMiniGame::CheckCorrectPresses()
 {
-	return RequestedInput == LastInput;
+	if (RequestedInput == LastInput)
+	{
+		CorrectPresses += 1;
+		return true;	
+	}
+	return false;
+}
+
+FText UMiniGame::ShownInput()
+{
+	if (RequestedInput == 1)
+	{
+		return FText::FromString("Y");
+	}
+	if (RequestedInput == 2)
+	{
+		return FText::FromString("B");
+	}
+	if (RequestedInput == 3)
+	{
+		return FText::FromString("X");
+	}
+	if (RequestedInput == 4)
+	{
+		return FText::FromString("A");
+	}
+	return FText::FromString("");
 }
 

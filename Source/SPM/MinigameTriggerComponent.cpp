@@ -25,6 +25,8 @@ void UMinigameTriggerComponent::BeginPlay()
 	Super::BeginPlay();
 	TriggerBox = GetOwner()->GetComponentByClass<UBoxComponent>();
 	MiniGamePawn = Cast<APawn>(GetOwner());
+
+	
 	// ...
 	
 }
@@ -42,13 +44,14 @@ void UMinigameTriggerComponent::ZoomIn(UPrimitiveComponent* Actor)
 	if (ControllerOwner && Controller)
 	{
 		bActive = true;
+		ControllerOwner->GetMovementComponent()->StopActiveMovement();
 		Controller->Possess(MiniGamePawn);
 		Controller->SetViewTarget(ControllerOwner);
 		Controller->SetViewTargetWithBlend(MiniGamePawn, 1, VTBlend_EaseIn, 5, true);
 	}
 }
 
-void UMinigameTriggerComponent::ZoomOut(UPrimitiveComponent* Actor)
+void UMinigameTriggerComponent::ZoomOut()
 {
 	bActive = false;
 	if (ControllerOwner && Controller)
@@ -65,16 +68,9 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	TArray<UPrimitiveComponent*> OverlappingActors;
 	TriggerBox->GetOverlappingComponents(OverlappingActors);
-	if (bCompleted && bActive)
+	if (TriggerBox && bCompleted && bActive)
 	{
-		for (UPrimitiveComponent* Actor : OverlappingActors)
-		{
-			if (ACharacterBase* Character = Cast<ACharacterBase>(Actor->GetOwner()))
-			{
-				if (!Character->GetCharacterMovement()->IsFalling())
-					ZoomOut(Actor);
-			}
-		}
+		ZoomOut();
 	}
 	else if (TriggerBox && !bCompleted && !bActive)
 	{

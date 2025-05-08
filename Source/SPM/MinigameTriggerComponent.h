@@ -32,7 +32,7 @@ protected:
 	virtual void ZoomIn(UPrimitiveComponent* Actor);
 
 	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
-	virtual void ZoomOut(UPrimitiveComponent* Actor);
+	virtual void ZoomOut();
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	APawn* MiniGamePawn = nullptr;
