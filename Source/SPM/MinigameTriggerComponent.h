@@ -32,13 +32,16 @@ protected:
 	virtual void ZoomIn(UPrimitiveComponent* Actor);
 
 	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
-	virtual void ZoomOut(UPrimitiveComponent* Actor);
+	virtual void ZoomOut();
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	APawn* MiniGamePawn = nullptr;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	ACharacter* ControllerOwner = nullptr;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	TSubclassOf<UUserWidget> MiniGameWidget;
 
 public:	
 	// Called every frame
@@ -50,13 +53,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	APlayerController* Controller;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCompleted;
 
 	UPROPERTY(EditAnywhere)
 	bool bActive = false;
 
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	bool GetCompletion() const { return bCompleted; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
