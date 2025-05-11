@@ -20,4 +20,3 @@ void ALoadLevelTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* Other
 		UGameplayStatics::LoadStreamLevel(this, LevelToLoad, true, true, LatentInfo);
 	}
 }
-
