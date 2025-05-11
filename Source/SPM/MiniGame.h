@@ -19,10 +19,53 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	UPROPERTY(EditAnywhere)
+	bool bIsComplete = false;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	float GameSpeed = 50.f;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	float PressTimeLimit = 3.f;
+
+	UPROPERTY()
+	int LastInput;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	int RequestedInput = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	int CorrectPressesToWin = 5;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	int CorrectPresses = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	float CurrentLoopTime = 0;
+
+	UPROPERTY(EditAnywhere)
+	float MaxLoopTime = 10.f;
+	
 
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	UFUNCTION(BlueprintCallable)
+	bool IsComplete() const { return bIsComplete; }
+	
+	UFUNCTION(BlueprintCallable)
+	void GameLoop();
+
+	UFUNCTION(BlueprintCallable)
+	void ReadInput(int Input);
+
+	UFUNCTION(BlueprintCallable)
+	int DecideInput();
+
+	UFUNCTION(BlueprintCallable)
+	bool CheckCorrectPresses();
+
+	UFUNCTION(BlueprintCallable)
+	FText ShownInput();
 };

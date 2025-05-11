@@ -28,18 +28,19 @@
 			"Enabled": true
 		},
 		{
-			"Name": "TextureGraph",
+			"Name": "WinDualShock",
 			"Enabled": true,
 			"SupportedTargetPlatforms": [
 				"Win64"
 			]
 		},
 		{
-			"Name": "WinDualShock",
-			"Enabled": true,
-			"SupportedTargetPlatforms": [
-				"Win64"
-			]
+			"Name": "ActorModifierCore",
+			"Enabled": true
+		},
+		{
+			"Name": "CurveExpression",
+			"Enabled": true
 		}
 	]
 }

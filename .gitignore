@@ -73,7 +73,3 @@ Plugins/*/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
-.idea\.idea.SPM\.idea\workspace.xml
-/.idea/.idea.SPM/.idea
-/.idea/.idea.SPM
-/.idea

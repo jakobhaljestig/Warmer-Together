@@ -25,6 +25,8 @@ void UMinigameTriggerComponent::BeginPlay()
 	Super::BeginPlay();
 	TriggerBox = GetOwner()->GetComponentByClass<UBoxComponent>();
 	MiniGamePawn = Cast<APawn>(GetOwner());
+
+	
 	// ...
 	
 }
@@ -38,24 +40,25 @@ void UMinigameTriggerComponent::StartMiniGame()
 void UMinigameTriggerComponent::ZoomIn(UPrimitiveComponent* Actor)
 {
 	ControllerOwner = Cast<ACharacterBase>(Actor->GetOwner());
-	APlayerController* Controller = Cast<APlayerController>(ControllerOwner->GetController());
+	Controller = Cast<APlayerController>(ControllerOwner->GetController());
 	if (ControllerOwner && Controller)
 	{
 		bActive = true;
-		ControllerOwner->GetComponentByClass<UBodyTemperature>()->SetCoolDownRate(0);
+		ControllerOwner->GetMovementComponent()->StopActiveMovement();
 		Controller->Possess(MiniGamePawn);
 		Controller->SetViewTarget(ControllerOwner);
 		Controller->SetViewTargetWithBlend(MiniGamePawn, 1, VTBlend_EaseIn, 5, true);
 	}
 }
 
-void UMinigameTriggerComponent::ZoomOut(UPrimitiveComponent* Actor)
+void UMinigameTriggerComponent::ZoomOut()
 {
 	bActive = false;
-	ControllerOwner = Cast<ACharacterBase>(Actor->GetOwner());
-	APlayerController* Controller = Cast<APlayerController>(ControllerOwner->GetController());
-	Controller->SetViewTargetWithBlend(ControllerOwner, 1, VTBlend_EaseOut, 5, true);
-	ControllerOwner->GetComponentByClass<UBodyTemperature>()->SetCoolDownRate(0.75);
+	if (ControllerOwner && Controller)
+	{
+		Controller->Possess(ControllerOwner);
+	}
+	
 }
 
 
@@ -64,9 +67,13 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	TArray<UPrimitiveComponent*> OverlappingActors;
-	if (TriggerBox && !bCompleted && !bActive)
+	TriggerBox->GetOverlappingComponents(OverlappingActors);
+	if (TriggerBox && bCompleted && bActive)
 	{
-		TriggerBox->GetOverlappingComponents(OverlappingActors);
+		ZoomOut();
+	}
+	else if (TriggerBox && !bCompleted && !bActive)
+	{
 		for (UPrimitiveComponent* Actor : OverlappingActors)
 		{
 			if (ACharacterBase* Character = Cast<ACharacterBase>(Actor->GetOwner()))
@@ -76,14 +83,11 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 			}
 		}
 	}
-	else 
-	{
-		
-	}
 
 	
 	// ...
 }
+
 
 
 

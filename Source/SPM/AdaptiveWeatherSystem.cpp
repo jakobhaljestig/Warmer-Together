@@ -1,6 +1,5 @@
 #include "AdaptiveWeatherSystem.h"
 
-#include "AssetTypeCategories.h"
 #include "CharacterBase.h"
 #include "EngineUtils.h"
 #include "PerformanceTracker.h"
@@ -12,14 +11,16 @@
 #include "Kismet/GameplayStatics.h"
 
 // Konstruktor
-UAdaptiveWeatherSystem::UAdaptiveWeatherSystem()
+UAdaptiveWeatherSystem::UAdaptiveWeatherSystem(): FogActor(nullptr), SnowLevel3(nullptr), SnowLevel2(nullptr),
+                                                  SnowLevel1(nullptr),
+                                                  MistParticleSystem(nullptr)
 {
 	// Kan initialisera standardvärden här
 }
 
 void UAdaptiveWeatherSystem::BeginPlay()
 {
-
+	
 }
 
 
@@ -46,19 +47,8 @@ void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 
 	UE_LOG(LogTemp, Warning, TEXT("[AdaptiveWeatherSystem] Initialized"));
 
-	// instatinserar vädret efter 0.5 sekunder, annars hinner inte allt laddas in och snön hittas inte
-	if (UWorld* World = GetWorld())
-	{
-		FTimerHandle TimerHandle;
-		World->GetTimerManager().SetTimer(
-			TimerHandle,
-			this,
-			&UAdaptiveWeatherSystem::InitializeEnvironmentReferences,
-			0.2f, // Delay i sekunder
-			false
-		);
-	}
-
+	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UAdaptiveWeatherSystem::OnMapLoaded);
+	
 	if (UWorld* World = GetWorld())
 	{
 		FTimerHandle UpdateTimerHandle;
@@ -77,9 +67,20 @@ void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 // Deinitialize kallas när subsystemet tas bort eller stängs av
 void UAdaptiveWeatherSystem::Deinitialize()
 {
+	FCoreUObjectDelegates::PostLoadMapWithWorld.RemoveAll(this);
 	Super::Deinitialize();
 
 	// Eventuella städoperationer här
+}
+
+void UAdaptiveWeatherSystem::OnMapLoaded(UWorld* LoadedWorld)
+{
+	UE_LOG(LogTemp, Warning, TEXT("[AdaptiveWeatherSystem] Map Loaded: %s"), *LoadedWorld->GetMapName());
+
+	InitializeEnvironmentReferences();
+
+	ApplyEnvironmentEffects();
+	
 }
 
 void UAdaptiveWeatherSystem::OnWeatherUpdateTick()
@@ -87,8 +88,6 @@ void UAdaptiveWeatherSystem::OnWeatherUpdateTick()
 	AggregatePerformance();
 	UpdateWeatherEffectLocation();
 }
-
-
 
 void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformance)
 {
@@ -241,31 +240,35 @@ void UAdaptiveWeatherSystem::UpdateWeatherEffectLocation() const
 
     // Skala snöeffekterna baserat på avståndet
     float ScaleFactor = FMath::GetMappedRangeValueClamped(FVector2D(0.f, 3000.f), FVector2D(1.0f, 3.0f), MaxDistance);
-    UE_LOG(LogTemp, Warning, TEXT("ScaleFactor: %.2f based on MaxDistance: %.1f"), ScaleFactor, MaxDistance);
     // Z-skalan fixeras
-    FVector ParticleScale = FVector(ScaleFactor, 2.0f, 3.0f);
+    FVector ParticleScale = FVector(ScaleFactor, 1.5f, 2.5f);
 
-    if (SnowLevel1) 
+	if (MaxDistance > 2500.f)
 	{
-		SnowLevel1->SetWorldLocation(Midpoint);
-		SnowLevel1->SetWorldScale3D(ParticleScale);
-	}
-	if (SnowLevel2) 
-	{
-		SnowLevel2->SetWorldLocation(Midpoint);
-		SnowLevel2->SetWorldScale3D(ParticleScale);
-	}
-	if (SnowLevel3) 
-	{
-		SnowLevel3->SetWorldLocation(Midpoint);
-		SnowLevel3->SetWorldScale3D(ParticleScale);
-	}
+		if (SnowLevel1) 
+		{
+			SnowLevel1->SetWorldLocation(Midpoint);
+			SnowLevel1->SetWorldScale3D(ParticleScale);
+		}
+		if (SnowLevel2) 
+		{
+			SnowLevel2->SetWorldLocation(Midpoint);
+			SnowLevel2->SetWorldScale3D(ParticleScale);
+		}
+		if (SnowLevel3) 
+		{
+			SnowLevel3->SetWorldLocation(Midpoint);
+			SnowLevel3->SetWorldScale3D(ParticleScale);
+			UE_LOG(LogTemp, Warning, TEXT("ScaleFactor: %.2f based on MaxDistance: %.1f"), ScaleFactor, MaxDistance);
+		}
 
-	if (MistParticleSystem)
-	{
-		MistParticleSystem->SetWorldLocation(Midpoint);
-		MistParticleSystem->SetWorldScale3D(ParticleScale);
+		if (MistParticleSystem)
+		{
+			MistParticleSystem->SetWorldLocation(Midpoint);
+			MistParticleSystem->SetWorldScale3D(ParticleScale);
+		}
 	}
+   
 
 }
 
@@ -313,7 +316,7 @@ void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 	float PerformanceScore = CurrentPerformance.RecentPerformanceScore();
 
 	float ZoneModifier = 1.0f;
-	
+	//Furkan was here
 	switch (CurrentZone)
 	{
 	case EZoneType::ZONE_NEUTRAL: ZoneModifier = 0.5f; break;

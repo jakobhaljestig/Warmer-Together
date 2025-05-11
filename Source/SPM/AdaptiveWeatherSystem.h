@@ -35,6 +35,7 @@ public:
 	EZoneType GetCurrentZone() const { return CurrentZone; }
 	// Uppdaterar systemet varje frame, inte nödvändigt om vi inte vill ha varje tick, men kan användas för periodiska uppdateringar
 	virtual void Deinitialize() override;
+	void OnMapLoaded(UWorld* LoadedWorld);
 	void OnWeatherUpdateTick();
 
 	// Uppdaterar prestationen, t.ex. efter att någon dör eller gör något bra
