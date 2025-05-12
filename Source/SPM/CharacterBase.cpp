@@ -181,7 +181,7 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller != nullptr && !bIsHugging)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -204,6 +204,15 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 	}
 }
 
+void ACharacterBase::Jump()
+{
+	if (bIsHugging)
+	{
+		return;
+	}
+
+	Super::Jump();
+}
 
 //-- Coyote time ---
 
@@ -217,8 +226,6 @@ void ACharacterBase::Falling()
 	Super::Falling();
 	EnableCoyoteTime();
 }
-
-
 
 void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
 {
@@ -245,11 +252,13 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
+	bIsHugging = true;
 	HugComponent -> TryHug();
 }
 
 void ACharacterBase::EndHug(const FInputActionValue& Value)
 {
+	bIsHugging = false;
 	HugComponent -> EndHug();
 }
 
@@ -279,13 +288,13 @@ void ACharacterBase::Aim(const FInputActionValue& Value)
 	/**Spawn actor - BP_Ball
 	 *Get socket transform */
 
-	PlayAimAnimation();
+	//PlayAimAnimation();
 	UE_LOG(LogTemplateCharacter, Error, TEXT("Is aiming"));
 }
 
 void ACharacterBase::Throw(const FInputActionValue& Value)
 {
-	PlayThrowAnimation();
+	//PlayThrowAnimation();
 	UE_LOG(LogTemplateCharacter, Error, TEXT("Is Throwing"));
 }
 
