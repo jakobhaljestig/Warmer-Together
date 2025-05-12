@@ -29,15 +29,20 @@ void UMiniGame::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	CurrentLoopTime += DeltaTime;
-	if (CurrentLoopTime > MaxLoopTime)
+	if (bPlaying)
 	{
-		GameLoop();
-	}
+		CurrentLoopTime += DeltaTime;
+		TimeSinceLastpress += DeltaTime;
 
-	if (CorrectPressesToWin == CorrectPresses)
-	{
-		bIsComplete = true;
+		if (TimeSinceLastpress > PressTimeLimit)
+		{
+			TimeSinceLastpress = 0;
+			LastInput = 0;
+		}
+		if (CurrentLoopTime > MaxLoopTime)
+		{
+			GameLoop();
+		}
 	}
 	// ...
 }
@@ -63,7 +68,6 @@ bool UMiniGame::CheckCorrectPresses()
 {
 	if (RequestedInput == LastInput)
 	{
-		CorrectPresses += 1;
 		return true;	
 	}
 	return false;
@@ -71,6 +75,10 @@ bool UMiniGame::CheckCorrectPresses()
 
 FText UMiniGame::ShownInput()
 {
+	if (bPlaying == false)
+	{
+		return FText::FromString("Waiting for other player");
+	}
 	if (RequestedInput == 1)
 	{
 		return FText::FromString("Y");
