@@ -26,7 +26,7 @@ protected:
 	float GameSpeed = 50.f;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
-	float PressTimeLimit = 3.f;
+	float TimingOffset = 3.f;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
 	float TimeSinceLastpress = 0;
@@ -80,6 +80,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	void SetTimer(const float LoopTime){ MaxLoopTime = LoopTime; }
+	
+	UFUNCTION(BlueprintCallable)
+	void SetInputOffset(const float Offset){ TimingOffset = Offset; }
 	
 	UFUNCTION(BlueprintCallable)
 	void SetComplete(const bool CompletionStatus){ bIsComplete = CompletionStatus; }

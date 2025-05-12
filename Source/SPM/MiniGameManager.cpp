@@ -23,6 +23,8 @@ void AMiniGameManager::BeginPlay()
 	{
 		Game1->SetTimer(MaxLoopTime);
 		Game2->SetTimer(MaxLoopTime);
+		Game1->SetInputOffset(TimingOffset);
+		Game2->SetInputOffset(TimingOffset);
 	}
 	
 }

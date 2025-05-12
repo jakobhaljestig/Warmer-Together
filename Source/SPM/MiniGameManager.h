@@ -26,8 +26,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	int CorrectPresses = 0;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
 	float MaxLoopTime = 10.f;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	float TimingOffset = 0.5f;
 
 public:	
 	// Called every frame

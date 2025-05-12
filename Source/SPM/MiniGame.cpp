@@ -34,7 +34,7 @@ void UMiniGame::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		CurrentLoopTime += DeltaTime;
 		TimeSinceLastpress += DeltaTime;
 
-		if (TimeSinceLastpress > PressTimeLimit)
+		if (TimeSinceLastpress > TimingOffset)
 		{
 			TimeSinceLastpress = 0;
 			LastInput = 0;
