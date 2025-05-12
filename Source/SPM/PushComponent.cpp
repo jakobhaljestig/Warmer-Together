@@ -21,8 +21,12 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		{
 			StopPushing();
 		}
+		else if(!PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush()){
+			OwnerMovementComponent->MaxWalkSpeed = 0;
+		}
 		else if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
 		{
+			OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed/4;
 			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
 			PhysicsHandle->SetTargetLocation(TargetLocation);
 		}
@@ -38,6 +42,7 @@ void UPushComponent::StartPushing()
 		{
 			PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers += 1;
 		}
+		
 	}
 
 	

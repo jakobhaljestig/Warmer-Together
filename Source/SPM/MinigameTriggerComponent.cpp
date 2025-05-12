@@ -57,6 +57,7 @@ void UMinigameTriggerComponent::ZoomOut()
 	if (ControllerOwner && Controller)
 	{
 		Controller->Possess(ControllerOwner);
+		ControllerOwner->GetMovementComponent()->StopActiveMovement();
 	}
 	
 }
