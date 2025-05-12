@@ -29,5 +29,5 @@ class SPM_API UWarmerTogetherSaveGame : public USaveGame
 
 public:
 	UPROPERTY()
-	TMap<FString, FString> SaveGameData;
+	TMap<FName, FActorSaveData> SavedActors;
 };
