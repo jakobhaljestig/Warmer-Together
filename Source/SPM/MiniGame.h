@@ -29,7 +29,7 @@ protected:
 	float TimingOffset = 3.f;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
-	float TimeSinceLastpress = 0;
+	float TimeSinceLastPress = 0;
 
 	UPROPERTY()
 	int LastInput;
