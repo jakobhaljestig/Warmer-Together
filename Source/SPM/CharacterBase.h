@@ -80,6 +80,8 @@ protected:
 	virtual void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 
+	virtual void Jump() override;
+
 	// RÖRELSE
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float BaseMovementSpeed = 600.0f;
@@ -197,6 +199,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
 	bool bHasDied = false;
 
+	bool bIsHugging;
 	
 private:
 	void UpdatePlayerLocation();
@@ -220,6 +223,8 @@ private:
 	virtual bool CanJumpInternal_Implementation() const override;
 	
 	virtual void Falling() override;
+
+	
 
 };
 

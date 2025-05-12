@@ -4,6 +4,7 @@
 #include "MinigameTriggerComponent.h"
 
 #include "CharacterBase.h"
+#include "Blueprint/UserWidget.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -25,7 +26,7 @@ void UMinigameTriggerComponent::BeginPlay()
 	Super::BeginPlay();
 	TriggerBox = GetOwner()->GetComponentByClass<UBoxComponent>();
 	MiniGamePawn = Cast<APawn>(GetOwner());
-
+	
 	
 	// ...
 	
@@ -57,6 +58,7 @@ void UMinigameTriggerComponent::ZoomOut()
 	if (ControllerOwner && Controller)
 	{
 		Controller->Possess(ControllerOwner);
+		ControllerOwner->GetMovementComponent()->StopActiveMovement();
 	}
 	
 }
@@ -83,8 +85,6 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 			}
 		}
 	}
-
-	
 	// ...
 }
 
