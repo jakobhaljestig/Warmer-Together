@@ -14,11 +14,10 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/MiniGame.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MiniGame.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/MiniGame.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MiniGame.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/MiniGameManager.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MiniGameManager.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/MiniGameManager.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MiniGameManager.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_RadioTower.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_RadioTower.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/7/2X/MZ8N4B9C88P0A7VP5Z3FMU.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/7/2X/MZ8N4B9C88P0A7VP5Z3FMU.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBig.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBig.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/ClimbComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/ClimbComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -79,7 +78,7 @@
     &quot;C/C++ Project.SPM.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Robin&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Nora&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -233,6 +232,9 @@
       <workItem from="1746514490860" duration="849000" />
       <workItem from="1746521208487" duration="1563000" />
       <workItem from="1746975214952" duration="1060000" />
+      <workItem from="1747055351102" duration="7496000" />
+      <workItem from="1747064383768" duration="166000" />
+      <workItem from="1747064578754" duration="1625000" />
     </task>
     <servers />
   </component>
