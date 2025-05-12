@@ -19,6 +19,7 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
+	
 	UPROPERTY(EditAnywhere)
 	bool bIsComplete = false;
 
@@ -29,7 +30,7 @@ protected:
 	float TimingOffset = 3.f;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
-	float TimeSinceLastpress = 0;
+	float TimeSinceLastPress = 0;
 
 	UPROPERTY()
 	int LastInput;
