@@ -27,6 +27,7 @@ void ASPMGameMode::InitGame(const FString& MapName, const FString& Options, FStr
 //SKAPA BUILDER KLASS?
 void ASPMGameMode::BeginPlay()
 {
+
 	//Spawnar Spelare 1
 	APlayerController* Player1Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (Player1Controller && Player1PawnClass)
