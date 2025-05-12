@@ -5,7 +5,6 @@
 #include "CharacterBase.h"
 #include "Kismet/GameplayStatics.h"
 
-
 UHugComponent::UHugComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;

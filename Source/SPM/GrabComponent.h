@@ -29,6 +29,9 @@ public:
 	//Release object
 	virtual void Release();
 
+	//Looks through all instances of GrabComponent to see if one is holding something
+	bool HoldingSomething() const;
+	
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
@@ -50,8 +53,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Grab")
 	bool Holding = false;
 
-	//Looks through all instances of GrabComponent to see if one is holding something
-	bool HoldingSomething() const;
+	
 
 	ECollisionChannel CollisionChannel;
 

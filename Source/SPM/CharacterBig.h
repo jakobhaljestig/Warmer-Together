@@ -17,9 +17,7 @@ UCLASS()
 class SPM_API ACharacterBig : public ACharacterBase
 {
 	GENERATED_BODY()
-
-
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* GrabAction;
 
@@ -48,7 +46,7 @@ protected:
 
 	bool IsH = false;
 
-	void Move(const FInputActionValue& Value) override;
+	virtual void Move(const FInputActionValue& Value) override;
 
 	//Tror de inte behövs UPROPERTY tbh
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Climb")
@@ -61,6 +59,6 @@ private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool bIsLifting = false;
 
-	void OnDeath() override;
+	virtual void OnDeath() override;
 	
 };
