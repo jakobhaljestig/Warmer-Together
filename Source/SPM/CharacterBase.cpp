@@ -16,6 +16,7 @@
 #include "PerformanceTracker.h"
 #include "PushComponent.h"
 #include "HugComponent.h"
+#include "SprintComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -66,8 +67,6 @@ ACharacterBase::ACharacterBase()
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
-
-	Stamina = MaxStamina;
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
 	CheckpointLocation = GetActorLocation();
@@ -91,6 +90,12 @@ void ACharacterBase::BeginPlay()
 	if (!HugComponent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("HugComponent not valid"));
+	}
+
+	SprintComponent = FindComponentByClass<USprintComponent>();
+	if (!SprintComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SprintComponent not valid"));
 	}
 	
 }
@@ -264,65 +269,13 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint(const FInputActionValue& Value)
 {
-	if (bCanSprint && Stamina > 0)
-	{
-		GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
-		
-		GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &ACharacterBase::DrainStamina, 0.05f, true);
-	}
+	SprintComponent->StartSprint(Value);
 }
 
-void ACharacterBase::DrainStamina()
-{
-	if (Stamina > 0)
-	{
-		Stamina -= StaminaDrainRate * 0.1f; 
-		
-		GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Stamina: %.2f"), Stamina));
-
-		if (Stamina <= 0)
-		{
-			Stamina = 0;
-			bCanSprint = false;
-			GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle); 
-		}
-	}
-}
 
 void ACharacterBase::StopSprint(const FInputActionValue& Value)
 {
-	
-	UE_LOG(LogTemp, Display, TEXT("StopSprint entered"));
-	
-	GetCharacterMovement()->MaxWalkSpeed = 500.f; 
-	GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle);
-	/*if (Stamina <= 0)
-	{
-
-		
-	}*/
-	
-	GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &ACharacterBase::RegenerateStamina, 0.1f, true);
-}
-
-void ACharacterBase::RegenerateStamina()
-{
-	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Stamina: %.2f"), Stamina));
-	if (Stamina < MaxStamina)
-	{
-		Stamina += StaminaRegenRate * GetWorld()->GetDeltaSeconds();
-		
-		if (Stamina >= MaxStamina)
-		{
-			Stamina = MaxStamina;
-			bIsRegenerating = false;
-			GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle);
-		}
-	}
-	if (Stamina > 0 && !bCanSprint) 
-	{
-		bCanSprint = true;
-	}
+	SprintComponent->StopSprint(Value);
 }
 
 

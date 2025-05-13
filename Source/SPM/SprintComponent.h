@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
+#include "CharacterBase.h"
 #include "SprintComponent.generated.h"
 
 
@@ -13,16 +14,43 @@ class SPM_API USprintComponent : public UActorComponent
 	GENERATED_BODY()
 
 public:	
-	// Sets default values for this component's properties
 	USprintComponent();
+	
+	void StartSprint (const FInputActionValue& Value);
+	
+	void StopSprint(const FInputActionValue& Value);
 
 protected:
-	// Called when the game starts
 	virtual void BeginPlay() override;
+	
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float SprintSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float MaxStamina = 10;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float StaminaDrainRate;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float StaminaRegenRate = 2;
+	
 
 public:	
-	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+private:
+	
+	void DrainStamina();
+	
+	void RegenerateStamina();
+
+	bool bCanSprint;
+	
+	bool bIsRegenerating;
+
+	float Stamina;
+
+	FTimerHandle StaminaCooldownTimerHandle;
 };

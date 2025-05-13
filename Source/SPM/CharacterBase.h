@@ -21,6 +21,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 class UPushComponent;
+class USprintComponent;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -92,35 +93,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float CurrentMovementSpeed;
 
+	//Sprint -
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprint")
+	USprintComponent* SprintComponent;
 	
-	//Sprint - ska flytta till en component
 	void StartSprint (const FInputActionValue& Value);
 	void StopSprint(const FInputActionValue& Value);
-	void DrainStamina();
-	void RegenerateStamina();
 	
-	bool bCanSprint;
-	bool bIsRegenerating; 
-	
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
-	float SprintSpeed;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
-	float SprintCooldownTime;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
-	float MaxStamina = 10;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
-	float StaminaDrainRate;
-
-	float Stamina;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
-	float StaminaRegenRate = 2;
-	
-	FTimerHandle StaminaCooldownTimerHandle;
-
 	//HUGGING
 	void BeginHug(const FInputActionValue& Value);
 	void EndHug(const FInputActionValue& Value);

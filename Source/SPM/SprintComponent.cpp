@@ -1,34 +1,79 @@
-// Fill out your copyright notice in the Description page of Project Settings.
-
 
 #include "SprintComponent.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
-// Sets default values for this component's properties
+
+
 USprintComponent::USprintComponent()
 {
-	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
-	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
-
-// Called when the game starts
 void USprintComponent::BeginPlay()
 {
 	Super::BeginPlay();
-
-	// ...
-	
+	Stamina =  MaxStamina;
 }
 
-
-// Called every frame
 void USprintComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+}
 
-	// ...
+void USprintComponent::StartSprint(const FInputActionValue& Value)
+{
+	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
+	if (CharacterOwner && bCanSprint && Stamina > 0)
+	{
+		CharacterOwner->GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+		
+		GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &USprintComponent::DrainStamina, 0.05f, true);
+	}
+}
+
+void USprintComponent::DrainStamina()
+{
+	if (Stamina > 0)
+	{
+		Stamina -= StaminaDrainRate * 0.1f; 
+		
+		GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Stamina: %.2f"), Stamina));
+
+		if (Stamina <= 0)
+		{
+			Stamina = 0;
+			bCanSprint = false;
+			GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle); 
+		}
+	}
+}
+
+void USprintComponent::StopSprint(const FInputActionValue& Value)
+{
+	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
+	CharacterOwner->GetCharacterMovement()->MaxWalkSpeed = 500.f; 
+	GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle);
+	
+	GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &USprintComponent::RegenerateStamina, 0.1f, true);
+}
+
+void USprintComponent::RegenerateStamina()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Stamina: %.2f"), Stamina));
+	if (Stamina < MaxStamina)
+	{
+		Stamina += StaminaRegenRate * GetWorld()->GetDeltaSeconds();
+		
+		if (Stamina >= MaxStamina)
+		{
+			Stamina = MaxStamina;
+			bIsRegenerating = false;
+			GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle);
+		}
+	}
+	if (Stamina > 0 && !bCanSprint) 
+	{
+		bCanSprint = true;
+	}
 }
 
