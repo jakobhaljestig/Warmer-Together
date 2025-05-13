@@ -30,22 +30,22 @@ void UBodyTemperature::BeginPlay()
 void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	
+	ACharacterPlayerController* Controller= Cast<ACharacterPlayerController>(Cast<APawn>(GetOwner())->GetController());
 	if (!bNearHeat)
     {
         if (Temp > 0)
         {
         	CoolDown(DeltaTime);
         }
-		if (GetTempPercentage() < 0.3 && !bDisplayFreezeEffect)
+		if (GetTempPercentage() < 0.3 && !bDisplayFreezeEffect && Controller)
 		{
 			bDisplayFreezeEffect = true;
-			Cast<ACharacterPlayerController>(Cast<APawn>(GetOwner())->GetController())->DisplayFreezeEffect(bDisplayFreezeEffect);
+			Controller->DisplayFreezeEffect(bDisplayFreezeEffect);
 		}
-		if (GetTempPercentage() >= 0.3 && bDisplayFreezeEffect)
+		if (GetTempPercentage() >= 0.3 && bDisplayFreezeEffect && Controller)
 		{
 			bDisplayFreezeEffect = false;
-			Cast<ACharacterPlayerController>(Cast<APawn>(GetOwner())->GetController())->DisplayFreezeEffect(bDisplayFreezeEffect);
+			Controller->DisplayFreezeEffect(bDisplayFreezeEffect);
 		}
         if (Temp == 0)
         {
