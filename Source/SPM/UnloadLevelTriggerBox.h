@@ -23,5 +23,11 @@ public:
 private:	
 	UPROPERTY(EditAnywhere)
 	FName LevelToUnload;
+
+	UPROPERTY()
+	bool P1Passed;
+
+	UPROPERTY()
+	bool P2Passed;
 	
 };
