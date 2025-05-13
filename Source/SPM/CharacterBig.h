@@ -22,9 +22,6 @@ class SPM_API ACharacterBig : public ACharacterBase
 	UInputAction* GrabAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
-	UInputAction* ThrowAction;
-
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ClimbAction;
 
 	
@@ -40,7 +37,6 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void ToggleGrab(const FInputActionValue& Value);
-	void Throw(const FInputActionValue& Value);
 
 	void Climb(const FInputActionValue& Value);
 
