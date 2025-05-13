@@ -60,7 +60,7 @@ void ACharacterBig::Climb(const FInputActionValue& Value)
 	if (PickupComponent -> HoldingSomething() == false)
 	{
 		ClimbingComponent->Climb();
-		//bIsClimbing = ClimbingComponent->IsClimbing();
+		bIsClimbing = ClimbingComponent->IsClimbing();
 	}
 	
 }
