@@ -23,15 +23,13 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		}
 		else if(!PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush()){
 			OwnerMovementComponent->MaxWalkSpeed = 0;
-			OwnerMovementComponent->MinAnalogWalkSpeed = 0;
 		}
 		else if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
 		{
-			OwnerMovementComponent->MinAnalogWalkSpeed = 20.f;
-			OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed/4;
 			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
 			PhysicsHandle->SetTargetLocation(TargetLocation);
 		}
+		
 		
 	}
 }
@@ -42,6 +40,7 @@ void UPushComponent::StartPushing()
 		Grab();
 		if (PhysicsHandle->GetGrabbedComponent() && PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>())
 		{
+			GetOwner()->SetActorRotation()
 			PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers += 1;
 		}
 		
@@ -66,16 +65,22 @@ void UPushComponent::GrabEffect()
 {
 	OriginalMovementSpeed = OwnerMovementComponent->MaxWalkSpeed;
 	OriginalRotationRate = OwnerMovementComponent->RotationRate;
-	OwnerMovementComponent->MaxWalkSpeed = OwnerMovementComponent->MaxWalkSpeed/4;
+	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed/4;
+	OwnerMovementComponent->MinAnalogWalkSpeed = 0;
 	OwnerMovementComponent->RotationRate = FRotator(0, 0, 0);
 	OwnerMovementComponent->SetJumpAllowed(false);
+	OwnerMovementComponent->SetPlaneConstraintEnabled(true);
+	OwnerMovementComponent->SetPlaneConstraintNormal(GetOwner()->GetActorRightVector() * 200);
+	
 }
 
 void UPushComponent::ReleaseEffect()
 {
 	Super::ReleaseEffect();
+	OwnerMovementComponent->MinAnalogWalkSpeed = 20.f;
 	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
 	OwnerMovementComponent->RotationRate = OriginalRotationRate;
 	OwnerMovementComponent->SetJumpAllowed(true);
+	OwnerMovementComponent->SetPlaneConstraintEnabled(false);
 }
 
