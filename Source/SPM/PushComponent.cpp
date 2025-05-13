@@ -23,9 +23,11 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		}
 		else if(!PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush()){
 			OwnerMovementComponent->MaxWalkSpeed = 0;
+			OwnerMovementComponent->MinAnalogWalkSpeed = 0;
 		}
 		else if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
 		{
+			OwnerMovementComponent->MinAnalogWalkSpeed = 20.f;
 			OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed/4;
 			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
 			PhysicsHandle->SetTargetLocation(TargetLocation);
@@ -35,7 +37,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 }
 void UPushComponent::StartPushing()
 {
-	if (!HoldingSomething())
+	if (!HoldingSomething() && !Holding)
 	{
 		Grab();
 		if (PhysicsHandle->GetGrabbedComponent() && PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>())
@@ -49,7 +51,7 @@ void UPushComponent::StartPushing()
 }
 void UPushComponent::StopPushing()
 {
-	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+	if (PhysicsHandle->GetGrabbedComponent() != nullptr && Holding)
 	{
 		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
 		if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>())

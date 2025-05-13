@@ -379,16 +379,22 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
-	PushComponent->StartPushing();
-	bIsPushing = true;
+	if (!PushComponent->HoldingSomething())
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
+		PushComponent->StartPushing();
+		bIsPushing = true;
+	}
 }
 
 void ACharacterBase::EndPush(const FInputActionValue& Value) 
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
-	PushComponent->StopPushing();
-	bIsPushing = false;
+	if (bIsPushing)
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
+		PushComponent->StopPushing();
+		bIsPushing = false;
+	}
 }
 
 

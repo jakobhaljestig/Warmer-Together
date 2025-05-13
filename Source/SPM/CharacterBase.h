@@ -230,6 +230,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
 	bool bHasDied = false;
 
+	UPROPERTY(BlueprintReadOnly)
 	bool bIsHugging;
 	
 private:
