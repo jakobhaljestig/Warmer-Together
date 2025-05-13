@@ -25,8 +25,7 @@ protected:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AMovingIceFloat> MovingIceFloatClass;
 
-	UPROPERTY(EditInstanceOnly, Category = "Spawner")
-	AActor* EndTarget;
+	
 
 
 	//Intervall av tid då isflak spawnas 
@@ -59,4 +58,6 @@ private:
 
 	bool bHasReachedEndPosition = false;
 
+	UPROPERTY(EditInstanceOnly, Category = "Spawner")
+	AActor* EndTarget;
 };
