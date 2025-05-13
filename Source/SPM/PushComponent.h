@@ -34,4 +34,5 @@ class SPM_API UPushComponent : public UGrabComponent
 	UPROPERTY(EditAnywhere)
 	float MaxPushWeight = 250;
 	
+	
 };

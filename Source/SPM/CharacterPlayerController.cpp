@@ -21,6 +21,7 @@ void ACharacterPlayerController::DisplayFreezeEffect(bool bShouldDisplay) const
 	}
 }
 
+
 void ACharacterPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);

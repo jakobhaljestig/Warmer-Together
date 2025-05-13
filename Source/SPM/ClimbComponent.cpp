@@ -98,7 +98,6 @@ void UClimbComponent::StopClimb()
 			FinishClimbUp();
 			return;
 		}
-
 		SetWalking();
 	}
 }
@@ -159,7 +158,7 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 
 	FVector Start = ClimbCharacter->GetActorLocation()  + FVector(0, 0, 80.f); //Flyttar upp linetrace mer mot huvudet
 	FVector ForwardVector = ClimbCharacter->GetActorForwardVector();
-	FVector End = Start + ForwardVector * 20.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
+	FVector End = Start + ForwardVector * 200.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
 
 	FVector HalfSize(30.f, 30.f, 50.f); 
 	FQuat Rotation = FQuat::Identity;

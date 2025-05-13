@@ -3,6 +3,8 @@
 
 #include "MiniGameManager.h"
 
+#include "MinigameTriggerComponent.h"
+
 // Sets default values
 AMiniGameManager::AMiniGameManager()
 {
@@ -37,7 +39,7 @@ void AMiniGameManager::Tick(float DeltaTime)
 	{
 		Game1->StartGame();
 		Game2->StartGame();
-		if (Game1->CheckCorrectPresses() && Game2->CheckCorrectPresses())
+		if (Game1->Correct && Game2->Correct)
 		{
 			CorrectPresses += 1;
 			Game1->GameLoop();

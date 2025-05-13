@@ -31,7 +31,6 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, this, &ACharacterBig::ToggleGrab);
-		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Ongoing, this, &ACharacterBig::Throw);
 
 		EnhancedInputComponent->BindAction(ClimbAction, ETriggerEvent::Started, this, &ACharacterBig::Climb);
 	
@@ -50,17 +49,12 @@ void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 	}
 }
 
-void ACharacterBig::Throw(const FInputActionValue& Value)
-{
-	PickupComponent->Throw();
-}
-
 void ACharacterBig::Climb(const FInputActionValue& Value)
 {
 	if (PickupComponent -> HoldingSomething() == false)
 	{
 		ClimbingComponent->Climb();
-		//bIsClimbing = ClimbingComponent->IsClimbing();
+		bIsClimbing = ClimbingComponent->IsClimbing();
 	}
 	
 }

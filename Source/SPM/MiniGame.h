@@ -102,4 +102,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	float GetMaxTime() const { return MaxLoopTime; }
+
+	UPROPERTY()
+	bool Correct;
 };
