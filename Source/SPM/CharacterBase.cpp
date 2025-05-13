@@ -66,6 +66,8 @@ ACharacterBase::ACharacterBase()
 void ACharacterBase::BeginPlay()
 {
 	Super::BeginPlay();
+
+	Stamina = MaxStamina;
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
 	CheckpointLocation = GetActorLocation();
@@ -96,7 +98,7 @@ void ACharacterBase::BeginPlay()
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 	if (GetCharacterMovement()->IsMovingOnGround())
 	{
 		LastGroundedZ = GetActorLocation().Z;
@@ -132,8 +134,8 @@ void ACharacterBase::Tick(float DeltaTime)
 	{
 		bIsPushing = false;
 	}
-
 }
+
 
 void ACharacterBase::NotifyControllerChanged()
 {
@@ -148,6 +150,7 @@ void ACharacterBase::NotifyControllerChanged()
 		}
 	}
 }
+
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -170,12 +173,16 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Aim);
 		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Completed, this, &ACharacterBase::Throw);
+
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterBase::StartSprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterBase::StopSprint);
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
+
 
 void ACharacterBase::Move(const FInputActionValue& Value)
 {
@@ -194,6 +201,7 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 	}
 }
 
+
 void ACharacterBase::Look(const FInputActionValue& Value)
 {
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -204,15 +212,21 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 	}
 }
 
+
 void ACharacterBase::Jump()
 {
 	if (bIsHugging)
 	{
 		return;
 	}
-
+	if (!GetCharacterMovement() -> IsMovingOnGround() && !bCanUseCoyoteTime)
+	{
+		return;
+	}
 	Super::Jump();
 }
+
+
 
 //-- Coyote time ---
 
@@ -248,8 +262,71 @@ void ACharacterBase::DisableCoyoteTime()
 }
 
 
-//--- Hugging ---
+void ACharacterBase::StartSprint(const FInputActionValue& Value)
+{
+	if (bCanSprint && Stamina > 0)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = SprintSpeed;
+		
+		GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &ACharacterBase::DrainStamina, 0.05f, true);
+	}
+}
 
+void ACharacterBase::DrainStamina()
+{
+	if (Stamina > 0)
+	{
+		Stamina -= StaminaDrainRate * 0.1f; 
+		
+		GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Stamina: %.2f"), Stamina));
+
+		if (Stamina <= 0)
+		{
+			Stamina = 0;
+			bCanSprint = false;
+			GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle); 
+		}
+	}
+}
+
+void ACharacterBase::StopSprint(const FInputActionValue& Value)
+{
+	
+	UE_LOG(LogTemp, Display, TEXT("StopSprint entered"));
+	
+	GetCharacterMovement()->MaxWalkSpeed = 500.f; 
+	GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle);
+	/*if (Stamina <= 0)
+	{
+
+		
+	}*/
+	
+	GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &ACharacterBase::RegenerateStamina, 0.1f, true);
+}
+
+void ACharacterBase::RegenerateStamina()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Stamina: %.2f"), Stamina));
+	if (Stamina < MaxStamina)
+	{
+		Stamina += StaminaRegenRate * GetWorld()->GetDeltaSeconds();
+		
+		if (Stamina >= MaxStamina)
+		{
+			Stamina = MaxStamina;
+			bIsRegenerating = false;
+			GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle);
+		}
+	}
+	if (Stamina > 0 && !bCanSprint) 
+	{
+		bCanSprint = true;
+	}
+}
+
+
+//--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
 	bIsHugging = true;

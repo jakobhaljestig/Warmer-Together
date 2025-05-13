@@ -63,6 +63,9 @@ class ACharacterBase : public ACharacter
 	UInputAction* PushAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SprintAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ThrowSnowballAction;
 
 
@@ -88,6 +91,35 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float CurrentMovementSpeed;
+
+	
+	//Sprint - ska flytta till en component
+	void StartSprint (const FInputActionValue& Value);
+	void StopSprint(const FInputActionValue& Value);
+	void DrainStamina();
+	void RegenerateStamina();
+	
+	bool bCanSprint;
+	bool bIsRegenerating; 
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float SprintSpeed;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float SprintCooldownTime;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float MaxStamina = 10;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float StaminaDrainRate;
+
+	float Stamina;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float StaminaRegenRate = 2;
+	
+	FTimerHandle StaminaCooldownTimerHandle;
 
 	//HUGGING
 	void BeginHug(const FInputActionValue& Value);
@@ -143,7 +175,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature")
 	float BaseCoolingRate = 5.0f;
 	
-
 	// Vind
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	float WindResistanceThreshold = 10.0f;

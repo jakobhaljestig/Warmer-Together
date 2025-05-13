@@ -27,10 +27,14 @@ class SPM_API ACharacterBig : public ACharacterBase
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ClimbAction;
 
-	
+public:
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool bIsClimbing = false;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool bIsLifting = false;
 
 protected:
-	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pickup")
 	ULiftComponent* PickupComponent;
@@ -53,12 +57,7 @@ protected:
 	UClimbComponent* ClimbingComponent;
 
 private:
-	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool bIsClimbing = false;
-
-	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool bIsLifting = false;
-
+	
 	virtual void OnDeath() override;
 	
 };
