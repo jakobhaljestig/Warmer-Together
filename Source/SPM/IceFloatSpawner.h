@@ -58,6 +58,6 @@ private:
 
 	bool bHasReachedEndPosition = false;
 
-	UPROPERTY(EditInstanceOnly, Category = "Spawner")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Spawner", meta = (AllowPrivateAccess = true))
 	AActor* EndTarget;
 };
