@@ -98,7 +98,6 @@ void UClimbComponent::StopClimb()
 			FinishClimbUp();
 			return;
 		}
-
 		SetWalking();
 	}
 }
