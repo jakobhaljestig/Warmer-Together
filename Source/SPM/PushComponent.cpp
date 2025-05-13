@@ -40,7 +40,6 @@ void UPushComponent::StartPushing()
 		Grab();
 		if (PhysicsHandle->GetGrabbedComponent() && PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>())
 		{
-			GetOwner()->SetActorRotation()
 			PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers += 1;
 		}
 		
