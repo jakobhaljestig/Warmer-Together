@@ -11,11 +11,11 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Health.h"
 #include "InputActionValue.h"
 #include "PerformanceTracker.h"
 #include "PushComponent.h"
 #include "HugComponent.h"
+#include "SprintComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -56,7 +56,6 @@ ACharacterBase::ACharacterBase()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	BodyTempComponent = CreateDefaultSubobject<UBodyTemperature>(TEXT("BodyTemperature"));
-	HealthComponent = CreateDefaultSubobject<UHealth>(TEXT("Health"));
 	HugComponent = CreateDefaultSubobject<UHugComponent>(TEXT("HugComponent")); 
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
@@ -90,13 +89,19 @@ void ACharacterBase::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("HugComponent not valid"));
 	}
+
+	SprintComponent = FindComponentByClass<USprintComponent>();
+	if (!SprintComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SprintComponent not valid"));
+	}
 	
 }
 
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 	if (GetCharacterMovement()->IsMovingOnGround())
 	{
 		LastGroundedZ = GetActorLocation().Z;
@@ -132,8 +137,8 @@ void ACharacterBase::Tick(float DeltaTime)
 	{
 		bIsPushing = false;
 	}
-
 }
+
 
 void ACharacterBase::NotifyControllerChanged()
 {
@@ -148,6 +153,7 @@ void ACharacterBase::NotifyControllerChanged()
 		}
 	}
 }
+
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -170,6 +176,9 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Aim);
 		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Completed, this, &ACharacterBase::Throw);
+
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterBase::StartSprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterBase::StopSprint);
 	}
 	else
 	{
@@ -177,11 +186,12 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 	}
 }
 
+
 void ACharacterBase::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr)
+	if (Controller != nullptr && !bIsHugging)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -194,6 +204,7 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 	}
 }
 
+
 void ACharacterBase::Look(const FInputActionValue& Value)
 {
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -203,6 +214,21 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 		AddControllerPitchInput(LookAxisVector.Y);
 	}
 }
+
+
+void ACharacterBase::Jump()
+{
+	if (bIsHugging)
+	{
+		return;
+	}
+	if (!GetCharacterMovement() -> IsMovingOnGround() && !bCanUseCoyoteTime)
+	{
+		return;
+	}
+	Super::Jump();
+}
+
 
 
 //-- Coyote time ---
@@ -218,8 +244,6 @@ void ACharacterBase::Falling()
 	EnableCoyoteTime();
 }
 
-
-
 void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
 {
 	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
@@ -231,7 +255,7 @@ void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8
 
 void ACharacterBase::EnableCoyoteTime()
 {
-	bCanUseCoyoteTime = true;
+	//bCanUseCoyoteTime = true;
 	GetWorldTimerManager().SetTimer(CoyoteTimeHandle, this, &ACharacterBase::DisableCoyoteTime, CoyoteTimeDuration, false);
 }
 
@@ -241,15 +265,28 @@ void ACharacterBase::DisableCoyoteTime()
 }
 
 
-//--- Hugging ---
+void ACharacterBase::StartSprint(const FInputActionValue& Value)
+{
+	SprintComponent->StartSprint(Value);
+}
 
+
+void ACharacterBase::StopSprint(const FInputActionValue& Value)
+{
+	SprintComponent->StopSprint();
+}
+
+
+//--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
+	bIsHugging = true;
 	HugComponent -> TryHug();
 }
 
 void ACharacterBase::EndHug(const FInputActionValue& Value)
 {
+	bIsHugging = false;
 	HugComponent -> EndHug();
 }
 
@@ -279,13 +316,13 @@ void ACharacterBase::Aim(const FInputActionValue& Value)
 	/**Spawn actor - BP_Ball
 	 *Get socket transform */
 
-	PlayAimAnimation();
+	//PlayAimAnimation();
 	UE_LOG(LogTemplateCharacter, Error, TEXT("Is aiming"));
 }
 
 void ACharacterBase::Throw(const FInputActionValue& Value)
 {
-	PlayThrowAnimation();
+	//PlayThrowAnimation();
 	UE_LOG(LogTemplateCharacter, Error, TEXT("Is Throwing"));
 }
 
@@ -293,16 +330,22 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
-	PushComponent->StartPushing();
-	bIsPushing = true;
+	if (!PushComponent->HoldingSomething())
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
+		PushComponent->StartPushing();
+		bIsPushing = true;
+	}
 }
 
 void ACharacterBase::EndPush(const FInputActionValue& Value) 
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
-	PushComponent->StopPushing();
-	bIsPushing = false;
+	if (bIsPushing)
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
+		PushComponent->StopPushing();
+		bIsPushing = false;
+	}
 }
 
 
@@ -324,7 +367,7 @@ void ACharacterBase::OnDeath()
 		if (WeatherSystem)
 		{
 			int32 PlayerIndex = UGameplayStatics::GetPlayerControllerID(Cast<APlayerController>(GetController()));
-			WeatherSystem->UpdatePerformance(PerformanceTracker->GetPerformance());
+			//WeatherSystem->UpdatePerformance(PerformanceTracker->GetPerformance());
 		}
 	}
 	RespawnAtCheckpoint();
@@ -340,13 +383,7 @@ void ACharacterBase::RespawnAtCheckpoint()
 {
 	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
 	bHasDied = false;
-
-	//bör inte ticka ner efter spelaren respawnar, endast kylenivån, sen efter kylenivån är på 0 så ska den börja ticka igen
-	if (HealthComponent)
-	{
-		HealthComponent->ResetHealth();
-	}
-
+	
 	//denna bör dock
 	UBodyTemperature* Temp = Cast<UBodyTemperature>(BodyTempComponent);
 	Temp->ResetTemp();
@@ -389,7 +426,7 @@ void ACharacterBase::Landed(const FHitResult& Hit)
 	if (FallDistanceMeters > FallDamageThreshold) // meters min for fall damage
 	{
 		float FallDamage = 50.f + ((FallDistanceMeters - FallDamageThreshold) * FallDamageMultiplier); 
-		HealthComponent->TakeDamage(FallDamage);
+		//HealthComponent->TakeDamage(FallDamage);
 		UE_LOG(LogTemp, Warning, TEXT("Threshold reached %f"),FallDistanceMeters);
 		UE_LOG(LogTemp, Warning, TEXT("Threshold reached %f"),FallDamage);
 	} 

@@ -28,10 +28,10 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* TriggerBox = nullptr;
 
-	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
+	UFUNCTION(BlueprintCallable)
 	virtual void ZoomIn(UPrimitiveComponent* Actor);
 
-	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
+	UFUNCTION(BlueprintCallable)
 	virtual void ZoomOut();
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
@@ -42,6 +42,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	TSubclassOf<UUserWidget> MiniGameWidget;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	TSubclassOf<UUserWidget> VictoryWidget;
 
 public:	
 	// Called every frame
