@@ -61,7 +61,8 @@ private:
 
 	void SetWalking();
 
-	void IsClimbBlocked(const FHitResult& HitResult) const;
+	bool IsWallStillInFront(FHitResult& HitResult) const;
+
 	
 
 		
