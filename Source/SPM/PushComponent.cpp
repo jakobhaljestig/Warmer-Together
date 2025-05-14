@@ -17,7 +17,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
 		FHitResult Hit;
-		if (!GetGrabbableInReach(Hit))
+		if (!GetGrabbableInReach(Hit) || PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->bIsFalling)
 		{
 			StopPushing();
 		}
@@ -26,6 +26,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		}
 		else if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
 		{
+			OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed/4;
 			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
 			PhysicsHandle->SetTargetLocation(TargetLocation);
 		}

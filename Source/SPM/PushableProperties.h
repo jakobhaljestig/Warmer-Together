@@ -35,6 +35,7 @@ public:
 
 	bool CanPush() const;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsFalling = false;
 
 		
