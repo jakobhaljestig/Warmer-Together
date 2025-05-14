@@ -3,7 +3,8 @@
 
 #include "LoadLevelTriggerBox.h"
 
-#include "CharacterBase.h"
+#include "CharacterBig.h"
+#include "CharacterSmall.h"
 #include "Kismet/GameplayStatics.h"
 
 ALoadLevelTriggerBox::ALoadLevelTriggerBox()
@@ -13,7 +14,7 @@ ALoadLevelTriggerBox::ALoadLevelTriggerBox()
 
 void ALoadLevelTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
-	if (Cast<ACharacterBase>(OtherActor) && LevelToLoad != "")
+	if ((Cast<ACharacterBig>(OtherActor) || Cast<ACharacterSmall>(OtherActor)) && LevelToLoad != "")
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Loading %s"), *LevelToLoad.ToString());
 		const FLatentActionInfo LatentInfo;

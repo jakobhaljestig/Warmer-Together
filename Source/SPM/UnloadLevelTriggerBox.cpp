@@ -3,7 +3,8 @@
 
 #include "UnloadLevelTriggerBox.h"
 
-#include "CharacterBase.h"
+#include "CharacterBig.h"
+#include "CharacterSmall.h"
 #include "Kismet/GameplayStatics.h"
 
 AUnloadLevelTriggerBox::AUnloadLevelTriggerBox()
@@ -13,7 +14,7 @@ AUnloadLevelTriggerBox::AUnloadLevelTriggerBox()
 
 void AUnloadLevelTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
-	if (Cast<ACharacterBase>(OtherActor) && LevelToUnload != "")
+	if ((Cast<ACharacterBig>(OtherActor) || Cast<ACharacterSmall>(OtherActor)) && LevelToUnload != "")
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Unloading %s"), *LevelToUnload.ToString());
 		const FLatentActionInfo LatentInfo;
