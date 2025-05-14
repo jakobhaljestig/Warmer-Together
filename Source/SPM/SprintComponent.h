@@ -18,7 +18,7 @@ public:
 	
 	void StartSprint (const FInputActionValue& Value);
 	
-	void StopSprint(const FInputActionValue& Value);
+	void StopSprint();
 
 protected:
 	virtual void BeginPlay() override;

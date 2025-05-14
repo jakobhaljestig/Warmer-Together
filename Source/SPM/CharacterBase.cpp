@@ -275,7 +275,7 @@ void ACharacterBase::StartSprint(const FInputActionValue& Value)
 
 void ACharacterBase::StopSprint(const FInputActionValue& Value)
 {
-	SprintComponent->StopSprint(Value);
+	SprintComponent->StopSprint();
 }
 
 
