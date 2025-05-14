@@ -15,7 +15,7 @@ void ALoadLevelTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* Other
 {
 	if (Cast<ACharacterBase>(OtherActor) && LevelToLoad != "")
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Loading %s"), *LevelToLoad.ToString());
+		UE_LOG(LogTemp, Error, TEXT("Loading %s"), *LevelToLoad.ToString());
 		const FLatentActionInfo LatentInfo;
 		UGameplayStatics::LoadStreamLevel(this, LevelToLoad, true, true, LatentInfo);
 	}

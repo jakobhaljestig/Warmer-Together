@@ -16,6 +16,7 @@
 #include "PerformanceTracker.h"
 #include "PushComponent.h"
 #include "HugComponent.h"
+#include "SprintComponent.h"
 #include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -90,13 +91,19 @@ void ACharacterBase::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("HugComponent not valid"));
 	}
+
+	SprintComponent = FindComponentByClass<USprintComponent>();
+	if (!SprintComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("SprintComponent not valid"));
+	}
 	
 }
 
 void ACharacterBase::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	
 	if (GetCharacterMovement()->IsMovingOnGround())
 	{
 		LastGroundedZ = GetActorLocation().Z;
@@ -132,8 +139,8 @@ void ACharacterBase::Tick(float DeltaTime)
 	{
 		bIsPushing = false;
 	}
-
 }
+
 
 void ACharacterBase::NotifyControllerChanged()
 {
@@ -148,6 +155,7 @@ void ACharacterBase::NotifyControllerChanged()
 		}
 	}
 }
+
 
 void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
@@ -170,12 +178,16 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Aim);
 		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Completed, this, &ACharacterBase::Throw);
+
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterBase::StartSprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterBase::StopSprint);
 	}
 	else
 	{
 		UE_LOG(LogTemplateCharacter, Error, TEXT("'%s' Failed to find an Enhanced Input component! This template is built to use the Enhanced Input system. If you intend to use the legacy system, then you will need to update this C++ file."), *GetNameSafe(this));
 	}
 }
+
 
 void ACharacterBase::Move(const FInputActionValue& Value)
 {
@@ -194,6 +206,7 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 	}
 }
 
+
 void ACharacterBase::Look(const FInputActionValue& Value)
 {
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
@@ -204,15 +217,21 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 	}
 }
 
+
 void ACharacterBase::Jump()
 {
 	if (bIsHugging)
 	{
 		return;
 	}
-
+	if (!GetCharacterMovement() -> IsMovingOnGround() && !bCanUseCoyoteTime)
+	{
+		return;
+	}
 	Super::Jump();
 }
+
+
 
 //-- Coyote time ---
 
@@ -248,8 +267,19 @@ void ACharacterBase::DisableCoyoteTime()
 }
 
 
-//--- Hugging ---
+void ACharacterBase::StartSprint(const FInputActionValue& Value)
+{
+	SprintComponent->StartSprint(Value);
+}
 
+
+void ACharacterBase::StopSprint(const FInputActionValue& Value)
+{
+	SprintComponent->StopSprint(Value);
+}
+
+
+//--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
 	bIsHugging = true;
@@ -302,16 +332,22 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
-	PushComponent->StartPushing();
-	bIsPushing = true;
+	if (!PushComponent->HoldingSomething())
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
+		PushComponent->StartPushing();
+		bIsPushing = true;
+	}
 }
 
 void ACharacterBase::EndPush(const FInputActionValue& Value) 
 {
-	UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
-	PushComponent->StopPushing();
-	bIsPushing = false;
+	if (bIsPushing)
+	{
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
+		PushComponent->StopPushing();
+		bIsPushing = false;
+	}
 }
 
 

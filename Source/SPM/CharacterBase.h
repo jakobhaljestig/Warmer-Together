@@ -21,6 +21,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 class UPushComponent;
+class USprintComponent;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -63,6 +64,9 @@ class ACharacterBase : public ACharacter
 	UInputAction* PushAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SprintAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ThrowSnowballAction;
 
 
@@ -89,6 +93,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float CurrentMovementSpeed;
 
+	//Sprint -
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprint")
+	USprintComponent* SprintComponent;
+	
+	void StartSprint (const FInputActionValue& Value);
+	void StopSprint(const FInputActionValue& Value);
+	
 	//HUGGING
 	void BeginHug(const FInputActionValue& Value);
 	void EndHug(const FInputActionValue& Value);
@@ -143,7 +154,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature")
 	float BaseCoolingRate = 5.0f;
 	
-
 	// Vind
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	float WindResistanceThreshold = 10.0f;
