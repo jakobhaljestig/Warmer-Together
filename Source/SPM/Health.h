@@ -1,6 +1,6 @@
 
 #pragma once
-
+/*
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Health.generated.h"
@@ -44,4 +44,4 @@ private:
 	float Health;
 	bool bFrozen = false;
 	
-};
+};*/

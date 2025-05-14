@@ -9,7 +9,7 @@
 #include "CharacterBase.h"
 #include "GameFramework/Actor.h"
 #include "Kismet/GameplayStatics.h"
-
+/*
 UBTService_AnalyzeWeather::UBTService_AnalyzeWeather()
 {
 	NodeName = "BTService_AnalyzeWeather";
@@ -35,10 +35,10 @@ void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	//hämtar performancetrackern från FPerformance, den som uppdaterar spelarens statistik
 	const FPerformance& Perf = PerfTracker->GetPerformance();
 
-	/*
+	
 	FPerformance Perf;
 	Perf.DeathCount = 10; // många dödsfall
-	Perf.AveragePuzzleTime = 100; // lång tid */
+	Perf.AveragePuzzleTime = 100; // lång tid 
 
 	UWorld* World = PlayerChar->GetWorld();
 	if (!World) return;
@@ -71,8 +71,8 @@ void UBTService_AnalyzeWeather::TickNode(UBehaviorTreeComponent& OwnerComp, uint
 	/*UE_LOG(LogTemp, Warning, TEXT("[TEST] Simulated BAD PERFORMANCE: Snow=%.2f Visibility=%.2f Temp=%.1f"),
 		WeatherSystem->GetCurrentWeather().SnowIntensity,
 		WeatherSystem->GetCurrentWeather().Visibility,
-		WeatherSystem->GetCurrentWeather().Temperature);*/
+		WeatherSystem->GetCurrentWeather().Temperature);
 
 	
-}
+}*/
 

@@ -38,10 +38,10 @@ void UFreezingTouchComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			{
 				if (Character->GetComponentByClass<UBodyTemperature>()->GetTempPercentage() > 0)
 					Character->GetComponentByClass<UBodyTemperature>()->ModifyTemperature(-CoolDownRate*DeltaTime);
-				else
+				/*else
 				{
 					Character->GetComponentByClass<UHealth>()->TakeDamage(CoolDownRate * DeltaTime);
-				}
+				}*/
 			}
 		}
 	}

@@ -1,6 +1,6 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
-
+/*
 #include "BTService_CheckHugBehaviour.h"
 
 #include "CharacterBase.h"
@@ -83,3 +83,4 @@ void UBTService_CheckHugBehaviour::TickNode(UBehaviorTreeComponent& OwnerComp, u
 		HugAcculuatorTimer = 0;
 	}
 }
+*/
