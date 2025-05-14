@@ -1,11 +1,14 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #pragma once
-/*
+
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTService.h"
 #include "BTService_CheckHugBehaviour.generated.h"
 
+/**
+ * 
+ */
 UCLASS()
 class SPM_API UBTService_CheckHugBehaviour : public UBTService
 {
@@ -29,4 +32,4 @@ private:
 	float HugAcculuatorTimer = 0.0f;
 
 	int32 HugsInPeriod = 0.f;
-};*/
+};

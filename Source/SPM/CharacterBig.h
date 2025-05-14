@@ -17,21 +17,22 @@ UCLASS()
 class SPM_API ACharacterBig : public ACharacterBase
 {
 	GENERATED_BODY()
-	
+
+
+
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* GrabAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ThrowAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ClimbAction;
 
-public:
-	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool bIsClimbing = false;
-
-	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool bIsLifting = false;
+	
 
 protected:
+	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pickup")
 	ULiftComponent* PickupComponent;
@@ -41,19 +42,25 @@ protected:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	void ToggleGrab(const FInputActionValue& Value);
+	void Throw(const FInputActionValue& Value);
 
 	void Climb(const FInputActionValue& Value);
 
 	bool IsH = false;
 
-	virtual void Move(const FInputActionValue& Value) override;
+	void Move(const FInputActionValue& Value) override;
 
 	//Tror de inte behövs UPROPERTY tbh
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Climb")
 	UClimbComponent* ClimbingComponent;
 
 private:
-	
-	virtual void OnDeath() override;
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool bIsClimbing = false;
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool bIsLifting = false;
+
+	void OnDeath() override;
 	
 };

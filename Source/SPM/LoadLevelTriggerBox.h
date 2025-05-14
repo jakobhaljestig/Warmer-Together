@@ -24,5 +24,4 @@ private:
 	UPROPERTY(EditAnywhere)
 	FName LevelToLoad;
 	
-	
 };

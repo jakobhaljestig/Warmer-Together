@@ -19,7 +19,7 @@ enum class EZoneType : uint8
 };
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
-class SPM_API UAdaptiveWeatherSystem : public UGameInstanceSubsystem,  public IWeatherUpdaterInterface
+class SPM_API UAdaptiveWeatherSystem : public UGameInstanceSubsystem, public IWeatherUpdaterInterface
 {
 	GENERATED_BODY()
 
@@ -28,26 +28,24 @@ public:
 	
 	virtual void BeginPlay();
 
+public:
+
+	void SetCurrentZone(EZoneType NewZone);
+	
 	EZoneType GetCurrentZone() const { return CurrentZone; }
 	// Uppdaterar systemet varje frame, inte nödvändigt om vi inte vill ha varje tick, men kan användas för periodiska uppdateringar
 	virtual void Deinitialize() override;
 	void OnMapLoaded(UWorld* LoadedWorld);
 	void OnWeatherUpdateTick();
-	
-
-	// Returnerar väderstatus, t.ex om det redan är dåligt väder behövs det inte adderas mer
-	const FWeatherState& GetCurrentWeather() const;
-	void InitializeEnvironmentReferences();
-	void UpdateWeatherFromTemperature(float TemperaturePercentage) const;
-	FVector GetPlayersMidpoint() const;
-	
-	void UpdateWeatherEffectLocation() const;
-	//void OnWeatherUpdateTick() const;
 
 	// Uppdaterar prestationen, t.ex. efter att någon dör eller gör något bra
 	virtual void UpdatePerformance(const FPerformance& NewPerformance) override;
 
-	//void SetCurrentZone(EZoneType NewZone);
+	// Returnerar väderstatus, t.ex om det redan är dåligt väder behövs det inte adderas mer
+	const FWeatherState& GetCurrentWeather() const;
+	void InitializeEnvironmentReferences();
+	FVector GetPlayersMidpoint() const;
+	void UpdateWeatherEffectLocation() const;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	AExponentialHeightFog* FogActor;
@@ -64,10 +62,8 @@ public:
 	UPROPERTY(EditAnywhere, Category = "Weather VFX")
 	class UNiagaraComponent* MistParticleSystem;
 
-	/*
 	void ApplyEnvironmentEffects() const;
 	void AggregatePerformance();
-	*/
 
 	mutable float CachedEnvTemp = 0.0f;
 
@@ -82,7 +78,7 @@ private:
 
 	void AffectBodyTemperatures() const;
 	
-	//void EvaluatePerformanceAndAdjustWeather();
+	void EvaluatePerformanceAndAdjustWeather();
 	
 	UPROPERTY(EditAnywhere, Category = "Weather")
 	FWeatherState CurrentWeather;
@@ -98,8 +94,6 @@ private:
 	float CurrentCoolRate = 1.5f;
 
 	int32 WeatherLevel = GetCurrentWeather().WeatherLevel;
-
-	FTimerHandle WeatherUpdateTimerHandle;
 
 
 };

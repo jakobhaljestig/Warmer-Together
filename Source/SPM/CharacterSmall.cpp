@@ -12,7 +12,13 @@
 void ACharacterSmall::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	GetCharacterMovement()->JumpZVelocity = 800.0f; 
+	GetCharacterMovement()->AirControl = 0.35f;
+	GetCharacterMovement()->BrakingDecelerationFalling = -1000.0f;
+
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
+	
 }
 
 
@@ -25,6 +31,9 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 		
 		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Started, this, &ACharacterSmall::Crawl);
 		EnhancedInputComponent->BindAction(CrawlAction, ETriggerEvent::Completed, this, &ACharacterSmall::StopCrawl);
+
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterSmall::Sprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterSmall::StopSprint);
 		
 	}
 	else
@@ -36,7 +45,7 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 //Implementera check för att se om något är över karaktären.
 void ACharacterSmall::Crawl (const FInputActionValue& Value)
 {
-	if (!bIsPushing && !bPressedJump && !GetCharacterMovement()->IsFalling() && !bIsHugging)
+	if (!bIsSprinting && !bIsPushing)
 	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Crouching"));
 		GetCharacterMovement()->MaxWalkSpeed = 250.0f;
@@ -48,7 +57,7 @@ void ACharacterSmall::Crawl (const FInputActionValue& Value)
 
 void ACharacterSmall::StopCrawl(const FInputActionValue& Value)
 {
-	if (bIsCrawling && !bPressedJump)
+	if (bIsCrawling)
 	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is not Crouching"));
 		GetCharacterMovement()->MaxWalkSpeed = 500.0f;
@@ -57,22 +66,34 @@ void ACharacterSmall::StopCrawl(const FInputActionValue& Value)
 	}
 }
 
+void ACharacterSmall::Sprint(const FInputActionValue& Value)
+{
+	if (!bIsPushing && !bIsCrawling)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 800.0f;
+		bIsSprinting = true;
+	}
+}
+
+void ACharacterSmall::StopSprint(const FInputActionValue& Value)
+{
+	if (bIsSprinting)
+	{
+		GetCharacterMovement()->MaxWalkSpeed = 500.0f;
+		bIsSprinting = false;
+	}
+}
+
 void ACharacterSmall::BeginPush(const FInputActionValue& Value)
 {
-	if (!bIsCrawling)
+	if (!bIsSprinting && !bIsCrawling)
 		Super::BeginPush(Value);
 }
 
 void ACharacterSmall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-}
-
-void ACharacterSmall::OnDeath()
-{
-	ACharacter::UnCrouch(true);
-	bIsCrawling = false;
-	Super::OnDeath();
+	
 }
 
 

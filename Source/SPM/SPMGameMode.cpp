@@ -27,19 +27,11 @@ void ASPMGameMode::InitGame(const FString& MapName, const FString& Options, FStr
 //SKAPA BUILDER KLASS?
 void ASPMGameMode::BeginPlay()
 {
-	Super::BeginPlay();
-
-	// Delay before spawning players
-	GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ASPMGameMode::SpawnPlayers, 1.0f, false);
-}
-
-void ASPMGameMode::SpawnPlayers()
-{
-	// Spawn Player 1
+	//Spawnar Spelare 1
 	APlayerController* Player1Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
 	if (Player1Controller && Player1PawnClass)
 	{
-		AActor* PlayerStart = FindPlayerStart(Player1Controller, "Player1Start"); 
+		AActor* PlayerStart = FindPlayerStart(Player1Controller, "Player1Start"); //lägg till tag för spawning point player 1
 		FVector SpawnLocation = PlayerStart->GetActorLocation();
 		FRotator SpawnRotation = PlayerStart->GetActorRotation();
 
@@ -51,11 +43,12 @@ void ASPMGameMode::SpawnPlayers()
 		}
 	}
 
-	// Spawn Player 2
+	//Spawna player 2
+	
 	APlayerController* Player2Controller = UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
 	if (Player2Controller && Player2PawnClass)
 	{
-		AActor* PlayerStart = FindPlayerStart(Player2Controller, "Player2Start"); 
+		AActor* PlayerStart = FindPlayerStart(Player2Controller, "Player2Start"); //lägg till tag för spawning point player 1
 		FVector SpawnLocation = PlayerStart->GetActorLocation();
 		FRotator SpawnRotation = PlayerStart->GetActorRotation();
 
