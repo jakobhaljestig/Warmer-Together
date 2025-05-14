@@ -43,12 +43,13 @@ void USprintComponent::DrainStamina()
 		{
 			Stamina = 0;
 			bCanSprint = false;
+			StopSprint();
 			GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle); 
 		}
 	}
 }
 
-void USprintComponent::StopSprint(const FInputActionValue& Value)
+void USprintComponent::StopSprint()
 {
 	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
 	CharacterOwner->GetCharacterMovement()->MaxWalkSpeed = 500.f; 
