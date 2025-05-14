@@ -14,19 +14,10 @@ AUnloadLevelTriggerBox::AUnloadLevelTriggerBox()
 
 void AUnloadLevelTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* OtherActor)
 {
-	if (Cast<ACharacterBig>(OtherActor))
-	{
-		P1Passed = true;
-	}
-	if (Cast<ACharacterSmall>(OtherActor))
-	{
-		P2Passed = true;
-	}
-
-	if (P1Passed && P2Passed)
+	if ((Cast<ACharacterBig>(OtherActor) || Cast<ACharacterSmall>(OtherActor)) && LevelToUnload != "")
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Unloading %s"), *LevelToUnload.ToString());
 		const FLatentActionInfo LatentInfo;
-		UGameplayStatics::UnloadStreamLevel(this, LevelToUnload, LatentInfo, true);
+		UGameplayStatics::UnloadStreamLevel(this, LevelToUnload, LatentInfo, false);
 	}
 }
