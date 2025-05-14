@@ -13,15 +13,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/Content/Maps/Jakob/Jakob.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Jakob/Jakob.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorOne.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorOne.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorThree.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorThree.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorTwo.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorTwo.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Lake.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Lake.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/projectSettingsUpdater.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/projectSettingsUpdater.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/LoadLevelTriggerBox.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/LoadLevelTriggerBox.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/UnloadLevelTriggerBox.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/UnloadLevelTriggerBox.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -245,7 +240,6 @@
       <workItem from="1746514490860" duration="849000" />
       <workItem from="1746521208487" duration="1563000" />
       <workItem from="1746975214952" duration="1060000" />
-      <workItem from="1747037846134" duration="13746000" />
     </task>
     <servers />
   </component>
