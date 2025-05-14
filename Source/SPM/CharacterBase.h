@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "BodyTemperature.h"
-#include "Health.h"
 #include "InputActionValue.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
@@ -13,7 +12,6 @@
 
 class UPerformanceTracker;
 class UBodyTemperature;
-class UHealth;
 class UAdaptiveWeatherSystem;
 class UBodyTemplate;
 class USpringArmComponent;
@@ -184,8 +182,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
 	UBodyTemperature* BodyTemperatureComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
-	UHealth* HealthComponent;
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	UHealth* HealthComponent;*/
 
 	// Referens till vår performance-tracker
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
