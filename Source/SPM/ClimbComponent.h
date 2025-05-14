@@ -60,8 +60,6 @@ private:
 	bool ClimbingDownInReach (FHitResult& HitResult) const;
 
 	void SetWalking();
-
-	void IsClimbBlocked(const FHitResult& HitResult) const;
 	
 
 		

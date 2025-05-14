@@ -41,8 +41,6 @@ public:
 	void ResetTemp();
 
 	void ModifyTemperature(float DeltaTemperature);
-	void HandleFreeze();
-	void HandleDeath();
 
 private:
 	void CoolDown(float DeltaTime);
@@ -52,7 +50,7 @@ private:
 	float MaxTemp = 100.f;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
-	float CoolDownRate = 0.8f;
+	float CoolDownRate = 2.5f;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float HeatUpRate = 20.f;
@@ -70,12 +68,6 @@ private:
 
 	bool bFrozen = false;
 	bool bDisplayFreezeEffect = false;
-
-	FTimerHandle DeathTimerHandle;
-	bool bHasDied = false;
-
-	UPROPERTY(EditAnywhere)
-	float DeathDelay = 2.5f; // Hur lång tid efter att temperaturen nått 0 man dör
 	
 };
 

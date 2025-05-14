@@ -50,7 +50,7 @@ void AIceFloatSpawner::SpawnIceFloat()
 
 		AMovingIceFloat* NewFloat = GetWorld() -> SpawnActor<AMovingIceFloat>(MovingIceFloatClass, SpawnLocation, SpawnRotation);
 		
-		if (NewFloat && EndTarget != nullptr)
+		if (NewFloat)
 		{
 			NewFloat->SetEndTarget(EndTarget->GetActorLocation());
 			NewFloat-> SetMovement(MovementSpeed);

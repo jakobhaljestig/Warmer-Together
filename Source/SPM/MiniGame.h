@@ -19,7 +19,6 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-	
 	UPROPERTY(EditAnywhere)
 	bool bIsComplete = false;
 
@@ -27,10 +26,7 @@ protected:
 	float GameSpeed = 50.f;
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
-	float TimingOffset = 3.f;
-
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
-	float TimeSinceLastPress = 0;
+	float PressTimeLimit = 3.f;
 
 	UPROPERTY()
 	int LastInput;
@@ -47,14 +43,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	float CurrentLoopTime = 0;
 
-	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
+	UPROPERTY(EditAnywhere)
 	float MaxLoopTime = 10.f;
-
-	UPROPERTY()
-	bool bPlaying = false;
-
-	UPROPERTY()
-	bool bUsing = false;
 	
 
 public:	
@@ -78,31 +68,4 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	FText ShownInput();
-
-	UFUNCTION(BlueprintCallable)
-	void SetTimer(const float LoopTime){ MaxLoopTime = LoopTime; }
-	
-	UFUNCTION(BlueprintCallable)
-	void SetInputOffset(const float Offset){ TimingOffset = Offset; }
-	
-	UFUNCTION(BlueprintCallable)
-	void SetComplete(const bool CompletionStatus){ bIsComplete = CompletionStatus; }
-
-	UFUNCTION(BlueprintCallable)
-	void StartGame(){ bPlaying = true; }
-
-	UFUNCTION()
-	bool IsPlayerUsing() const { return bUsing; }
-
-	UFUNCTION(BlueprintCallable)
-	void SetPlayerUsing(bool Using) { bUsing = Using; }
-
-	UFUNCTION(BlueprintCallable)
-	float GetTimer() const { return CurrentLoopTime; }
-
-	UFUNCTION(BlueprintCallable)
-	float GetMaxTime() const { return MaxLoopTime; }
-
-	UPROPERTY()
-	bool Correct;
 };

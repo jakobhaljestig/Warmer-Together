@@ -29,22 +29,15 @@ void UMiniGame::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (bPlaying)
+	CurrentLoopTime += DeltaTime;
+	if (CurrentLoopTime > MaxLoopTime)
 	{
-		CurrentLoopTime += DeltaTime;
-		if (Correct)
-			TimeSinceLastPress += DeltaTime;
+		GameLoop();
+	}
 
-		if (TimeSinceLastPress > TimingOffset)
-		{
-			Correct = false;
-			TimeSinceLastPress = 0;
-			LastInput = 0;
-		}
-		if (CurrentLoopTime > MaxLoopTime)
-		{
-			GameLoop();
-		}
+	if (CorrectPressesToWin == CorrectPresses)
+	{
+		bIsComplete = true;
 	}
 	// ...
 }
@@ -54,7 +47,6 @@ void UMiniGame::GameLoop()
 	RequestedInput = DecideInput();
 	LastInput = 0;
 	CurrentLoopTime = 0;
-	Correct = false;
 }
 
 void UMiniGame::ReadInput(const int Input)
@@ -71,17 +63,14 @@ bool UMiniGame::CheckCorrectPresses()
 {
 	if (RequestedInput == LastInput)
 	{
-		Correct = true;
+		CorrectPresses += 1;
+		return true;	
 	}
-	return Correct;
+	return false;
 }
 
 FText UMiniGame::ShownInput()
 {
-	if (bPlaying == false)
-	{
-		return FText::FromString("Waiting for other player");
-	}
 	if (RequestedInput == 1)
 	{
 		return FText::FromString("Y");

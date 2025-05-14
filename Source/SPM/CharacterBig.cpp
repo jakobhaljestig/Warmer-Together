@@ -24,13 +24,16 @@ void ACharacterBig::BeginPlay()
 	}
 }
 
+
 void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
-	
+	// Set up action bindings
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
+		// För test
 		EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, this, &ACharacterBig::ToggleGrab);
+		EnhancedInputComponent->BindAction(ThrowAction, ETriggerEvent::Ongoing, this, &ACharacterBig::Throw);
 
 		EnhancedInputComponent->BindAction(ClimbAction, ETriggerEvent::Started, this, &ACharacterBig::Climb);
 	
@@ -41,23 +44,27 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	}
 }
 
+//För test
 void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 {
-	if (!bIsClimbing && !bIsHugging)
-	{
-		PickupComponent->GrabAndRelease();
-	}
+	PickupComponent->GrabAndRelease();
 }
+
+
+
+void ACharacterBig::Throw(const FInputActionValue& Value)
+{
+	PickupComponent->Throw();
+}
+
+
 
 void ACharacterBig::Climb(const FInputActionValue& Value)
 {
-	if (PickupComponent -> HoldingSomething() == false)
-	{
-		ClimbingComponent->Climb();
-		bIsClimbing = ClimbingComponent->IsClimbing();
-	}
-	
+	ClimbingComponent->Climb();
 }
+
+
 
 void ACharacterBig::Move(const FInputActionValue& Value)
 {
@@ -74,6 +81,7 @@ void ACharacterBig::Move(const FInputActionValue& Value)
 			}
 			return;
 		}
+		
 		Super::Move(Value);
 	}
 }
@@ -81,6 +89,5 @@ void ACharacterBig::Move(const FInputActionValue& Value)
 void ACharacterBig::OnDeath()
 {
 	PickupComponent->Drop(0,0);
-	ClimbingComponent->StopClimb();
 	Super::OnDeath();
 }

@@ -23,6 +23,22 @@ void UAdaptiveWeatherSystem::BeginPlay()
 	
 }
 
+
+void UAdaptiveWeatherSystem::SetCurrentZone(EZoneType NewZone)
+{
+
+	if (bIsCooperationDetected && NewZone != EZoneType::ZONE_NEUTRAL)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[Weather] Cooperation detected, ignoring zone change."));
+		return;
+	}
+	
+	CurrentZone = NewZone;
+	EvaluatePerformanceAndAdjustWeather(); 
+	ApplyEnvironmentEffects();      
+		
+}
+
 void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 {
 	Super::Initialize(Collection);
@@ -32,6 +48,18 @@ void UAdaptiveWeatherSystem::Initialize(FSubsystemCollectionBase& Collection)
 	UE_LOG(LogTemp, Warning, TEXT("[AdaptiveWeatherSystem] Initialized"));
 
 	FCoreUObjectDelegates::PostLoadMapWithWorld.AddUObject(this, &UAdaptiveWeatherSystem::OnMapLoaded);
+	
+	if (UWorld* World = GetWorld())
+	{
+		FTimerHandle UpdateTimerHandle;
+		World->GetTimerManager().SetTimer(
+			UpdateTimerHandle,
+			this,
+			&UAdaptiveWeatherSystem::OnWeatherUpdateTick,
+			UpdateInterval,
+			true
+		);
+	}
 
 }
 
@@ -51,56 +79,28 @@ void UAdaptiveWeatherSystem::OnMapLoaded(UWorld* LoadedWorld)
 
 	InitializeEnvironmentReferences();
 
-	//ApplyEnvironmentEffects();
-
-	if (UWorld* World = GetWorld())
-	{
-		World->GetTimerManager().SetTimer(
-			WeatherUpdateTimerHandle,
-			this,
-			&UAdaptiveWeatherSystem::OnWeatherUpdateTick,
-			5.0f,  // varje 5 sekunder (kan justeras)
-			true   // looping
-		);
-
-		UE_LOG(LogTemp, Warning, TEXT("[AdaptiveWeatherSystem] Started Weather Update Timer"));
+	ApplyEnvironmentEffects();
 	
-	}
 }
-	
 
 void UAdaptiveWeatherSystem::OnWeatherUpdateTick()
 {
-	UE_LOG(LogTemp, Warning, TEXT("[AdaptiveWeatherSystem] Weather Tick called"));
-
+	AggregatePerformance();
 	UpdateWeatherEffectLocation();
-
-	// Hämta medeltemperaturen från spelarna
-	TArray<AActor*> PlayerCharacters;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
-
-	float TotalTemp = 0.f;
-	int32 Count = 0;
-
-	for (AActor* Actor : PlayerCharacters)
-	{
-		ACharacterBase* Character = Cast<ACharacterBase>(Actor);
-		if (!Character) continue;
-
-		UBodyTemperature* TempComp = Character->FindComponentByClass<UBodyTemperature>();
-		if (TempComp)
-		{
-			TotalTemp += TempComp->GetTempPercentage(); // 0.0–1.0
-			Count++;
-		}
-	}
-
-	if (Count > 0)
-	{
-		float AvgTemp = TotalTemp / Count;
-		UpdateWeatherFromTemperature(AvgTemp);
-	}
 }
+
+void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformance)
+{
+	CurrentPerformance = NewPerformance;
+	EvaluatePerformanceAndAdjustWeather();
+
+	/*UE_LOG(LogTemp, Warning, TEXT("Performance Updated: Deaths=%d, AvgTime=%.1f, TimeNearHeat=%.1f"),
+		CurrentPerformance.DeathCount,
+		CurrentPerformance.AveragePuzzleTime,
+		CurrentPerformance.TimeNearHeat);
+		*/
+}
+
 
 const FWeatherState& UAdaptiveWeatherSystem::GetCurrentWeather() const
 {
@@ -185,37 +185,6 @@ void UAdaptiveWeatherSystem::InitializeEnvironmentReferences()
 		UE_LOG(LogTemp, Error, TEXT("[Weather] MistParticleSystem not found!"));
 	}
 }
-
-void UAdaptiveWeatherSystem::UpdateWeatherFromTemperature(const float TemperaturePercentage) const
-{
-	if (!SnowLevel1 || !SnowLevel2 || !SnowLevel3 || !MistParticleSystem) return;
-
-	UE_LOG(LogTemp, Warning, TEXT("TempPct: %.2f"), TemperaturePercentage);
-
-	// Allt inaktivt först
-	SnowLevel1->Deactivate();
-	SnowLevel2->Deactivate();
-	SnowLevel3->Deactivate();
-	MistParticleSystem->Deactivate();
-
-	if (TemperaturePercentage >= 0.75f)
-	{
-		SnowLevel1->Activate();
-		UE_LOG(LogTemp, Warning, TEXT("Snow 1 Activated"));
-	}
-	else if (TemperaturePercentage >= 0.5f)
-	{
-		SnowLevel2->Activate();
-		UE_LOG(LogTemp, Warning, TEXT("Snow 2 Activated"));
-	}
-	else if (TemperaturePercentage >= 0.25f)
-	{
-		SnowLevel3->Activate();
-		MistParticleSystem->Activate();
-		UE_LOG(LogTemp, Warning, TEXT("Mist + Snow 3 Activated"));
-	}
-}
-
 FVector UAdaptiveWeatherSystem::GetPlayersMidpoint() const
 {
     TArray<AActor*> PlayerCharacters;
@@ -251,28 +220,28 @@ FVector UAdaptiveWeatherSystem::GetPlayersMidpoint() const
 
 void UAdaptiveWeatherSystem::UpdateWeatherEffectLocation() const
 {
-	const FVector Midpoint = GetPlayersMidpoint();
+    const FVector Midpoint = GetPlayersMidpoint();
 
-	// Beräkna avståndet mellan spelarna för att bestämma skalan
-	TArray<AActor*> PlayerCharacters;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
+    // Beräkna avståndet mellan spelarna för att bestämma skalan
+    TArray<AActor*> PlayerCharacters;
+    UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
 
-	float MaxDistance = 0.0f;
-	for (int32 i = 0; i < PlayerCharacters.Num(); ++i)
-	{
-		for (int32 j = i + 1; j < PlayerCharacters.Num(); ++j)
-		{
-			AActor* ActorA = PlayerCharacters[i];
-			AActor* ActorB = PlayerCharacters[j];
-			float Dist = FVector::Dist(ActorA->GetActorLocation(), ActorB->GetActorLocation());
-			MaxDistance = FMath::Max(MaxDistance, Dist);
-		}
-	}
+    float MaxDistance = 0.0f;
+    for (int32 i = 0; i < PlayerCharacters.Num(); ++i)
+    {
+        for (int32 j = i + 1; j < PlayerCharacters.Num(); ++j)
+        {
+            AActor* ActorA = PlayerCharacters[i];
+            AActor* ActorB = PlayerCharacters[j];
+            float Dist = FVector::Dist(ActorA->GetActorLocation(), ActorB->GetActorLocation());
+            MaxDistance = FMath::Max(MaxDistance, Dist);
+        }
+    }
 
-	// Skala snöeffekterna baserat på avståndet
-	float ScaleFactor = FMath::GetMappedRangeValueClamped(FVector2D(0.f, 3000.f), FVector2D(1.0f, 3.0f), MaxDistance);
-	// Z-skalan fixeras
-	FVector ParticleScale = FVector(ScaleFactor, 1.5f, 2.5f);
+    // Skala snöeffekterna baserat på avståndet
+    float ScaleFactor = FMath::GetMappedRangeValueClamped(FVector2D(0.f, 3000.f), FVector2D(1.0f, 3.0f), MaxDistance);
+    // Z-skalan fixeras
+    FVector ParticleScale = FVector(ScaleFactor, 1.5f, 2.5f);
 
 	if (MaxDistance > 2500.f)
 	{
@@ -299,7 +268,10 @@ void UAdaptiveWeatherSystem::UpdateWeatherEffectLocation() const
 			MistParticleSystem->SetWorldScale3D(ParticleScale);
 		}
 	}
+   
+
 }
+
 
 //påverkar bodytemp baserat på vädernivån, måste nog tweakas lite vart eftersom
 void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
@@ -337,43 +309,6 @@ void UAdaptiveWeatherSystem::AffectBodyTemperatures() const
 	}
 }
 
-void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& Performance)
-{
-	// Tom implementation – används inte längre
-}
-
-/*
-void UAdaptiveWeatherSystem::AggregatePerformance()
-{
-	TArray<AActor*> PlayerCharacters;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
-
-	int32 TotalDeaths = 0;
-	int32 NumPlayers = 0;
-
-	for (AActor* Actor : PlayerCharacters)
-	{
-		if (ACharacterBase* Character = Cast<ACharacterBase>(Actor))
-		{
-			if (UPerformanceTracker* Tracker = Character->FindComponentByClass<UPerformanceTracker>())
-			{
-				TotalDeaths += Tracker->GetPerformance().DeathCount;
-				NumPlayers++;
-			}
-		}
-	}
-
-	if (NumPlayers > 0)
-	{
-		float AverageDeaths = static_cast<float>(TotalDeaths) / NumPlayers;
-
-		FPerformance AggregatedPerformance;
-		AggregatedPerformance.DeathCount = AverageDeaths; // Snitt-dödsantal!
-
-		CurrentPerformance = AggregatedPerformance;
-		EvaluatePerformanceAndAdjustWeather();
-	}
-}
 
 //kollar performance score och motifierar zonen däreefter, Vädret går att anpassa, just nu har vi ju bara visability och snöpartiklar (som bara finns som på/av)
 void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
@@ -410,18 +345,9 @@ void UAdaptiveWeatherSystem::EvaluatePerformanceAndAdjustWeather()
 
 
 }
-void UAdaptiveWeatherSystem::UpdatePerformance(const FPerformance& NewPerformance)
-{
-	CurrentPerformance = NewPerformance;
-	EvaluatePerformanceAndAdjustWeather();
 
-	/*UE_LOG(LogTemp, Warning, TEXT("Performance Updated: Deaths=%d, AvgTime=%.1f, TimeNearHeat=%.1f"),
-		CurrentPerformance.DeathCount,
-		CurrentPerformance.AveragePuzzleTime,
-		CurrentPerformance.TimeNearHeat);
-		
-}
-/lägger på fog och snow, ytterligare effekter kan läggas till
+
+//lägger på fog och snow, ytterligare effekter kan läggas till
 void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const
 {
 		const FWeatherState& Weather = GetCurrentWeather();
@@ -477,21 +403,37 @@ void UAdaptiveWeatherSystem::ApplyEnvironmentEffects() const
 		}
 }
 
-void UAdaptiveWeatherSystem::SetCurrentZone(EZoneType NewZone)
+void UAdaptiveWeatherSystem::AggregatePerformance()
 {
+	TArray<AActor*> PlayerCharacters;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
 
-	if (bIsCooperationDetected && NewZone != EZoneType::ZONE_NEUTRAL)
+	int32 TotalDeaths = 0;
+	int32 NumPlayers = 0;
+
+	for (AActor* Actor : PlayerCharacters)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("[Weather] Cooperation detected, ignoring zone change."));
-		return;
+		if (ACharacterBase* Character = Cast<ACharacterBase>(Actor))
+		{
+			if (UPerformanceTracker* Tracker = Character->FindComponentByClass<UPerformanceTracker>())
+			{
+				TotalDeaths += Tracker->GetPerformance().DeathCount;
+				NumPlayers++;
+			}
+		}
 	}
-	
-	CurrentZone = NewZone;
-	EvaluatePerformanceAndAdjustWeather(); 
-	ApplyEnvironmentEffects();      
-		
+
+	if (NumPlayers > 0)
+	{
+		float AverageDeaths = static_cast<float>(TotalDeaths) / NumPlayers;
+
+		FPerformance AggregatedPerformance;
+		AggregatedPerformance.DeathCount = AverageDeaths; // Snitt-dödsantal!
+
+		CurrentPerformance = AggregatedPerformance;
+		EvaluatePerformanceAndAdjustWeather();
+	}
 }
-*/
 
 
 

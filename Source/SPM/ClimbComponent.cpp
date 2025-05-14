@@ -45,6 +45,7 @@ void UClimbComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 			bIsOnLedge = false;
 		}
 	}
+	
 }
 
 //Metoden är rätt värdelös
@@ -81,7 +82,7 @@ void UClimbComponent::StartClimb(FHitResult Hit)
 	bIsClimbing = true;
 	MovementComponent -> SetMovementMode(MOVE_Flying); //ANtar att gravity blir 0
 	MovementComponent->GravityScale = 0.0f;
-	MovementComponent->MaxFlySpeed = 400.f;
+	MovementComponent->MaxFlySpeed = 200.f;
 	MovementComponent->BrakingDecelerationFlying = 5000.f;
 	MovementComponent->bOrientRotationToMovement = false;
 	
@@ -97,6 +98,7 @@ void UClimbComponent::StopClimb()
 			FinishClimbUp();
 			return;
 		}
+
 		SetWalking();
 	}
 }
@@ -157,7 +159,7 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 
 	FVector Start = ClimbCharacter->GetActorLocation()  + FVector(0, 0, 80.f); //Flyttar upp linetrace mer mot huvudet
 	FVector ForwardVector = ClimbCharacter->GetActorForwardVector();
-	FVector End = Start + ForwardVector * 200.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
+	FVector End = Start + ForwardVector * 100.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
 
 	FVector HalfSize(30.f, 30.f, 50.f); 
 	FQuat Rotation = FQuat::Identity;
@@ -176,23 +178,12 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 		TraceParams
 	);
 	
-	if (bHit && HitResult.GetActor()->ActorHasTag("Climbable"))
+	if (bHit && HitResult.GetActor() -> ActorHasTag("Climbable"))
 	{
-		FHitResult BlockHit;
-		bool bBlocked = GetWorld()->LineTraceSingleByChannel(
-			BlockHit,
-			Start,
-			HitResult.ImpactPoint,
-			ECC_Visibility,
-			TraceParams
-		);
-		
-		if (bBlocked && BlockHit.GetActor() != HitResult.GetActor())
-		{
-			return false;
-		}
+		//UE_LOG(LogTemp, Warning, TEXT("Raycast hitting climbing object"));
 		return true;
 	}
+	
 	return false;
 }
 
@@ -228,7 +219,7 @@ bool UClimbComponent::ClimbingDownInReach(FHitResult& HitResult) const
 		TraceParams
 	);
 
-	//DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 2.0f);
+	DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 2.0f);
 
 	if (bHit && HitResult.GetActor()->ActorHasTag("Climbable"))
 	{
@@ -250,9 +241,4 @@ void UClimbComponent::SetWalking()
 	MovementComponent->MaxWalkSpeed = 500.f;
 	MovementComponent->BrakingDecelerationWalking = 2048.f;
 	MovementComponent->bOrientRotationToMovement = true;
-}
-
-void UClimbComponent::IsClimbBlocked(const FHitResult& HitResult) const
-{
-	
 }

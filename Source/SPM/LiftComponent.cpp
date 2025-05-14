@@ -23,7 +23,7 @@ void ULiftComponent::GrabAndRelease()
 	
 	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
-		Throw();
+		Drop(DroppingForce, VerticalDroppingForce);
 	}
 	else if (!HoldingSomething() && !OwnerMovementComponent->IsFalling())
 	{

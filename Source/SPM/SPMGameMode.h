@@ -16,14 +16,10 @@ class ASPMGameMode : public AGameModeBase
 
 public:
 	ASPMGameMode();
-	void SpawnPlayers();
 
 	virtual void InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage) override;
 
 	virtual void BeginPlay() override;
-
-private:
-	FTimerHandle SpawnTimerHandle;
 
 protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Players")
