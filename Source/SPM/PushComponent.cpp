@@ -17,7 +17,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
 		FHitResult Hit;
-		if (!GetGrabbableInReach(Hit))
+		if (!GetGrabbableInReach(Hit) || PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->bIsFalling)
 		{
 			StopPushing();
 		}
