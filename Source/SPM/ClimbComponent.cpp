@@ -45,7 +45,6 @@ void UClimbComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 			bIsOnLedge = false;
 		}
 	}
-	
 }
 
 //Metoden är rätt värdelös
@@ -177,12 +176,23 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 		TraceParams
 	);
 	
-	if (bHit && HitResult.GetActor() -> ActorHasTag("Climbable"))
+	if (bHit && HitResult.GetActor()->ActorHasTag("Climbable"))
 	{
-		//UE_LOG(LogTemp, Warning, TEXT("Raycast hitting climbing object"));
+		FHitResult BlockHit;
+		bool bBlocked = GetWorld()->LineTraceSingleByChannel(
+			BlockHit,
+			Start,
+			HitResult.ImpactPoint,
+			ECC_Visibility,
+			TraceParams
+		);
+		
+		if (bBlocked && BlockHit.GetActor() != HitResult.GetActor())
+		{
+			return false;
+		}
 		return true;
 	}
-	
 	return false;
 }
 
@@ -240,4 +250,9 @@ void UClimbComponent::SetWalking()
 	MovementComponent->MaxWalkSpeed = 500.f;
 	MovementComponent->BrakingDecelerationWalking = 2048.f;
 	MovementComponent->bOrientRotationToMovement = true;
+}
+
+void UClimbComponent::IsClimbBlocked(const FHitResult& HitResult) const
+{
+	
 }
