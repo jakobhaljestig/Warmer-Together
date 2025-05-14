@@ -11,7 +11,6 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
-#include "Health.h"
 #include "InputActionValue.h"
 #include "PerformanceTracker.h"
 #include "PushComponent.h"
@@ -57,7 +56,6 @@ ACharacterBase::ACharacterBase()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	BodyTempComponent = CreateDefaultSubobject<UBodyTemperature>(TEXT("BodyTemperature"));
-	HealthComponent = CreateDefaultSubobject<UHealth>(TEXT("Health"));
 	HugComponent = CreateDefaultSubobject<UHugComponent>(TEXT("HugComponent")); 
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
@@ -257,7 +255,7 @@ void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8
 
 void ACharacterBase::EnableCoyoteTime()
 {
-	bCanUseCoyoteTime = true;
+	//bCanUseCoyoteTime = true;
 	GetWorldTimerManager().SetTimer(CoyoteTimeHandle, this, &ACharacterBase::DisableCoyoteTime, CoyoteTimeDuration, false);
 }
 
@@ -369,7 +367,7 @@ void ACharacterBase::OnDeath()
 		if (WeatherSystem)
 		{
 			int32 PlayerIndex = UGameplayStatics::GetPlayerControllerID(Cast<APlayerController>(GetController()));
-			WeatherSystem->UpdatePerformance(PerformanceTracker->GetPerformance());
+			//WeatherSystem->UpdatePerformance(PerformanceTracker->GetPerformance());
 		}
 	}
 	RespawnAtCheckpoint();
@@ -385,13 +383,7 @@ void ACharacterBase::RespawnAtCheckpoint()
 {
 	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
 	bHasDied = false;
-
-	//bör inte ticka ner efter spelaren respawnar, endast kylenivån, sen efter kylenivån är på 0 så ska den börja ticka igen
-	if (HealthComponent)
-	{
-		HealthComponent->ResetHealth();
-	}
-
+	
 	//denna bör dock
 	UBodyTemperature* Temp = Cast<UBodyTemperature>(BodyTempComponent);
 	Temp->ResetTemp();
@@ -434,7 +426,7 @@ void ACharacterBase::Landed(const FHitResult& Hit)
 	if (FallDistanceMeters > FallDamageThreshold) // meters min for fall damage
 	{
 		float FallDamage = 50.f + ((FallDistanceMeters - FallDamageThreshold) * FallDamageMultiplier); 
-		HealthComponent->TakeDamage(FallDamage);
+		//HealthComponent->TakeDamage(FallDamage);
 		UE_LOG(LogTemp, Warning, TEXT("Threshold reached %f"),FallDistanceMeters);
 		UE_LOG(LogTemp, Warning, TEXT("Threshold reached %f"),FallDamage);
 	} 
