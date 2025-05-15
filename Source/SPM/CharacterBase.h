@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "BodyTemperature.h"
 #include "InputActionValue.h"
+#include "WeatherComponent.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
 #include "CharacterBase.generated.h"
@@ -132,7 +133,7 @@ protected:
 
 	//VÄDER
 	UPROPERTY()
-	UAdaptiveWeatherSystem* AdaptiveWeatherSystem;
+	UWeatherComponent* WeatherComponent;
 	
 
 	//FALL DAMAGE

@@ -2,8 +2,6 @@
 
 
 #include "BodyTemperature.h"
-
-#include "CharacterBig.h"
 #include "CharacterPlayerController.h"
 #include "CharacterSmall.h"
 #include "Kismet/GameplayStatics.h"
@@ -22,8 +20,6 @@ UBodyTemperature::UBodyTemperature()
 void UBodyTemperature::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	WeatherSystem = GetWorld()->GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
 }
 
 // Called every frame
@@ -144,13 +140,6 @@ void UBodyTemperature::ResetTemp()
 {
 	Temp = MaxTemp;
 	bFrozen = false;
-
-	if (!WeatherSystem)
-	{
-		WeatherSystem = GetWorld()->GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
-		UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] WeatherSystem reinitialized on ResetTemp"));
-	}
-
 
 }
 

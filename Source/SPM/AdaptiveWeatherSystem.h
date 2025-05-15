@@ -1,5 +1,5 @@
 #pragma once
-
+/*
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "FPerformance.h"
@@ -63,11 +63,9 @@ public:
 	
 	UPROPERTY(EditAnywhere, Category = "Weather VFX")
 	class UNiagaraComponent* MistParticleSystem;
-
-	/*
 	void ApplyEnvironmentEffects() const;
 	void AggregatePerformance();
-	*/
+	
 
 	mutable float CachedEnvTemp = 0.0f;
 
@@ -102,4 +100,6 @@ private:
 	FTimerHandle WeatherUpdateTimerHandle;
 
 
+
 };
+*/

@@ -69,15 +69,6 @@ void ACharacterBase::BeginPlay()
 	CurrentMovementSpeed = BaseMovementSpeed;
 	CheckpointLocation = GetActorLocation();
 
-	if (!PerformanceTracker)
-	{
-		PerformanceTracker = FindComponentByClass<UPerformanceTracker>();  // Hitta om den finns på samma objekt
-		if (!PerformanceTracker)
-		{
-			UE_LOG(LogTemp, Error, TEXT("PerformanceTracker not found!"));
-		}
-	}
-
 	PushComponent = FindComponentByClass<UPushComponent>();
 	if (!PushComponent)
 	{
@@ -109,28 +100,11 @@ void ACharacterBase::Tick(float DeltaTime)
 	
 	UpdatePlayerLocation();
 
-	UAdaptiveWeatherSystem* WeatherSystemInstance = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
-
-	if (!WeatherSystemInstance || !BodyTempComponent)
-		return;
-
-	const FWeatherState& CurrentWeather = WeatherSystemInstance->GetCurrentWeather();
 
 	// Temperatur påverkar kroppstemperatur
 	// float TempFactor = FMath::Clamp(-CurrentWeather.Temperature / 30.0f, 0.0f, 1.0f);
 	// BodyTempComponent->CoolDown(DeltaTime * TempFactor * BaseCoolingRate);
 
-	// Vind påverkar rörelse
-	if (CurrentWeather.WindSpeed > WindResistanceThreshold)
-	{
-		float WindFactor = FMath::Clamp(CurrentWeather.WindSpeed / MaxWindSpeed, 0.0f, 1.0f);
-		CurrentMovementSpeed = BaseMovementSpeed * (1.0f - WindFactor * 0.4f);
-	}
-	else
-	{
-		CurrentMovementSpeed = BaseMovementSpeed;
-	}
-	
 	// Snö påverkar sikt – detta kan styra t.ex. dimma, post-process etc
 	// UpdateVisibility(CurrentWeather.Visibility);
 	if (GetComponentByClass<UPhysicsHandleComponent>()->GetGrabbedComponent() == nullptr)
@@ -358,18 +332,7 @@ void ACharacterBase::OnDeath()
 	bHasDied = true;
 
 	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
-
-	if (PerformanceTracker)
-	{
-		PerformanceTracker->RegisterDeath();
-
-		UAdaptiveWeatherSystem* WeatherSystem = GetGameInstance()->GetSubsystem<UAdaptiveWeatherSystem>();
-		if (WeatherSystem)
-		{
-			int32 PlayerIndex = UGameplayStatics::GetPlayerControllerID(Cast<APlayerController>(GetController()));
-			//WeatherSystem->UpdatePerformance(PerformanceTracker->GetPerformance());
-		}
-	}
+	
 	RespawnAtCheckpoint();
 	
 }
