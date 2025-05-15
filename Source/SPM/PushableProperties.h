@@ -24,16 +24,19 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int NumberOfGrabbers = 0;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int RequiredNumberOfGrabbers = 0;
 	
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int HoldDistance = 100;
 
 	bool CanPush() const;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bIsFalling = false;
 
 		
 };

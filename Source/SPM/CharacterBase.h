@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "BodyTemperature.h"
-#include "Health.h"
 #include "InputActionValue.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
@@ -13,7 +12,6 @@
 
 class UPerformanceTracker;
 class UBodyTemperature;
-class UHealth;
 class UAdaptiveWeatherSystem;
 class UBodyTemplate;
 class USpringArmComponent;
@@ -21,6 +19,7 @@ class UCameraComponent;
 class UInputMappingContext;
 class UInputAction;
 class UPushComponent;
+class USprintComponent;
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -63,6 +62,9 @@ class ACharacterBase : public ACharacter
 	UInputAction* PushAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* SprintAction;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ThrowSnowballAction;
 
 
@@ -80,6 +82,8 @@ protected:
 	virtual void Move(const FInputActionValue& Value);
 	void Look(const FInputActionValue& Value);
 
+	virtual void Jump() override;
+
 	// RÖRELSE
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Movement")
 	float BaseMovementSpeed = 600.0f;
@@ -87,6 +91,13 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Movement")
 	float CurrentMovementSpeed;
 
+	//Sprint -
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprint")
+	USprintComponent* SprintComponent;
+	
+	void StartSprint (const FInputActionValue& Value);
+	void StopSprint(const FInputActionValue& Value);
+	
 	//HUGGING
 	void BeginHug(const FInputActionValue& Value);
 	void EndHug(const FInputActionValue& Value);
@@ -141,7 +152,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature")
 	float BaseCoolingRate = 5.0f;
 	
-
 	// Vind
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	float WindResistanceThreshold = 10.0f;
@@ -172,8 +182,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
 	UBodyTemperature* BodyTemperatureComponent;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
-	UHealth* HealthComponent;
+	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
+	UHealth* HealthComponent;*/
 
 	// Referens till vår performance-tracker
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
@@ -197,6 +207,8 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
 	bool bHasDied = false;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsHugging;
 	
 private:
 	void UpdatePlayerLocation();
@@ -220,6 +232,8 @@ private:
 	virtual bool CanJumpInternal_Implementation() const override;
 	
 	virtual void Falling() override;
+
+	
 
 };
 

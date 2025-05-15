@@ -31,30 +31,32 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
+	ACharacterPlayerController* Controller= Cast<ACharacterPlayerController>(Cast<APawn>(GetOwner())->GetController());
 	if (!bNearHeat)
     {
         if (Temp > 0)
         {
         	CoolDown(DeltaTime);
         }
-		if (GetTempPercentage() < 0.3 && !bDisplayFreezeEffect)
+		if (GetTempPercentage() < 0.3 && !bDisplayFreezeEffect && Controller)
 		{
 			bDisplayFreezeEffect = true;
-			Cast<ACharacterPlayerController>(Cast<APawn>(GetOwner())->GetController())->DisplayFreezeEffect(bDisplayFreezeEffect);
+			Controller->DisplayFreezeEffect(bDisplayFreezeEffect);
 		}
-		if (GetTempPercentage() >= 0.3 && bDisplayFreezeEffect)
+		if (GetTempPercentage() >= 0.3 && bDisplayFreezeEffect && Controller)
 		{
 			bDisplayFreezeEffect = false;
-			Cast<ACharacterPlayerController>(Cast<APawn>(GetOwner())->GetController())->DisplayFreezeEffect(bDisplayFreezeEffect);
+			Controller->DisplayFreezeEffect(bDisplayFreezeEffect);
 		}
-        if (Temp == 0)
-        {
-        	if (!bFrozen)
-        	{
-        		bFrozen = true;
-        		GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
-        	}
-        }
+		if (Temp == 0)
+		{
+			if (!bFrozen)
+			{
+				bFrozen = true;
+				HandleFreeze();
+			}
+		}
+
     }
 	if (bNearHeat && Temp < MaxTemp)
     {
@@ -62,7 +64,7 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		if (bFrozen)
 		{
 			bFrozen = false;
-			GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
+			//GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
 		}
     }
 }
@@ -76,54 +78,15 @@ void UBodyTemperature::CoolDown(float DeltaTime)
 {
 	if (!bNearHeat)
 	{
-		float TempEffect = 1.0f;
+		// Använd en fast kylhastighet utan väderpåverkan
+		Temp -= DeltaTime * CoolDownRate;
 
-		if (WeatherSystem)
+		if (Temp < 0.0f)
 		{
-			const float EnvTemp = WeatherSystem->CachedEnvTemp;
-
-			// Exponentiell ökning för att göra nedkylning snabbare när vädret är riktigt kallt
-			if (EnvTemp < 0.0f)
-			{
-				TempEffect = FMath::GetMappedRangeValueClamped(
-					FVector2D(-30.0f, 0.0f),
-					FVector2D(3.0f, 0.5f), // Exponentiellt starkare effekt vid kallt väder
-					EnvTemp
-				);
-			}
-			else
-			{
-				TempEffect = FMath::GetMappedRangeValueClamped(
-					FVector2D(0.0f, 30.0f),
-					FVector2D(0.5f, 0.0f),
-					EnvTemp
-				);
-			}
+			Temp = 0.0f;
 		}
-
-		float EffectiveCoolRate = CoolDownRate * TempEffect;
-
-		// Här appliceras snabbare nedkylning vid dålig prestation
-		Temp -= DeltaTime * EffectiveCoolRate;
-
-		if (Temp < 0.0f) Temp = 0.0f;
-
-		//UE_LOG(LogTemp, Warning, TEXT("Cooling: %.2f | Temp=%.2f | Env=%.2f"),
-			//EffectiveCoolRate, Temp, WeatherSystem ? WeatherSystem->GetCurrentWeather().Temperature : -999.0f);
 	}
-
-	if (WeatherSystem)
-	{
-		float EnvTemp = WeatherSystem->CachedEnvTemp;
-		//UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Character %s | EnvTemp: %.2f"), *GetOwner()->GetName(), EnvTemp);
-	}
-	else
-	{
-		UE_LOG(LogTemp, Error, TEXT("[BodyTemp] Character %s | WeatherSystem is NULL!"), *GetOwner()->GetName());
-	}
-
 }
-
 
 void UBodyTemperature::HeatUp(float DeltaTime)
 {
@@ -132,6 +95,14 @@ void UBodyTemperature::HeatUp(float DeltaTime)
 	{
 		Temp = MaxTemp;
 	}
+	
+	if (GetWorld()->GetTimerManager().IsTimerActive(DeathTimerHandle))
+	{
+		GetWorld()->GetTimerManager().ClearTimer(DeathTimerHandle);
+		UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Recovered from freezing. Death timer cancelled."));
+		bHasDied = false;
+	}
+
 }
 
 
@@ -140,7 +111,7 @@ void UBodyTemperature::ShareTemp()
 	if (bFrozen)
 	{
 		bFrozen = false;
-		GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
+		//GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
 	}
 
 	ACharacter* Char0 = UGameplayStatics::GetPlayerCharacter(this, 0);
@@ -192,3 +163,29 @@ void UBodyTemperature::ModifyTemperature(float DeltaTemperature)
 	UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Modified Temp by %.1f. New Temp: %.1f (%.1f%%)"), 
 		DeltaTemperature, Temp, GetTempPercentage() * 100.0f);
 }
+
+void UBodyTemperature::HandleFreeze()
+{
+	UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Player is frozen. Starting death timer..."));
+
+	if (!bHasDied)
+	{
+		// startar en timer som dödar spelaren efter en delay
+		GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &UBodyTemperature::HandleDeath, DeathDelay, false);
+	}
+}
+
+void UBodyTemperature::HandleDeath()
+{
+	if (bHasDied) return;
+	bHasDied = true;
+
+	ACharacterBase* OwnerChar = Cast<ACharacterBase>(GetOwner());
+	if (OwnerChar && !OwnerChar->bHasDied)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Player has died from cold."));
+		OwnerChar->OnDeath(); 
+	}
+}
+
+
