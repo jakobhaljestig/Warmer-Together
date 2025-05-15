@@ -33,4 +33,6 @@ void ACharacterPlayerController::OnPossess(APawn* InPawn)
     }
 
 	FreezeEffect = CreateWidget(this, FreezeEffectClass);
+	FreezeEffect->AddToPlayerScreen();
+
 }

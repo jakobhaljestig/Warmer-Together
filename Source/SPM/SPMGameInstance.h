@@ -18,7 +18,5 @@ protected:
 	virtual void Init() override;
 
 public:
-	// Instans av vädersystemet
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
-	UAdaptiveWeatherSystem* WeatherSystem;
+
 };

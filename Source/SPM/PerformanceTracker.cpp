@@ -9,16 +9,6 @@ UPerformanceTracker::UPerformanceTracker()
 void UPerformanceTracker::BeginPlay()
 {
 	Super::BeginPlay();
-
-	if (const UGameInstance* GameInstance = GetWorld()->GetGameInstance())
-	{
-		WeatherUpdater = Cast<IWeatherUpdaterInterface>(GameInstance->GetSubsystem<UAdaptiveWeatherSystem>());
-		
-		if (!WeatherUpdater)
-		{
-			UE_LOG(LogTemp, Error, TEXT("WeatherUpdaterInterface not found!"));
-		}
-	}
 }
 
 
