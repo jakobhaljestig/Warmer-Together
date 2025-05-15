@@ -61,7 +61,11 @@ private:
 
 	void SetWalking();
 
-	void IsClimbBlocked(const FHitResult& HitResult) const;
+	void SetClimbingMovement();
+
+	bool ClimbTargetStillValid(FHitResult& HitResult) const;
+	
+
 	
 
 		

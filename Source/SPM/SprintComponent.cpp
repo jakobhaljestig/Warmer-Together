@@ -20,7 +20,7 @@ void USprintComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
-void USprintComponent::StartSprint(const FInputActionValue& Value)
+void USprintComponent::StartSprint()
 {
 	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
 	if (CharacterOwner && bCanSprint && Stamina > 0)

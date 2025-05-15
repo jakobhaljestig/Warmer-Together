@@ -32,11 +32,15 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetTempPercentage() const { return Temp / MaxTemp; }
 
+	UFUNCTION(BlueprintCallable)
+	float GetCooldownRate() const { return CoolDownRate; }
+
+	UFUNCTION(BlueprintCallable)
+	void SetCoolDownRate(float NewRate) { CoolDownRate = NewRate; }
+	
 	// Väder-systemet som referens
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Weather")
 	UAdaptiveWeatherSystem* WeatherSystem;
-
-	void SetCoolDownRate(float NewRate) { CoolDownRate = NewRate; }
 
 	void ResetTemp();
 

@@ -18,5 +18,7 @@ void ALoadLevelTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* Other
 		UE_LOG(LogTemp, Warning, TEXT("Loading %s"), *LevelToLoad.ToString());
 		const FLatentActionInfo LatentInfo;
 		UGameplayStatics::LoadStreamLevel(this, LevelToLoad, true, false, LatentInfo);
+
+		Destroy();
 	}
 }

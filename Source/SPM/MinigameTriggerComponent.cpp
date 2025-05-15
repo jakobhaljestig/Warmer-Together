@@ -4,7 +4,8 @@
 #include "MinigameTriggerComponent.h"
 
 #include "CharacterBase.h"
-#include "Blueprint/UserWidget.h"
+#include "CharacterBig.h"
+#include "CharacterSmall.h"
 #include "Components/BoxComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
@@ -78,11 +79,23 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	{
 		for (UPrimitiveComponent* Actor : OverlappingActors)
 		{
-			if (ACharacterBase* Character = Cast<ACharacterBase>(Actor->GetOwner()))
+			if (ForBigPlayer)
 			{
-				if (!Character->GetCharacterMovement()->IsFalling())
-					ZoomIn(Actor);
+				if (ACharacterBase* Character = Cast<ACharacterBig>(Actor->GetOwner()))
+				{
+					if (!Character->GetCharacterMovement()->IsFalling())
+						ZoomIn(Actor);
+				}
 			}
+			if (ForSmallPlayer)
+			{
+				if (ACharacterBase* Character = Cast<ACharacterSmall>(Actor->GetOwner()))
+				{
+					if (!Character->GetCharacterMovement()->IsFalling())
+						ZoomIn(Actor);
+				}
+			}
+			
 		}
 	}
 	// ...

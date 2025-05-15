@@ -95,8 +95,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprint")
 	USprintComponent* SprintComponent;
 	
-	void StartSprint (const FInputActionValue& Value);
-	void StopSprint(const FInputActionValue& Value);
+	void StartSprint ();
+	void StopSprint();
 	
 	//HUGGING
 	void BeginHug(const FInputActionValue& Value);
@@ -179,12 +179,6 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
-	UBodyTemperature* BodyTemperatureComponent;
-
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
-	UHealth* HealthComponent;*/
-
 	// Referens till vår performance-tracker
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
 	UPerformanceTracker* PerformanceTracker;
@@ -219,17 +213,23 @@ private:
 	
 	// --- Coyote Time ---
 	FTimerHandle CoyoteTimeHandle;
+	
 	bool bCanUseCoyoteTime = false;
+
+	bool bHasJumped = false;
 	
 	UPROPERTY(EditAnywhere, Category = "Jump")
 	float CoyoteTimeDuration = 0.2f; 
 
 	void EnableCoyoteTime();
+	
 	void DisableCoyoteTime();
 
 	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
 	
 	virtual bool CanJumpInternal_Implementation() const override;
+
+	virtual void OnJumped_Implementation() override;
 	
 	virtual void Falling() override;
 
