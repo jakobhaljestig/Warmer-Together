@@ -95,8 +95,8 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprint")
 	USprintComponent* SprintComponent;
 	
-	void StartSprint (const FInputActionValue& Value);
-	void StopSprint(const FInputActionValue& Value);
+	void StartSprint ();
+	void StopSprint();
 	
 	//HUGGING
 	void BeginHug(const FInputActionValue& Value);

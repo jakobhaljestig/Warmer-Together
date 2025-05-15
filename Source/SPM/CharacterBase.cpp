@@ -265,13 +265,13 @@ void ACharacterBase::DisableCoyoteTime()
 }
 
 
-void ACharacterBase::StartSprint(const FInputActionValue& Value)
+void ACharacterBase::StartSprint()
 {
-	SprintComponent->StartSprint(Value);
+	SprintComponent->StartSprint();
 }
 
 
-void ACharacterBase::StopSprint(const FInputActionValue& Value)
+void ACharacterBase::StopSprint()
 {
 	SprintComponent->StopSprint();
 }

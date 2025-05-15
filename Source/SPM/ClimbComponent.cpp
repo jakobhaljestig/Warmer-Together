@@ -215,7 +215,7 @@ bool UClimbComponent::ClimbingDownInReach(FHitResult& HitResult) const
 	}
 
 	FVector Forward = ClimbCharacter->GetActorForwardVector();
-	FVector Start = ClimbCharacter->GetActorLocation() + Forward * 60.f + FVector(0.f, 50.f, -50.f);
+	FVector Start = ClimbCharacter->GetActorLocation() + Forward * 60.f + FVector(0.f, 0.f, -50.f);
 	
 	FVector Direction = (-Forward + FVector(0.f, 0.f, -1.f)).GetSafeNormal();
 	FVector End = Start + Direction * 150.f;
