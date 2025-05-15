@@ -179,12 +179,6 @@ public:
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Body Temperature")
-	UBodyTemperature* BodyTemperatureComponent;
-
-	/*UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Health")
-	UHealth* HealthComponent;*/
-
 	// Referens till vår performance-tracker
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
 	UPerformanceTracker* PerformanceTracker;

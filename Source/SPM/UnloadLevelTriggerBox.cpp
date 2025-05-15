@@ -18,5 +18,7 @@ void AUnloadLevelTriggerBox::OnOverlapBegin(AActor* OverlappedActor, AActor* Oth
 		UE_LOG(LogTemp, Warning, TEXT("Unloading %s"), *LevelToUnload.ToString());
 		const FLatentActionInfo LatentInfo;
 		UGameplayStatics::UnloadStreamLevel(this, LevelToUnload, LatentInfo, false);
+		
+		Destroy();
 	}
 }

@@ -15,14 +15,32 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_SaveGame.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_SaveGame.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_CutsceneTrigger.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_CutsceneTrigger.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/SaveGame/BP_SaveGame.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/SaveGame/BP_SaveGame.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/SaveGame/BP_SaveGameTrigger.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/SaveGame/BP_SaveGameTrigger.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Cave.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Cave.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Chasm.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Chasm.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorOne.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorOne.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorThree.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorThree.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorTwo.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorTwo.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CrashSite.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CrashSite.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Lake.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Lake.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Mountain.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Mountain.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap_Jakob2.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap_Jakob2.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap_TestSparsystem.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap_TestSparsystem.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorFour.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorFour.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorOne.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorOne.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorThree.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorThree.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorTwo.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorTwo.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/WBP_MainMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Assets/WBP_MainMenu.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/UI_Assets/WBP_MainMenuNew.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Assets/WBP_MainMenuNew.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BodyTemperature.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BodyTemperature.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/Health.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/Health.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/LoadLevelTriggerBox.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/LoadLevelTriggerBox.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/UnloadLevelTriggerBox.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/UnloadLevelTriggerBox.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -260,6 +278,7 @@
       <workItem from="1747249227070" duration="765000" />
       <workItem from="1747307233481" duration="2958000" />
       <workItem from="1747315462928" duration="5246000" />
+      <workItem from="1747325031226" duration="3239000" />
     </task>
     <servers />
   </component>
