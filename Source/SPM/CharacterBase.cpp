@@ -255,7 +255,7 @@ void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8
 
 void ACharacterBase::EnableCoyoteTime()
 {
-	bCanUseCoyoteTime = true;
+	//bCanUseCoyoteTime = true;
 	GetWorldTimerManager().SetTimer(CoyoteTimeHandle, this, &ACharacterBase::DisableCoyoteTime, CoyoteTimeDuration, false);
 }
 
