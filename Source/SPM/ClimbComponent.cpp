@@ -12,7 +12,6 @@ UClimbComponent::UClimbComponent()
 	PrimaryComponentTick.bCanEverTick = true;
 }
 
-
 // Called when the game starts
 void UClimbComponent::BeginPlay()
 {
@@ -37,20 +36,28 @@ void UClimbComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	if (bIsClimbing)
 	{
 		FHitResult Hit;
-		if (!ClimbingInReach(Hit))
+		if (!ClimbTargetStillValid(Hit))
 		{
+			//UE_LOG(LogTemp, Error, TEXT("Is on ledge"));
 			bIsOnLedge = true;
 		}else
 		{
 			bIsOnLedge = false;
 		}
 	}
+
+	if (MovementComponent && bIsClimbing)
+	{
+		FVector Velocity = MovementComponent->Velocity;
+		Velocity.X = 0.f;
+		Velocity.Y = 0.f;
+		MovementComponent->Velocity = Velocity;
+	}
 }
 
 //Metoden är rätt värdelös
 void UClimbComponent::Climb()
 {
-
 	FHitResult Hit;
 	if ((!bIsClimbing && ClimbingInReach(Hit)) == true || (!bIsClimbing && ClimbingDownInReach(Hit)))
 	{
@@ -62,28 +69,27 @@ void UClimbComponent::Climb()
 	}
 }
 
-
 void UClimbComponent::StartClimb(FHitResult Hit)
 {
 	bIsClimbing = true;
 	
-	//IMpactPoint där trace channel träffar objekt
+	///IMpactPoint där trace channel träffar objekt
 	FVector AttachNormal = Hit.ImpactNormal;
-	FVector AttachPosition = Hit.ImpactPoint + AttachNormal * 10.f; 
+	FVector AttachPosition = Hit.ImpactPoint + AttachNormal * 1.f; 
 	ClimbCharacter->SetActorLocation(AttachPosition);
 
 	//ROTATION
-	FRotator WallRotation = Hit.ImpactNormal.ToOrientationRotator();
-	WallRotation.Yaw += 180.f;
-	FRotator FinalRotation = FRotator(0.f, WallRotation.Yaw, 0.f);
+	FVector WallNormal = Hit.ImpactNormal;
+	WallNormal.Z = 0.f; 
+	WallNormal.Normalize();
+
+	FRotator FinalRotation = WallNormal.Rotation();
+	FinalRotation.Yaw += 180.f; 
+	FinalRotation.Pitch = 0.f;
+	FinalRotation.Roll = 0.f;
+	
 	ClimbCharacter->SetActorRotation(FinalRotation);
-	
-	MovementComponent -> SetMovementMode(MOVE_Flying); //ANtar att gravity blir 0
-	MovementComponent->GravityScale = 0.0f;
-	MovementComponent->MaxFlySpeed = 400.f;
-	MovementComponent->BrakingDecelerationFlying = 5000.f;
-	MovementComponent->bOrientRotationToMovement = false;
-	
+	SetClimbingMovement();
 }
 
 
@@ -97,7 +103,7 @@ void UClimbComponent::StopClimb()
 			return;
 		}
 		
-		FVector NewLocation = ClimbCharacter->GetActorLocation() - ClimbCharacter->GetActorForwardVector() * 100.f;
+		FVector NewLocation = ClimbCharacter->GetActorLocation() - ClimbCharacter->GetActorForwardVector() * 20.f;
 		ClimbCharacter->SetActorLocation(NewLocation);
 		SetWalking();
 	}
@@ -107,8 +113,7 @@ void UClimbComponent::StopClimb()
 void UClimbComponent::FinishClimbUp()
 {
 	if (!ClimbCharacter) return;
-
-	//UE_LOG(LogTemp, Display, TEXT("FinishClimbUp"));
+	
 	FVector Start = ClimbCharacter->GetActorLocation() + FVector(0.f, 0.f, 150.f); //raycast från över  huvuedt
 	FVector Forward = ClimbCharacter->GetActorForwardVector();
 	FVector Direction = (Forward + FVector(0.f, 0.f, -1.5f)).GetSafeNormal(); 
@@ -126,15 +131,6 @@ void UClimbComponent::FinishClimbUp()
 		TraceParams
 	);
 	
-	/*DrawDebugLine(GetWorld(),
-		Start,
-		End,
-		FColor::Green,
-		false,
-		2.0f,
-		0,
-		2.0f);*/
-	
 	if (bHit)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Found ledge top at: %s"), *HitResult.ImpactPoint.ToString());
@@ -145,10 +141,8 @@ void UClimbComponent::FinishClimbUp()
 	
 	bIsOnLedge = false;
 	SetWalking();
-
 }
 
-//Ska kolla om objektet framför går att klättra på. 
 bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 {
 	if (!ClimbCharacter)
@@ -159,7 +153,7 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 
 	FVector Start = ClimbCharacter->GetActorLocation()  + FVector(0, 0, 80.f); //Flyttar upp linetrace mer mot huvudet
 	FVector ForwardVector = ClimbCharacter->GetActorForwardVector();
-	FVector End = Start + ForwardVector * 200.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
+	FVector End = Start + ForwardVector * 30.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
 
 	FVector HalfSize(30.f, 30.f, 50.f); 
 	FQuat Rotation = FQuat::Identity;
@@ -167,22 +161,37 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 	FCollisionQueryParams TraceParams;
 	TraceParams.AddIgnoredActor(ClimbCharacter);
 
-
 	bool bHit = GetWorld()->SweepSingleByChannel(
-		HitResult,
-		Start,
-		End,
-		Rotation,
-		ECC_GameTraceChannel3,
-		FCollisionShape::MakeBox(HalfSize),
-		TraceParams
+	HitResult,
+	Start,
+	End,
+	Rotation,
+	ECC_GameTraceChannel3,
+	FCollisionShape::MakeBox(HalfSize),
+	TraceParams
 	);
+	
+	//DEBUG
+	FVector MidPoint = (Start + End) * 0.5f;
+	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1.5f, 0, 2.0f);
+	DrawDebugBox(GetWorld(), MidPoint, HalfSize, Rotation, bHit ? FColor::Green : FColor::Red, false, 1.5f);
+
 	
 	if (bHit && HitResult.GetActor()->ActorHasTag("Climbable"))
 	{
-		// Kolla om stegen har en komponent (t.ex. UBoxComponent) som är klättringszon
-		TArray<UActorComponent*> Components = HitResult.GetActor()->GetComponentsByTag(UBoxComponent::StaticClass(), "ClimbZone");
+		FVector ForwardClimbVector = ClimbCharacter->GetActorForwardVector();
+		FVector WallNormal = HitResult.ImpactNormal;
+		WallNormal.Z = 0.f;
+		WallNormal.Normalize();
 
+		float Dot = FVector::DotProduct(ForwardClimbVector, -WallNormal);
+		if (Dot < 0.9f) 
+		{
+			UE_LOG(LogTemp, Error, TEXT("Character not straight"));
+			return false;
+		}
+		
+		TArray<UActorComponent*> Components = HitResult.GetActor()->GetComponentsByTag(UBoxComponent::StaticClass(), "ClimbZone");
 		for (UActorComponent* Comp : Components)
 		{
 			UBoxComponent* Box = Cast<UBoxComponent>(Comp);
@@ -191,7 +200,6 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 				return true;
 			}
 		}
-
 		return false;
 	}
 	return false;
@@ -207,7 +215,7 @@ bool UClimbComponent::ClimbingDownInReach(FHitResult& HitResult) const
 	}
 
 	FVector Forward = ClimbCharacter->GetActorForwardVector();
-	FVector Start = ClimbCharacter->GetActorLocation() + Forward * 60.f + FVector(0.f, 0.f, -50.f);
+	FVector Start = ClimbCharacter->GetActorLocation() + Forward * 60.f + FVector(0.f, 50.f, -50.f);
 	
 	FVector Direction = (-Forward + FVector(0.f, 0.f, -1.f)).GetSafeNormal();
 	FVector End = Start + Direction * 150.f;
@@ -215,6 +223,10 @@ bool UClimbComponent::ClimbingDownInReach(FHitResult& HitResult) const
 	FVector HalfSize(20.f, 20.f, 30.f);
 	
 	FQuat Rotation = FQuat::Identity;
+
+	FVector MidPoint = (Start + End) * 0.5f;
+	DrawDebugBox(GetWorld(), MidPoint, HalfSize, Rotation, FColor::Cyan, false, 1.5f);
+	DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.5f, 0, 1.0f);
 	
 	FCollisionQueryParams TraceParams;
 	TraceParams.AddIgnoredActor(ClimbCharacter);
@@ -228,14 +240,10 @@ bool UClimbComponent::ClimbingDownInReach(FHitResult& HitResult) const
 		FCollisionShape::MakeBox(HalfSize),
 		TraceParams
 	);
-
-	//DrawDebugLine(GetWorld(), Start, End, FColor::Red, false, 2.0f, 0, 2.0f);
-
+	
 	if (bHit && HitResult.GetActor()->ActorHasTag("Climbable"))
 	{
-		// Kolla om stegen har en komponent (t.ex. UBoxComponent) som är klättringszon
 		TArray<UActorComponent*> Components = HitResult.GetActor()->GetComponentsByTag(UBoxComponent::StaticClass(), "ClimbDownZone");
-
 		for (UActorComponent* Comp : Components)
 		{
 			UBoxComponent* Box = Cast<UBoxComponent>(Comp);
@@ -244,14 +252,19 @@ bool UClimbComponent::ClimbingDownInReach(FHitResult& HitResult) const
 				return true;
 			}
 		}
-
 		return false;
 	}
-
 	return false;
 }
 
-
+void UClimbComponent::SetClimbingMovement()
+{
+	MovementComponent -> SetMovementMode(MOVE_Flying); //Antar att gravity blir 0
+	MovementComponent->GravityScale = 0.0f;
+	MovementComponent->MaxFlySpeed = 400.f;
+	MovementComponent->BrakingDecelerationFlying = 5000.f;
+	MovementComponent->bOrientRotationToMovement = false;
+}
 
 void UClimbComponent::SetWalking()
 {
@@ -263,4 +276,41 @@ void UClimbComponent::SetWalking()
 	MovementComponent->bOrientRotationToMovement = true;
 }
 
+bool UClimbComponent::ClimbTargetStillValid(FHitResult& HitResult) const
+{
+	if (!ClimbCharacter) return false;
+
+	FVector Start = ClimbCharacter->GetActorLocation() + FVector(0.f, 0.f, 80.f);
+	FVector Forward = ClimbCharacter->GetActorForwardVector();
+	FVector End = Start + Forward * 200.f;
+	FVector HalfSize(30.f, 30.f, 50.f);
+	FQuat Rotation = FQuat::Identity;
+
+	FCollisionQueryParams TraceParams;
+	TraceParams.AddIgnoredActor(ClimbCharacter);
+
+	bool bHit = GetWorld()->SweepSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		Rotation,
+		ECC_GameTraceChannel3,
+		FCollisionShape::MakeBox(HalfSize),
+		TraceParams
+	);
+
+	if (bHit && HitResult.GetActor()->ActorHasTag("Climbable"))
+	{
+		TArray<UActorComponent*> Components = HitResult.GetActor()->GetComponentsByTag(UBoxComponent::StaticClass(), "ClimbZone");
+		for (UActorComponent* Comp : Components)
+		{
+			UBoxComponent* Box = Cast<UBoxComponent>(Comp);
+			if (Box && Box->IsOverlappingActor(ClimbCharacter))
+			{
+				return true;
+			}
+		}
+	}
+	return false;
+}
 

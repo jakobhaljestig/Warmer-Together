@@ -61,7 +61,10 @@ private:
 
 	void SetWalking();
 
-	bool IsWallStillInFront(FHitResult& HitResult) const;
+	void SetClimbingMovement();
+
+	bool ClimbTargetStillValid(FHitResult& HitResult) const;
+	
 
 	
 
