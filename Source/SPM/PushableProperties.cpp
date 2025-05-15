@@ -18,7 +18,6 @@ UPushableProperties::UPushableProperties()
 void UPushableProperties::BeginPlay()
 {
 	Super::BeginPlay();
-
 	// ...
 	
 }
@@ -35,5 +34,6 @@ bool UPushableProperties::CanPush() const
 {
 	return NumberOfGrabbers >= RequiredNumberOfGrabbers;
 }
+
 
 
