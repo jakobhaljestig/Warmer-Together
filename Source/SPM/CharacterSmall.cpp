@@ -36,11 +36,11 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 //Implementera check för att se om något är över karaktären.
 void ACharacterSmall::Crawl (const FInputActionValue& Value)
 {
+	Tags.Remove("Grabbed");
 	if (!bIsPushing && !bPressedJump && !GetCharacterMovement()->IsFalling() && !bIsHugging)
 	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Crouching"));
 		GetCharacterMovement()->MaxWalkSpeed = 250.0f;
-		Tags.Remove("Grabbed");
 		ACharacter::Crouch(true);
 		bIsCrawling = true;
 	}

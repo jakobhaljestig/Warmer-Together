@@ -4,6 +4,7 @@
 #include "PushComponent.h"
 
 #include "PushableProperties.h"
+#include "VectorTypes.h"
 
 UPushComponent::UPushComponent()
 {
@@ -17,7 +18,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
 		FHitResult Hit;
-		if (!GetGrabbableInReach(Hit) || PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->bIsFalling)
+		if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->bIsFalling)
 		{
 			StopPushing();
 		}
@@ -27,8 +28,21 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		else if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
 		{
 			OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed/4;
+			if (!GetGrabbableInReach(Hit, PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1))
+			{
+				int Attempts = 0;
+				while (!GetGrabbableInReach(Hit, PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1))
+				{
+					Attempts++;
+					GetOwner()->SetActorLocation(GetOwner()->GetActorLocation() + OwnerMovementComponent->GetForwardVector());
+					if (Attempts >= 5) break;
+				}
+				
+			}
+
 			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
 			PhysicsHandle->SetTargetLocation(TargetLocation);
+			
 		}
 		
 		

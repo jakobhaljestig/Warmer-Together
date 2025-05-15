@@ -131,6 +131,19 @@ bool UGrabComponent::GetGrabbableInReach(FHitResult& OutHitResult) const
 		Sphere);
 	
 }
+bool UGrabComponent::GetGrabbableInReach(FHitResult& OutHitResult, float Distance) const
+{
+	FVector Start = GetOwner()->GetActorLocation();
+	FVector End = Start + GetOwner()->GetActorForwardVector() * Distance;
+	FCollisionShape Sphere = FCollisionShape::MakeSphere(GrabRadius);
+	return GetWorld()->SweepSingleByChannel(
+		OutHitResult,
+		Start, End,
+		FQuat::Identity,
+		CollisionChannel,
+		Sphere);
+	
+}
 
 void UGrabComponent::GrabEffect()
 {
