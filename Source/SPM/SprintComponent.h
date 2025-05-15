@@ -16,13 +16,12 @@ class SPM_API USprintComponent : public UActorComponent
 public:	
 	USprintComponent();
 	
-	void StartSprint (const FInputActionValue& Value);
+	void StartSprint ();
 	
 	void StopSprint();
 
 protected:
 	virtual void BeginPlay() override;
-	
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
 	float SprintSpeed;
@@ -46,7 +45,7 @@ private:
 	
 	void RegenerateStamina();
 
-	bool bCanSprint;
+	bool bCanSprint = true;
 	
 	bool bIsRegenerating;
 

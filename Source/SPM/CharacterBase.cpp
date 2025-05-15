@@ -222,11 +222,14 @@ void ACharacterBase::Jump()
 	{
 		return;
 	}
-	if (!GetCharacterMovement() -> IsMovingOnGround() && !bCanUseCoyoteTime)
-	{
-		return;
-	}
 	Super::Jump();
+}
+
+
+void ACharacterBase::OnJumped_Implementation()
+{
+	Super::OnJumped_Implementation();
+	bCanUseCoyoteTime = false;
 }
 
 
@@ -235,7 +238,7 @@ void ACharacterBase::Jump()
 
 bool ACharacterBase::CanJumpInternal_Implementation() const
 {
-	return Super::CanJumpInternal_Implementation() || bCanUseCoyoteTime; 
+	return Super::CanJumpInternal_Implementation() || bCanUseCoyoteTime;
 }
 
 void ACharacterBase::Falling()
@@ -249,13 +252,14 @@ void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8
 	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
 	if (!bPressedJump && !GetCharacterMovement()->IsFalling())
 	{
+		bHasJumped = false; 
 		bCanUseCoyoteTime = false;
 	}
 }
 
 void ACharacterBase::EnableCoyoteTime()
 {
-	//bCanUseCoyoteTime = true;
+	bCanUseCoyoteTime = true;
 	GetWorldTimerManager().SetTimer(CoyoteTimeHandle, this, &ACharacterBase::DisableCoyoteTime, CoyoteTimeDuration, false);
 }
 
@@ -265,13 +269,13 @@ void ACharacterBase::DisableCoyoteTime()
 }
 
 
-void ACharacterBase::StartSprint(const FInputActionValue& Value)
+void ACharacterBase::StartSprint()
 {
-	SprintComponent->StartSprint(Value);
+	SprintComponent->StartSprint();
 }
 
 
-void ACharacterBase::StopSprint(const FInputActionValue& Value)
+void ACharacterBase::StopSprint()
 {
 	SprintComponent->StopSprint();
 }
