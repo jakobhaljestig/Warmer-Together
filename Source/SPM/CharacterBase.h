@@ -219,17 +219,23 @@ private:
 	
 	// --- Coyote Time ---
 	FTimerHandle CoyoteTimeHandle;
+	
 	bool bCanUseCoyoteTime = false;
+
+	bool bHasJumped = false;
 	
 	UPROPERTY(EditAnywhere, Category = "Jump")
 	float CoyoteTimeDuration = 0.2f; 
 
 	void EnableCoyoteTime();
+	
 	void DisableCoyoteTime();
 
 	virtual void OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode) override;
 	
 	virtual bool CanJumpInternal_Implementation() const override;
+
+	virtual void OnJumped_Implementation() override;
 	
 	virtual void Falling() override;
 

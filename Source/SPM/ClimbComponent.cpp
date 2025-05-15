@@ -75,18 +75,22 @@ void UClimbComponent::StartClimb(FHitResult Hit)
 	
 	///IMpactPoint där trace channel träffar objekt
 	FVector AttachNormal = Hit.ImpactNormal;
-	FVector AttachPosition = Hit.ImpactPoint + AttachNormal * 1.f; 
+	FVector AttachPosition = Hit.ImpactPoint + AttachNormal * 15.f; 
 	ClimbCharacter->SetActorLocation(AttachPosition);
 
 	//ROTATION
-	FVector WallNormal = Hit.ImpactNormal;
+	FRotator WallRotation = Hit.ImpactNormal.ToOrientationRotator();
+	WallRotation.Yaw += 180.f;
+	FRotator FinalRotation = FRotator(0.f, WallRotation.Yaw, 0.f);
+	
+	/*FVector WallNormal = Hit.ImpactNormal;
 	WallNormal.Z = 0.f; 
 	WallNormal.Normalize();
 
 	FRotator FinalRotation = WallNormal.Rotation();
 	FinalRotation.Yaw += 180.f; 
 	FinalRotation.Pitch = 0.f;
-	FinalRotation.Roll = 0.f;
+	FinalRotation.Roll = 0.f;*/
 	
 	ClimbCharacter->SetActorRotation(FinalRotation);
 	SetClimbingMovement();
@@ -215,10 +219,10 @@ bool UClimbComponent::ClimbingDownInReach(FHitResult& HitResult) const
 	}
 
 	FVector Forward = ClimbCharacter->GetActorForwardVector();
-	FVector Start = ClimbCharacter->GetActorLocation() + Forward * 60.f + FVector(0.f, 0.f, -50.f);
+	FVector Start = ClimbCharacter->GetActorLocation() + Forward * 150.f + FVector(0.f, 0.f, -50.f);
 	
 	FVector Direction = (-Forward + FVector(0.f, 0.f, -1.f)).GetSafeNormal();
-	FVector End = Start + Direction * 150.f;
+	FVector End = Start + Direction * 200.f;
 
 	FVector HalfSize(20.f, 20.f, 30.f);
 	
