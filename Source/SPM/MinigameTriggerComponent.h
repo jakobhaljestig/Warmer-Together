@@ -67,4 +67,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UMiniGame* MiniGame;
+
+	UPROPERTY(EditAnywhere)
+	bool ForBigPlayer = false;
+
+	UPROPERTY(EditAnywhere)
+	bool ForSmallPlayer = false;
 };

@@ -37,6 +37,7 @@ protected:
 	virtual void BeginPlay() override;
 
 	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
+	bool GetGrabbableInReach(FHitResult& OutHitResult, float Distance) const;
 
 	UPROPERTY(VisibleAnywhere)
 	UPhysicsHandleComponent* PhysicsHandle = nullptr;
