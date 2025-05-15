@@ -37,14 +37,17 @@ void UFreezingTouchComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			if (ACharacterBase* Character = Cast<ACharacterBase>(Actor->GetOwner()))
 			{
 				if (Character->GetComponentByClass<UBodyTemperature>()->GetTempPercentage() > 0)
-					Character->GetComponentByClass<UBodyTemperature>()->ModifyTemperature(-CoolDownRate*DeltaTime);
-				/*else
 				{
-					Character->GetComponentByClass<UHealth>()->TakeDamage(CoolDownRate * DeltaTime);
-				}*/
+					Character->GetComponentByClass<UBodyTemperature>()->ModifyTemperature(-CoolDownRate*DeltaTime);
+				}
+				else if (Character->GetComponentByClass<UBodyTemperature>()->GetTempPercentage() <= 0)
+				{
+					Character->OnDeath();
+				}
 			}
-		}
 	}
-	// ...
+	
 }
+}
+	
 
