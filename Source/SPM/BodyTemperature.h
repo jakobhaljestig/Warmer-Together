@@ -32,6 +32,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	float GetTempPercentage() const { return Temp / MaxTemp; }
 
+
+	UFUNCTION(BlueprintCallable)
 	void SetCoolDownRate(float NewRate) { CoolDownRate = NewRate; }
 
 	void ResetTemp();
@@ -47,7 +49,7 @@ private:
 	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float MaxTemp = 100.f;
 
-	UPROPERTY(EditAnywhere, Category = "Temperature")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature", meta = (AllowPrivateAccess = "true"))
 	float CoolDownRate = 0.8f;
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
