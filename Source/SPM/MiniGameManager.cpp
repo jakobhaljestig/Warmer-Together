@@ -50,6 +50,8 @@ void AMiniGameManager::Tick(float DeltaTime)
 		{
 			Game1->SetComplete(true);
 			Game2->SetComplete(true);
+			Game1Pawn->GetComponentByClass<UMinigameTriggerComponent>()->bCompleted = true;
+			Game2Pawn->GetComponentByClass<UMinigameTriggerComponent>()->bCompleted = true;
 		}
 	}
 }
