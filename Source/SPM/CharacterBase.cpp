@@ -100,13 +100,13 @@ void ACharacterBase::Tick(float DeltaTime)
 	
 	UpdatePlayerLocation();
 
-	if (bIsHugging)
+	if (bSuccesfulHug)
 	{
 		HugTimer += DeltaTime;
 
-		if (HugTimer > 6.f)
+		if (HugTimer > HugTime)
 		{
-			bIsHugging = false;
+			bSuccesfulHug = false;
 			HugTimer = 0.f;
 			HugComponent->EndHug();
 		}
@@ -176,7 +176,7 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr && !bIsHugging)
+	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -271,22 +271,22 @@ void ACharacterBase::StopSprint()
 //--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
-	bIsHugging = true;
-	HugComponent -> TryHug();
+	if (!bIsPushing && !bIsCrouched && !bIsHugging)
+		HugComponent -> TryHug();
+		bIsHugging = true;
 }
 
 void ACharacterBase::EndHug(const FInputActionValue& Value)
 {
-	/*
+
 	bIsHugging = false;
 	HugComponent -> EndHug();
-	*/
 }
 
 
 void ACharacterBase::Hug()
 {
-	
+	bSuccesfulHug = true;
 	if (BodyTempComponent)
 		{
 		    UE_LOG(LogTemplateCharacter, Warning, TEXT("Characters are hugging"));

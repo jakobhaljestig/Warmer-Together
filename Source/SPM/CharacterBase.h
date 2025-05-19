@@ -212,6 +212,9 @@ public:
 	bool bIsHugging;
 
 	UPROPERTY(BlueprintReadOnly)
+	bool bSuccesfulHug = false;
+
+	UPROPERTY(BlueprintReadOnly)
 	bool bIsSprinting;
 	
 private:
