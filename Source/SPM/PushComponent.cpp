@@ -18,6 +18,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
 		FHitResult Hit;
+
 		if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->bIsFalling)
 		{
 			StopPushing();
@@ -37,15 +38,18 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 					GetOwner()->SetActorLocation(GetOwner()->GetActorLocation() + OwnerMovementComponent->GetForwardVector());
 					if (Attempts >= 5) break;
 				}
+				if (!GetGrabbableInReach(Hit))
+				{
+					StopPushing();
+				}
 				
 			}
-
-			FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
-			PhysicsHandle->SetTargetLocation(TargetLocation);
-			
+			if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+			{
+				FVector TargetLocation = GetOwner()->GetActorLocation() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
+				PhysicsHandle->SetTargetLocation(TargetLocation);
+			}
 		}
-		
-		
 	}
 }
 void UPushComponent::StartPushing()
@@ -74,6 +78,45 @@ void UPushComponent::StopPushing()
 		Release();	
 	}
 }
+
+void UPushComponent::Grab()
+{
+
+
+	if (PhysicsHandle == nullptr)
+	{
+		return;
+	}
+
+	FHitResult HitResult;
+	if (GetGrabbableInReach(HitResult))
+	{
+		if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+		{
+			return;
+		}
+		
+		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
+		Holding = true;
+		AActor* HitActor = HitResult.GetActor();
+		HitComponent->WakeAllRigidBodies();
+		HitActor->Tags.Add("Grabbed");
+		HitActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		FRotator NewRotation = HitResult.ImpactNormal.Rotation();
+		NewRotation.Pitch = 0.0f;
+		NewRotation.Yaw += 180.0f;
+		GetOwner()->SetActorRotation(NewRotation);
+		GetGrabbableInReach(HitResult);
+		PhysicsHandle->GrabComponentAtLocation(
+			HitComponent,
+			NAME_None,
+			HitResult.ImpactPoint);
+		GrabEffect();
+	}
+	
+
+}
+
 //Restricts player movement
 void UPushComponent::GrabEffect()
 {

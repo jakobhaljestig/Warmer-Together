@@ -39,17 +39,19 @@ void AMiniGameManager::Tick(float DeltaTime)
 	{
 		Game1->StartGame();
 		Game2->StartGame();
+		if (CorrectPresses >= CorrectPressesToWin)
+		{
+			Game1->SetComplete(true);
+			Game2->SetComplete(true);
+			Game1Pawn->GetComponentByClass<UMinigameTriggerComponent>()->bCompleted = true;
+			Game2Pawn->GetComponentByClass<UMinigameTriggerComponent>()->bCompleted = true;
+		}
+
 		if (Game1->Correct && Game2->Correct)
 		{
 			CorrectPresses += 1;
 			Game1->GameLoop();
 			Game2->GameLoop();
-		}
-
-		if (CorrectPresses >= CorrectPressesToWin)
-		{
-			Game1->SetComplete(true);
-			Game2->SetComplete(true);
 		}
 	}
 }
