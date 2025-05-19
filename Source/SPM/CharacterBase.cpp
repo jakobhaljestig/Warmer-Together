@@ -100,6 +100,17 @@ void ACharacterBase::Tick(float DeltaTime)
 	
 	UpdatePlayerLocation();
 
+	if (bIsHugging)
+	{
+		HugTimer += DeltaTime;
+
+		if (HugTimer > 6.f)
+		{
+			bIsHugging = false;
+			HugTimer = 0.f;
+			HugComponent->EndHug();
+		}
+	}
 
 	// Temperatur påverkar kroppstemperatur
 	// float TempFactor = FMath::Clamp(-CurrentWeather.Temperature / 30.0f, 0.0f, 1.0f);
@@ -266,13 +277,16 @@ void ACharacterBase::BeginHug(const FInputActionValue& Value)
 
 void ACharacterBase::EndHug(const FInputActionValue& Value)
 {
+	/*
 	bIsHugging = false;
 	HugComponent -> EndHug();
+	*/
 }
 
 
-void ACharacterBase::Hug() const
+void ACharacterBase::Hug()
 {
+	
 	if (BodyTempComponent)
 		{
 		    UE_LOG(LogTemplateCharacter, Warning, TEXT("Characters are hugging"));
