@@ -19,9 +19,9 @@ class SPM_API UPushComponent : public UGrabComponent
 	public:
 	UPushComponent();
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-	
 	virtual void StartPushing();
 	virtual void StopPushing();
+	void Grab() override;
 
 	private:
 	virtual void GrabEffect() override;
