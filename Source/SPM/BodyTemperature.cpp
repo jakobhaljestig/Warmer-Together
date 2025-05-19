@@ -37,12 +37,10 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		if (GetTempPercentage() < 0.3 && !bDisplayFreezeEffect && Controller)
 		{
 			bDisplayFreezeEffect = true;
-			Controller->DisplayFreezeEffect(bDisplayFreezeEffect);
 		}
 		if (GetTempPercentage() >= 0.3 && bDisplayFreezeEffect && Controller)
 		{
 			bDisplayFreezeEffect = false;
-			Controller->DisplayFreezeEffect(bDisplayFreezeEffect);
 		}
 		if (Temp == 0)
 		{

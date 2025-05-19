@@ -13,9 +13,6 @@ UCLASS()
 class SPM_API ACharacterPlayerController : public APlayerController
 {
 	GENERATED_BODY()
-
-public:
-	void DisplayFreezeEffect(bool bShouldDisplay) const;
 	
 protected:
 	virtual void OnPossess(APawn* InPawn) override;

@@ -4,24 +4,6 @@
 #include "CharacterPlayerController.h"
 #include "Blueprint/UserWidget.h"
 
-void ACharacterPlayerController::DisplayFreezeEffect(bool bShouldDisplay) const
-{
-	if (FreezeEffect)
-	{
-		if (bShouldDisplay)
-		{
-			UE_LOG(LogTemp, Display, TEXT("Displaying Freeze Effect"));
-			FreezeEffect->AddToPlayerScreen();
-		}
-		else
-		{
-			UE_LOG(LogTemp, Display, TEXT("No Freeze"));
-			FreezeEffect->RemoveFromParent();
-		}
-	}
-}
-
-
 void ACharacterPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -29,10 +11,13 @@ void ACharacterPlayerController::OnPossess(APawn* InPawn)
 	HUD = CreateWidget(this, HUDClass);
     if (HUD)
     {
-    	HUD->AddToPlayerScreen();
+    	HUD->AddToPlayerScreen(5);
     }
 
-	//FreezeEffect = CreateWidget(this, FreezeEffectClass);
-	//FreezeEffect->AddToPlayerScreen();
-
+	FreezeEffect = CreateWidget(this, FreezeEffectClass);
+	if (FreezeEffect)
+	{
+		FreezeEffect->AddToPlayerScreen(2);
+	}
+	
 }
