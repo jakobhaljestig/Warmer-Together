@@ -23,8 +23,6 @@ void ASPMGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// Delay before spawning players
-	GetWorld()->GetTimerManager().SetTimer(SpawnTimerHandle, this, &ASPMGameMode::SpawnPlayers, 1.0f, false);
 }
 
 void ASPMGameMode::SpawnPlayers()
