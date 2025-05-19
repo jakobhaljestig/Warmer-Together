@@ -204,6 +204,9 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsHugging;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsSprinting;
 	
 private:
 	void UpdatePlayerLocation();

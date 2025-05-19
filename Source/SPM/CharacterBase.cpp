@@ -245,13 +245,15 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint()
 {
-	SprintComponent->StartSprint();
+	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched)
+		SprintComponent->StartSprint();
 }
 
 
 void ACharacterBase::StopSprint()
 {
-	SprintComponent->StopSprint();
+	if (bIsSprinting)
+		SprintComponent->StopSprint();
 }
 
 

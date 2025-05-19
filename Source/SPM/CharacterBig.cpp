@@ -43,7 +43,7 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 
 void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 {
-	if (!bIsClimbing && !bIsHugging)
+	if (!bIsClimbing && !bIsHugging && !)
 	{
 		PickupComponent->GrabAndRelease();
 	}
