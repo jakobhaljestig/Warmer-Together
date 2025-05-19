@@ -151,7 +151,7 @@ void UWeatherComponent::UpdateWeatherFromTemperature(const float TemperaturePerc
 	SnowLevel2->Deactivate();
 	SnowLevel3->Deactivate();
 	MistParticleSystem->Deactivate();
-	TemperaturePrecent = 1-TemperaturePercentage;
+	TemperaturePrecent = TemperaturePercentage;
 	if (TemperaturePercentage >= 0.75f)
 	{
 		SnowLevel1->Activate();
