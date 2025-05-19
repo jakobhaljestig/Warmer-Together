@@ -151,7 +151,7 @@ void UWeatherComponent::UpdateWeatherFromTemperature(const float TemperaturePerc
 	SnowLevel2->Deactivate();
 	SnowLevel3->Deactivate();
 	MistParticleSystem->Deactivate();
-	TemperaturePrecent = TemperaturePercentage;
+	TemperaturePrecent = 1-TemperaturePercentage;
 	if (TemperaturePercentage >= 0.75f)
 	{
 		SnowLevel1->Activate();
@@ -227,9 +227,7 @@ void UWeatherComponent::UpdateWeatherEffectLocation() const
 	float ScaleFactor = FMath::GetMappedRangeValueClamped(FVector2D(0.f, 3000.f), FVector2D(1.0f, 3.0f), MaxDistance);
 	// Z-skalan fixeras
 	FVector ParticleScale = FVector(ScaleFactor, 1.5f, 2.5f);
-
-	if (MaxDistance > 2500.f)
-	{
+	
 		if (SnowLevel1) 
 		{
 			SnowLevel1->SetWorldLocation(Midpoint);
@@ -253,7 +251,7 @@ void UWeatherComponent::UpdateWeatherEffectLocation() const
 			MistParticleSystem->SetWorldScale3D(ParticleScale);
 		}
 	}
-}
+
 
 //påverkar bodytemp baserat på vädernivån, måste nog tweakas lite vart eftersom
 void UWeatherComponent::AffectBodyTemperatures() const

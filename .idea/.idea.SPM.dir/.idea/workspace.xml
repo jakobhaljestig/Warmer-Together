@@ -7,7 +7,23 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8a4c13a4-64a6-4712-af49-375e61b76c6c" name="Changes" comment="" />
+    <list default="true" id="8a4c13a4-64a6-4712-af49-375e61b76c6c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM.dir/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM.dir/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Animation/ABP_Big.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animation/ABP_Big.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Animation/ABP_Small.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animation/ABP_Small.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmallNew.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmallNew.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AnimComp_BigHug.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AnimComp_BigHug.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/Anim_BigClimbing_Ladder.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/Anim_BigClimbing_Ladder.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/Anim_Hug2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/Anim_Hug2.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/Anim_HugReverse.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/Anim_HugReverse.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/Anim_Hug2.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/Anim_SmallHug.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/Anim_SmallHug.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/HugComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/HugComponent.cpp" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -28,7 +44,7 @@
     <setting file="file://$PROJECT_DIR$/Source/SPM/Player2Character.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="Toolset" />
+    <option name="selectedTabId" value="CurrentFile" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;associatedIndex&quot;: 7
@@ -43,7 +59,7 @@
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;Uproject.SPM.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;blenda&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;New__R&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,

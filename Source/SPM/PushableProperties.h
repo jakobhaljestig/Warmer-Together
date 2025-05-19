@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
-#include "GameFramework/CharacterMovementComponent.h"
 #include "PushableProperties.generated.h"
 
 
