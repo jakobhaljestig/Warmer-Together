@@ -73,7 +73,7 @@ void UHugComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorCo
 void UHugComponent::MovePlayersTogether(ACharacterBase* P1, ACharacterBase* P2)
 {
 	if (!P1 || !P2) return;
-
+	
 	FVector Location1 = P1->GetActorLocation();
 	FVector Location2 = P2->GetActorLocation();
 	
@@ -85,5 +85,6 @@ void UHugComponent::MovePlayersTogether(ACharacterBase* P1, ACharacterBase* P2)
 
 	P1->SetActorRotation(RotToP2);
 	P2->SetActorRotation(RotToP1);
+	P2->SetActorLocation(Location1 + P1->GetActorForwardVector() * 40);
 }
 
