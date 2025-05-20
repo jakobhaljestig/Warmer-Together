@@ -324,7 +324,7 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	if (!PushComponent->HoldingSomething() && !bIsSprinting)
+	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched)
 	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
 		PushComponent->StartPushing();
@@ -334,12 +334,9 @@ void ACharacterBase::BeginPush(const FInputActionValue& Value)
 
 void ACharacterBase::EndPush(const FInputActionValue& Value) 
 {
-	if (bIsPushing)
-	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
 		PushComponent->StopPushing();
 		bIsPushing = false;
-	}
 }
 
 
