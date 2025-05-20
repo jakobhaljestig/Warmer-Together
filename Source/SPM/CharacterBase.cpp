@@ -257,16 +257,20 @@ void ACharacterBase::DisableCoyoteTime()
 void ACharacterBase::StartSprint()
 {
 	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched)
+	{
 		SprintComponent->StartSprint();
+		bIsSprinting = true;
+	}
 }
-
 
 void ACharacterBase::StopSprint()
 {
 	if (bIsSprinting)
+	{
 		SprintComponent->StopSprint();
+		bIsSprinting = false;
+	}
 }
-
 
 //--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
