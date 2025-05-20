@@ -203,7 +203,7 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 
 void ACharacterBase::Jump()
 {
-	if (bIsHugging)
+	if (bIsHugging || bSuccesfulHug)
 	{
 		return;
 	}
@@ -232,6 +232,7 @@ void ACharacterBase::Falling()
 	EnableCoyoteTime();
 }
 
+
 void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
 {
 	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
@@ -256,22 +257,26 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint()
 {
-	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched)
+	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
+	{
 		SprintComponent->StartSprint();
+		bIsSprinting = true;
+	}
 }
-
 
 void ACharacterBase::StopSprint()
 {
 	if (bIsSprinting)
+	{
 		SprintComponent->StopSprint();
+		bIsSprinting = false;
+	}
 }
-
 
 //--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
-	if (!bIsPushing && !bIsCrouched && !bIsHugging)
+	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug)
 		HugComponent -> TryHug();
 		bIsHugging = true;
 }
@@ -296,11 +301,6 @@ void ACharacterBase::Hug()
     	{
     		UE_LOG(LogTemplateCharacter, Error, TEXT("BodyTempComponent is nullptr!"));
     	}
-
-	if (PerformanceTracker)
-	{
-		PerformanceTracker->RegisterHug();
-	}
 }
 
 // --- Kasta Snöboll ---*/
@@ -324,7 +324,7 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	if (!PushComponent->HoldingSomething() && !bIsSprinting)
+	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
 	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
 		PushComponent->StartPushing();
@@ -334,12 +334,9 @@ void ACharacterBase::BeginPush(const FInputActionValue& Value)
 
 void ACharacterBase::EndPush(const FInputActionValue& Value) 
 {
-	if (bIsPushing)
-	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
 		PushComponent->StopPushing();
 		bIsPushing = false;
-	}
 }
 
 
@@ -352,13 +349,31 @@ void ACharacterBase::OnDeath()
 	bHasDied = true;
 
 	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
+
+	if (bHasCheckPointLocation)
+	{
+		RespawnAtCheckpoint();
+		UE_LOG(LogTemp, Warning, TEXT("Checkpoint found, death triggered"));
+	}
+	else
+	{
+		RespawnToLastSafeLocation();
+		ResetTemp();
+		UE_LOG(LogTemp, Warning, TEXT("Checkpoint not found."));
+	}
 	
-	RespawnAtCheckpoint();
-	
+}
+
+void ACharacterBase::ResetTemp() const
+{
+	//denna bör dock
+	UBodyTemperature* Temp = Cast<UBodyTemperature>(BodyTempComponent);
+	Temp->ResetTemp();
 }
 
 void ACharacterBase::SetCheckpointLocation(FVector Location)
 {
+	bHasCheckPointLocation = true;
 	CheckpointLocation = Location;
 }
 
@@ -366,16 +381,15 @@ void ACharacterBase::RespawnAtCheckpoint()
 {
 	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
 	bHasDied = false;
-	
-	//denna bör dock
-	UBodyTemperature* Temp = Cast<UBodyTemperature>(BodyTempComponent);
-	Temp->ResetTemp();
+
+	ResetTemp();
 	
 	SetActorLocation(NewLocation);
 }
 
 void ACharacterBase::RespawnToLastSafeLocation()
 {
+	bHasDied = false;
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 

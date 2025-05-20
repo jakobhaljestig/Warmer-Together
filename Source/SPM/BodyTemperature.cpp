@@ -116,15 +116,20 @@ void UBodyTemperature::ShareTemp()
 
 	if (Temp0 && Temp1)
 	{
-		const float Mean = (Temp0->Temp + Temp1->Temp) / 2.0f;
+		/*const float Mean = (Temp0->Temp + Temp1->Temp) / 2.0f;
 
 		if (const float HalfTemp = Temp0->MaxTemp * 0.5f; Mean < HalfTemp)
 		{
 			float NewTemp = HalfTemp; // höj båda upp till 50%
 			UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Hug boost to 50%% → %.2f"), NewTemp);
-			Temp0->Temp = NewTemp;
-			Temp1->Temp = NewTemp;
-		}
+			
+		}*/
+		
+		float NewTemp = MaxTemp;
+		Temp0->Temp = NewTemp;
+		Temp1->Temp = NewTemp;
+		UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Successfully shared temp!"));
+		
 	}
 	else
 	{
@@ -138,7 +143,6 @@ void UBodyTemperature::ResetTemp()
 {
 	Temp = MaxTemp;
 	bFrozen = false;
-
 }
 
 void UBodyTemperature::ModifyTemperature(float DeltaTemperature)
@@ -173,6 +177,11 @@ void UBodyTemperature::HandleDeath()
 		UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Player has died from cold."));
 		OwnerChar->OnDeath(); 
 	}
+}
+
+void UBodyTemperature::ColdBuff(float CoolDownValue)
+{
+	Temp -= CoolDownValue;
 }
 
 
