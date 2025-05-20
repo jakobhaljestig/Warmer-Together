@@ -67,7 +67,9 @@ class ACharacterBase : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ThrowSnowballAction;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* DanceAction;
 
 public:
 	
@@ -120,6 +122,13 @@ protected:
 
 	virtual void BeginPush(const FInputActionValue& Value);
 	void EndPush(const FInputActionValue& Value);
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dance")
+	bool bIsDancing;
+	
+	void StartDance(const FInputActionValue& Value);
+	void EndDance(const FInputActionValue& Value);
 
 	//---Kasta Snöboll ---
 	void Aim(const FInputActionValue& Value);
