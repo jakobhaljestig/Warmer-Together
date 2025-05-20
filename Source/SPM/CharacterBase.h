@@ -246,7 +246,9 @@ private:
 	
 	virtual void Falling() override;
 
-	
+	bool bHasCheckPointLocation = false;
 
+	void ResetTemp() const;
+	
 };
 

@@ -3,6 +3,10 @@
 
 #include "BirdAi.h"
 
+#include "BTTask_GiveTemporaryBuff.h"
+#include "GameFramework/Character.h"
+#include "Kismet/GameplayStatics.h"
+
 
 // Sets default values
 ABirdAi::ABirdAi()
@@ -49,10 +53,6 @@ void ABirdAi::Tick(float DeltaTime)
 
 }
 
-void ABirdAi::OnPlayerScaredBird()
-{
-}
-
 void ABirdAi::UpdateCircling(float DeltaTime)
 {
 	CircleAngle += CircleSpeed * DeltaTime;
@@ -62,17 +62,63 @@ void ABirdAi::UpdateCircling(float DeltaTime)
 
 void ABirdAi::CheckForPlayers()
 {
+	TArray<AActor*> Players;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacter::StaticClass(), Players);
+
+	for (AActor* Player : Players)
+	{
+		float Distance = FVector::Dist(Player->GetActorLocation(), GetActorLocation());
+		if (Distance < DetectionRadius)
+		{
+			StartDive(Player);
+			return;
+		}
+	}
 }
 
 void ABirdAi::StartDive(AActor* Player)
 {
+	TargetPlayer = Player;
+	DiveTargetLocation = Player->GetActorLocation();
+	CurrentState = EBirdState::Diving;
 }
 
 void ABirdAi::UpdateDiving(float DeltaTime)
 {
+	FVector CurrentLocation = GetActorLocation();
+	FVector Direction = (DiveTargetLocation - CurrentLocation).GetSafeNormal();
+	SetActorLocation(CurrentLocation + Direction * DiveSpeed * DeltaTime);
+
+	if (FVector::Dist(CurrentLocation, DiveTargetLocation) < 100.f)
+	{
+		if (TargetPlayer)
+		{
+			if (UBodyTemperature* Temp = TargetPlayer -> FindComponentByClass<UBodyTemperature>())
+			{
+				Temp -> ColdBuff(20.f);
+			}
+		}
+		CurrentState = EBirdState::Retreating;
+	}
 }
 
 void ABirdAi::UpdateRetreating(float DeltaTime)
 {
+	FVector Direction = (CircleCenter + FVector(0, 0, 300)) - GetActorLocation();
+	SetActorLocation(GetActorLocation() + Direction * DiveSpeed * DeltaTime);
+
+	if (FVector::Dist(GetActorLocation(), CircleCenter + FVector(0, 0, 300)) < 100.f)
+	{
+		CurrentState = EBirdState::Circling;
+	}
 }
+
+void ABirdAi::OnPlayerScaredBird()
+{
+	if (CurrentState == EBirdState::Diving)
+	{
+		CurrentState = EBirdState::Retreating;
+	}
+}
+
 
