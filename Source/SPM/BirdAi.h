@@ -23,6 +23,10 @@ public:
 	// Sets default values for this actor's properties
 	ABirdAi();
 
+	UPROPERTY(EditAnywhere)
+	float CirclingHeight = 500.f;
+
+
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -56,5 +60,9 @@ private:
 	void StartDive(AActor* Player);
 	void UpdateDiving(float DeltaTime);
 	void UpdateRetreating(float DeltaTime);
+
+	float AttackCooldown = 5.0f; // sekunder mellan attacker
+	float CooldownTimer = 2.0f;
+	bool bCanAttack = true;
 
 };

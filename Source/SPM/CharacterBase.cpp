@@ -164,6 +164,9 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterBase::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterBase::StopSprint);
+
+		EnhancedInputComponent->BindAction(DanceAction, ETriggerEvent::Started, this, &ACharacterBase::StartDance);
+		EnhancedInputComponent->BindAction(DanceAction, ETriggerEvent::Completed, this, &ACharacterBase::EndDance);
 	}
 	else
 	{
@@ -176,7 +179,7 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug)
+	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug && !bHasDied && !bIsDancing)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -257,7 +260,7 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint()
 {
-	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
+	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
 		SprintComponent->StartSprint();
 		bIsSprinting = true;
@@ -276,7 +279,7 @@ void ACharacterBase::StopSprint()
 //--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
-	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug)
+	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug && !bHasDied)
 		HugComponent -> TryHug();
 		bIsHugging = true;
 }
@@ -324,7 +327,7 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
+	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
 		PushComponent->StartPushing();
@@ -339,6 +342,19 @@ void ACharacterBase::EndPush(const FInputActionValue& Value)
 		bIsPushing = false;
 }
 
+void ACharacterBase::StartDance(const FInputActionValue& Value)
+{
+	if (!bSuccesfulHug && !bHasDied && !bIsSprinting && !bIsPushing && !bHasJumped && !bIsCrouched && !bIsHugging)
+	{
+		bIsDancing = true;
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Dance Started"));
+	}
+}
+
+void ACharacterBase::EndDance(const FInputActionValue& Value)
+{
+	bIsDancing = false;
+}
 
 // --- Death/Respawn/Damage --- 
 void ACharacterBase::OnDeath()
