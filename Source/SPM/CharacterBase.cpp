@@ -232,6 +232,7 @@ void ACharacterBase::Falling()
 	EnableCoyoteTime();
 }
 
+
 void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
 {
 	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
@@ -257,16 +258,20 @@ void ACharacterBase::DisableCoyoteTime()
 void ACharacterBase::StartSprint()
 {
 	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched)
+	{
 		SprintComponent->StartSprint();
+		bIsSprinting = true;
+	}
 }
-
 
 void ACharacterBase::StopSprint()
 {
 	if (bIsSprinting)
+	{
 		SprintComponent->StopSprint();
+		bIsSprinting = false;
+	}
 }
-
 
 //--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
@@ -296,11 +301,6 @@ void ACharacterBase::Hug()
     	{
     		UE_LOG(LogTemplateCharacter, Error, TEXT("BodyTempComponent is nullptr!"));
     	}
-
-	if (PerformanceTracker)
-	{
-		PerformanceTracker->RegisterHug();
-	}
 }
 
 // --- Kasta Snöboll ---*/
@@ -349,13 +349,31 @@ void ACharacterBase::OnDeath()
 	bHasDied = true;
 
 	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
+
+	if (bHasCheckPointLocation)
+	{
+		RespawnAtCheckpoint();
+		UE_LOG(LogTemp, Warning, TEXT("Checkpoint found, death triggered"));
+	}
+	else
+	{
+		RespawnToLastSafeLocation();
+		ResetTemp();
+		UE_LOG(LogTemp, Warning, TEXT("Checkpoint not found."));
+	}
 	
-	RespawnAtCheckpoint();
-	
+}
+
+void ACharacterBase::ResetTemp() const
+{
+	//denna bör dock
+	UBodyTemperature* Temp = Cast<UBodyTemperature>(BodyTempComponent);
+	Temp->ResetTemp();
 }
 
 void ACharacterBase::SetCheckpointLocation(FVector Location)
 {
+	bHasCheckPointLocation = true;
 	CheckpointLocation = Location;
 }
 
@@ -363,16 +381,15 @@ void ACharacterBase::RespawnAtCheckpoint()
 {
 	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
 	bHasDied = false;
-	
-	//denna bör dock
-	UBodyTemperature* Temp = Cast<UBodyTemperature>(BodyTempComponent);
-	Temp->ResetTemp();
+
+	ResetTemp();
 	
 	SetActorLocation(NewLocation);
 }
 
 void ACharacterBase::RespawnToLastSafeLocation()
 {
+	bHasDied = false;
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 

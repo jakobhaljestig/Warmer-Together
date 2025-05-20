@@ -42,9 +42,13 @@ public:
 	void HandleFreeze();
 	void HandleDeath();
 
+	void ColdBuff(float CoolDownValue);
+
 private:
-	void CoolDown(float DeltaTime);
+	
 	void HeatUp(float DeltaTime);
+
+	void CoolDown(float DeltaTime);
 	
 	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float MaxTemp = 100.f;
@@ -73,7 +77,7 @@ private:
 	bool bHasDied = false;
 
 	UPROPERTY(EditAnywhere)
-	float DeathDelay = 2.5f; // Hur lång tid efter att temperaturen nått 0 man dör
+	float DeathDelay = 1.f; // Hur lång tid efter att temperaturen nått 0 man dör
 	
 };
 
