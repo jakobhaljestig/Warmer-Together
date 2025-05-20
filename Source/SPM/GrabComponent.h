@@ -54,8 +54,6 @@ protected:
 	UPROPERTY(VisibleAnywhere, Category = "Grab")
 	bool Holding = false;
 
-	
-
 	ECollisionChannel CollisionChannel;
 
 	UPROPERTY(VisibleAnywhere)
