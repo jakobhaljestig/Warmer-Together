@@ -4,6 +4,7 @@
 #include "ClimbComponent.h"
 #include "Components/BoxComponent.h"
 #include "CharacterSmall.h"
+#include "Components/ArrowComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
 // Sets default values for this component's properties
@@ -73,26 +74,26 @@ void UClimbComponent::StartClimb(FHitResult Hit)
 {
 	bIsClimbing = true;
 	
-	///IMpactPoint där trace channel träffar objekt
+	///Gammal implementation
 	FVector AttachNormal = Hit.ImpactNormal;
-	FVector AttachPosition = Hit.ImpactPoint + AttachNormal * 50.f; 
+	FVector AttachPosition = Hit.ImpactPoint + AttachNormal * 10.f; 
 	ClimbCharacter->SetActorLocation(AttachPosition);
 
 	//ROTATION
-	FRotator WallRotation = Hit.ImpactNormal.ToOrientationRotator();
-	WallRotation.Yaw += 180.f;
-	FRotator FinalRotation = FRotator(0.f, WallRotation.Yaw, 0.f);
-	
-	/*FVector WallNormal = Hit.ImpactNormal;
-	WallNormal.Z = 0.f; 
-	WallNormal.Normalize();
+	UArrowComponent* Arrow = Hit.GetActor()->FindComponentByClass<UArrowComponent>();
+	if (Arrow)
+	{
+		//FVector ArrowLocation = Arrow->GetComponentLocation();
+		FRotator ArrowRotation = Arrow->GetComponentRotation();
 
-	FRotator FinalRotation = WallNormal.Rotation();
-	FinalRotation.Yaw += 180.f; 
-	FinalRotation.Pitch = 0.f;
-	FinalRotation.Roll = 0.f;*/
-	
-	ClimbCharacter->SetActorRotation(FinalRotation);
+		// Placera spelaren vid pilens position
+		//ClimbCharacter->SetActorLocation(ArrowLocation);
+
+		// Rotera spelaren så att den "tittar" åt samma håll som pilen
+		FRotator NewRotation = FRotator(0.f, ArrowRotation.Yaw, 0.f);
+		ClimbCharacter->SetActorRotation(NewRotation);
+	}
+
 	SetClimbingMovement();
 }
 
