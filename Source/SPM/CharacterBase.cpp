@@ -164,6 +164,9 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterBase::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterBase::StopSprint);
+
+		EnhancedInputComponent->BindAction(DanceAction, ETriggerEvent::Started, this, &ACharacterBase::StartDance);
+		EnhancedInputComponent->BindAction(DanceAction, ETriggerEvent::Completed, this, &ACharacterBase::EndDance);
 	}
 	else
 	{
@@ -339,6 +342,19 @@ void ACharacterBase::EndPush(const FInputActionValue& Value)
 		bIsPushing = false;
 }
 
+void ACharacterBase::StartDance(const FInputActionValue& Value)
+{
+	if (!bSuccesfulHug && !bHasDied && !bIsSprinting && !bIsPushing && !bHasJumped && !bIsCrouched && !bIsHugging)
+	{
+		bIsDancing = true;
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Dance Started"));
+	}
+}
+
+void ACharacterBase::EndDance(const FInputActionValue& Value)
+{
+	bIsDancing = false;
+}
 
 // --- Death/Respawn/Damage --- 
 void ACharacterBase::OnDeath()
