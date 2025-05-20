@@ -410,22 +410,28 @@ void ACharacterBase::RespawnToLastSafeLocation()
 }
 
 
+
+
 void ACharacterBase::UpdatePlayerLocation()
 {
-	if (GetCharacterMovement()->IsMovingOnGround())
+	if (!GetCharacterMovement()->IsMovingOnGround())
+		return;
+
+	AActor* Ground = GetCharacterMovement()->CurrentFloor.HitResult.GetActor();
+	UStaticMeshComponent* MeshComp = Ground ? Ground->FindComponentByClass<UStaticMeshComponent>() : nullptr;
+	UStaticMesh* SurfaceMesh = MeshComp ? MeshComp->GetStaticMesh() : nullptr;
+
+	if (!SurfaceMesh)
+		return;
+
+	const FString& Name = SurfaceMesh->GetName();
+	
+	if ((Name.Contains(TEXT("Cube"))) && FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
 	{
-		AActor* Ground = GetCharacterMovement() -> CurrentFloor.HitResult.GetActor();
-
-		if (Ground && !Ground->ActorHasTag(TEXT("IgnoreLastSafeLocation")))
-		{
-			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
-			{
-				LastSafeLocation = GetActorLocation();
-			}
-		}
+		LastSafeLocation = GetActorLocation();
 	}
-
 }
+
 
 
 void ACharacterBase::Landed(const FHitResult& Hit)

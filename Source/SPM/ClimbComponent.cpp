@@ -119,10 +119,13 @@ void UClimbComponent::FinishClimbUp()
 {
 	if (!ClimbCharacter) return;
 	
-	FVector Start = ClimbCharacter->GetActorLocation() + FVector(0.f, 0.f, 150.f); //raycast från över  huvuedt
 	FVector Forward = ClimbCharacter->GetActorForwardVector();
-	FVector Direction = (Forward + FVector(0.f, 0.f, -1.5f)).GetSafeNormal(); 
-	FVector End = Start + Direction * 300.f; 
+	FVector Start = ClimbCharacter->GetActorLocation() 
+				  + Forward * 150.f            // Lite framför
+				  + FVector(0.f, 0.f, 100.f); // Lite upp
+
+	// Raycast rakt ner
+	FVector End = Start + FVector(0.f, 0.f, -300.f);
 
 	FHitResult HitResult;
 	FCollisionQueryParams TraceParams;
@@ -135,10 +138,15 @@ void UClimbComponent::FinishClimbUp()
 		ECC_Visibility,
 		TraceParams
 	);
+
+	FColor LineColor = bHit ? FColor::Green : FColor::Red;
+	DrawDebugLine(GetWorld(), Start, End, LineColor, false, 2.0f, 0, 2.0f);
 	
 	if (bHit)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Found ledge top at: %s"), *HitResult.ImpactPoint.ToString());
+
+		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 15.f, 12, FColor::Blue, false, 2.0f);
 		
 		FVector TargetLocation = HitResult.ImpactPoint + FVector(0.f, 0.f, 50.f);
 		ClimbCharacter->SetActorLocation(TargetLocation);
