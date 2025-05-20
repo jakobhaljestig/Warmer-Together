@@ -108,7 +108,6 @@ void UWeatherComponent::SpawnWeatherEffects()
 
 void UWeatherComponent::OnWeatherUpdateTick() 
 {
-	UE_LOG(LogTemp, Warning, TEXT("[AdaptiveWeatherSystem] Weather Tick called"));
 
 	UpdateWeatherEffectLocation();
 
@@ -143,9 +142,7 @@ void UWeatherComponent::OnWeatherUpdateTick()
 void UWeatherComponent::UpdateWeatherFromTemperature(const float TemperaturePercentage) 
 {
 	if (!SnowLevel1 || !SnowLevel2 || !SnowLevel3 || !MistParticleSystem) return;
-
-	UE_LOG(LogTemp, Warning, TEXT("TempPct: %.2f"), TemperaturePercentage);
-
+	
 	// Allt inaktivt först
 	SnowLevel1->Deactivate();
 	SnowLevel2->Deactivate();
@@ -155,18 +152,18 @@ void UWeatherComponent::UpdateWeatherFromTemperature(const float TemperaturePerc
 	if (TemperaturePercentage >= 0.75f)
 	{
 		SnowLevel1->Activate();
-		UE_LOG(LogTemp, Warning, TEXT("Snow 1 Activated"));
+		//UE_LOG(LogTemp, Warning, TEXT("Snow 1 Activated"));
 	}
 	else if (TemperaturePercentage >= 0.5f)
 	{
 		SnowLevel2->Activate();
-		UE_LOG(LogTemp, Warning, TEXT("Snow 2 Activated"));
+		//UE_LOG(LogTemp, Warning, TEXT("Snow 2 Activated"));
 	}
 	else if (TemperaturePercentage >= 0.25f)
 	{
 		SnowLevel3->Activate();
 		MistParticleSystem->Activate();
-		UE_LOG(LogTemp, Warning, TEXT("Mist + Snow 3 Activated"));
+		//UE_LOG(LogTemp, Warning, TEXT("Mist + Snow 3 Activated"));
 	}
 }
 
@@ -197,8 +194,8 @@ FVector UWeatherComponent::GetPlayersMidpoint() const
     // Dela med antalet spelare för att få mittpunkten
     FVector Midpoint = TotalLocation / PlayerCharacters.Num();
 
-    UE_LOG(LogTemp, Warning, TEXT("[WeatherSystem] Midpoint: X=%.1f Y=%.1f Z=%.1f, MaxDistance: %.1f"), 
-        Midpoint.X, Midpoint.Y, Midpoint.Z, MaxDistance);
+    /*UE_LOG(LogTemp, Warning, TEXT("[WeatherSystem] Midpoint: X=%.1f Y=%.1f Z=%.1f, MaxDistance: %.1f"), 
+        Midpoint.X, Midpoint.Y, Midpoint.Z, MaxDistance);*/
 
     return Midpoint;
 }
@@ -227,9 +224,7 @@ void UWeatherComponent::UpdateWeatherEffectLocation() const
 	float ScaleFactor = FMath::GetMappedRangeValueClamped(FVector2D(0.f, 3000.f), FVector2D(1.0f, 3.0f), MaxDistance);
 	// Z-skalan fixeras
 	FVector ParticleScale = FVector(ScaleFactor, 1.5f, 2.5f);
-
-	if (MaxDistance > 2500.f)
-	{
+	
 		if (SnowLevel1) 
 		{
 			SnowLevel1->SetWorldLocation(Midpoint);
@@ -244,7 +239,7 @@ void UWeatherComponent::UpdateWeatherEffectLocation() const
 		{
 			SnowLevel3->SetWorldLocation(Midpoint);
 			SnowLevel3->SetWorldScale3D(ParticleScale);
-			UE_LOG(LogTemp, Warning, TEXT("ScaleFactor: %.2f based on MaxDistance: %.1f"), ScaleFactor, MaxDistance);
+			//UE_LOG(LogTemp, Warning, TEXT("ScaleFactor: %.2f based on MaxDistance: %.1f"), ScaleFactor, MaxDistance);
 		}
 
 		if (MistParticleSystem)
@@ -253,7 +248,7 @@ void UWeatherComponent::UpdateWeatherEffectLocation() const
 			MistParticleSystem->SetWorldScale3D(ParticleScale);
 		}
 	}
-}
+
 
 //påverkar bodytemp baserat på vädernivån, måste nog tweakas lite vart eftersom
 void UWeatherComponent::AffectBodyTemperatures() const

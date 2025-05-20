@@ -21,10 +21,7 @@ public:
 protected:
 	// Called when the game starts
 	virtual void BeginPlay() override;
-
-	UFUNCTION(BlueprintCallable, meta = (AllowPrivateAccess = "true"))
-	virtual void StartMiniGame();
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
 	UBoxComponent* TriggerBox = nullptr;
 

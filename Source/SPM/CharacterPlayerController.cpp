@@ -4,6 +4,20 @@
 #include "CharacterPlayerController.h"
 #include "Blueprint/UserWidget.h"
 
+void ACharacterPlayerController::HideHUD(bool bShouldHide)
+{
+	if (bShouldHide)
+	{
+		HUD->RemoveFromParent();
+        FreezeEffect->RemoveFromParent();
+	}
+	else
+	{
+		HUD->AddToPlayerScreen(5);
+		FreezeEffect->AddToPlayerScreen(2);
+	}
+}
+
 void ACharacterPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
@@ -17,7 +31,8 @@ void ACharacterPlayerController::OnPossess(APawn* InPawn)
 	FreezeEffect = CreateWidget(this, FreezeEffectClass);
 	if (FreezeEffect)
 	{
-		FreezeEffect->AddToPlayerScreen(2);
+		FreezeEffect->AddToPlayerScreen(1);
 	}
-	
 }
+
+

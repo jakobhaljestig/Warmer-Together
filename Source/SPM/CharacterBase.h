@@ -102,7 +102,7 @@ protected:
 	//HUGGING
 	void BeginHug(const FInputActionValue& Value);
 	void EndHug(const FInputActionValue& Value);
-	void Hug() const;
+	void Hug();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Push")
 	UHugComponent* HugComponent;
@@ -130,6 +130,12 @@ protected:
 
 	UFUNCTION(BlueprintImplementableEvent, Category = "Animation")
 	void PlayThrowAnimation();
+
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	float HugTimer = 0;
+
+	UPROPERTY(EditAnywhere, Category = "Animation")
+	float HugTime = 5.6;
 
 	//VÄDER
 	UPROPERTY()
@@ -204,6 +210,12 @@ public:
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsHugging;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bSuccesfulHug = false;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsSprinting;
 	
 private:
 	void UpdatePlayerLocation();
@@ -234,7 +246,9 @@ private:
 	
 	virtual void Falling() override;
 
-	
+	bool bHasCheckPointLocation = false;
 
+	void ResetTemp() const;
+	
 };
 

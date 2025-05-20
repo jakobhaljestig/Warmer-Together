@@ -100,6 +100,17 @@ void ACharacterBase::Tick(float DeltaTime)
 	
 	UpdatePlayerLocation();
 
+	if (bSuccesfulHug)
+	{
+		HugTimer += DeltaTime;
+
+		if (HugTimer > HugTime)
+		{
+			bSuccesfulHug = false;
+			HugTimer = 0.f;
+			HugComponent->EndHug();
+		}
+	}
 
 	// Temperatur påverkar kroppstemperatur
 	// float TempFactor = FMath::Clamp(-CurrentWeather.Temperature / 30.0f, 0.0f, 1.0f);
@@ -165,7 +176,7 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr && !bIsHugging)
+	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -192,7 +203,7 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 
 void ACharacterBase::Jump()
 {
-	if (bIsHugging)
+	if (bIsHugging || bSuccesfulHug)
 	{
 		return;
 	}
@@ -221,6 +232,7 @@ void ACharacterBase::Falling()
 	EnableCoyoteTime();
 }
 
+
 void ACharacterBase::OnMovementModeChanged(EMovementMode PrevMovementMode, uint8 PreviousCustomMode)
 {
 	Super::OnMovementModeChanged(PrevMovementMode, PreviousCustomMode);
@@ -245,32 +257,41 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint()
 {
-	SprintComponent->StartSprint();
+	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
+	{
+		SprintComponent->StartSprint();
+		bIsSprinting = true;
+	}
 }
-
 
 void ACharacterBase::StopSprint()
 {
-	SprintComponent->StopSprint();
+	if (bIsSprinting)
+	{
+		SprintComponent->StopSprint();
+		bIsSprinting = false;
+	}
 }
-
 
 //--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
-	bIsHugging = true;
-	HugComponent -> TryHug();
+	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug)
+		HugComponent -> TryHug();
+		bIsHugging = true;
 }
 
 void ACharacterBase::EndHug(const FInputActionValue& Value)
 {
+
 	bIsHugging = false;
 	HugComponent -> EndHug();
 }
 
 
-void ACharacterBase::Hug() const
+void ACharacterBase::Hug()
 {
+	bSuccesfulHug = true;
 	if (BodyTempComponent)
 		{
 		    UE_LOG(LogTemplateCharacter, Warning, TEXT("Characters are hugging"));
@@ -280,11 +301,6 @@ void ACharacterBase::Hug() const
     	{
     		UE_LOG(LogTemplateCharacter, Error, TEXT("BodyTempComponent is nullptr!"));
     	}
-
-	if (PerformanceTracker)
-	{
-		PerformanceTracker->RegisterHug();
-	}
 }
 
 // --- Kasta Snöboll ---*/
@@ -308,7 +324,7 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	if (!PushComponent->HoldingSomething())
+	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
 	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
 		PushComponent->StartPushing();
@@ -318,12 +334,9 @@ void ACharacterBase::BeginPush(const FInputActionValue& Value)
 
 void ACharacterBase::EndPush(const FInputActionValue& Value) 
 {
-	if (bIsPushing)
-	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
 		PushComponent->StopPushing();
 		bIsPushing = false;
-	}
 }
 
 
@@ -336,13 +349,31 @@ void ACharacterBase::OnDeath()
 	bHasDied = true;
 
 	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
+
+	if (bHasCheckPointLocation)
+	{
+		RespawnAtCheckpoint();
+		UE_LOG(LogTemp, Warning, TEXT("Checkpoint found, death triggered"));
+	}
+	else
+	{
+		RespawnToLastSafeLocation();
+		ResetTemp();
+		UE_LOG(LogTemp, Warning, TEXT("Checkpoint not found."));
+	}
 	
-	RespawnAtCheckpoint();
-	
+}
+
+void ACharacterBase::ResetTemp() const
+{
+	//denna bör dock
+	UBodyTemperature* Temp = Cast<UBodyTemperature>(BodyTempComponent);
+	Temp->ResetTemp();
 }
 
 void ACharacterBase::SetCheckpointLocation(FVector Location)
 {
+	bHasCheckPointLocation = true;
 	CheckpointLocation = Location;
 }
 
@@ -350,16 +381,15 @@ void ACharacterBase::RespawnAtCheckpoint()
 {
 	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
 	bHasDied = false;
-	
-	//denna bör dock
-	UBodyTemperature* Temp = Cast<UBodyTemperature>(BodyTempComponent);
-	Temp->ResetTemp();
+
+	ResetTemp();
 	
 	SetActorLocation(NewLocation);
 }
 
 void ACharacterBase::RespawnToLastSafeLocation()
 {
+	bHasDied = false;
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 }
 
