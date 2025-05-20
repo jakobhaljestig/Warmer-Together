@@ -59,7 +59,7 @@ void UClimbComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 void UClimbComponent::Climb()
 {
 	FHitResult Hit;
-	if ((!bIsClimbing && ClimbingInReach(Hit)) == true || (!bIsClimbing && ClimbingDownInReach(Hit)))
+	if ((!bIsClimbing && ClimbingInReach(Hit)) == true /*|| (!bIsClimbing && ClimbingDownInReach(Hit))*/)
 	{
 		StartClimb(Hit);
 	}
@@ -75,7 +75,7 @@ void UClimbComponent::StartClimb(FHitResult Hit)
 	
 	///IMpactPoint där trace channel träffar objekt
 	FVector AttachNormal = Hit.ImpactNormal;
-	FVector AttachPosition = Hit.ImpactPoint + AttachNormal * 15.f; 
+	FVector AttachPosition = Hit.ImpactPoint + AttachNormal * 50.f; 
 	ClimbCharacter->SetActorLocation(AttachPosition);
 
 	//ROTATION
@@ -157,9 +157,9 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 
 	FVector Start = ClimbCharacter->GetActorLocation()  + FVector(0, 0, 80.f); //Flyttar upp linetrace mer mot huvudet
 	FVector ForwardVector = ClimbCharacter->GetActorForwardVector();
-	FVector End = Start + ForwardVector * 30.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
+	FVector End = Start + ForwardVector * 100.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
 
-	FVector HalfSize(30.f, 30.f, 50.f); 
+	FVector HalfSize(20.f, 20.f, 20.f); 
 	FQuat Rotation = FQuat::Identity;
 	
 	FCollisionQueryParams TraceParams;
