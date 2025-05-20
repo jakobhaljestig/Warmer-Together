@@ -37,7 +37,7 @@ void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComp
 void ACharacterSmall::Crawl (const FInputActionValue& Value)
 {
 	Tags.Remove("Grabbed");
-	if (!bIsPushing && !bPressedJump && !GetCharacterMovement()->IsFalling() && !bIsHugging)
+	if (!bIsPushing && !bPressedJump && !GetCharacterMovement()->IsFalling() && !bIsHugging && !bSuccesfulHug)
 	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Player Small is Crouching"));
 		GetCharacterMovement()->MaxWalkSpeed = 250.0f;

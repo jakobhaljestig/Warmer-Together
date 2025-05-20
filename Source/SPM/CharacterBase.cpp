@@ -203,7 +203,7 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 
 void ACharacterBase::Jump()
 {
-	if (bIsHugging)
+	if (bIsHugging || bSuccesfulHug)
 	{
 		return;
 	}
@@ -257,7 +257,7 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint()
 {
-	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched)
+	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
 	{
 		SprintComponent->StartSprint();
 		bIsSprinting = true;
@@ -276,7 +276,7 @@ void ACharacterBase::StopSprint()
 //--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
-	if (!bIsPushing && !bIsCrouched && !bIsHugging)
+	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug)
 		HugComponent -> TryHug();
 		bIsHugging = true;
 }
@@ -324,7 +324,7 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched)
+	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
 	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
 		PushComponent->StartPushing();
