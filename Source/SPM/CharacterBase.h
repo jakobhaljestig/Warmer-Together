@@ -8,6 +8,7 @@
 #include "WeatherComponent.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "BirdAi.h"
 #include "CharacterBase.generated.h"
 
 
@@ -68,6 +69,9 @@ class ACharacterBase : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ThrowSnowballAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* ScareAction;
+
 
 public:
 	
@@ -98,6 +102,9 @@ protected:
 	
 	void StartSprint ();
 	void StopSprint();
+
+	void StartScare();
+	void StopScare();
 	
 	//HUGGING
 	void BeginHug(const FInputActionValue& Value);

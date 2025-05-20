@@ -164,6 +164,9 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterBase::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterBase::StopSprint);
+
+		EnhancedInputComponent->BindAction(ScareAction, ETriggerEvent::Started, this, &ACharacterBase::StartScare);
+		EnhancedInputComponent->BindAction(ScareAction, ETriggerEvent::Completed, this, &ACharacterBase::StopScare);
 	}
 	else
 	{
@@ -271,6 +274,31 @@ void ACharacterBase::StopSprint()
 		SprintComponent->StopSprint();
 		bIsSprinting = false;
 	}
+}
+
+void ACharacterBase::StartScare()
+{
+	UE_LOG(LogTemp, Warning, TEXT("bird scared"));
+
+	TArray<AActor*> Birds;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABirdAi::StaticClass(), Birds);
+
+	for (AActor* Bird : Birds)
+	{
+		float Distance = FVector::Dist(Bird->GetActorLocation(), GetActorLocation());
+		if (Distance < 800.f) // eller annan range
+		{
+			if (ABirdAi* BirdAI = Cast<ABirdAi>(Bird))
+			{
+				BirdAI->OnPlayerScaredBird(); // flyger upp igen
+			}
+		}
+	}
+}
+
+void ACharacterBase::StopScare()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Stop scare"));
 }
 
 //--- Hugging ---
