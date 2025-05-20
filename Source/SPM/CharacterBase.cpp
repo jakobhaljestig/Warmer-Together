@@ -179,7 +179,7 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug)
+	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug && !bHasDied && !bIsDancing)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -260,7 +260,7 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint()
 {
-	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
+	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
 		SprintComponent->StartSprint();
 		bIsSprinting = true;
@@ -279,7 +279,7 @@ void ACharacterBase::StopSprint()
 //--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
-	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug)
+	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug && !bHasDied)
 		HugComponent -> TryHug();
 		bIsHugging = true;
 }
@@ -327,7 +327,7 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
+	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
 		PushComponent->StartPushing();
