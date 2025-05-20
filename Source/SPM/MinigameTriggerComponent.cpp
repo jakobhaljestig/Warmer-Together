@@ -33,12 +33,6 @@ void UMinigameTriggerComponent::BeginPlay()
 	
 }
 
-void UMinigameTriggerComponent::StartMiniGame()
-{
-	
-}
-
-
 void UMinigameTriggerComponent::ZoomIn(UPrimitiveComponent* Actor)
 {
 	ControllerOwner = Cast<ACharacterBase>(Actor->GetOwner());
