@@ -207,7 +207,7 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 
 void ACharacterBase::Jump()
 {
-	if (bIsHugging || bSuccesfulHug)
+	if (bIsHugging || bSuccesfulHug || bHasDied)
 	{
 		return;
 	}
@@ -261,7 +261,7 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint()
 {
-	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
+	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
 		SprintComponent->StartSprint();
 		bIsSprinting = true;
