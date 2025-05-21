@@ -15,6 +15,7 @@ UBTTask_DiveToPlayer::UBTTask_DiveToPlayer()
 EBTNodeResult::Type UBTTask_DiveToPlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
 	bReachedTarget = false;
+	
 	return EBTNodeResult::InProgress;
 }
 
@@ -53,7 +54,10 @@ void UBTTask_DiveToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 		Bird->bCanAttack = false;
 		Bird->CooldownTimer = Bird->AttackCooldown;
 
-		BB->SetValueAsName("BirdState", "Retreating");
+		BB->SetValueAsName("BirdStates", "Retreating");
+
+		UE_LOG(LogTemp, Warning, TEXT("Dive Task: Executing"));
+
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
 }

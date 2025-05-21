@@ -6,13 +6,14 @@
 #include "GameFramework/Pawn.h"
 #include "BirdAi.generated.h"
 
+/*
 UENUM(BlueprintType)
 enum class EBirdState : uint8
 {
 	Circling,
 	Diving,
 	Retreating
-};
+};*/
 
 UCLASS()
 class SPM_API ABirdAi : public APawn
@@ -43,7 +44,7 @@ public:
 	void UpdateDiving(float DeltaTime);
 	void UpdateRetreating(float DeltaTime);
 
-	EBirdState CurrentState;
+	//EBirdState CurrentState;
 
 	FVector CircleCenter;
 	float CircleRadius;
@@ -63,6 +64,10 @@ public:
 	float AttackCooldown = 5.0f; // sekunder mellan attacker
 	float CooldownTimer = 2.0f;
 	bool bCanAttack = true;
+
+	UPROPERTY(VisibleAnywhere)
+	class UFloatingPawnMovement* MovementComponent;
+
 
 private:
 

@@ -4,9 +4,6 @@
 #include "BirdAi.h"
 
 #include "BirdAIController.h"
-#include "GameFramework/Character.h"
-#include "Kismet/GameplayStatics.h"
-
 
 // Sets default values
 ABirdAi::ABirdAi()
@@ -17,10 +14,12 @@ ABirdAi::ABirdAi()
 	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
 	AIControllerClass = ABirdAIController::StaticClass();
 
+	//MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
+	
 	CircleRadius = 500.f;
 	CircleSpeed = 1.f;
 	CircleAngle = 0.f;
-	CurrentState = EBirdState::Circling;
+	//CurrentState = EBirdState::Circling;
 
 }
 
@@ -82,7 +81,7 @@ void ABirdAi::UpdateCircling(float DeltaTime)
 	//UE_LOG(LogTemp, Warning, TEXT("Circling at angle: %f"), CircleAngle);
 }
 
-
+/*
 void ABirdAi::CheckForPlayers()
 {
 
@@ -101,14 +100,16 @@ void ABirdAi::CheckForPlayers()
 			return;
 		}
 	}
-}
+}*/
 
+/*
 void ABirdAi::StartDive(AActor* Player)
 {
 	TargetPlayer = Player;
 	DiveTargetLocation = Player->GetActorLocation();
 	CurrentState = EBirdState::Diving;
-}
+}*/
+
 /*
 void ABirdAi::UpdateDiving(float DeltaTime)
 {
@@ -156,10 +157,11 @@ void ABirdAi::UpdateDiving(float DeltaTime)
 		bCanAttack = false;
 		CooldownTimer = AttackCooldown;
 
-		CurrentState = EBirdState::Retreating;
+		//CurrentState = EBirdState::Retreating;
 	}
 }*/
 
+/*
 void ABirdAi::UpdateRetreating(float DeltaTime)
 {
 	FVector TargetLocation = CircleCenter + FVector(0, 0, 500);
@@ -190,7 +192,7 @@ void ABirdAi::UpdateRetreating(float DeltaTime)
 			//UE_LOG(LogTemp, Warning, TEXT("Resetting CircleAngle from position: %s"), *GetActorLocation().ToString());
 			UE_LOG(LogTemp, Warning, TEXT("circling again."));
 			
-			CurrentState = EBirdState::Circling;
+			//CurrentState = EBirdState::Circling;
 		}
 
 	}
@@ -204,6 +206,7 @@ void ABirdAi::OnPlayerScaredBird()
 		CurrentState = EBirdState::Retreating;
 	}
 }
+*/
 
 
 

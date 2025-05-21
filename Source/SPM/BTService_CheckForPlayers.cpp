@@ -16,6 +16,8 @@ void UBTService_CheckForPlayers::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 	AAIController* AICon = OwnerComp.GetAIOwner();
 	ABirdAi* Bird = Cast<ABirdAi>(AICon->GetPawn());
 
+	UE_LOG(LogTemp, Warning, TEXT("Checking for players"));
+
 	if (!Bird || !Bird->bCanAttack)
 		return;
 
@@ -29,7 +31,7 @@ void UBTService_CheckForPlayers::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 		{
 			OwnerComp.GetBlackboardComponent()->SetValueAsObject("TargetPlayer", Player);
 			OwnerComp.GetBlackboardComponent()->SetValueAsVector("DiveTargetLocation", Player->GetActorLocation());
-			OwnerComp.GetBlackboardComponent()->SetValueAsName("BirdState", "Diving");
+			OwnerComp.GetBlackboardComponent()->SetValueAsName("BirdStates", "Diving");
 			return;
 		}
 	}
