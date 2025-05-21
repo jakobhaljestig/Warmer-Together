@@ -3,25 +3,30 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
 #include "BirdAi.generated.h"
 
+/*
 UENUM(BlueprintType)
 enum class EBirdState : uint8
 {
 	Circling,
 	Diving,
 	Retreating
-};
+};*/
 
 UCLASS()
-class SPM_API ABirdAi : public AActor
+class SPM_API ABirdAi : public APawn
 {
 	GENERATED_BODY()
 	
 public:	
 	// Sets default values for this actor's properties
 	ABirdAi();
+
+	UPROPERTY(EditAnywhere)
+	float CirclingHeight = 500.f;
+
 
 protected:
 	// Called when the game starts or when spawned
@@ -33,8 +38,13 @@ public:
 
 	void OnPlayerScaredBird();
 
-private:
-	EBirdState CurrentState;
+	void UpdateCircling(float DeltaTime);
+	void CheckForPlayers();
+	void StartDive(AActor* Player);
+	void UpdateDiving(float DeltaTime);
+	void UpdateRetreating(float DeltaTime);
+
+	//EBirdState CurrentState;
 
 	FVector CircleCenter;
 	float CircleRadius;
@@ -51,10 +61,14 @@ private:
 
 	FVector DiveTargetLocation;
 
-	void UpdateCircling(float DeltaTime);
-	void CheckForPlayers();
-	void StartDive(AActor* Player);
-	void UpdateDiving(float DeltaTime);
-	void UpdateRetreating(float DeltaTime);
+	float AttackCooldown = 5.0f; // sekunder mellan attacker
+	float CooldownTimer = 2.0f;
+	bool bCanAttack = true;
+
+	UPROPERTY(VisibleAnywhere)
+	class UFloatingPawnMovement* MovementComponent;
+
+
+private:
 
 };

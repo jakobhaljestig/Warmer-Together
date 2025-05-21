@@ -159,11 +159,13 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::BeginPush);
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::EndPush);
 
-		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Aim);
-		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Completed, this, &ACharacterBase::Throw);
+		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Throw);
 
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterBase::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterBase::StopSprint);
+
+		EnhancedInputComponent->BindAction(DanceAction, ETriggerEvent::Started, this, &ACharacterBase::StartDance);
+		EnhancedInputComponent->BindAction(DanceAction, ETriggerEvent::Completed, this, &ACharacterBase::EndDance);
 	}
 	else
 	{
@@ -176,7 +178,8 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug)
+	if (bHasDied) return;
+	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug && !bIsDancing)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -203,7 +206,7 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 
 void ACharacterBase::Jump()
 {
-	if (bIsHugging || bSuccesfulHug)
+	if (bIsHugging || bSuccesfulHug || bHasDied)
 	{
 		return;
 	}
@@ -257,7 +260,7 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint()
 {
-	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
+	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
 		SprintComponent->StartSprint();
 		bIsSprinting = true;
@@ -276,7 +279,7 @@ void ACharacterBase::StopSprint()
 //--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
-	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug)
+	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug && !bHasDied)
 		HugComponent -> TryHug();
 		bIsHugging = true;
 }
@@ -305,26 +308,56 @@ void ACharacterBase::Hug()
 
 // --- Kasta Snöboll ---*/
 
-void ACharacterBase::Aim(const FInputActionValue& Value)
-{
-	/**Spawn actor - BP_Ball
-	 *Get socket transform */
-
-	//PlayAimAnimation();
-	UE_LOG(LogTemplateCharacter, Error, TEXT("Is aiming"));
-}
 
 void ACharacterBase::Throw(const FInputActionValue& Value)
 {
-	//PlayThrowAnimation();
-	UE_LOG(LogTemplateCharacter, Error, TEXT("Is Throwing"));
+	/*if (!SnowballClass) return;
+	
+	FVector CameraLocation;
+	FRotator CameraRotation;
+	GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+	FVector CameraForward = CameraRotation.Vector();
+
+	FVector CharacterForward = GetActorForwardVector();
+
+	float AimAngleDegrees = FMath::RadiansToDegrees(acosf(FVector::DotProduct(CameraForward.GetSafeNormal(), CharacterForward.GetSafeNormal())));
+
+	if (AimAngleDegrees > 45)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Kastar inte – kameran tittar för långt från karaktärens riktning (vinkel: %.1f°)"), AimAngleDegrees);
+		return;
+	}
+	
+	FVector SpawnLocation = GetMesh()->GetSocketLocation("RightHandSocket");
+	FRotator SpawnRotation = (CameraRotation.Vector()).Rotation();
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+
+	ASnowball* Snowball = GetWorld()->SpawnActor<ASnowball>(SnowballClass, SpawnLocation, SpawnRotation, SpawnParams);
+
+	if (Snowball)
+	{
+		FVector ThrowDirection = CameraRotation.Vector() + FVector(0, 0, 0.7f); 
+		ThrowDirection.Normalize();
+		Snowball->ThrowInDirection(ThrowDirection);
+	}*/
+}
+
+void ACharacterBase::ApplySnowballHit()
+{
+	if (BodyTempComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("character was hit"));
+		BodyTempComponent->ColdBuff(5);
+	}
 }
 
 //--- Pushing ---
 
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
-	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched && !bSuccesfulHug)
+	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Started"));
 		PushComponent->StartPushing();
@@ -339,6 +372,20 @@ void ACharacterBase::EndPush(const FInputActionValue& Value)
 		bIsPushing = false;
 }
 
+void ACharacterBase::StartDance(const FInputActionValue& Value)
+{
+	if (!bSuccesfulHug && !bHasDied && !bIsSprinting && !bIsPushing && !bHasJumped && !bIsCrouched && !bIsHugging)
+	{
+		bIsDancing = true;
+		UE_LOG(LogTemplateCharacter, Display, TEXT("Dance Started"));
+	}
+}
+
+void ACharacterBase::EndDance(const FInputActionValue& Value)
+{
+	bIsDancing = false;
+}
+
 
 // --- Death/Respawn/Damage --- 
 void ACharacterBase::OnDeath()
@@ -347,17 +394,17 @@ void ACharacterBase::OnDeath()
 		return;
 
 	bHasDied = true;
-
+	PushComponent->StopPushing();
 	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
 
 	if (bHasCheckPointLocation)
 	{
-		RespawnAtCheckpoint();
+		GetWorldTimerManager().SetTimer(RespawnTimeHandle, this, &ACharacterBase::RespawnAtCheckpoint, RespawnTimeDuration, false);
 		UE_LOG(LogTemp, Warning, TEXT("Checkpoint found, death triggered"));
 	}
 	else
 	{
-		RespawnToLastSafeLocation();
+		GetWorldTimerManager().SetTimer(RespawnTimeHandle, this, &ACharacterBase::RespawnToLastSafeLocation, RespawnTimeDuration, false);
 		ResetTemp();
 		UE_LOG(LogTemp, Warning, TEXT("Checkpoint not found."));
 	}
@@ -394,22 +441,28 @@ void ACharacterBase::RespawnToLastSafeLocation()
 }
 
 
+
+
 void ACharacterBase::UpdatePlayerLocation()
 {
-	if (GetCharacterMovement()->IsMovingOnGround())
+	if (!GetCharacterMovement()->IsMovingOnGround())
+		return;
+
+	AActor* Ground = GetCharacterMovement()->CurrentFloor.HitResult.GetActor();
+	UStaticMeshComponent* MeshComp = Ground ? Ground->FindComponentByClass<UStaticMeshComponent>() : nullptr;
+	UStaticMesh* SurfaceMesh = MeshComp ? MeshComp->GetStaticMesh() : nullptr;
+
+	if (!SurfaceMesh)
+		return;
+
+	const FString& Name = SurfaceMesh->GetName();
+	
+	if ((Name.Contains(TEXT("Cube"))) && FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
 	{
-		AActor* Ground = GetCharacterMovement() -> CurrentFloor.HitResult.GetActor();
-
-		if (Ground && !Ground->ActorHasTag(TEXT("IgnoreLastSafeLocation")))
-		{
-			if (FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
-			{
-				LastSafeLocation = GetActorLocation();
-			}
-		}
+		LastSafeLocation = GetActorLocation();
 	}
-
 }
+
 
 
 void ACharacterBase::Landed(const FHitResult& Hit)

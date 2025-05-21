@@ -37,9 +37,8 @@ void UClimbComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	if (bIsClimbing)
 	{
 		FHitResult Hit;
-		if (!ClimbTargetStillValid(Hit))
+		if (!ClimbingInReach(Hit))
 		{
-			//UE_LOG(LogTemp, Error, TEXT("Is on ledge"));
 			bIsOnLedge = true;
 		}else
 		{
@@ -75,21 +74,22 @@ void UClimbComponent::StartClimb(FHitResult Hit)
 	bIsClimbing = true;
 	
 	///Gammal implementation
-	FVector AttachNormal = Hit.ImpactNormal;
+	/*FVector AttachNormal = Hit.ImpactNormal;
 	FVector AttachPosition = Hit.ImpactPoint + AttachNormal * 10.f; 
-	ClimbCharacter->SetActorLocation(AttachPosition);
+	ClimbCharacter->SetActorLocation(AttachPosition);*/
 
 	//ROTATION
 	UArrowComponent* Arrow = Hit.GetActor()->FindComponentByClass<UArrowComponent>();
 	if (Arrow)
 	{
-		//FVector ArrowLocation = Arrow->GetComponentLocation();
+		//position
+		FVector WallDirection = -Arrow->GetForwardVector(); 
+		FVector BasePosition = Hit.ImpactPoint;
+		FVector AttachPosition = BasePosition + WallDirection * 10.0f;
+		ClimbCharacter->SetActorLocation(AttachPosition);
+
+		//Gör så spelaren roteras åt samma håll som pilen
 		FRotator ArrowRotation = Arrow->GetComponentRotation();
-
-		// Placera spelaren vid pilens position
-		//ClimbCharacter->SetActorLocation(ArrowLocation);
-
-		// Rotera spelaren så att den "tittar" åt samma håll som pilen
 		FRotator NewRotation = FRotator(0.f, ArrowRotation.Yaw, 0.f);
 		ClimbCharacter->SetActorRotation(NewRotation);
 	}
@@ -119,10 +119,13 @@ void UClimbComponent::FinishClimbUp()
 {
 	if (!ClimbCharacter) return;
 	
-	FVector Start = ClimbCharacter->GetActorLocation() + FVector(0.f, 0.f, 150.f); //raycast från över  huvuedt
 	FVector Forward = ClimbCharacter->GetActorForwardVector();
-	FVector Direction = (Forward + FVector(0.f, 0.f, -1.5f)).GetSafeNormal(); 
-	FVector End = Start + Direction * 300.f; 
+	FVector Start = ClimbCharacter->GetActorLocation() 
+				  + Forward * 150.f            // Lite framför
+				  + FVector(0.f, 0.f, 100.f); // Lite upp
+
+	// Raycast rakt ner
+	FVector End = Start + FVector(0.f, 0.f, -300.f);
 
 	FHitResult HitResult;
 	FCollisionQueryParams TraceParams;
@@ -135,10 +138,15 @@ void UClimbComponent::FinishClimbUp()
 		ECC_Visibility,
 		TraceParams
 	);
+
+	FColor LineColor = bHit ? FColor::Green : FColor::Red;
+	DrawDebugLine(GetWorld(), Start, End, LineColor, false, 2.0f, 0, 2.0f);
 	
 	if (bHit)
 	{
 		//UE_LOG(LogTemp, Warning, TEXT("Found ledge top at: %s"), *HitResult.ImpactPoint.ToString());
+
+		DrawDebugSphere(GetWorld(), HitResult.ImpactPoint, 15.f, 12, FColor::Blue, false, 2.0f);
 		
 		FVector TargetLocation = HitResult.ImpactPoint + FVector(0.f, 0.f, 50.f);
 		ClimbCharacter->SetActorLocation(TargetLocation);
@@ -148,54 +156,29 @@ void UClimbComponent::FinishClimbUp()
 	SetWalking();
 }
 
-bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
+bool UClimbComponent::ClimbingInReach(FHitResult& HitResult) const
 {
-	if (!ClimbCharacter)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Climb component is null"));
-		return false;
-	}
+	if (!ClimbCharacter) return false;
 
-	FVector Start = ClimbCharacter->GetActorLocation()  + FVector(0, 0, 80.f); //Flyttar upp linetrace mer mot huvudet
-	FVector ForwardVector = ClimbCharacter->GetActorForwardVector();
-	FVector End = Start + ForwardVector * 100.f; //Hur långt karaktären ser framåt, byta ut hårdkodning. 
+	FVector Start = ClimbCharacter->GetActorLocation() + FVector(0, 0, 80.f);
+	FVector Forward = ClimbCharacter->GetActorForwardVector();
+	FVector End = Start + Forward * 100.f;
 
-	FVector HalfSize(20.f, 20.f, 20.f); 
-	FQuat Rotation = FQuat::Identity;
-	
 	FCollisionQueryParams TraceParams;
 	TraceParams.AddIgnoredActor(ClimbCharacter);
 
-	bool bHit = GetWorld()->SweepSingleByChannel(
-	HitResult,
-	Start,
-	End,
-	Rotation,
-	ECC_GameTraceChannel3,
-	FCollisionShape::MakeBox(HalfSize),
-	TraceParams
+	bool bHit = GetWorld()->LineTraceSingleByChannel(
+		HitResult,
+		Start,
+		End,
+		ECC_GameTraceChannel3,
+		TraceParams
 	);
-	
-	//DEBUG
-	FVector MidPoint = (Start + End) * 0.5f;
-	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1.5f, 0, 2.0f);
-	DrawDebugBox(GetWorld(), MidPoint, HalfSize, Rotation, bHit ? FColor::Green : FColor::Red, false, 1.5f);
 
-	
+	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1.5f, 0, 2.0f);
+
 	if (bHit && HitResult.GetActor()->ActorHasTag("Climbable"))
 	{
-		FVector ForwardClimbVector = ClimbCharacter->GetActorForwardVector();
-		FVector WallNormal = HitResult.ImpactNormal;
-		WallNormal.Z = 0.f;
-		WallNormal.Normalize();
-
-		float Dot = FVector::DotProduct(ForwardClimbVector, -WallNormal);
-		if (Dot < 0.9f) 
-		{
-			UE_LOG(LogTemp, Error, TEXT("Character not straight"));
-			return false;
-		}
-		
 		TArray<UActorComponent*> Components = HitResult.GetActor()->GetComponentsByTag(UBoxComponent::StaticClass(), "ClimbZone");
 		for (UActorComponent* Comp : Components)
 		{
@@ -205,10 +188,10 @@ bool UClimbComponent::ClimbingInReach (FHitResult& HitResult) const
 				return true;
 			}
 		}
-		return false;
 	}
 	return false;
 }
+
 
 
 bool UClimbComponent::ClimbingDownInReach(FHitResult& HitResult) const

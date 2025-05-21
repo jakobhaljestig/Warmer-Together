@@ -23,7 +23,7 @@ void ULiftComponent::GrabAndRelease()
 	
 	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
-		Throw();
+		StartThrow();
 	}
 	else if (!HoldingSomething() && !OwnerMovementComponent->IsFalling())
 	{
@@ -49,6 +49,8 @@ void ULiftComponent::Drop(float Force, float VerticalForce)
 		}
 		else
 		{
+			FVector TargetLocation = GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(FName("LiftHoldLocation"));
+			PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorLocation(TargetLocation);
 			PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce);	
 		}
 		PhysicsHandle->GetGrabbedComponent()->GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
@@ -56,6 +58,14 @@ void ULiftComponent::Drop(float Force, float VerticalForce)
 		
 	}
 
+}
+
+void ULiftComponent::StartThrow()
+{
+	if (bThrowing != true)
+	{
+		bThrowing = true;
+	}
 }
 
 void ULiftComponent::GrabEffect()
@@ -90,7 +100,10 @@ void ULiftComponent::Lift()
 {
 	Grab();
 	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+	{
 		PhysicsHandle->GetGrabbedComponent()->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
+	}
+		
 
 }
 // Called every frame
@@ -99,14 +112,26 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
-		FVector TargetLocation = GetOwner()->GetActorLocation() + FVector(0,0,HoldDistance);
-		PhysicsHandle->GetGrabbedComponent()->SetWorldLocation(TargetLocation);
-		PhysicsHandle->GetGrabbedComponent()->SetWorldRotation(this->GetOwner()->GetActorRotation());
+		FVector TargetLocation = GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(FName("LiftHoldLocation"));
+		PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorLocation(TargetLocation);
+		PhysicsHandle->GetGrabbedComponent()->SetWorldRotation(GetOwner()->GetActorRotation());
+		
 
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
-		if (!GrabbedActor->Tags.Contains("Grabbed"))
+		if (!GrabbedActor->Tags.Contains("Grabbed") || Cast<ACharacterSmall>(GrabbedActor) && Cast<ACharacterSmall>(GrabbedActor)->bHasDied)
 		{
 			Drop(DroppingForce, VerticalDroppingForce);
+		}
+	}
+
+	if (bThrowing)
+	{
+		ThrowTimer += DeltaTime;
+		if (ThrowTimer >= 1.55f)
+		{
+			ThrowTimer = 0;
+			Throw();
+			bThrowing = false;
 		}
 	}
 	

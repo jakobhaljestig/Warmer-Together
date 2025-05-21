@@ -8,6 +8,7 @@
 #include "WeatherComponent.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Snowball.h"
 #include "CharacterBase.generated.h"
 
 
@@ -67,13 +68,17 @@ class ACharacterBase : public ACharacter
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* ThrowSnowballAction;
-
+	
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* DanceAction;
 
 public:
 	
 	ACharacterBase();
 	
 	void Tick(float DeltaTime);
+
+	void ApplySnowballHit();
 
 protected:
 
@@ -121,16 +126,23 @@ protected:
 	virtual void BeginPush(const FInputActionValue& Value);
 	void EndPush(const FInputActionValue& Value);
 
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dance")
+	bool bIsDancing;
+	
+	void StartDance(const FInputActionValue& Value);
+	void EndDance(const FInputActionValue& Value);
+
 	//---Kasta Snöboll ---
-	void Aim(const FInputActionValue& Value);
 	void Throw(const FInputActionValue& Value);
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Animation")
-	void PlayAimAnimation();
+	UPROPERTY(EditDefaultsOnly, Category = "Snowball")
+	TSubclassOf<ASnowball> SnowballClass;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "Animation")
-	void PlayThrowAnimation();
-
+	UPROPERTY(EditAnywhere, Category = "Snowball")
+	FName HandSocketName = "RightHandSocket";
+	
+	
 	UPROPERTY(EditAnywhere, Category = "Animation")
 	float HugTimer = 0;
 
@@ -218,11 +230,20 @@ public:
 	bool bIsSprinting;
 	
 private:
+
+	
 	void UpdatePlayerLocation();
 
 	UPROPERTY(VisibleAnywhere, Category = "Respawn")
 	FVector CheckpointLocation;
 	
+	FTimerHandle RespawnTimeHandle;
+
+	UPROPERTY(EditAnywhere, Category = "Respawn")
+	float RespawnTimeDuration = 5.f;
+
+
+
 	
 	// --- Coyote Time ---
 	FTimerHandle CoyoteTimeHandle;
@@ -232,8 +253,8 @@ private:
 	bool bHasJumped = false;
 	
 	UPROPERTY(EditAnywhere, Category = "Jump")
-	float CoyoteTimeDuration = 0.2f; 
-
+	float CoyoteTimeDuration = 0.2f;
+	
 	void EnableCoyoteTime();
 	
 	void DisableCoyoteTime();

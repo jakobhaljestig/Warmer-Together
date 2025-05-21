@@ -50,11 +50,6 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Grab")
 	float HoldDistance = 200.f;
-	
-	UPROPERTY(VisibleAnywhere, Category = "Grab")
-	bool Holding = false;
-
-	
 
 	ECollisionChannel CollisionChannel;
 
@@ -74,6 +69,9 @@ private:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	UPROPERTY(VisibleAnywhere, Category = "Grab")
+	bool Holding = false;
 
 		
 };
