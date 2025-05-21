@@ -3,7 +3,7 @@
 
 #include "BirdAi.h"
 
-#include "BTTask_GiveTemporaryBuff.h"
+#include "BirdAIController.h"
 #include "GameFramework/Character.h"
 #include "Kismet/GameplayStatics.h"
 
@@ -13,6 +13,9 @@ ABirdAi::ABirdAi()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	AIControllerClass = ABirdAIController::StaticClass();
 
 	CircleRadius = 500.f;
 	CircleSpeed = 1.f;
@@ -32,7 +35,7 @@ void ABirdAi::BeginPlay()
 // Called every frame
 void ABirdAi::Tick(float DeltaTime)
 {
-	Super::Tick(DeltaTime);
+	/*Super::Tick(DeltaTime);
 
 	switch (CurrentState)
 	{
@@ -57,9 +60,7 @@ void ABirdAi::Tick(float DeltaTime)
 		{
 			bCanAttack = true;
 		}
-	}
-
-
+	}*/
 }
 
 void ABirdAi::UpdateCircling(float DeltaTime)
@@ -78,7 +79,7 @@ void ABirdAi::UpdateCircling(float DeltaTime)
 		SetActorRotation(FRotationMatrix::MakeFromX(Direction.GetSafeNormal()).Rotator());
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Circling at angle: %f"), CircleAngle);
+	//UE_LOG(LogTemp, Warning, TEXT("Circling at angle: %f"), CircleAngle);
 }
 
 
@@ -108,7 +109,7 @@ void ABirdAi::StartDive(AActor* Player)
 	DiveTargetLocation = Player->GetActorLocation();
 	CurrentState = EBirdState::Diving;
 }
-
+/*
 void ABirdAi::UpdateDiving(float DeltaTime)
 {
 	FVector CurrentLocation = GetActorLocation();
@@ -157,7 +158,7 @@ void ABirdAi::UpdateDiving(float DeltaTime)
 
 		CurrentState = EBirdState::Retreating;
 	}
-}
+}*/
 
 void ABirdAi::UpdateRetreating(float DeltaTime)
 {
@@ -186,7 +187,7 @@ void ABirdAi::UpdateRetreating(float DeltaTime)
 				CircleAngle = FMath::Atan2(ToBird.Y, ToBird.X);
 			}
 
-			UE_LOG(LogTemp, Warning, TEXT("Resetting CircleAngle from position: %s"), *GetActorLocation().ToString());
+			//UE_LOG(LogTemp, Warning, TEXT("Resetting CircleAngle from position: %s"), *GetActorLocation().ToString());
 			UE_LOG(LogTemp, Warning, TEXT("circling again."));
 			
 			CurrentState = EBirdState::Circling;

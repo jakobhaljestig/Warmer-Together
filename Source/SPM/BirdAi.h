@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Actor.h"
+#include "GameFramework/Pawn.h"
 #include "BirdAi.generated.h"
 
 UENUM(BlueprintType)
@@ -15,7 +15,7 @@ enum class EBirdState : uint8
 };
 
 UCLASS()
-class SPM_API ABirdAi : public AActor
+class SPM_API ABirdAi : public APawn
 {
 	GENERATED_BODY()
 	
@@ -37,7 +37,12 @@ public:
 
 	void OnPlayerScaredBird();
 
-private:
+	void UpdateCircling(float DeltaTime);
+	void CheckForPlayers();
+	void StartDive(AActor* Player);
+	void UpdateDiving(float DeltaTime);
+	void UpdateRetreating(float DeltaTime);
+
 	EBirdState CurrentState;
 
 	FVector CircleCenter;
@@ -55,14 +60,10 @@ private:
 
 	FVector DiveTargetLocation;
 
-	void UpdateCircling(float DeltaTime);
-	void CheckForPlayers();
-	void StartDive(AActor* Player);
-	void UpdateDiving(float DeltaTime);
-	void UpdateRetreating(float DeltaTime);
-
 	float AttackCooldown = 5.0f; // sekunder mellan attacker
 	float CooldownTimer = 2.0f;
 	bool bCanAttack = true;
+
+private:
 
 };
