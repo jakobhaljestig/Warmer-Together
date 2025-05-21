@@ -15,15 +15,14 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/AI/BB_BirdAi.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/BB_BirdAi.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/AI/BT_BirdAi.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/BT_BirdAi.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BTService_CheckForPlayers.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BTService_CheckForPlayers.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Snowball.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Snowball.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Meshes/SK_BigCharacter_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Meshes/SK_BigCharacter_Skeleton.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Meshes/SM_SmallCharacter_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Meshes/SM_SmallCharacter_Skeleton.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Source/SPM/BTTask_Circle.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BTTask_Circle.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BTTask_DiveToPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BTTask_DiveToPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BirdAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BirdAIController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BirdAIController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BirdAIController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BirdAi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BirdAi.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BirdAi.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BirdAi.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/Snowball.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/Snowball.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/Snowball.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/Snowball.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,6 +54,7 @@
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://9" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectHandle.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/Engine/GameInstance.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/VT/BlockCodingHelpers.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -95,7 +95,7 @@
     &quot;C/C++ Project.SPM.executor&quot;: &quot;Debug&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;kajsa&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Nora&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -264,6 +264,7 @@
       <workItem from="1747815052585" duration="52000" />
       <workItem from="1747815116839" duration="3435000" />
       <workItem from="1747818608582" duration="7234000" />
+      <workItem from="1747832055746" duration="6567000" />
     </task>
     <servers />
   </component>

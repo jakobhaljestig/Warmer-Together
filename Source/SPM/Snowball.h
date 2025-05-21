@@ -27,7 +27,10 @@ public:
 	void ThrowInDirection(const FVector& ThrowDirection);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	float Speed;
+	float Speed = 1500.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	float gravity = 1.0f;
 
 protected:
 	virtual void BeginPlay() override;
@@ -35,5 +38,12 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UFUNCTION(BlueprintCallable)
+	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
+					  UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
+
+
+	
 
 };

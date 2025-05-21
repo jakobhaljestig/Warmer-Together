@@ -2,6 +2,7 @@
 
 
 #include "Snowball.h"
+#include "CharacterBase.h"
 
 // Sets default values
 ASnowball::ASnowball()
@@ -13,20 +14,37 @@ ASnowball::ASnowball()
 	CollisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("Collision"));
 	CollisionComp->SetSphereRadius(20.0f); 
 	RootComponent = CollisionComp;
-	
+
+	CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	CollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1); 
+	CollisionComp->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
+	CollisionComp->SetCollisionResponseToChannel(ECC_Pawn, ECollisionResponse::ECR_Block); 
+	CollisionComp->SetNotifyRigidBodyCollision(true);
+
 	
 	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("MovementComp"));
 	MovementComp -> SetUpdatedComponent(CollisionComp);
-	MovementComp-> InitialSpeed = 3000.0f;
-	MovementComp-> MaxSpeed = 3000.0f;
+	MovementComp-> InitialSpeed = Speed;
+	MovementComp-> MaxSpeed = Speed;
 	MovementComp -> bRotationFollowsVelocity = true;
 	MovementComp -> bShouldBounce = false;
-	MovementComp -> ProjectileGravityScale = 1.0f;
+	MovementComp -> ProjectileGravityScale = gravity;
+
+	CollisionComp->SetNotifyRigidBodyCollision(true);
+	CollisionComp->OnComponentHit.AddDynamic(this, &ASnowball::OnHit);
 }
 
 void ASnowball::BeginPlay()
 {
 	Super::BeginPlay();
+	
+	UE_LOG(LogTemp, Warning, TEXT("Snöbollens ägare: %s"), *GetOwner()->GetName());
+	
+	if (AActor* MyOwner = GetOwner())
+	{
+		CollisionComp->IgnoreActorWhenMoving(MyOwner, true);
+	}
+
 	
 }
 
@@ -43,4 +61,22 @@ void ASnowball::ThrowInDirection(const FVector& ThrowDirection)
 		MovementComp->Velocity = ThrowDirection * MovementComp->InitialSpeed;
 	}
 }
+
+
+void ASnowball::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
+					  UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
+{
+	UE_LOG(LogTemp, Warning, TEXT("Snöboll träffade något!"));
+
+	if (OtherActor == GetOwner()) return;
+
+	if (ACharacterBase* HitCharacter = Cast<ACharacterBase>(OtherActor))
+	{
+		HitCharacter->ApplySnowballHit();
+	}
+
+	Destroy();
+}
+
+
 

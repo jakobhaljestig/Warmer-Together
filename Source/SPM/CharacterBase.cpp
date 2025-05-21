@@ -313,7 +313,7 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 {
 	if (!SnowballClass) return;
 	
-	/*FVector CameraLocation;
+	FVector CameraLocation;
 	FRotator CameraRotation;
 	GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
 	FVector CameraForward = CameraRotation.Vector();
@@ -328,7 +328,6 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 		return;
 	}
 	
-
 	FVector SpawnLocation = GetMesh()->GetSocketLocation("RightHandSocket");
 	FRotator SpawnRotation = (CameraRotation.Vector()).Rotation();
 
@@ -339,10 +338,19 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 
 	if (Snowball)
 	{
-		FVector ThrowDirection = CameraRotation.Vector() + FVector(0, 0, 0.5f); 
+		FVector ThrowDirection = CameraRotation.Vector() + FVector(0, 0, 0.7f); 
 		ThrowDirection.Normalize();
 		Snowball->ThrowInDirection(ThrowDirection);
-	}*/
+	}
+}
+
+void ACharacterBase::ApplySnowballHit()
+{
+	if (BodyTempComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("character was hit"));
+		BodyTempComponent->ColdBuff(5);
+	}
 }
 
 //--- Pushing ---
@@ -377,6 +385,7 @@ void ACharacterBase::EndDance(const FInputActionValue& Value)
 {
 	bIsDancing = false;
 }
+
 
 // --- Death/Respawn/Damage --- 
 void ACharacterBase::OnDeath()

@@ -78,6 +78,8 @@ public:
 	
 	void Tick(float DeltaTime);
 
+	void ApplySnowballHit();
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -135,7 +137,7 @@ protected:
 	void Throw(const FInputActionValue& Value);
 
 	UPROPERTY(EditDefaultsOnly, Category = "Snowball")
-	TSubclassOf<class ASnowball> SnowballClass;
+	TSubclassOf<ASnowball> SnowballClass;
 
 	UPROPERTY(EditAnywhere, Category = "Snowball")
 	FName HandSocketName = "RightHandSocket";
