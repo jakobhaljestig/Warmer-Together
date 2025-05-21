@@ -11,7 +11,7 @@ UBTTask_Circle::UBTTask_Circle()
 
 EBTNodeResult::Type UBTTask_Circle::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	UE_LOG(LogTemp, Warning, TEXT("BTTask_Circle: Executing"));
+	//UE_LOG(LogTemp, Warning, TEXT("BTTask_Circle: Executing"));
 	return EBTNodeResult::InProgress; 
 }
 
@@ -33,6 +33,6 @@ void UBTTask_Circle::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemo
 		return;
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("BTTask_Circle: Ticking"));
+	//UE_LOG(LogTemp, Warning, TEXT("BTTask_Circle: Ticking"));
 	Bird->UpdateCircling(DeltaSeconds);
 }

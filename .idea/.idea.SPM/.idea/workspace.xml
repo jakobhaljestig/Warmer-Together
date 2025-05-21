@@ -15,15 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/AI/BB_BirdAi.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/BB_BirdAi.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/AI/BT_BirdAi.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/AI/BT_BirdAi.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BTService_CheckForPlayers.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BTService_CheckForPlayers.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BTTask_Circle.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BTTask_Circle.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BTTask_DiveToPlayer.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BTTask_DiveToPlayer.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BirdAIController.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BirdAIController.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BirdAIController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BirdAIController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BirdAi.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BirdAi.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/BirdAi.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/BirdAi.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Mountain.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Mountain.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,23 +43,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectHandle.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/Engine/GameInstance.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/VT/BlockCodingHelpers.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/SPM/BTService_CheckForPlayers.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/SPM/BTService_CheckForPlayers.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/SPM/BTTask_DiveToPlayer.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/SPM/BTTask_DiveToPlayer.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/SPM/BTTask_Retreating.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/SPM/BTTask_Retreating.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/SPM/BirdAIController.cpp" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/Source/SPM/BirdAIController.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/x64/UnrealEditor/Development/SPM/Module.SPM.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterPlayerController.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -79,7 +57,7 @@
     <setting file="file://$PROJECT_DIR$/Source/SPM/WeatherUpdaterInterface.h" root0="FORCE_HIGHLIGHTING" />
   </component>
   <component name="ProblemsViewState">
-    <option name="selectedTabId" value="CurrentFile" />
+    <option name="selectedTabId" value="Toolset" />
   </component>
   <component name="ProjectColorInfo">{
   &quot;customColor&quot;: &quot;&quot;,
@@ -92,10 +70,10 @@
   </component>
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
-    &quot;C/C++ Project.SPM.executor&quot;: &quot;Debug&quot;,
+    &quot;C/C++ Project.SPM.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;kajsa&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Jonas__backup&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
     &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
@@ -261,9 +239,7 @@
       <workItem from="1747638460411" duration="622000" />
       <workItem from="1747642729918" duration="6745000" />
       <workItem from="1747767691957" duration="3593000" />
-      <workItem from="1747815052585" duration="52000" />
-      <workItem from="1747815116839" duration="3435000" />
-      <workItem from="1747818608582" duration="7234000" />
+      <workItem from="1747811454625" duration="720000" />
     </task>
     <servers />
   </component>
