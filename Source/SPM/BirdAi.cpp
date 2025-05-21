@@ -34,9 +34,9 @@ void ABirdAi::BeginPlay()
 // Called every frame
 void ABirdAi::Tick(float DeltaTime)
 {
-	/*Super::Tick(DeltaTime);
+	Super::Tick(DeltaTime);
 
-	switch (CurrentState)
+	/*switch (CurrentState)
 	{
 		case EBirdState::Circling:
 			UpdateCircling(DeltaTime);
@@ -49,8 +49,7 @@ void ABirdAi::Tick(float DeltaTime)
 		case EBirdState::Retreating:
 			UpdateRetreating(DeltaTime);
 			break;
-		
-	}
+	}*/
 	
 	if (!bCanAttack)
 	{
@@ -59,7 +58,7 @@ void ABirdAi::Tick(float DeltaTime)
 		{
 			bCanAttack = true;
 		}
-	}*/
+	}
 }
 
 void ABirdAi::UpdateCircling(float DeltaTime)
