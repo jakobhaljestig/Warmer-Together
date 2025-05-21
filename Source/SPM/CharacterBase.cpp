@@ -364,7 +364,7 @@ void ACharacterBase::OnDeath()
 		return;
 
 	bHasDied = true;
-
+	PushComponent->StopPushing();
 	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
 
 	if (bHasCheckPointLocation)

@@ -104,7 +104,7 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		PhysicsHandle->GetGrabbedComponent()->SetWorldRotation(this->GetOwner()->GetActorRotation());
 
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
-		if (!GrabbedActor->Tags.Contains("Grabbed"))
+		if (!GrabbedActor->Tags.Contains("Grabbed") || Cast<ACharacterSmall>(GrabbedActor) && Cast<ACharacterSmall>(GrabbedActor)->bHasDied)
 		{
 			Drop(DroppingForce, VerticalDroppingForce);
 		}

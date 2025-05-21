@@ -83,6 +83,7 @@ void ACharacterBig::Move(const FInputActionValue& Value)
 void ACharacterBig::OnDeath()
 {
 	PickupComponent->Drop(0,0);
+	bIsLifting = false;
 	ClimbingComponent->StopClimb();
 	Super::OnDeath();
 }
