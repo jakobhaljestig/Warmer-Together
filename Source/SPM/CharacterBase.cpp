@@ -159,8 +159,7 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::BeginPush);
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::EndPush);
 
-		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Aim);
-		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Completed, this, &ACharacterBase::Throw);
+		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Throw);
 
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterBase::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterBase::StopSprint);
@@ -207,7 +206,7 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 
 void ACharacterBase::Jump()
 {
-	if (bIsHugging || bSuccesfulHug)
+	if (bIsHugging || bSuccesfulHug || bHasDied)
 	{
 		return;
 	}
@@ -261,7 +260,7 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint()
 {
-	if (!bIsSprinting && !bIsPushing && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
+	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
 		SprintComponent->StartSprint();
 		bIsSprinting = true;
@@ -309,19 +308,49 @@ void ACharacterBase::Hug()
 
 // --- Kasta Snöboll ---*/
 
-void ACharacterBase::Aim(const FInputActionValue& Value)
-{
-	/**Spawn actor - BP_Ball
-	 *Get socket transform */
-
-	//PlayAimAnimation();
-	UE_LOG(LogTemplateCharacter, Error, TEXT("Is aiming"));
-}
 
 void ACharacterBase::Throw(const FInputActionValue& Value)
 {
-	//PlayThrowAnimation();
-	UE_LOG(LogTemplateCharacter, Error, TEXT("Is Throwing"));
+	/*if (!SnowballClass) return;
+	
+	FVector CameraLocation;
+	FRotator CameraRotation;
+	GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+	FVector CameraForward = CameraRotation.Vector();
+
+	FVector CharacterForward = GetActorForwardVector();
+
+	float AimAngleDegrees = FMath::RadiansToDegrees(acosf(FVector::DotProduct(CameraForward.GetSafeNormal(), CharacterForward.GetSafeNormal())));
+
+	if (AimAngleDegrees > 45)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Kastar inte – kameran tittar för långt från karaktärens riktning (vinkel: %.1f°)"), AimAngleDegrees);
+		return;
+	}
+	
+	FVector SpawnLocation = GetMesh()->GetSocketLocation("RightHandSocket");
+	FRotator SpawnRotation = (CameraRotation.Vector()).Rotation();
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+
+	ASnowball* Snowball = GetWorld()->SpawnActor<ASnowball>(SnowballClass, SpawnLocation, SpawnRotation, SpawnParams);
+
+	if (Snowball)
+	{
+		FVector ThrowDirection = CameraRotation.Vector() + FVector(0, 0, 0.7f); 
+		ThrowDirection.Normalize();
+		Snowball->ThrowInDirection(ThrowDirection);
+	}*/
+}
+
+void ACharacterBase::ApplySnowballHit()
+{
+	if (BodyTempComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("character was hit"));
+		BodyTempComponent->ColdBuff(5);
+	}
 }
 
 //--- Pushing ---
@@ -356,6 +385,7 @@ void ACharacterBase::EndDance(const FInputActionValue& Value)
 {
 	bIsDancing = false;
 }
+
 
 // --- Death/Respawn/Damage --- 
 void ACharacterBase::OnDeath()
