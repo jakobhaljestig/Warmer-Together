@@ -90,7 +90,10 @@ void ULiftComponent::Lift()
 {
 	Grab();
 	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+	{
 		PhysicsHandle->GetGrabbedComponent()->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
+	}
+		
 
 }
 // Called every frame
