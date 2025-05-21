@@ -68,10 +68,8 @@ void ACharacterSmall::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 }
 
-
 void ACharacterSmall::OnDeath()
 {
-	//bHasDied = true;
 	ACharacter::UnCrouch(true);
 	bIsCrawling = false;
 	Super::OnDeath();
