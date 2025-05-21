@@ -179,7 +179,8 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 {
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
-	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug && !bHasDied && !bIsDancing)
+	if (bHasDied) return;
+	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug && !bIsDancing)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -368,12 +369,12 @@ void ACharacterBase::OnDeath()
 
 	if (bHasCheckPointLocation)
 	{
-		RespawnAtCheckpoint();
+		GetWorldTimerManager().SetTimer(RespawnTimeHandle, this, &ACharacterBase::RespawnAtCheckpoint, RespawnTimeDuration, false);
 		UE_LOG(LogTemp, Warning, TEXT("Checkpoint found, death triggered"));
 	}
 	else
 	{
-		RespawnToLastSafeLocation();
+		GetWorldTimerManager().SetTimer(RespawnTimeHandle, this, &ACharacterBase::RespawnToLastSafeLocation, RespawnTimeDuration, false);
 		ResetTemp();
 		UE_LOG(LogTemp, Warning, TEXT("Checkpoint not found."));
 	}

@@ -232,7 +232,11 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Respawn")
 	FVector CheckpointLocation;
 	
-	
+	FTimerHandle RespawnTimeHandle;
+
+	UPROPERTY(EditAnywhere, Category = "Respawn")
+	float RespawnTimeDuration = 5.f;
+
 	// --- Coyote Time ---
 	FTimerHandle CoyoteTimeHandle;
 	
@@ -241,8 +245,8 @@ private:
 	bool bHasJumped = false;
 	
 	UPROPERTY(EditAnywhere, Category = "Jump")
-	float CoyoteTimeDuration = 0.2f; 
-
+	float CoyoteTimeDuration = 0.2f;
+	
 	void EnableCoyoteTime();
 	
 	void DisableCoyoteTime();
