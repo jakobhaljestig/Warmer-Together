@@ -24,6 +24,17 @@ void ACharacterBig::BeginPlay()
 	}
 }
 
+void ACharacterBig::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	if (bIsThrowing && !PickupComponent->Holding)
+	{
+		bIsThrowing = false;
+	}
+	
+}
+
 void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
@@ -46,8 +57,18 @@ void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 	
 	if (!bIsClimbing && !bIsHugging && !bIsSprinting && !bSuccesfulHug)
 	{
-		PickupComponent->GrabAndRelease();
-		bIsLifting = PickupComponent->Holding;
+		if (!PickupComponent->Holding && !PickupComponent->HoldingSomething())
+		{
+			PickupComponent->Lift();
+			if (PickupComponent->Holding)
+				bIsLifting = true;
+		}
+		else if (PickupComponent->Holding)
+		{
+			PickupComponent->StartThrow();
+			bIsThrowing = true;
+			bIsLifting = false;
+		}
 	}
 }
 
@@ -83,6 +104,7 @@ void ACharacterBig::Move(const FInputActionValue& Value)
 void ACharacterBig::OnDeath()
 {
 	PickupComponent->Drop(0,0);
+	bIsLifting = false;
 	ClimbingComponent->StopClimb();
 	Super::OnDeath();
 }

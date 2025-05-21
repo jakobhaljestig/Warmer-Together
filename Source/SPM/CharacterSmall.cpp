@@ -73,6 +73,7 @@ void ACharacterSmall::OnDeath()
 	ACharacter::UnCrouch(true);
 	bIsCrawling = false;
 	Super::OnDeath();
+	
 }
 
 

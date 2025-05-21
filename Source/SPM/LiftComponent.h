@@ -34,6 +34,17 @@ public:
 
 	virtual void Lift();
 	virtual void Drop(float Force, float VerticalForce);
+
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool bThrowing;
+	
+	float ThrowTimer = 0;
+
+	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
+	float ThrowTime = 2.f;
+
+	UFUNCTION()
+	void StartThrow();
 	
 private:
 	UPROPERTY(EditAnywhere)

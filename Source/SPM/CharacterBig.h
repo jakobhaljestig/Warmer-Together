@@ -31,12 +31,17 @@ public:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool bIsLifting = false;
 
+	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
+	bool bIsThrowing = false;
+
 protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pickup")
 	ULiftComponent* PickupComponent;
 
 	void BeginPlay() override;
+
+	void Tick(float DeltaTime) override;
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 

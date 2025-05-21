@@ -3,10 +3,7 @@
 
 #include "BirdAi.h"
 
-#include "BTTask_GiveTemporaryBuff.h"
-#include "GameFramework/Character.h"
-#include "Kismet/GameplayStatics.h"
-
+#include "BirdAIController.h"
 
 // Sets default values
 ABirdAi::ABirdAi()
@@ -14,10 +11,15 @@ ABirdAi::ABirdAi()
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+	AutoPossessAI = EAutoPossessAI::PlacedInWorldOrSpawned;
+	AIControllerClass = ABirdAIController::StaticClass();
+
+	//MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
+	
 	CircleRadius = 500.f;
 	CircleSpeed = 1.f;
 	CircleAngle = 0.f;
-	CurrentState = EBirdState::Circling;
+	//CurrentState = EBirdState::Circling;
 
 }
 
@@ -34,7 +36,7 @@ void ABirdAi::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	switch (CurrentState)
+	/*switch (CurrentState)
 	{
 		case EBirdState::Circling:
 			UpdateCircling(DeltaTime);
@@ -47,8 +49,7 @@ void ABirdAi::Tick(float DeltaTime)
 		case EBirdState::Retreating:
 			UpdateRetreating(DeltaTime);
 			break;
-		
-	}
+	}*/
 	
 	if (!bCanAttack)
 	{
@@ -58,8 +59,6 @@ void ABirdAi::Tick(float DeltaTime)
 			bCanAttack = true;
 		}
 	}
-
-
 }
 
 void ABirdAi::UpdateCircling(float DeltaTime)
@@ -78,10 +77,10 @@ void ABirdAi::UpdateCircling(float DeltaTime)
 		SetActorRotation(FRotationMatrix::MakeFromX(Direction.GetSafeNormal()).Rotator());
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Circling at angle: %f"), CircleAngle);
+	//UE_LOG(LogTemp, Warning, TEXT("Circling at angle: %f"), CircleAngle);
 }
 
-
+/*
 void ABirdAi::CheckForPlayers()
 {
 
@@ -100,15 +99,17 @@ void ABirdAi::CheckForPlayers()
 			return;
 		}
 	}
-}
+}*/
 
+/*
 void ABirdAi::StartDive(AActor* Player)
 {
 	TargetPlayer = Player;
 	DiveTargetLocation = Player->GetActorLocation();
 	CurrentState = EBirdState::Diving;
-}
+}*/
 
+/*
 void ABirdAi::UpdateDiving(float DeltaTime)
 {
 	FVector CurrentLocation = GetActorLocation();
@@ -155,10 +156,11 @@ void ABirdAi::UpdateDiving(float DeltaTime)
 		bCanAttack = false;
 		CooldownTimer = AttackCooldown;
 
-		CurrentState = EBirdState::Retreating;
+		//CurrentState = EBirdState::Retreating;
 	}
-}
+}*/
 
+/*
 void ABirdAi::UpdateRetreating(float DeltaTime)
 {
 	FVector TargetLocation = CircleCenter + FVector(0, 0, 500);
@@ -186,10 +188,10 @@ void ABirdAi::UpdateRetreating(float DeltaTime)
 				CircleAngle = FMath::Atan2(ToBird.Y, ToBird.X);
 			}
 
-			UE_LOG(LogTemp, Warning, TEXT("Resetting CircleAngle from position: %s"), *GetActorLocation().ToString());
+			//UE_LOG(LogTemp, Warning, TEXT("Resetting CircleAngle from position: %s"), *GetActorLocation().ToString());
 			UE_LOG(LogTemp, Warning, TEXT("circling again."));
 			
-			CurrentState = EBirdState::Circling;
+			//CurrentState = EBirdState::Circling;
 		}
 
 	}
@@ -203,6 +205,7 @@ void ABirdAi::OnPlayerScaredBird()
 		CurrentState = EBirdState::Retreating;
 	}
 }
+*/
 
 
 
