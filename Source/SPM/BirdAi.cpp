@@ -78,7 +78,7 @@ void ABirdAi::UpdateCircling(float DeltaTime)
 		SetActorRotation(FRotationMatrix::MakeFromX(Direction.GetSafeNormal()).Rotator());
 	}
 
-	UE_LOG(LogTemp, Warning, TEXT("Circling at angle: %f"), CircleAngle);
+	//UE_LOG(LogTemp, Warning, TEXT("Circling at angle: %f"), CircleAngle);
 }
 
 
@@ -186,7 +186,7 @@ void ABirdAi::UpdateRetreating(float DeltaTime)
 				CircleAngle = FMath::Atan2(ToBird.Y, ToBird.X);
 			}
 
-			UE_LOG(LogTemp, Warning, TEXT("Resetting CircleAngle from position: %s"), *GetActorLocation().ToString());
+			//UE_LOG(LogTemp, Warning, TEXT("Resetting CircleAngle from position: %s"), *GetActorLocation().ToString());
 			UE_LOG(LogTemp, Warning, TEXT("circling again."));
 			
 			CurrentState = EBirdState::Circling;

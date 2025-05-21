@@ -159,8 +159,7 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::BeginPush);
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::EndPush);
 
-		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Aim);
-		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Completed, this, &ACharacterBase::Throw);
+		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Throw);
 
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterBase::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterBase::StopSprint);
@@ -309,19 +308,41 @@ void ACharacterBase::Hug()
 
 // --- Kasta Snöboll ---*/
 
-void ACharacterBase::Aim(const FInputActionValue& Value)
-{
-	/**Spawn actor - BP_Ball
-	 *Get socket transform */
-
-	//PlayAimAnimation();
-	UE_LOG(LogTemplateCharacter, Error, TEXT("Is aiming"));
-}
 
 void ACharacterBase::Throw(const FInputActionValue& Value)
 {
-	//PlayThrowAnimation();
-	UE_LOG(LogTemplateCharacter, Error, TEXT("Is Throwing"));
+	if (!SnowballClass) return;
+	
+	/*FVector CameraLocation;
+	FRotator CameraRotation;
+	GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+	FVector CameraForward = CameraRotation.Vector();
+
+	FVector CharacterForward = GetActorForwardVector();
+
+	float AimAngleDegrees = FMath::RadiansToDegrees(acosf(FVector::DotProduct(CameraForward.GetSafeNormal(), CharacterForward.GetSafeNormal())));
+
+	if (AimAngleDegrees > 45)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Kastar inte – kameran tittar för långt från karaktärens riktning (vinkel: %.1f°)"), AimAngleDegrees);
+		return;
+	}
+	
+
+	FVector SpawnLocation = GetMesh()->GetSocketLocation("RightHandSocket");
+	FRotator SpawnRotation = (CameraRotation.Vector()).Rotation();
+
+	FActorSpawnParameters SpawnParams;
+	SpawnParams.Owner = this;
+
+	ASnowball* Snowball = GetWorld()->SpawnActor<ASnowball>(SnowballClass, SpawnLocation, SpawnRotation, SpawnParams);
+
+	if (Snowball)
+	{
+		FVector ThrowDirection = CameraRotation.Vector() + FVector(0, 0, 0.5f); 
+		ThrowDirection.Normalize();
+		Snowball->ThrowInDirection(ThrowDirection);
+	}*/
 }
 
 //--- Pushing ---
