@@ -311,7 +311,7 @@ void ACharacterBase::Hug()
 
 void ACharacterBase::Throw(const FInputActionValue& Value)
 {
-	if (!SnowballClass) return;
+	/*if (!SnowballClass) return;
 	
 	FVector CameraLocation;
 	FRotator CameraRotation;
@@ -341,7 +341,7 @@ void ACharacterBase::Throw(const FInputActionValue& Value)
 		FVector ThrowDirection = CameraRotation.Vector() + FVector(0, 0, 0.7f); 
 		ThrowDirection.Normalize();
 		Snowball->ThrowInDirection(ThrowDirection);
-	}
+	}*/
 }
 
 void ACharacterBase::ApplySnowballHit()
