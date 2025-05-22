@@ -62,7 +62,7 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature", meta = (AllowPrivateAccess = "true"))
 	bool bNearHeat = false;
 
-	UPROPERTY(EditAnywhere, Category = "Temperature")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature", meta = (AllowPrivateAccess = "true"))
 	float Temp;
 
 	UPROPERTY()

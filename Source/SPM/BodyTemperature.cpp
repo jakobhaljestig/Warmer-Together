@@ -30,10 +30,7 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	ACharacterPlayerController* Controller= Cast<ACharacterPlayerController>(Cast<APawn>(GetOwner())->GetController());
 	if (!bNearHeat)
     {
-        if (Temp > 0)
-        {
-        	CoolDown(DeltaTime);
-        }
+		CoolDown(DeltaTime);
 		if (GetTempPercentage() < 0.3 && !bDisplayFreezeEffect && Controller)
 		{
 			bDisplayFreezeEffect = true;
@@ -42,7 +39,7 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		{
 			bDisplayFreezeEffect = false;
 		}
-		if (Temp == 0)
+		if (Temp <= 0)
 		{
 			if (!bFrozen)
 			{
