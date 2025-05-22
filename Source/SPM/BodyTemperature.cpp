@@ -42,7 +42,7 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		{
 			bDisplayFreezeEffect = false;
 		}
-		if (Temp == 0)
+		if (Temp <= 0)
 		{
 			if (!bFrozen)
 			{
