@@ -33,7 +33,7 @@ public:
 
 protected:
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pickup")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup", meta = (AllowPrivateAccess = "true"))
 	ULiftComponent* PickupComponent;
 
 	void BeginPlay() override;
