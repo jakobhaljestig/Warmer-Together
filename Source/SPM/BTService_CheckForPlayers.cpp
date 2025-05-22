@@ -16,7 +16,7 @@ void UBTService_CheckForPlayers::TickNode(UBehaviorTreeComponent& OwnerComp, uin
 	AAIController* AICon = OwnerComp.GetAIOwner();
 	ABirdAi* Bird = Cast<ABirdAi>(AICon->GetPawn());
 
-	UE_LOG(LogTemp, Warning, TEXT("Checking for players"));
+	//UE_LOG(LogTemp, Warning, TEXT("Checking for players"));
 
 	if (!Bird || !Bird->bCanAttack)
 		return;
