@@ -93,23 +93,22 @@ void ULiftComponent::Throw()
 	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
 		Drop(ThrowingForce, VerticalThrowingForce);
-		ACharacterBig* CharacterBig  = Cast<ACharacterBig>(GetOwner());
-		CharacterBig->Tags.Remove("IsLifting");
+		GetOwner()->Tags.Remove("IsLifting");
 	}
 }
 
 void ULiftComponent::Lift()
 {
-	Grab();
-	ACharacterBig* CharacterBig  = Cast<ACharacterBig>(GetOwner());
-	CharacterBig->Tags.Add("IsLifting");
-	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+	if (OwnerMovementComponent && !OwnerMovementComponent->IsFalling())
 	{
-		
-		PhysicsHandle->GetGrabbedComponent()->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
-		PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorEnableCollision(false);
+		Grab();
+		if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+		{
+			GetOwner()->Tags.Add("IsLifting");
+			PhysicsHandle->GetGrabbedComponent()->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
+			PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorEnableCollision(false);
+		}
 	}
-		
 
 }
 // Called every frame
