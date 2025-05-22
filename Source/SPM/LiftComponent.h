@@ -33,6 +33,8 @@ public:
 	void Throw();
 
 	virtual void Lift();
+
+	UFUNCTION(BlueprintCallable)
 	virtual void Drop(float Force, float VerticalForce);
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
