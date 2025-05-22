@@ -66,6 +66,10 @@ void ACharacterSmall::BeginPush(const FInputActionValue& Value)
 void ACharacterSmall::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
+	if (bHasDied)
+	{
+		Tags.Remove("Grabbed");
+	}
 }
 
 void ACharacterSmall::OnDeath()
