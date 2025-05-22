@@ -8,7 +8,7 @@
 #include "WeatherComponent.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "Snowball.h"
+#include "ThrowSnowballComponent.h"
 #include "CharacterBase.generated.h"
 
 
@@ -78,7 +78,7 @@ public:
 	
 	void Tick(float DeltaTime);
 
-	void ApplySnowballHit();
+	void ApplySnowballHit() const;
 
 protected:
 
@@ -134,13 +134,10 @@ protected:
 	void EndDance(const FInputActionValue& Value);
 
 	//---Kasta Snöboll ---
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Push")
+	UThrowSnowballComponent* ThrowSnowballComponent;
+
 	void Throw(const FInputActionValue& Value);
-
-	UPROPERTY(EditDefaultsOnly, Category = "Snowball")
-	TSubclassOf<ASnowball> SnowballClass;
-
-	UPROPERTY(EditAnywhere, Category = "Snowball")
-	FName HandSocketName = "RightHandSocket";
 	
 	
 	UPROPERTY(EditAnywhere, Category = "Animation")

@@ -16,9 +16,11 @@ ASnowball::ASnowball()
 	RootComponent = CollisionComp;
 
 	CollisionComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	CollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel1); 
+	CollisionComp->SetCollisionObjectType(ECollisionChannel::ECC_GameTraceChannel4); 
 	CollisionComp->SetCollisionResponseToAllChannels(ECollisionResponse::ECR_Ignore);
-	CollisionComp->SetCollisionResponseToChannel(ECC_Pawn, ECollisionResponse::ECR_Block); 
+	CollisionComp->SetCollisionResponseToChannel(ECC_Pawn, ECollisionResponse::ECR_Block);
+	CollisionComp->SetCollisionResponseToChannel(ECC_WorldStatic, ECR_Block);
+	CollisionComp->SetCollisionResponseToChannel(ECC_WorldDynamic, ECR_Block);
 	CollisionComp->SetNotifyRigidBodyCollision(true);
 
 	
@@ -74,7 +76,8 @@ void ASnowball::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	{
 		HitCharacter->ApplySnowballHit();
 	}
-
+	
+	UE_LOG(LogTemp, Warning, TEXT("Snöboll förstördes"));
 	Destroy();
 }
 

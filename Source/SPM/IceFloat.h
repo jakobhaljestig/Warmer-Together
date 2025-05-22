@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "CountdownTimer.h"
 #include  "Components/BoxComponent.h"
 #include "IceFloat.generated.h"
 
@@ -34,8 +33,11 @@ public:
 
 private:
 
-	CountdownTimer Timer;
+	FTimerHandle BreakTimerHandle;
+	FTimerHandle RespawnTimerHandle;
 
+	void HandleBreak();
+	
 	void RespawnObject();
 
 	UPROPERTY(EditAnywhere)
