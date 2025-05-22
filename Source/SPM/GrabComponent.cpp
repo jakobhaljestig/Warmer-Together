@@ -3,6 +3,7 @@
 
 #include "GrabComponent.h"
 
+#include "CharacterBig.h"
 #include "PhysicsEngine/PhysicsHandleComponent.h"
 
 // Sets default values for this component's properties
@@ -89,6 +90,8 @@ void UGrabComponent::Grab(){
 		{
 			return;
 		}
+
+		
 		
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
 		Holding = true;
@@ -112,6 +115,9 @@ void UGrabComponent::Release()
 		Holding = false;
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
+		
+		
+		
 		PhysicsHandle->ReleaseComponent();
 		ReleaseEffect();
 	}

@@ -5,7 +5,7 @@
 
 #include "CharacterSmall.h"
 #include "Kismet/BlueprintTypeConversions.h"
-
+#include "CharacterBig.h"
 
 ULiftComponent::ULiftComponent()
 {
@@ -93,14 +93,19 @@ void ULiftComponent::Throw()
 	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
 		Drop(ThrowingForce, VerticalThrowingForce);
+		ACharacterBig* CharacterBig  = Cast<ACharacterBig>(GetOwner());
+		CharacterBig->Tags.Remove("IsLifting");
 	}
 }
 
 void ULiftComponent::Lift()
 {
 	Grab();
+	ACharacterBig* CharacterBig  = Cast<ACharacterBig>(GetOwner());
+	CharacterBig->Tags.Add("IsLifting");
 	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
+		
 		PhysicsHandle->GetGrabbedComponent()->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
 		PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorEnableCollision(false);
 	}
