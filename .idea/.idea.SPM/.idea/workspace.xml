@@ -15,7 +15,10 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Meshes/SM_GroundMesh.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Meshes/SM_GroundMesh.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Button_prompt_Prototype_Temporary.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Button_prompt_Prototype_Temporary.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Chasm.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Chasm.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CrashSite.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CrashSite.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Mountain.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Mountain.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
     </list>
@@ -240,6 +243,7 @@
       <workItem from="1747642729918" duration="6745000" />
       <workItem from="1747767691957" duration="3593000" />
       <workItem from="1747811454625" duration="720000" />
+      <workItem from="1747898254702" duration="710000" />
     </task>
     <servers />
   </component>
