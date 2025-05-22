@@ -14,15 +14,14 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Animation/ABP_Big.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animation/ABP_Big.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigLift.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigLift.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigThrowSmall.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigThrowSmall.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Meshes/SK_BigCharacter_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Meshes/SK_BigCharacter_Skeleton.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/LiftComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/LiftComponent.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameManager.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameManager.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_CutsceneTrigger.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_CutsceneTrigger.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_VictoryCutsceneTrigger.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_VictoryCutsceneTrigger.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap_TestSparsystem.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap_TestSparsystem.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_Beginning.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_Beginning.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorFive.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorFive.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_Ending.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_Ending.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -48,6 +47,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/UMG/Public/Components/Button.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/x64/UnrealEditor/Development/SPM/Module.SPM.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
@@ -78,7 +78,7 @@
     "C/C++ Project.SPM.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "New__R",
+    "git-widget-placeholder": "Jakob__Ny",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -135,8 +135,13 @@
       <option name="WORKING_DIRECTORY" value="" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="ENV_FILE_PATHS" value="" />
+      <option name="REDIRECT_INPUT_PATH" value="" />
+      <option name="PTY_MODE" value="Auto" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/AutomationTool/AutomationTool.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
@@ -153,8 +158,13 @@
       <option name="WORKING_DIRECTORY" value="" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="ENV_FILE_PATHS" value="" />
+      <option name="REDIRECT_INPUT_PATH" value="" />
+      <option name="PTY_MODE" value="Auto" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
@@ -245,6 +255,7 @@
       <workItem from="1747642729918" duration="6745000" />
       <workItem from="1747767691957" duration="3593000" />
       <workItem from="1747811454625" duration="720000" />
+      <workItem from="1747910925551" duration="7548000" />
     </task>
     <servers />
   </component>
