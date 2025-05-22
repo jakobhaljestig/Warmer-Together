@@ -264,41 +264,4 @@ void UClimbComponent::SetWalking()
 	MovementComponent->bOrientRotationToMovement = true;
 }
 
-bool UClimbComponent::ClimbTargetStillValid(FHitResult& HitResult) const
-{
-	if (!ClimbCharacter) return false;
-
-	FVector Start = ClimbCharacter->GetActorLocation() + FVector(0.f, 0.f, 80.f);
-	FVector Forward = ClimbCharacter->GetActorForwardVector();
-	FVector End = Start + Forward * 200.f;
-	FVector HalfSize(30.f, 30.f, 50.f);
-	FQuat Rotation = FQuat::Identity;
-
-	FCollisionQueryParams TraceParams;
-	TraceParams.AddIgnoredActor(ClimbCharacter);
-
-	bool bHit = GetWorld()->SweepSingleByChannel(
-		HitResult,
-		Start,
-		End,
-		Rotation,
-		ECC_GameTraceChannel3,
-		FCollisionShape::MakeBox(HalfSize),
-		TraceParams
-	);
-
-	if (bHit && HitResult.GetActor()->ActorHasTag("Climbable"))
-	{
-		TArray<UActorComponent*> Components = HitResult.GetActor()->GetComponentsByTag(UBoxComponent::StaticClass(), "ClimbZone");
-		for (UActorComponent* Comp : Components)
-		{
-			UBoxComponent* Box = Cast<UBoxComponent>(Comp);
-			if (Box && Box->IsOverlappingActor(ClimbCharacter))
-			{
-				return true;
-			}
-		}
-	}
-	return false;
-}
 

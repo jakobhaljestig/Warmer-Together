@@ -32,6 +32,13 @@ void ACharacterBig::Tick(float DeltaTime)
 	{
 		bIsThrowing = false;
 	}
+
+	if (!PickupComponent->Holding)
+	{
+		bIsLifting = false;
+		bIsThrowing = false;
+	}
+	
 	
 }
 
@@ -55,7 +62,7 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 {
 	
-	if (!bIsClimbing && !bIsHugging && !bIsSprinting && !bSuccesfulHug)
+	if (!bIsClimbing && !bIsHugging && !bIsSprinting && !bSuccesfulHug && !bHasDied)
 	{
 		if (!PickupComponent->Holding && !PickupComponent->HoldingSomething())
 		{
