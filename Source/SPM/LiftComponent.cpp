@@ -118,12 +118,7 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		FVector TargetLocation = (TargetLocation1 + TargetLocation2)/2;
 		PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorLocation(TargetLocation);
 		PhysicsHandle->GetGrabbedComponent()->SetWorldRotation(GetOwner()->GetActorRotation());
-
-		if (!bThrowing)
-		{
-			
-		}
-
+		
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		if (!GrabbedActor->Tags.Contains("Grabbed") || Cast<ACharacterSmall>(GrabbedActor) && Cast<ACharacterSmall>(GrabbedActor)->bHasDied)
 		{
