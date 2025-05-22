@@ -49,11 +49,12 @@ void ULiftComponent::Drop(float Force, float VerticalForce)
 		}
 		else
 		{
-			FVector TargetLocation = GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(FName("LiftHoldLocation"));
+			FVector TargetLocation = (GetOwner()->GetActorLocation() + FVector(0,0,1) * HoldDistance);
 			PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorLocation(TargetLocation);
 			PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce);	
 		}
 		PhysicsHandle->GetGrabbedComponent()->GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorEnableCollision(true);
 		Release();
 		
 	}
@@ -102,6 +103,7 @@ void ULiftComponent::Lift()
 	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
 		PhysicsHandle->GetGrabbedComponent()->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
+		PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorEnableCollision(false);
 	}
 		
 
