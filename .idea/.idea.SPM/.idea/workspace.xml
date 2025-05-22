@@ -15,25 +15,9 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameManager.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameManager.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_CutsceneTrigger.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_CutsceneTrigger.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_VictoryCutscene.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_VictoryCutscene.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/Nellie/Nellie1.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Nellie/Nellie1.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorFour.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorOne.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorOne.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorThree.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorThree.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorTwo.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorTwo.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CrashSite.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CrashSite.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Mountain.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Mountain.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap_Jakob2.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap_Jakob2.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap_TestSparsystem.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap_TestSparsystem.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorFour.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorFour.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorOne.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorOne.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorThree.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorThree.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorTwo.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_CorridorTwo.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_EndingWithCredits.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_EndingWithCredits.uasset" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -269,7 +253,7 @@
       <workItem from="1747811454625" duration="720000" />
       <workItem from="1747910925551" duration="7548000" />
       <workItem from="1747928177528" duration="1369000" />
-      <workItem from="1747932198178" duration="2384000" />
+      <workItem from="1747932198178" duration="3894000" />
     </task>
     <servers />
   </component>
