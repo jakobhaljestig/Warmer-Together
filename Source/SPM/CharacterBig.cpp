@@ -32,6 +32,13 @@ void ACharacterBig::Tick(float DeltaTime)
 	{
 		bIsThrowing = false;
 	}
+
+	if (!PickupComponent->Holding)
+	{
+		bIsLifting = false;
+		bIsThrowing = false;
+	}
+	
 	
 }
 
