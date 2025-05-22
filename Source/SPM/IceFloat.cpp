@@ -38,18 +38,19 @@ void AIceFloat::Tick(float DeltaTime)
 //Ska göra bättre hantering av breaking sen 
 void AIceFloat::BreakObject()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Breaking Object"));
-	Timer.Start(GetWorld(), BreakTime, [this]()->void
-	{
-		SetActorEnableCollision(false);
-		SetActorHiddenInGame(true);
-		
+	UE_LOG(LogTemp, Warning, TEXT("BreakObject called – starting BreakTimer"));
+	
+	GetWorld()->GetTimerManager().SetTimer(BreakTimerHandle, this, &AIceFloat::HandleBreak, BreakTime, false);
+}
 
-		Timer.Start(GetWorld(), RespawnTime, [this]()->void
-			{
-				RespawnObject();
-			});
-	});
+void AIceFloat::HandleBreak()
+{
+	UE_LOG(LogTemp, Warning, TEXT("Breaking Object"));
+
+	SetActorEnableCollision(false);
+	SetActorHiddenInGame(true);
+	
+	GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &AIceFloat::RespawnObject, RespawnTime, false);
 }
 
 void AIceFloat::RespawnObject()

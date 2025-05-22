@@ -54,6 +54,7 @@ void UMiniGame::GameLoop()
 {
 	RequestedInput = DecideInput();
 	LastInput = 0;
+	TimeSinceLastPress = 0;
 	//CurrentLoopTime = 0;
 	Correct = false;
 }

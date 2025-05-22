@@ -29,14 +29,11 @@ public:
 	bool bIsClimbing = false;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool bIsLifting = false;
-
-	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool bIsThrowing = false;
 
 protected:
 	
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Pickup")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup", meta = (AllowPrivateAccess = "true"))
 	ULiftComponent* PickupComponent;
 
 	void BeginPlay() override;

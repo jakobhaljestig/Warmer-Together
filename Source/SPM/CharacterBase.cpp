@@ -86,6 +86,12 @@ void ACharacterBase::BeginPlay()
 	{
 		UE_LOG(LogTemp, Error, TEXT("SprintComponent not valid"));
 	}
+
+	ThrowSnowballComponent = FindComponentByClass<UThrowSnowballComponent>();
+	if (!ThrowSnowballComponent)
+	{
+		UE_LOG(LogTemp, Error, TEXT("ThrowSnowBallComponent not valid"));
+	}
 	
 }
 
@@ -279,7 +285,7 @@ void ACharacterBase::StopSprint()
 //--- Hugging ---
 void ACharacterBase::BeginHug(const FInputActionValue& Value)
 {
-	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug && !bHasDied)
+	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug && !bHasDied && !bIsLifting)
 		HugComponent -> TryHug();
 		bIsHugging = true;
 }
@@ -308,47 +314,20 @@ void ACharacterBase::Hug()
 
 // --- Kasta Snöboll ---*/
 
-
-void ACharacterBase::Throw(const FInputActionValue& Value)
+void ACharacterBase::Throw (const FInputActionValue& Value)
 {
-	/*if (!SnowballClass) return;
-	
-	FVector CameraLocation;
-	FRotator CameraRotation;
-	GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
-	FVector CameraForward = CameraRotation.Vector();
-
-	FVector CharacterForward = GetActorForwardVector();
-
-	float AimAngleDegrees = FMath::RadiansToDegrees(acosf(FVector::DotProduct(CameraForward.GetSafeNormal(), CharacterForward.GetSafeNormal())));
-
-	if (AimAngleDegrees > 45)
+	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Kastar inte – kameran tittar för långt från karaktärens riktning (vinkel: %.1f°)"), AimAngleDegrees);
-		return;
+		ThrowSnowballComponent->Throw();
 	}
 	
-	FVector SpawnLocation = GetMesh()->GetSocketLocation("RightHandSocket");
-	FRotator SpawnRotation = (CameraRotation.Vector()).Rotation();
-
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.Owner = this;
-
-	ASnowball* Snowball = GetWorld()->SpawnActor<ASnowball>(SnowballClass, SpawnLocation, SpawnRotation, SpawnParams);
-
-	if (Snowball)
-	{
-		FVector ThrowDirection = CameraRotation.Vector() + FVector(0, 0, 0.7f); 
-		ThrowDirection.Normalize();
-		Snowball->ThrowInDirection(ThrowDirection);
-	}*/
 }
 
-void ACharacterBase::ApplySnowballHit()
+void ACharacterBase::ApplySnowballHit() const
 {
 	if (BodyTempComponent)
 	{
-		UE_LOG(LogTemp, Error, TEXT("character was hit"));
+		UE_LOG(LogTemp, Error, TEXT("Character was hit"));
 		BodyTempComponent->ColdBuff(5);
 	}
 }
