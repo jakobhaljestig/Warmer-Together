@@ -134,7 +134,7 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	if (bThrowing)
 	{
 		ThrowTimer += DeltaTime;
-		if (ThrowTimer >= 1.55f)
+		if (ThrowTimer >= ThrowTime)
 		{
 			ThrowTimer = 0;
 			Throw();
