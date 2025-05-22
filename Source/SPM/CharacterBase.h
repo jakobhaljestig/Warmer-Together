@@ -229,6 +229,9 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsSprinting;
 	
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsLifting = false;
+	
 private:
 
 	

@@ -29,9 +29,6 @@ public:
 	bool bIsClimbing = false;
 
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
-	bool bIsLifting = false;
-
-	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool bIsThrowing = false;
 
 protected:
