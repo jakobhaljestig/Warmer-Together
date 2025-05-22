@@ -4,6 +4,7 @@
 #include "LiftComponent.h"
 
 #include "CharacterSmall.h"
+#include "Kismet/BlueprintTypeConversions.h"
 
 
 ULiftComponent::ULiftComponent()
@@ -49,8 +50,6 @@ void ULiftComponent::Drop(float Force, float VerticalForce)
 		}
 		else
 		{
-			FVector TargetLocation = (GetOwner()->GetActorLocation() + FVector(0,0,1) * HoldDistance);
-			PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorLocation(TargetLocation);
 			PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce);	
 		}
 		PhysicsHandle->GetGrabbedComponent()->GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
@@ -114,10 +113,16 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
 	{
-		FVector TargetLocation = GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(FName("LiftHoldLocation"));
+		FVector TargetLocation1 = GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(FName("LiftHoldLocation"));
+		FVector TargetLocation2 = GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(FName("LiftHoldLocation2"));
+		FVector TargetLocation = (TargetLocation1 + TargetLocation2)/2;
 		PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorLocation(TargetLocation);
 		PhysicsHandle->GetGrabbedComponent()->SetWorldRotation(GetOwner()->GetActorRotation());
-		
+
+		if (!bThrowing)
+		{
+			
+		}
 
 		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
 		if (!GrabbedActor->Tags.Contains("Grabbed") || Cast<ACharacterSmall>(GrabbedActor) && Cast<ACharacterSmall>(GrabbedActor)->bHasDied)
