@@ -104,5 +104,5 @@ public:
 	float GetMaxTime() const { return MaxLoopTime; }
 
 	UPROPERTY()
-	bool Correct;
+	bool Correct = false;
 };
