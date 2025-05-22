@@ -134,7 +134,7 @@ protected:
 	void EndDance(const FInputActionValue& Value);
 
 	//---Kasta Snöboll ---
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Push")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Snowball")
 	UThrowSnowballComponent* ThrowSnowballComponent;
 
 	void Throw(const FInputActionValue& Value);

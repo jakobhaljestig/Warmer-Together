@@ -21,8 +21,11 @@ void UThrowSnowballComponent::TickComponent(float DeltaTime, ELevelTick TickType
 
 void UThrowSnowballComponent::Throw()
 {
-	if (!SnowballClass) return;
-
+	if (!SnowballClass || !bCanThrow)
+	{
+		return;
+	}
+	
 	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
 	
 	FVector CameraLocation;
@@ -53,5 +56,14 @@ void UThrowSnowballComponent::Throw()
 		FVector ThrowDirection = CameraRotation.Vector() + FVector(0, 0, 0.7f); 
 		ThrowDirection.Normalize();
 		Snowball->ThrowInDirection(ThrowDirection);
+
+		bCanThrow = false;
+		
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ResetThrow, this, &UThrowSnowballComponent::ResetThrow, SnowballInterval, false);
 	}
+}
+
+void UThrowSnowballComponent::ResetThrow()
+{
+	bCanThrow = true;
 }

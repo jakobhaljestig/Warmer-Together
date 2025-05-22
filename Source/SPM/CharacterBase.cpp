@@ -316,7 +316,11 @@ void ACharacterBase::Hug()
 
 void ACharacterBase::Throw (const FInputActionValue& Value)
 {
-	ThrowSnowballComponent->Throw();
+	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
+	{
+		ThrowSnowballComponent->Throw();
+	}
+	
 }
 
 void ACharacterBase::ApplySnowballHit() const

@@ -18,6 +18,9 @@ public:
 
 	void Throw();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	bool bCanThrow = true;
+
 protected:
 	virtual void BeginPlay() override;
 	
@@ -27,8 +30,13 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Snowball")
 	FName HandSocketName = "RightHandSocket";
 
+	UPROPERTY(EditAnywhere, Category = "Snowball")
+	float SnowballInterval = 1.0f;
+	
+	void ResetThrow();
+
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-		
+	FTimerHandle TimerHandle_ResetThrow;
 };

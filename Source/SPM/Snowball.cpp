@@ -42,6 +42,7 @@ void ASnowball::BeginPlay()
 	
 	UE_LOG(LogTemp, Warning, TEXT("Snöbollens ägare: %s"), *GetOwner()->GetName());
 	
+	//Gör så snöbollen ignorerar den som kastar
 	if (AActor* MyOwner = GetOwner())
 	{
 		CollisionComp->IgnoreActorWhenMoving(MyOwner, true);
