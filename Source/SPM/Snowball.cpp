@@ -48,7 +48,7 @@ void ASnowball::BeginPlay()
 		CollisionComp->IgnoreActorWhenMoving(MyOwner, true);
 	}
 
-	
+	SetLifeSpan(MaxLifeTime);
 }
 
 void ASnowball::Tick(float DeltaTime)
@@ -81,6 +81,4 @@ void ASnowball::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UE_LOG(LogTemp, Warning, TEXT("Snöboll förstördes"));
 	Destroy();
 }
-
-
 
