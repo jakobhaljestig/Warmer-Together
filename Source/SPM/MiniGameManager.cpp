@@ -37,8 +37,11 @@ void AMiniGameManager::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 	if (Game1->IsPlayerUsing() && Game2->IsPlayerUsing())
 	{
-		Game1->StartGame();
-		Game2->StartGame();
+		if (!Game1->bPlaying && !Game2->bPlaying)
+		{
+			Game1->StartGame();
+			Game2->StartGame();
+		}
 		if (CorrectPresses >= CorrectPressesToWin)
 		{
 			Game1->SetComplete(true);

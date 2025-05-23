@@ -49,10 +49,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
 	float MaxLoopTime = 10.f;
-
-	UPROPERTY()
-	bool bPlaying = false;
-
+	
 	UPROPERTY()
 	bool bUsing = false;
 	
@@ -105,4 +102,7 @@ public:
 
 	UPROPERTY()
 	bool Correct = false;
+
+	UPROPERTY()
+	bool bPlaying = false;
 };
