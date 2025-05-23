@@ -230,7 +230,7 @@ public:
 	bool bIsLifting = false;
 
 	UFUNCTION(BlueprintCallable)
-	virtual void ResetAnimations();
+	virtual void ResetPlayerState();
 	
 private:
 

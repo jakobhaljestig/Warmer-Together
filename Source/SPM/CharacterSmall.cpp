@@ -15,9 +15,9 @@ void ACharacterSmall::BeginPlay()
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 }
 
-void ACharacterSmall::ResetAnimations()
+void ACharacterSmall::ResetPlayerState()
 {
-	Super::ResetAnimations();
+	Super::ResetPlayerState();
 
 	UnCrouch();
 }

@@ -31,7 +31,7 @@ public:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool bIsThrowing = false;
 
-	void ResetAnimations() override;
+	void ResetPlayerState() override;
 
 protected:
 	

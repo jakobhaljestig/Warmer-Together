@@ -8,9 +8,9 @@
 #include "LiftComponent.h"
 #include "InputActionValue.h"
 
-void ACharacterBig::ResetAnimations()
+void ACharacterBig::ResetPlayerState()
 {
-	Super::ResetAnimations();
+	Super::ResetPlayerState();
 
 	PickupComponent->Drop(1, 1);
 	ClimbingComponent->StopClimb();

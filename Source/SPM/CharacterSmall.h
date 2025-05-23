@@ -28,7 +28,7 @@ public:
 
 	void BeginPlay() override;
 
-	void ResetAnimations() override;
+	void ResetPlayerState() override;
 
 private:
 

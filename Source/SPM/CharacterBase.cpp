@@ -420,7 +420,7 @@ void ACharacterBase::RespawnToLastSafeLocation()
 }
 
 
-void ACharacterBase::ResetAnimations()
+void ACharacterBase::ResetPlayerState()
 {
 	StopSprint();
 	PushComponent->StopPushing();
