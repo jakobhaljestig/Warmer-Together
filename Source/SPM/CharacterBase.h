@@ -228,6 +228,9 @@ public:
 	
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsLifting = false;
+
+	UFUNCTION(BlueprintCallable)
+	virtual void ResetAnimations();
 	
 private:
 
