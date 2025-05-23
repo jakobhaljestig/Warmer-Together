@@ -56,6 +56,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Weather VFX")
 	UMaterialParameterCollection* FreezeParam;
+	
 
 	void SpawnWeatherEffects();
 	
@@ -63,9 +64,9 @@ private:
 	
 	void UpdateWeatherFromTemperature(float TemperaturePercentage) ;
 	
-	FVector GetPlayersMidpoint() const;
+	//FVector GetPlayersMidpoint() const;
 	
-	void UpdateWeatherEffectLocation() const;
+	//void UpdateWeatherEffectLocation() const;
 	
 	void AffectBodyTemperatures() const;
 
