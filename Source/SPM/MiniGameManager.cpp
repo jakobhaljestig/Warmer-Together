@@ -46,8 +46,9 @@ void AMiniGameManager::Tick(float DeltaTime)
 		{
 			Game1->SetComplete(true);
 			Game2->SetComplete(true);
-			Game1Pawn->GetComponentByClass<UMinigameTriggerComponent>()->bCompleted = true;
-			Game2Pawn->GetComponentByClass<UMinigameTriggerComponent>()->bCompleted = true;
+			Game1Pawn->GetComponentByClass<UMinigameTriggerComponent>()->ZoomOut();
+			Game2Pawn->GetComponentByClass<UMinigameTriggerComponent>()->ZoomOut();
+			
 		}
 
 		if (Game1->Correct && Game2->Correct)

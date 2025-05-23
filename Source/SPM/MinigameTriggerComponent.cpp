@@ -26,6 +26,8 @@ void UMinigameTriggerComponent::BeginPlay()
 {
 	Super::BeginPlay();
 	TriggerBox = GetOwner()->GetComponentByClass<UBoxComponent>();
+
+	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &UMinigameTriggerComponent::OnBeginOverlap);
 	MiniGamePawn = Cast<APawn>(GetOwner());
 	
 	
@@ -33,9 +35,34 @@ void UMinigameTriggerComponent::BeginPlay()
 	
 }
 
-void UMinigameTriggerComponent::ZoomIn(UPrimitiveComponent* Actor)
+void UMinigameTriggerComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,UPrimitiveComponent* OtherComp,
+		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	ControllerOwner = Cast<ACharacterBase>(Actor->GetOwner());
+	if (TriggerBox && !bCompleted && !bActive)
+	{
+		if (ForBigPlayer)
+		{
+			if (ACharacterBase* Character = Cast<ACharacterBig>(OtherActor))
+			{
+				if (!Character->GetCharacterMovement()->IsFalling())
+					ZoomIn(OtherActor);
+			}
+		}
+		if (ForSmallPlayer)
+		{
+			if (ACharacterBase* Character = Cast<ACharacterSmall>(OtherActor))
+			{
+				if (!Character->GetCharacterMovement()->IsFalling())
+					ZoomIn(OtherActor);
+			}
+		}
+	}
+	
+}
+
+void UMinigameTriggerComponent::ZoomIn(AActor* Actor)
+{
+	ControllerOwner = Cast<ACharacterBase>(Actor);
 	Controller = Cast<APlayerController>(ControllerOwner->GetController());
 	if (ControllerOwner && Controller)
 	{
@@ -50,10 +77,10 @@ void UMinigameTriggerComponent::ZoomIn(UPrimitiveComponent* Actor)
 void UMinigameTriggerComponent::ZoomOut()
 {
 	bActive = false;
-	if (ControllerOwner && Controller)
+	bCompleted = true;
+	if (ControllerOwner && Cast<APawn>(GetOwner())->GetController())
 	{
-		Controller->Possess(ControllerOwner);
-		ControllerOwner->GetMovementComponent()->StopActiveMovement();
+		Cast<APawn>(GetOwner())->GetController()->Possess(ControllerOwner);
 	}
 	
 }
@@ -63,35 +90,6 @@ void UMinigameTriggerComponent::ZoomOut()
 void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	TArray<UPrimitiveComponent*> OverlappingActors;
-	TriggerBox->GetOverlappingComponents(OverlappingActors);
-	if (TriggerBox && bCompleted && bActive)
-	{
-		ZoomOut();
-	}
-	else if (TriggerBox && !bCompleted && !bActive)
-	{
-		for (UPrimitiveComponent* Actor : OverlappingActors)
-		{
-			if (ForBigPlayer)
-			{
-				if (ACharacterBase* Character = Cast<ACharacterBig>(Actor->GetOwner()))
-				{
-					if (!Character->GetCharacterMovement()->IsFalling())
-						ZoomIn(Actor);
-				}
-			}
-			if (ForSmallPlayer)
-			{
-				if (ACharacterBase* Character = Cast<ACharacterSmall>(Actor->GetOwner()))
-				{
-					if (!Character->GetCharacterMovement()->IsFalling())
-						ZoomIn(Actor);
-				}
-			}
-			
-		}
-	}
 	// ...
 }
 
