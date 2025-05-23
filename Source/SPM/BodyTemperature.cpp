@@ -30,10 +30,7 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 	ACharacterPlayerController* Controller= Cast<ACharacterPlayerController>(Cast<APawn>(GetOwner())->GetController());
 	if (!bNearHeat)
     {
-        if (Temp > 0)
-        {
-        	CoolDown(DeltaTime);
-        }
+		CoolDown(DeltaTime);
 		if (GetTempPercentage() < 0.3 && !bDisplayFreezeEffect && Controller)
 		{
 			bDisplayFreezeEffect = true;
@@ -42,12 +39,12 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 		{
 			bDisplayFreezeEffect = false;
 		}
-		if (Temp == 0)
+		if (Temp <= 0.1)
 		{
 			if (!bFrozen)
 			{
 				bFrozen = true;
-				HandleFreeze();
+				//HandleFreeze();
 			}
 		}
 
@@ -73,11 +70,11 @@ void UBodyTemperature::CoolDown(float DeltaTime)
 	if (!bNearHeat)
 	{
 		// Använd en fast kylhastighet utan väderpåverkan
-		Temp -= DeltaTime * CoolDownRate;
+		ModifyTemperature(-DeltaTime * CoolDownRate);
 
-		if (Temp < 0.0f)
+		if (GetTempPercentage() <= 0.0f)
 		{
-			Temp = 0.0f;
+			Cast<ACharacterBase>(GetOwner())->OnDeath();
 		}
 	}
 }
@@ -158,12 +155,12 @@ void UBodyTemperature::ModifyTemperature(float DeltaTemperature)
 void UBodyTemperature::HandleFreeze()
 {
 	UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Player is frozen. Starting death timer..."));
-
-	if (!bHasDied)
-	{
+	HandleDeath();
+	//if (!bHasDied)
+	//{
 		// startar en timer som dödar spelaren efter en delay
-		GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &UBodyTemperature::HandleDeath, DeathDelay, false);
-	}
+		//GetWorld()->GetTimerManager().SetTimer(DeathTimerHandle, this, &UBodyTemperature::HandleDeath, DeathDelay, false);
+	//}
 }
 
 void UBodyTemperature::HandleDeath()

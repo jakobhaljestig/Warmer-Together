@@ -49,10 +49,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
 	float MaxLoopTime = 10.f;
-
-	UPROPERTY()
-	bool bPlaying = false;
-
+	
 	UPROPERTY()
 	bool bUsing = false;
 	
@@ -104,5 +101,8 @@ public:
 	float GetMaxTime() const { return MaxLoopTime; }
 
 	UPROPERTY()
-	bool Correct;
+	bool Correct = false;
+
+	UPROPERTY()
+	bool bPlaying = false;
 };

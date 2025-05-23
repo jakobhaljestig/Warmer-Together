@@ -32,17 +32,21 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float gravity = 1.0f;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	float MaxLifeTime = 5.0f;
+
 protected:
 	virtual void BeginPlay() override;
 
-public:	
-	// Called every frame
+public:
+	
 	virtual void Tick(float DeltaTime) override;
 
 	UFUNCTION(BlueprintCallable)
 	void OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 					  UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-	
+
+
 	
 
 };

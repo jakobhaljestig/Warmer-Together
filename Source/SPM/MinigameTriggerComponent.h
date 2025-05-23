@@ -48,13 +48,13 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditAnywhere)
-	AActor* MiniGameActor;
+	AActor* MiniGameActor = nullptr;
 	
 	UPROPERTY(EditAnywhere)
-	APlayerController* Controller;
+	APlayerController* Controller = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bCompleted;
+	bool bCompleted = false;
 
 	UPROPERTY(EditAnywhere)
 	bool bActive = false;
@@ -63,7 +63,7 @@ public:
 	bool GetCompletion() const { return bCompleted; }
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	UMiniGame* MiniGame;
+	UMiniGame* MiniGame = nullptr;
 
 	UPROPERTY(EditAnywhere)
 	bool ForBigPlayer = false;
