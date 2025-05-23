@@ -8,6 +8,14 @@
 #include "LiftComponent.h"
 #include "InputActionValue.h"
 
+void ACharacterBig::ResetPlayerState()
+{
+	Super::ResetPlayerState();
+
+	PickupComponent->Drop(1, 1);
+	ClimbingComponent->StopClimb();
+}
+
 void ACharacterBig::BeginPlay()
 {
 	Super::BeginPlay();

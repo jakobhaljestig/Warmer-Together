@@ -107,6 +107,10 @@ void ULiftComponent::Lift()
 			GetOwner()->Tags.Add("IsLifting");
 			PhysicsHandle->GetGrabbedComponent()->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
 			PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorEnableCollision(false);
+			if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(PhysicsHandle->GetGrabbedComponent()->GetOwner()))
+			{
+				HeldPlayer->ResetPlayerState();
+			}
 		}
 	}
 
