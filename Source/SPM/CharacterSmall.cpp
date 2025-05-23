@@ -15,6 +15,13 @@ void ACharacterSmall::BeginPlay()
 	GetCharacterMovement()->NavAgentProps.bCanCrouch = true;
 }
 
+void ACharacterSmall::ResetAnimations()
+{
+	Super::ResetAnimations();
+
+	UnCrouch();
+}
+
 
 void ACharacterSmall::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 {

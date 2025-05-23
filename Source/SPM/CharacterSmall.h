@@ -28,6 +28,8 @@ public:
 
 	void BeginPlay() override;
 
+	void ResetAnimations() override;
+
 private:
 
 	void OnDeath() override;
