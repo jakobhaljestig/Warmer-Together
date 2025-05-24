@@ -64,11 +64,11 @@ private:
 	
 	void UpdateWeatherFromTemperature(float TemperaturePercentage) ;
 	
-	//FVector GetPlayersMidpoint() const;
+	FVector GetPlayersMidpoint() const;
 	
-	//void UpdateWeatherEffectLocation() const;
+	void UpdateWeatherEffectLocation() const;
 	
-	void AffectBodyTemperatures() const;
+	//void AffectBodyTemperatures() const;
 
 	float CurrentCoolRate = 1.5f;
 

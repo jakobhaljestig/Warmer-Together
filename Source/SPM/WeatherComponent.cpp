@@ -107,7 +107,7 @@ void UWeatherComponent::SpawnWeatherEffects()
 void UWeatherComponent::OnWeatherUpdateTick() 
 {
 
-	//UpdateWeatherEffectLocation();
+	UpdateWeatherEffectLocation();
 
 	// Hämta medeltemperaturen från spelarna
 	TArray<AActor*> PlayerCharacters;
@@ -164,7 +164,7 @@ void UWeatherComponent::UpdateWeatherFromTemperature(const float TemperaturePerc
 		//UE_LOG(LogTemp, Warning, TEXT("Mist + Snow 3 Activated"));
 	}
 }
-/*
+
 FVector UWeatherComponent::GetPlayersMidpoint() const
 {
     TArray<AActor*> PlayerCharacters;
@@ -192,12 +192,12 @@ FVector UWeatherComponent::GetPlayersMidpoint() const
     // Dela med antalet spelare för att få mittpunkten
     FVector Midpoint = TotalLocation / PlayerCharacters.Num();
 
-    /*UE_LOG(LogTemp, Warning, TEXT("[WeatherSystem] Midpoint: X=%.1f Y=%.1f Z=%.1f, MaxDistance: %.1f"), 
-        Midpoint.X, Midpoint.Y, Midpoint.Z, MaxDistance);
+    //UE_LOG(LogTemp, Warning, TEXT("[WeatherSystem] Midpoint: X=%.1f Y=%.1f Z=%.1f, MaxDistance: %.1f"), 
+        //Midpoint.X, Midpoint.Y, Midpoint.Z, MaxDistance);
 
     return Midpoint;
-}*/
-/*
+}
+
 void UWeatherComponent::UpdateWeatherEffectLocation() const
 {
 	const FVector Midpoint = GetPlayersMidpoint();
@@ -245,9 +245,9 @@ void UWeatherComponent::UpdateWeatherEffectLocation() const
 			MistParticleSystem->SetWorldLocation(Midpoint);
 			//MistParticleSystem->SetWorldScale3D(ParticleScale);
 		}
-	}*/
+	}
 
-
+/*
 //påverkar bodytemp baserat på vädernivån, måste nog tweakas lite vart eftersom
 void UWeatherComponent::AffectBodyTemperatures() const
 {
@@ -273,7 +273,7 @@ void UWeatherComponent::AffectBodyTemperatures() const
 				CurrentWeather.WeatherLevel,
 				CurrentCoolRate,
 				BodyTemp->GetTempPercentage() * 100.0f
-			);*/
+			);
 		}
 		else
 		{
@@ -282,6 +282,6 @@ void UWeatherComponent::AffectBodyTemperatures() const
 
 		Index++;
 	}
-}
+}*/
 
 
