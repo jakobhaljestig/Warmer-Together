@@ -38,11 +38,15 @@ public:
 
 	void ResetTemp();
 
+	UFUNCTION(BlueprintCallable)
 	void ModifyTemperature(float DeltaTemperature);
 	void HandleFreeze();
 	void HandleDeath();
 
 	void ColdBuff(float CoolDownValue);
+
+	UPROPERTY(BlueprintReadWrite)
+	float TemperaturePrecent;
 
 private:
 	

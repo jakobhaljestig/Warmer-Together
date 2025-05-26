@@ -9,9 +9,7 @@
 
 // Sets default values for this component's properties
 UWeatherComponent::UWeatherComponent(): SnowLevel3(nullptr), SnowLevel2(nullptr), SnowLevel1(nullptr),
-                                        MistParticleSystem(nullptr), SnowSystem1(nullptr), SnowSystem2(nullptr),
-                                        SnowSystem3(nullptr),
-                                        MistSystem(nullptr)
+                                        MistParticleSystem(nullptr)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -32,7 +30,7 @@ void UWeatherComponent::BeginPlay()
 
 	if (!bHasSpawnedWeather)
 	{
-		SpawnWeatherEffects();
+		//SpawnWeatherEffects();
 		bHasSpawnedWeather = true;
 	}
 	
@@ -57,7 +55,7 @@ void UWeatherComponent::SpawnWeatherEffects()
 			SnowSystem1,
 			GetOwner()->GetRootComponent(),
 			NAME_None,
-			FVector::ZeroVector,
+			FVector(0.f, 0.f, 500.f),
 			FRotator::ZeroRotator,
 			EAttachLocation::KeepRelativeOffset,
 			false
@@ -148,7 +146,7 @@ void UWeatherComponent::UpdateWeatherFromTemperature(const float TemperaturePerc
 	SnowLevel2->Deactivate();
 	SnowLevel3->Deactivate();
 	MistParticleSystem->Deactivate();
-	TemperaturePrecent = 1-TemperaturePercentage;
+	//TemperaturePrecent = 1-TemperaturePercentage;
 	if (TemperaturePercentage >= 0.75f)
 	{
 		SnowLevel1->Activate();
@@ -194,8 +192,8 @@ FVector UWeatherComponent::GetPlayersMidpoint() const
     // Dela med antalet spelare för att få mittpunkten
     FVector Midpoint = TotalLocation / PlayerCharacters.Num();
 
-    /*UE_LOG(LogTemp, Warning, TEXT("[WeatherSystem] Midpoint: X=%.1f Y=%.1f Z=%.1f, MaxDistance: %.1f"), 
-        Midpoint.X, Midpoint.Y, Midpoint.Z, MaxDistance);*/
+    //UE_LOG(LogTemp, Warning, TEXT("[WeatherSystem] Midpoint: X=%.1f Y=%.1f Z=%.1f, MaxDistance: %.1f"), 
+        //Midpoint.X, Midpoint.Y, Midpoint.Z, MaxDistance);
 
     return Midpoint;
 }
@@ -228,28 +226,28 @@ void UWeatherComponent::UpdateWeatherEffectLocation() const
 		if (SnowLevel1) 
 		{
 			SnowLevel1->SetWorldLocation(Midpoint);
-			SnowLevel1->SetWorldScale3D(ParticleScale);
+			//SnowLevel1->SetWorldScale3D(ParticleScale);
 		}
 		if (SnowLevel2) 
 		{
 			SnowLevel2->SetWorldLocation(Midpoint);
-			SnowLevel2->SetWorldScale3D(ParticleScale);
+			//SnowLevel2->SetWorldScale3D(ParticleScale);
 		}
 		if (SnowLevel3) 
 		{
 			SnowLevel3->SetWorldLocation(Midpoint);
-			SnowLevel3->SetWorldScale3D(ParticleScale);
+			//SnowLevel3->SetWorldScale3D(ParticleScale);
 			//UE_LOG(LogTemp, Warning, TEXT("ScaleFactor: %.2f based on MaxDistance: %.1f"), ScaleFactor, MaxDistance);
 		}
 
 		if (MistParticleSystem)
 		{
 			MistParticleSystem->SetWorldLocation(Midpoint);
-			MistParticleSystem->SetWorldScale3D(ParticleScale);
+			//MistParticleSystem->SetWorldScale3D(ParticleScale);
 		}
 	}
 
-
+/*
 //påverkar bodytemp baserat på vädernivån, måste nog tweakas lite vart eftersom
 void UWeatherComponent::AffectBodyTemperatures() const
 {
@@ -275,7 +273,7 @@ void UWeatherComponent::AffectBodyTemperatures() const
 				CurrentWeather.WeatherLevel,
 				CurrentCoolRate,
 				BodyTemp->GetTempPercentage() * 100.0f
-			);*/
+			);
 		}
 		else
 		{
@@ -284,6 +282,6 @@ void UWeatherComponent::AffectBodyTemperatures() const
 
 		Index++;
 	}
-}
+}*/
 
 
