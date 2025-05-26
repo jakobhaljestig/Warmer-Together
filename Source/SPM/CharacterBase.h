@@ -212,6 +212,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
 
+	UFUNCTION(BlueprintCallable)
 	virtual void OnDeath();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
