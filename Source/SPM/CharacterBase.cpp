@@ -375,7 +375,7 @@ void ACharacterBase::OnDeath()
 	bHasDied = true;
 	PushComponent->StopPushing();
 	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
-
+	
 	if (bHasCheckPointLocation)
 	{
 		GetWorldTimerManager().SetTimer(RespawnTimeHandle, this, &ACharacterBase::RespawnAtCheckpoint, RespawnTimeDuration, false);

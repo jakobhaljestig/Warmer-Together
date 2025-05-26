@@ -28,6 +28,7 @@ void UMinigameTriggerComponent::BeginPlay()
 	TriggerBox = GetOwner()->GetComponentByClass<UBoxComponent>();
 
 	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &UMinigameTriggerComponent::OnBeginOverlap);
+	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &UMinigameTriggerComponent::OnEndOverlap);
 	MiniGamePawn = Cast<APawn>(GetOwner());
 	
 	
@@ -44,30 +45,50 @@ void UMinigameTriggerComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedCo
 		{
 			if (ACharacterBase* Character = Cast<ACharacterBig>(OtherActor))
 			{
-				if (!Character->GetCharacterMovement()->IsFalling())
-					ZoomIn(OtherActor);
+				ControllerOwner = Character;
 			}
 		}
 		if (ForSmallPlayer)
 		{
 			if (ACharacterBase* Character = Cast<ACharacterSmall>(OtherActor))
 			{
-				if (!Character->GetCharacterMovement()->IsFalling())
-					ZoomIn(OtherActor);
+				ControllerOwner = Character;
 			}
 		}
 	}
 	
 }
 
+void UMinigameTriggerComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (!bCompleted && !bActive)
+	{
+		if (ForBigPlayer)
+		{
+			if (Cast<ACharacterBig>(OtherActor) && !Controller)
+			{
+				ControllerOwner = nullptr;
+			}
+		}
+		if (ForSmallPlayer)
+		{
+			if (Cast<ACharacterSmall>(OtherActor) && !Controller)
+			{
+				ControllerOwner = nullptr;
+			}
+		}
+	}
+}
+
 void UMinigameTriggerComponent::ZoomIn(AActor* Actor)
 {
-	ControllerOwner = Cast<ACharacterBase>(Actor);
 	Controller = Cast<APlayerController>(ControllerOwner->GetController());
 	if (ControllerOwner && Controller)
 	{
+		TriggerBox->RemoveFromRoot();
 		bActive = true;
-		ControllerOwner->GetMovementComponent()->StopActiveMovement();
+		ControllerOwner->GetMovementComponent()->Velocity = FVector(0, 0, 0);
 		Controller->Possess(MiniGamePawn);
 		Controller->SetViewTarget(ControllerOwner);
 		Controller->SetViewTargetWithBlend(MiniGamePawn, 1, VTBlend_EaseIn, 5, true);
@@ -80,7 +101,9 @@ void UMinigameTriggerComponent::ZoomOut()
 	bCompleted = true;
 	if (ControllerOwner && Cast<APawn>(GetOwner())->GetController())
 	{
-		Cast<APawn>(GetOwner())->GetController()->Possess(ControllerOwner);
+		Controller->Possess(ControllerOwner);
+		Cast<ACharacterBase>(ControllerOwner)->bIsHugging = false;
+		ControllerOwner = nullptr;
 	}
 	
 }
@@ -91,6 +114,10 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	// ...
+
+	if (ControllerOwner && !bActive && Cast<ACharacterBase>(ControllerOwner)->bIsHugging){
+		ZoomIn(ControllerOwner);
+	}
 }
 
 

@@ -113,7 +113,7 @@ protected:
 	UHugComponent* HugComponent;
 	
 	// KROPPSTEMPERATUR
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Temperature")
 	UBodyTemperature* BodyTempComponent;
 
 	//PUSH
@@ -212,6 +212,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
 
+	UFUNCTION(BlueprintCallable)
 	virtual void OnDeath();
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Performance")
