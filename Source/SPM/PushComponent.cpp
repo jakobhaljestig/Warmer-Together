@@ -31,6 +31,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 			OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed/4;
 			if (!GetGrabbableInReach(Hit, PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1))
 			{
+				//If player is too far away, try to move back into reach, otherwise stop pushing
 				int Attempts = 0;
 				while (!GetGrabbableInReach(Hit, PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1))
 				{

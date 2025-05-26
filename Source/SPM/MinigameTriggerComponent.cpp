@@ -28,6 +28,7 @@ void UMinigameTriggerComponent::BeginPlay()
 	TriggerBox = GetOwner()->GetComponentByClass<UBoxComponent>();
 
 	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &UMinigameTriggerComponent::OnBeginOverlap);
+	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &UMinigameTriggerComponent::OnEndOverlap);
 	MiniGamePawn = Cast<APawn>(GetOwner());
 	
 	
@@ -44,26 +45,46 @@ void UMinigameTriggerComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedCo
 		{
 			if (ACharacterBase* Character = Cast<ACharacterBig>(OtherActor))
 			{
-				if (!Character->GetCharacterMovement()->IsFalling())
-					ZoomIn(OtherActor);
+				ControllerOwner = Cast<ACharacterBase>(OtherActor);
 			}
 		}
 		if (ForSmallPlayer)
 		{
 			if (ACharacterBase* Character = Cast<ACharacterSmall>(OtherActor))
 			{
-				if (!Character->GetCharacterMovement()->IsFalling())
-					ZoomIn(OtherActor);
+				ControllerOwner = Cast<ACharacterBase>(OtherActor);
 			}
 		}
 	}
 	
 }
 
+void UMinigameTriggerComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
+	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	if (TriggerBox && !bCompleted && !bActive)
+	{
+		if (ForBigPlayer)
+		{
+			if (ACharacterBase* Character = Cast<ACharacterBig>(OtherActor))
+			{
+				ControllerOwner = nullptr;
+			}
+		}
+		if (ForSmallPlayer)
+		{
+			if (ACharacterBase* Character = Cast<ACharacterSmall>(OtherActor))
+			{
+				ControllerOwner = nullptr;
+			}
+		}
+	}
+}
+
 void UMinigameTriggerComponent::ZoomIn(AActor* Actor)
 {
-	ControllerOwner = Cast<ACharacterBase>(Actor);
 	Controller = Cast<APlayerController>(ControllerOwner->GetController());
+	TriggerBox->Deactivate();
 	if (ControllerOwner && Controller)
 	{
 		bActive = true;
@@ -91,6 +112,10 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	// ...
+
+	if (ControllerOwner && !bActive && Cast<ACharacterBase>(ControllerOwner)->bIsHugging){
+		ZoomIn(ControllerOwner);
+	}
 }
 
 
