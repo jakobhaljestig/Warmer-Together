@@ -62,12 +62,29 @@ void UMinigameTriggerComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedCo
 void UMinigameTriggerComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
 	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
-	
+	if (TriggerBox && !bCompleted && !bActive)
+	{
+		if (ForBigPlayer)
+		{
+			if (ACharacterBase* Character = Cast<ACharacterBig>(OtherActor))
+			{
+				ControllerOwner = nullptr;
+			}
+		}
+		if (ForSmallPlayer)
+		{
+			if (ACharacterBase* Character = Cast<ACharacterSmall>(OtherActor))
+			{
+				ControllerOwner = nullptr;
+			}
+		}
+	}
 }
 
 void UMinigameTriggerComponent::ZoomIn(AActor* Actor)
 {
 	Controller = Cast<APlayerController>(ControllerOwner->GetController());
+	TriggerBox->Deactivate();
 	if (ControllerOwner && Controller)
 	{
 		bActive = true;
