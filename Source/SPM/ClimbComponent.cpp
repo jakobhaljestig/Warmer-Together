@@ -55,11 +55,10 @@ void UClimbComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	}
 }
 
-//Metoden är rätt värdelös
 void UClimbComponent::Climb()
 {
 	FHitResult Hit;
-	if ((!bIsClimbing && ClimbingInReach(Hit)) == true /*|| (!bIsClimbing && ClimbingDownInReach(Hit))*/)
+	if ((!bIsClimbing && ClimbingInReach(Hit)) == true)
 	{
 		StartClimb(Hit);
 	}
@@ -73,12 +72,6 @@ void UClimbComponent::StartClimb(FHitResult Hit)
 {
 	bIsClimbing = true;
 	
-	///Gammal implementation
-	/*FVector AttachNormal = Hit.ImpactNormal;
-	FVector AttachPosition = Hit.ImpactPoint + AttachNormal * 10.f; 
-	ClimbCharacter->SetActorLocation(AttachPosition);*/
-
-	//ROTATION
 	UArrowComponent* Arrow = Hit.GetActor()->FindComponentByClass<UArrowComponent>();
 	if (Arrow)
 	{
@@ -113,7 +106,6 @@ void UClimbComponent::StopClimb()
 		SetWalking();
 	}
 }
-
 
 void UClimbComponent::FinishClimbUp()
 {
@@ -156,6 +148,9 @@ void UClimbComponent::FinishClimbUp()
 	SetWalking();
 }
 
+
+
+
 bool UClimbComponent::ClimbingInReach(FHitResult& HitResult) const
 {
 	if (!ClimbCharacter) return false;
@@ -177,6 +172,8 @@ bool UClimbComponent::ClimbingInReach(FHitResult& HitResult) const
 
 	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1.5f, 0, 2.0f);
 
+	//UPrimitiveComponent* Component = HitResult.GetComponent();
+
 	if (bHit && HitResult.GetActor()->ActorHasTag("Climbable"))
 	{
 		TArray<UActorComponent*> Components = HitResult.GetActor()->GetComponentsByTag(UBoxComponent::StaticClass(), "ClimbZone");
@@ -188,59 +185,6 @@ bool UClimbComponent::ClimbingInReach(FHitResult& HitResult) const
 				return true;
 			}
 		}
-	}
-	return false;
-}
-
-
-
-bool UClimbComponent::ClimbingDownInReach(FHitResult& HitResult) const
-{
-	if (!ClimbCharacter)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Climb component is null"));
-		return false;
-	}
-
-	FVector Forward = ClimbCharacter->GetActorForwardVector();
-	FVector Start = ClimbCharacter->GetActorLocation() + Forward * 150.f + FVector(0.f, 0.f, -50.f);
-	
-	FVector Direction = (-Forward + FVector(0.f, 0.f, -1.f)).GetSafeNormal();
-	FVector End = Start + Direction * 200.f;
-
-	FVector HalfSize(20.f, 20.f, 30.f);
-	
-	FQuat Rotation = FQuat::Identity;
-
-	FVector MidPoint = (Start + End) * 0.5f;
-	DrawDebugBox(GetWorld(), MidPoint, HalfSize, Rotation, FColor::Cyan, false, 1.5f);
-	DrawDebugLine(GetWorld(), Start, End, FColor::Blue, false, 1.5f, 0, 1.0f);
-	
-	FCollisionQueryParams TraceParams;
-	TraceParams.AddIgnoredActor(ClimbCharacter);
-
-	bool bHit = GetWorld()->SweepSingleByChannel(
-		HitResult,
-		Start,
-		End,
-		Rotation,
-		ECC_GameTraceChannel3,
-		FCollisionShape::MakeBox(HalfSize),
-		TraceParams
-	);
-	
-	if (bHit && HitResult.GetActor()->ActorHasTag("Climbable"))
-	{
-		TArray<UActorComponent*> Components = HitResult.GetActor()->GetComponentsByTag(UBoxComponent::StaticClass(), "ClimbDownZone");
-		for (UActorComponent* Comp : Components)
-		{
-			UBoxComponent* Box = Cast<UBoxComponent>(Comp);
-			if (Box && Box->IsOverlappingActor(ClimbCharacter))
-			{
-				return true;
-			}
-		}
-		return false;
 	}
 	return false;
 }

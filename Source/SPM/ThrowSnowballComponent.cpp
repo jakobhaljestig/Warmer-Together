@@ -19,6 +19,8 @@ void UThrowSnowballComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 }
 
+
+
 void UThrowSnowballComponent::Throw()
 {
 	if (!SnowballClass || !bCanThrow)
