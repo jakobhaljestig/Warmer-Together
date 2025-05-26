@@ -28,7 +28,7 @@ void UFreezingTouchComponent::BeginPlay()
 void UFreezingTouchComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if (TriggerBox != nullptr)
+	/*if (TriggerBox != nullptr)
 	{
 		TArray<UPrimitiveComponent*> OverlappingActors;
 		TriggerBox->GetOverlappingComponents(OverlappingActors);
@@ -47,7 +47,7 @@ void UFreezingTouchComponent::TickComponent(float DeltaTime, ELevelTick TickType
 			}
 	}
 	
-}
+	}*/
 }
 	
 
