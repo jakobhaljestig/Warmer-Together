@@ -44,6 +44,9 @@ public:
 
 	void ColdBuff(float CoolDownValue);
 
+	UPROPERTY(BlueprintReadWrite)
+	float TemperaturePrecent;
+
 private:
 	
 	void HeatUp(float DeltaTime);

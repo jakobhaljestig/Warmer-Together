@@ -113,7 +113,7 @@ protected:
 	UHugComponent* HugComponent;
 	
 	// KROPPSTEMPERATUR
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Temperature")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Temperature")
 	UBodyTemperature* BodyTempComponent;
 
 	//PUSH

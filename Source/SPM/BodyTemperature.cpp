@@ -145,11 +145,13 @@ void UBodyTemperature::ResetTemp()
 void UBodyTemperature::ModifyTemperature(float DeltaTemperature)
 {
 	Temp += DeltaTemperature;
+	TemperaturePrecent = 1-GetTempPercentage();
 	double MinTemp = 0;
 	Temp = FMath::Clamp(Temp, MinTemp, MaxTemp);
 
-	UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Modified Temp by %.1f. New Temp: %.1f (%.1f%%)"), 
-		DeltaTemperature, Temp, GetTempPercentage() * 100.0f);
+	
+	/*UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Modified Temp by %.1f. New Temp: %.1f (%.1f%%)"), 
+		DeltaTemperature, Temp, GetTempPercentage() * 100.0f);*/
 }
 
 void UBodyTemperature::HandleFreeze()
