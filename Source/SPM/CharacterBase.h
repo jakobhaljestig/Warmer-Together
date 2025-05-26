@@ -182,7 +182,6 @@ protected:
 	
 	void UpdateVisibility(float VisibilityFactor);
 	
-
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -211,6 +210,11 @@ public:
 	
 	UFUNCTION(BlueprintCallable, Category = "Respawn")
 	void RespawnToLastSafeLocation();
+
+	UFUNCTION(BlueprintCallable, Category = "Respawn")
+	void StartDelayedRespawn();
+
+	
 
 	UFUNCTION(BlueprintCallable)
 	virtual void OnDeath();
@@ -245,6 +249,9 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Respawn")
 	float RespawnTimeDuration = 5.f;
+
+	FVector SavedCameraLocation;
+	FRotator SavedCameraRotation;
 
 
 
