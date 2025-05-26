@@ -38,6 +38,7 @@ public:
 
 	void ResetTemp();
 
+	UFUNCTION(BlueprintCallable)
 	void ModifyTemperature(float DeltaTemperature);
 	void HandleFreeze();
 	void HandleDeath();

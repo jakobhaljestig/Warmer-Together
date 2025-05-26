@@ -56,6 +56,7 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Weather VFX")
 	UMaterialParameterCollection* FreezeParam;
+	
 
 	void SpawnWeatherEffects();
 	
@@ -67,7 +68,7 @@ private:
 	
 	void UpdateWeatherEffectLocation() const;
 	
-	void AffectBodyTemperatures() const;
+	//void AffectBodyTemperatures() const;
 
 	float CurrentCoolRate = 1.5f;
 
