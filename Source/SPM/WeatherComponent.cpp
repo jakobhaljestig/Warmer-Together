@@ -228,9 +228,9 @@ void UWeatherComponent::UpdateWeatherEffectLocation() const
 	}
 
 	// Skala snöeffekterna baserat på avståndet
-	float ScaleFactor = FMath::GetMappedRangeValueClamped(FVector2D(0.f, 3000.f), FVector2D(1.0f, 3.0f), MaxDistance);
+	float ScaleFactor = FMath::GetMappedRangeValueClamped(FVector2D(0.f, 3000.f), FVector2D(1.0f, 2.0f), MaxDistance);
 	// Z-skalan fixeras
-	FVector ParticleScale = FVector(ScaleFactor, 1.5f, 2.5f);
+	FVector ParticleScale = FVector(1.f, 1.f, ScaleFactor);
 
 	float AvgZ = 0.f;
 	for (AActor* Actor : PlayerCharacters)
@@ -243,17 +243,19 @@ void UWeatherComponent::UpdateWeatherEffectLocation() const
 	
 		if (SnowLevel1) 
 		{
+			
 			SnowLevel1->SetWorldLocation(EffectLocation);
-			if (MaxDistance > 5000.f)
+			if (MaxDistance > 4800.f)
 			{
 				SnowLevel1->SetWorldScale3D(ParticleScale);
+				UE_LOG(LogTemp, Warning, TEXT("ScaleFactor: %.2f based on MaxDistance: %.1f"), ScaleFactor, MaxDistance);
 			}
 		}
 		if (SnowLevel2) 
 		{
 			SnowLevel2->SetWorldLocation(EffectLocation);
 			//SnowLevel2->SetWorldScale3D(ParticleScale);
-			if (MaxDistance > 5000.f)
+			if (MaxDistance > 4800.f)
 			{
 				SnowLevel2->SetWorldScale3D(ParticleScale);
 			}
