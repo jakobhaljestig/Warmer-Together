@@ -68,10 +68,10 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UMiniGame* MiniGame = nullptr;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool ForBigPlayer = false;
 
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool ForSmallPlayer = false;
 
 	UFUNCTION(BlueprintCallable)
