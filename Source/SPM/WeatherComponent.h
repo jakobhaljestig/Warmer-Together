@@ -28,6 +28,10 @@ public:
 	/*UPROPERTY(BlueprintReadWrite)
 	float TemperaturePrecent;*/
 
+	UFUNCTION(BlueprintCallable, Category = "Weather")
+	void SetWeatherEffectScale(FVector NewScale);
+
+
 private:
 	
 	UPROPERTY(EditAnywhere, Category = "Weather VFX")
@@ -53,10 +57,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category="Niagara")
 	UNiagaraSystem* MistSystem;
-
-	UPROPERTY(EditAnywhere, Category="Weather VFX")
-	UMaterialParameterCollection* FreezeParam;
-	
 
 	void SpawnWeatherEffects();
 	

@@ -23,6 +23,10 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	UUserWidget* FreezeEffect;
+
+	UPROPERTY()
+	UUserWidget* HUD;
+	
 	
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
@@ -30,10 +34,5 @@ protected:
 private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> HUDClass;
-	
-	
-
-	UPROPERTY()
-	UUserWidget* HUD;
 	
 };
