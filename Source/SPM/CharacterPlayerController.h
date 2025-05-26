@@ -17,6 +17,12 @@ class SPM_API ACharacterPlayerController : public APlayerController
 public:
 	UFUNCTION(BlueprintCallable)
 	void HideHUD(bool bShouldHide);
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<UUserWidget> FreezeEffectClass;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UUserWidget* FreezeEffect;
 	
 protected:
 	virtual void OnPossess(APawn* InPawn) override;
@@ -25,12 +31,9 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> HUDClass;
 	
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<UUserWidget> FreezeEffectClass;
+	
 
 	UPROPERTY()
 	UUserWidget* HUD;
-
-	UPROPERTY()
-	UUserWidget* FreezeEffect;
+	
 };
