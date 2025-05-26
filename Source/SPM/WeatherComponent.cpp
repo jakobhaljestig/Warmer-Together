@@ -201,6 +201,7 @@ FVector UWeatherComponent::GetPlayersMidpoint() const
 void UWeatherComponent::UpdateWeatherEffectLocation() const
 {
 	const FVector Midpoint = GetPlayersMidpoint();
+	const float ZOffset = 500.f;
 
 	// Beräkna avståndet mellan spelarna för att bestämma skalan
 	TArray<AActor*> PlayerCharacters;
@@ -219,23 +220,24 @@ void UWeatherComponent::UpdateWeatherEffectLocation() const
 	}
 
 	// Skala snöeffekterna baserat på avståndet
-	float ScaleFactor = FMath::GetMappedRangeValueClamped(FVector2D(0.f, 3000.f), FVector2D(1.0f, 3.0f), MaxDistance);
+	//float ScaleFactor = FMath::GetMappedRangeValueClamped(FVector2D(0.f, 3000.f), FVector2D(1.0f, 3.0f), MaxDistance);
 	// Z-skalan fixeras
-	FVector ParticleScale = FVector(ScaleFactor, 1.5f, 2.5f);
-	
+	//FVector ParticleScale = FVector(ScaleFactor, 1.5f, 2.5f);
+
+	FVector EffectLocation = Midpoint + FVector(0.f, 0.f, ZOffset);
 		if (SnowLevel1) 
 		{
-			SnowLevel1->SetWorldLocation(Midpoint);
+			SnowLevel1->SetWorldLocation(EffectLocation);
 			//SnowLevel1->SetWorldScale3D(ParticleScale);
 		}
 		if (SnowLevel2) 
 		{
-			SnowLevel2->SetWorldLocation(Midpoint);
+			SnowLevel2->SetWorldLocation(EffectLocation);
 			//SnowLevel2->SetWorldScale3D(ParticleScale);
 		}
 		if (SnowLevel3) 
 		{
-			SnowLevel3->SetWorldLocation(Midpoint);
+			SnowLevel3->SetWorldLocation(EffectLocation);
 			//SnowLevel3->SetWorldScale3D(ParticleScale);
 			//UE_LOG(LogTemp, Warning, TEXT("ScaleFactor: %.2f based on MaxDistance: %.1f"), ScaleFactor, MaxDistance);
 		}
