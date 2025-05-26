@@ -58,6 +58,27 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 			//GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
 		}
     }
+
+	if (bIsHugging)
+	{
+		if (Temp < MaxTemp)
+		{
+			Temp += DeltaTime * HugHeatRate;
+			if (Temp >= MaxTemp)
+			{
+				Temp = MaxTemp;
+				bIsHugging = false;
+				UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Hug heating complete."));
+			}
+		}
+		else
+		{
+			bIsHugging = false;
+		}
+	
+		TemperaturePrecent = 1 - GetTempPercentage();
+	}
+
 }
 
 void UBodyTemperature::IsNearHeat(bool bIsNearHeat)
@@ -82,6 +103,7 @@ void UBodyTemperature::CoolDown(float DeltaTime)
 void UBodyTemperature::HeatUp(float DeltaTime)
 {
 	Temp = Temp + DeltaTime * HeatUpRate;
+	TemperaturePrecent = 1-GetTempPercentage();
 	if (Temp > MaxTemp)
 	{
 		Temp = MaxTemp;
@@ -120,11 +142,13 @@ void UBodyTemperature::ShareTemp()
 			float NewTemp = HalfTemp; // höj båda upp till 50%
 			UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Hug boost to 50%% → %.2f"), NewTemp);
 			
-		}*/
+		}
 		
 		float NewTemp = MaxTemp;
 		Temp0->Temp = NewTemp;
-		Temp1->Temp = NewTemp;
+		Temp1->Temp = NewTemp;*/
+		Temp0->bIsHugging = true;
+		Temp1->bIsHugging = true;
 		UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Successfully shared temp!"));
 		
 	}
