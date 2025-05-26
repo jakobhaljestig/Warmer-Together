@@ -16,7 +16,11 @@ class SPM_API UThrowSnowballComponent : public UActorComponent
 public:	
 	UThrowSnowballComponent();
 
+	void Aim();
+	
 	void Throw();
+
+	bool IsAiming() const {return bIsAiming;}
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanThrow = true;
@@ -27,6 +31,9 @@ protected:
 	UPROPERTY(EditDefaultsOnly, Category = "Snowball")
 	TSubclassOf<ASnowball> SnowballClass;
 
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<AActor> GroundMarkerClass;
+
 	UPROPERTY(EditAnywhere, Category = "Snowball")
 	FName HandSocketName = "RightHandSocket";
 
@@ -35,8 +42,23 @@ protected:
 	
 	void ResetThrow();
 
+	
+
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+
+private:
+	bool bIsAiming = false;
+
+	AActor* GroundMarker;
+
+	FVector GetThrowVelocity() const;
+
 	FTimerHandle TimerHandle_ResetThrow;
+
+	float GetSnowballSpeed() const;
+
+	float GetSnowballGravity() const;
 };
+

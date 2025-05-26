@@ -35,6 +35,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float MaxLifeTime = 5.0f;
 
+	
+
 protected:
 	virtual void BeginPlay() override;
 

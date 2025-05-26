@@ -15,21 +15,10 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/NS_Mist.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/NS_Mist.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/NS_Snow_Level1.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/NS_Snow_Level1.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/NS_Snow_Level2.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/NS_Snow_Level2.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Assets/VFX/Snow/NS_Snow_Level3.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/VFX/Snow/NS_Snow_Level3.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_WeatherActor.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_WeatherActor.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_TriggerVictory.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_TriggerVictory.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_VictoryCutscene.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/Cutscene/BP_VictoryCutscene.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Chasm.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Chasm.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/6/CF/ZPR4A2QXTWH9ON1IA2ZWGI.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/ThirdPerson/Maps/ThirdPersonMap/6/CF/ZPR4A2QXTWH9ON1IA2ZWGI.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/SPM.sln.DotSettings.user" beforeDir="false" afterPath="$PROJECT_DIR$/SPM.sln.DotSettings.user" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterPlayerController.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterPlayerController.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/WeatherComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/WeatherComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/WeatherComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/WeatherComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_WaterCollider.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_WaterCollider.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/CharacterBase.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,10 +44,10 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="cidr-memory-view://1" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectHandle.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="mock:///dummy.cpp" root0="SKIP_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://4" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/UMG/Public/Components/Button.h" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/UMG/Public/Components/Image.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Intermediate/Build/Win64/x64/UnrealEditor/Development/SPM/Module.SPM.cpp" root0="SKIP_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
@@ -89,7 +78,7 @@
     "C/C++ Project.SPM.executor": "Debug",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "kajsa",
+    "git-widget-placeholder": "Nora",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -146,8 +135,13 @@
       <option name="WORKING_DIRECTORY" value="" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="ENV_FILE_PATHS" value="" />
+      <option name="REDIRECT_INPUT_PATH" value="" />
+      <option name="PTY_MODE" value="Auto" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/AutomationTool/AutomationTool.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
@@ -164,8 +158,13 @@
       <option name="WORKING_DIRECTORY" value="" />
       <option name="PASS_PARENT_ENVS" value="1" />
       <option name="USE_EXTERNAL_CONSOLE" value="0" />
+      <option name="ENV_FILE_PATHS" value="" />
+      <option name="REDIRECT_INPUT_PATH" value="" />
+      <option name="PTY_MODE" value="Auto" />
       <option name="USE_MONO" value="0" />
       <option name="RUNTIME_ARGUMENTS" value="" />
+      <option name="AUTO_ATTACH_CHILDREN" value="0" />
+      <option name="MIXED_MODE_DEBUG" value="0" />
       <option name="PROJECT_PATH" value="$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Programs/UnrealBuildTool/UnrealBuildTool.csproj" />
       <option name="PROJECT_EXE_PATH_TRACKING" value="1" />
       <option name="PROJECT_ARGUMENTS_TRACKING" value="1" />
@@ -261,7 +260,7 @@
       <workItem from="1747932198178" duration="3894000" />
       <workItem from="1747939678688" duration="475000" />
       <workItem from="1748244019279" duration="704000" />
-      <workItem from="1748281567890" duration="5391000" />
+      <workItem from="1748285005260" duration="2144000" />
     </task>
     <servers />
   </component>
