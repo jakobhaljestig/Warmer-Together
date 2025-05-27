@@ -89,10 +89,23 @@ void ABirdAi::UpdateCircling(float DeltaTime)
 			*NewLocation.ToString(), FMath::RadiansToDegrees(CircleAngle));
 		bFirstTickInCircling = false;
 	}
+}
 
+void ABirdAi::MoveSmoothlyTo(const FVector& Start, const FVector& End, float Alpha)
+{
+	const FVector NewLocation = FMath::Lerp(Start, End, Alpha);
+	SetActorLocation(NewLocation);
+}
 
-
-	//UE_LOG(LogTemp, Warning, TEXT("Circling at angle: %f"), CircleAngle);
+void ABirdAi::RotateSmoothlyTowards(const FVector& Direction, float DeltaSeconds, float RotationSpeed)
+{
+	if (!Direction.IsNearlyZero())
+	{
+		FRotator CurrentRotation = GetActorRotation();
+		const FRotator TargetRotation = Direction.Rotation();
+		const FRotator NewRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaSeconds, RotationSpeed);
+		SetActorRotation(NewRotation);
+	}
 }
 
 /*

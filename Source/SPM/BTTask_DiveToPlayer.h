@@ -17,7 +17,8 @@ class SPM_API UBTTask_DiveToPlayer : public UBTTaskNode
 
 public:
 	UBTTask_DiveToPlayer();
-	uint16 GetInstanceMemorySize() const;
+	
+	virtual uint16 GetInstanceMemorySize() const override;
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
