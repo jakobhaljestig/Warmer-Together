@@ -26,18 +26,31 @@ void UBTTask_DiveToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	AActor* Target = Cast<AActor>(BB->GetValueAsObject("TargetPlayer"));
 	FVector DiveTarget = BB->GetValueAsVector("DiveTargetLocation");
 
-	if (!Bird || !Target)
+	if (!Bird || !Target || !BB )
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
 	
-	FVector Direction = (DiveTarget - Bird->GetActorLocation()).GetSafeNormal();
-	
-	Bird->SetActorLocation(Bird->GetActorLocation() + Direction * Bird->DiveSpeed * DeltaSeconds);
-	Bird->SetActorRotation(FRotationMatrix::MakeFromX(Direction).Rotator());
+	// MJUK RÖRELSE
+	FVector CurrentLocation = Bird->GetActorLocation();
+	FVector NewLocation = FMath::VInterpTo(CurrentLocation, DiveTarget, DeltaSeconds, Bird->DiveSpeed);
+	Bird->SetActorLocation(NewLocation);
 
-	if (FVector::Dist(Bird->GetActorLocation(), DiveTarget) < 100.f)
+	// MJUK ROTATION
+	FVector Direction = (DiveTarget - CurrentLocation).GetSafeNormal();
+	if (!Direction.IsNearlyZero())
+	{
+		FRotator DesiredRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
+		FRotator NewRotation = FMath::RInterpTo(Bird->GetActorRotation(), DesiredRotation, DeltaSeconds, 5.0f);
+		UE_LOG(LogTemp, Warning, TEXT("DeltaSeconds: %f"), DeltaSeconds);
+		Bird->SetActorRotation(NewRotation);
+	}
+
+	float Distance = FVector::Dist(NewLocation, DiveTarget);
+	UE_LOG(LogTemp, Warning, TEXT("Distance to DiveTarget: %f"), Distance);
+
+	if (Distance < DiveCompleteDistance)
 	{
 		UBodyTemperature* Temp = Target->FindComponentByClass<UBodyTemperature>();
 		if (Temp)

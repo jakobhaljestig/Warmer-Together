@@ -19,4 +19,7 @@ protected:
 	virtual void OnGameplayTaskActivated(UGameplayTask& Task) override {}
 
 	bool bReachedTarget = false;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Bird|Behavior")
+	float DiveCompleteDistance = 100.f;
 };

@@ -36,13 +36,19 @@ void UBTTask_Retreating::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 	FVector Offset = FVector(FMath::Cos(Bird->CircleAngle), FMath::Sin(Bird->CircleAngle), 0.f) * Bird->CircleRadius;
 	FVector TargetLocation = Bird->CircleCenter + Offset + FVector(0, 0, Bird->CirclingHeight);
 
-	//flyttar fågeln mot mål
-	FVector Direction = TargetLocation - Bird->GetActorLocation();
+	
+	// Mjuk rörelse mot mål
+	FVector CurrentLocation = Bird->GetActorLocation();
+	FVector NewLocation = FMath::VInterpTo(CurrentLocation, TargetLocation, DeltaSeconds, Bird->DiveSpeed);
+	Bird->SetActorLocation(NewLocation);
+
+	// Mjuk rotation mot mål
+	FVector Direction = (TargetLocation - CurrentLocation).GetSafeNormal();
 	if (!Direction.IsNearlyZero())
 	{
-		Direction.Normalize();
-		Bird->SetActorLocation(Bird->GetActorLocation() + Direction * Bird->DiveSpeed * DeltaSeconds);
-		Bird->SetActorRotation(FRotationMatrix::MakeFromX(Direction).Rotator());
+		FRotator DesiredRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
+		FRotator NewRotation = FMath::RInterpTo(Bird->GetActorRotation(), DesiredRotation, DeltaSeconds, 5.0f);
+		Bird->SetActorRotation(NewRotation);
 	}
 
 	// när den 'ärtillräckligt nära, avsluta retreat och börja cirkla

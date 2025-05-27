@@ -16,7 +16,7 @@ ABirdAi::ABirdAi()
 
 	//MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
 	
-	CircleRadius = 500.f;
+	CircleRadius = 700.f;
 	CircleSpeed = 1.f;
 	CircleAngle = 0.f;
 	//CurrentState = EBirdState::Circling;
@@ -77,6 +77,7 @@ void ABirdAi::UpdateCircling(float DeltaTime)
 	SetActorLocation(NewLocation);
 
 	FVector Direction = (NewLocation - PreviousLocation);
+	
 	if (!Direction.IsNearlyZero())
 	{
 		SetActorRotation(FRotationMatrix::MakeFromX(Direction.GetSafeNormal()).Rotator());
