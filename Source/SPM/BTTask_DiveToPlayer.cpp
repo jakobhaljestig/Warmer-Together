@@ -2,7 +2,6 @@
 #include "BirdAi.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "AIController.h"
-#include "GameFramework/Character.h"
 #include "BodyTemperature.h"
 #include "CharacterBase.h"
 
@@ -39,31 +38,32 @@ void UBTTask_DiveToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 	
 	ABirdAi* Bird = Cast<ABirdAi>(OwnerComp.GetAIOwner()->GetPawn());
 	UBlackboardComponent* BB = OwnerComp.GetBlackboardComponent();
-	AActor* Target = Cast<AActor>(BB->GetValueAsObject("TargetPlayer"));
-	FVector DiveTarget = BB->GetValueAsVector("DiveTargetLocation");
-
-	if (!Bird || !Target || !BB )
+	
+	if (!Bird || !BB )
 	{
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
-	
+
+	AActor* Target = Cast<AActor>(BB->GetValueAsObject("TargetPlayer"));
+	FVector DiveTarget = BB->GetValueAsVector("DiveTargetLocation");
+
+	if (!Target)
+	{
+		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
+	}
+
+	//interpolering med mjuk start/slut
 	Memory->ElapsedTime += DeltaSeconds;
 	float Alpha = FMath::Clamp(Memory->ElapsedTime / Memory->TotalDiveDuration, 0.f, 1.f);
+	
 	float SmoothAlpha = FMath::InterpEaseInOut(0.f, 1.f, Alpha, 2.f); //justera för mer/mindre easing
-
 	FVector NewLocation = FMath::Lerp(Memory->StartLocation, DiveTarget, SmoothAlpha);
 	
-	Bird->SetActorLocation(NewLocation);
-
-	// MJUK ROTATION
-	FVector Direction = (DiveTarget - NewLocation).GetSafeNormal();
-	if (!Direction.IsNearlyZero())
-	{
-		FRotator DesiredRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
-		FRotator NewRotation = FMath::RInterpTo(Bird->GetActorRotation(), DesiredRotation, DeltaSeconds, 3.0f);
-		Bird->SetActorRotation(NewRotation);
-	}
+	Bird->MoveSmoothlyTo(Memory->StartLocation, DiveTarget, SmoothAlpha);
+	const FVector Direction = (DiveTarget - Bird->GetActorLocation()).GetSafeNormal();
+	Bird->RotateSmoothlyTowards(Direction, DeltaSeconds, 3.f);
 
 	float Distance = FVector::Dist(NewLocation, DiveTarget);
 	if (Distance < DiveCompleteDistance || Alpha >= 1.0f)

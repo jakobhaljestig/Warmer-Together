@@ -34,11 +34,13 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
 	
-
 	void UpdateCircling(float DeltaTime);
 
+	void MoveSmoothlyTo(const FVector& Start, const FVector& End, float Alpha);
+
+	void RotateSmoothlyTowards(const FVector& Direction, float DeltaSeconds, float RotationSpeed = 3.f);
+	
 	/*
 	void CheckForPlayers();
 	void StartDive(AActor* Player);
@@ -49,6 +51,7 @@ public:
 	//EBirdState CurrentState;
 
 	FVector CircleCenter;
+	
 	float CircleRadius;
 	float CircleSpeed;
 	float CircleAngle;
@@ -65,6 +68,7 @@ public:
 
 	float AttackCooldown = 10.0f; // sekunder mellan attacker
 	float CooldownTimer = 2.0f;
+	
 	bool bCanAttack = true;
 	
 	bool bFirstTickInCircling = true;

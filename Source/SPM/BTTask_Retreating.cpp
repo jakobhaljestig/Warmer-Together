@@ -47,9 +47,10 @@ EBTNodeResult::Type UBTTask_Retreating::ExecuteTask(UBehaviorTreeComponent& Owne
 
 void UBTTask_Retreating::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
-	FRetreatTaskMemory* Memory = (FRetreatTaskMemory*)NodeMemory;
+	FRetreatTaskMemory* Memory = reinterpret_cast<FRetreatTaskMemory*>(NodeMemory);
 	
 	ABirdAi* Bird = Cast<ABirdAi>(OwnerComp.GetAIOwner()->GetPawn());
+	
 	if (!Bird)
 	{
 		UE_LOG(LogTemp, Error, TEXT("[Retreating] Bird pawn is null!"));
@@ -57,25 +58,17 @@ void UBTTask_Retreating::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		return;
 	}
 	
-	// Tidsbaserad rörelse
+	// tidsbaserad interpolation
 	Memory->ElapsedTime += DeltaSeconds;
 	float Alpha = FMath::Clamp(Memory->ElapsedTime / Memory->TotalRetreatDuration, 0.f, 1.f);
 	float SmoothAlpha = FMath::InterpEaseInOut(0.f, 1.f, Alpha, 2.f); // exponent 2 = normal easing
 
-	FVector NewLocation = FMath::Lerp(Memory->StartLocation, Memory->TargetLocation, SmoothAlpha);
-	Bird->SetActorLocation(NewLocation);
-
-	// Rotation mot mål
-	FVector Direction = (Memory->TargetLocation - NewLocation).GetSafeNormal();
-	if (!Direction.IsNearlyZero())
-	{
-		FRotator DesiredRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
-		FRotator NewRotation = FMath::RInterpTo(Bird->GetActorRotation(), DesiredRotation, DeltaSeconds, 5.0f);
-		Bird->SetActorRotation(NewRotation);
-	}
+	Bird->MoveSmoothlyTo(Memory->StartLocation, Memory->TargetLocation, SmoothAlpha);
+	const FVector Direction = (Memory->TargetLocation - Bird->GetActorLocation()).GetSafeNormal();
+	Bird->RotateSmoothlyTowards(Direction, DeltaSeconds, 5.f);
 
 	// Klar när nära eller alpha = 1.0
-	if (FVector::Dist(NewLocation, Memory->TargetLocation) < 100.f || Alpha >= 1.0f)
+	if (FVector::Dist(Bird->GetActorLocation(), Memory->TargetLocation) < 100.f || Alpha >= 1.0f)
 	{
 		Bird->SetActorLocation(Memory->TargetLocation); // exakta målpositionen
 		Bird->bFirstTickInCircling = true;
