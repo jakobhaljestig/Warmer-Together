@@ -2,13 +2,11 @@
 
 
 #include "BTService_AnalyzeWeather.h"
-#include "BehaviorTree/BlackboardComponent.h"
-#include "AIController.h"
-#include "PerformanceTracker.h"
+
 #include "AdaptiveWeatherSystem.h"
-#include "CharacterBase.h"
+
 #include "GameFramework/Actor.h"
-#include "Kismet/GameplayStatics.h"
+
 /*
 UBTService_AnalyzeWeather::UBTService_AnalyzeWeather()
 {
