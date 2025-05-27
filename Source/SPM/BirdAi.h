@@ -68,7 +68,16 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	class UFloatingPawnMovement* MovementComponent;
 
+	bool bFirstTickInCircling = true;
+
+	FVector OriginalCircleCenter;
+
+	float OriginalCircleRadius;
+
 
 private:
+
+	
+
 
 };

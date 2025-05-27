@@ -1,14 +1,10 @@
 #include "AdaptiveWeatherSystem.h"
 
-#include "CharacterBase.h"
-#include "EngineUtils.h"
-#include "PerformanceTracker.h"
+
 #include "Engine/World.h"
 #include "TimerManager.h"
-#include "Components/ExponentialHeightFogComponent.h"
-#include "Engine/ExponentialHeightFog.h"
 #include "Engine/World.h"
-#include "Kismet/GameplayStatics.h"
+
 /*
 // Konstruktor
 UAdaptiveWeatherSystem::UAdaptiveWeatherSystem(): FogActor(nullptr), SnowLevel3(nullptr), SnowLevel2(nullptr),

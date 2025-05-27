@@ -29,6 +29,11 @@ void ABirdAi::BeginPlay()
 	Super::BeginPlay();
 
 	CircleCenter = GetActorLocation(); //startlocation
+
+	OriginalCircleCenter = CircleCenter;
+
+	CircleRadius = 500.f; // eller det du vill ha som standard
+	OriginalCircleRadius = CircleRadius;
 }
 
 // Called every frame
@@ -76,6 +81,15 @@ void ABirdAi::UpdateCircling(float DeltaTime)
 	{
 		SetActorRotation(FRotationMatrix::MakeFromX(Direction.GetSafeNormal()).Rotator());
 	}
+
+	if (bFirstTickInCircling)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[Circling] First circling position: %s (angle: %f deg)"),
+			*NewLocation.ToString(), FMath::RadiansToDegrees(CircleAngle));
+		bFirstTickInCircling = false;
+	}
+
+
 
 	//UE_LOG(LogTemp, Warning, TEXT("Circling at angle: %f"), CircleAngle);
 }

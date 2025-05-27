@@ -31,8 +31,9 @@ void UBTTask_DiveToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
 		return;
 	}
-
+	
 	FVector Direction = (DiveTarget - Bird->GetActorLocation()).GetSafeNormal();
+	
 	Bird->SetActorLocation(Bird->GetActorLocation() + Direction * Bird->DiveSpeed * DeltaSeconds);
 	Bird->SetActorRotation(FRotationMatrix::MakeFromX(Direction).Rotator());
 

@@ -7,7 +7,7 @@
 #include "BirdAi.h"
 #include "BehaviorTree/BlackboardComponent.h"
 
-UBTTask_Retreating::UBTTask_Retreating()
+UBTTask_Retreating::UBTTask_Retreating(): bReachedTarget(false)
 {
 	bNotifyTick = true;
 	NodeName = "Retreating";
@@ -18,19 +18,26 @@ EBTNodeResult::Type UBTTask_Retreating::ExecuteTask(UBehaviorTreeComponent& Owne
 	bReachedTarget = false;
 	return EBTNodeResult::InProgress;
 }
-
 void UBTTask_Retreating::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
 	ABirdAi* Bird = Cast<ABirdAi>(OwnerComp.GetAIOwner()->GetPawn());
-
 	if (!Bird)
 	{
+		UE_LOG(LogTemp, Error, TEXT("[Retreating] Bird pawn is null!"));
 		FinishLatentTask(OwnerComp, EBTNodeResult::Failed);
+		return;
 	}
 
-	FVector TargetLocation = Bird->CircleCenter + FVector(0,0,500);
-	FVector Direction = TargetLocation - Bird->GetActorLocation();
+	// Återställ cirkelbana till original
+	Bird->CircleCenter = Bird->OriginalCircleCenter;
+	Bird->CircleRadius = Bird->OriginalCircleRadius;
 
+	// räknar ut exakt målpunkt på cirkeln där fågeln ska återuppta sin cirkling
+	FVector Offset = FVector(FMath::Cos(Bird->CircleAngle), FMath::Sin(Bird->CircleAngle), 0.f) * Bird->CircleRadius;
+	FVector TargetLocation = Bird->CircleCenter + Offset + FVector(0, 0, Bird->CirclingHeight);
+
+	//flyttar fågeln mot mål
+	FVector Direction = TargetLocation - Bird->GetActorLocation();
 	if (!Direction.IsNearlyZero())
 	{
 		Direction.Normalize();
@@ -38,25 +45,21 @@ void UBTTask_Retreating::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* Node
 		Bird->SetActorRotation(FRotationMatrix::MakeFromX(Direction).Rotator());
 	}
 
+	// när den 'ärtillräckligt nära, avsluta retreat och börja cirkla
 	if (FVector::Dist(Bird->GetActorLocation(), TargetLocation) < 100.f)
 	{
-		FVector FinalPosition = Bird->GetActorLocation();
+		Bird->SetActorLocation(TargetLocation); // för säkerhet: sätt exakt
 
-		Bird->CircleCenter = FVector(FinalPosition.X, FinalPosition.Y, 0.f);
-		Bird->CirclingHeight = FinalPosition.Z;
+		UE_LOG(LogTemp, Warning, TEXT("[Retreating] Reached final circling point: %s"), *TargetLocation.ToString());
 
-		FVector ToBird = FVector(FinalPosition.X, FinalPosition.Y, 0.f) - Bird->CircleCenter;
+		// markera att nästa cirkling är första tick
+		Bird->bFirstTickInCircling = true;
 
-		if (!ToBird.IsNearlyZero())
-		{
-			ToBird.Normalize();
-			Bird->CircleAngle = FMath::Atan2(ToBird.Y, ToBird.X);
-		}
-
+		// sätt status till Circling
 		UBlackboardComponent* BBComp = OwnerComp.GetBlackboardComponent();
-		BBComp -> SetValueAsName("BirdStates", "Circling");
+		BBComp->SetValueAsName("BirdStates", "Circling");
 
-		UE_LOG(LogTemp, Display, TEXT("Reatreating done"));
+		UE_LOG(LogTemp, Display, TEXT("[Retreating] Retreat complete – switching to Circling"));
 
 		FinishLatentTask(OwnerComp, EBTNodeResult::Succeeded);
 	}
