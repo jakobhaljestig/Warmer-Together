@@ -83,6 +83,7 @@ void ACharacterSmall::OnDeath()
 {
 	ACharacter::UnCrouch(true);
 	bIsCrawling = false;
+	Tags.Remove("Grabbed");
 	Super::OnDeath();
 	
 }
