@@ -137,6 +137,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Snowball")
 	UThrowSnowballComponent* ThrowSnowballComponent;
 
+	void Aim(const FInputActionValue& Value);
+
 	void Throw(const FInputActionValue& Value);
 	
 	
