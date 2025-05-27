@@ -15,69 +15,14 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterBig.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmallNew.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_CharacterSmallNew.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_FallingTree6.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_FallingTree6.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube_Wide.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube_Wide.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_PopupCrawl.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_PopupCrawl.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_PopupLadderCollider.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_PopupLadderCollider.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_RadioTower.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_RadioTower.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/NewGameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/NewGameMode.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/UI/Buttons/Controller/A_Btn.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/UI/Buttons/Controller/A_Btn.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/UI/Buttons/Controller/B_Btn.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/UI/Buttons/Controller/B_Btn.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/UI/Buttons/Controller/X_Btn.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/UI/Buttons/Controller/X_Btn.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/UI/Buttons/Controller/Y_Btn.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/UI/Buttons/Controller/Y_Btn.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WBP_PopupWidget.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/UI/WBP_PopupWidget.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WB_HUD.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/UI/WB_HUD.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WB_MiniGame.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/UI/WB_MiniGame.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Sequencer/Cutscene_EndingWithCredits.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Sequencer/Cutscene_EndingWithCredits.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/BI_Interactable.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/BI_PopupInfo.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/BP_MainMenu.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Assets/BP_MainMenu.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/BigPopup.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Controller/A_Btn.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Controller/B_Btn.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Controller/ButtonA_70x70.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Controller/ButtonB_70x70.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Controller/ButtonX_70x70.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Controller/ButtonY_70x70.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Controller/L2.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Controller/X_Btn.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Controller/Y_Btn.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Dialog_ruta.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Keyboard/E.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Keyboard/M1_ReleaseDeets.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Keyboard/M1_click.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Keyboard/M1_icon.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Keyboard/M2_click.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/Keyboard/M2_icon.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/M_LoadGameBtnC.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/M_LoadGameBtnH.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/M_NewGameBtnC.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/M_NewGameBtnH.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/M_QuitBtnC.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/M_QuitBtnH.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/M_SettingsBtnC.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Buttons/M_SettingsBtnH.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/CreditsDataTable.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Fade.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Fonts/AveriaSerif-Bold.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/Fonts/AveriaSerif-Bold_Font.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/M_Heart_Empty.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/M_Heart_Full.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/M_Thermometer_Empty.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/M_Thermometer_Full.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/M_Title1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/M_Title4.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/MainMenu.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Assets/MainMenu.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/WBP_Credits.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/WBP_MainMenu.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/WBP_MainMenuNew.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/WBP_PlayerPopupWidget1.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/WBP_PopupWidget.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/WBP_Settings.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/WBP_StartScreen.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/UI_Assets/WBP_StartScreen.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/pics/Tutorial_Climb.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/pics/Tutorial_Crawl.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/pics/Tutorial_Push.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/UI_Assets/pics/Tutorial_Throw.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -103,7 +48,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="cidr-memory-view://3" root0="FORCE_HIGHLIGHTING" />
+    <setting file="cidr-memory-view://4" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/CoreUObject/Public/UObject/ObjectHandle.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/UMG/Public/Components/Button.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/UMG/Public/Components/Image.h" root0="FORCE_HIGHLIGHTING" />
@@ -132,21 +77,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "C/C++ Project.SPM.executor": "Debug",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Mathilda",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "SolutionBuilderGeneralOptionsPage",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;C/C++ Project.SPM.executor&quot;: &quot;Debug&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Mathilda&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;SolutionBuilderGeneralOptionsPage&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="C/C++ Project.SPM">
     <configuration name="SPM" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
