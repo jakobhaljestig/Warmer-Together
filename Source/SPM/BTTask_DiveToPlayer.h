@@ -3,6 +3,12 @@
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTTask_DiveToPlayer.generated.h"
+struct FDiveTaskMemory
+{
+	FVector StartLocation;
+	float ElapsedTime = 0.f;
+	float TotalDiveDuration = 2.f; 
+};
 
 UCLASS(BlueprintType)
 class SPM_API UBTTask_DiveToPlayer : public UBTTaskNode
@@ -11,6 +17,7 @@ class SPM_API UBTTask_DiveToPlayer : public UBTTaskNode
 
 public:
 	UBTTask_DiveToPlayer();
+	uint16 GetInstanceMemorySize() const;
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;

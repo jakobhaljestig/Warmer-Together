@@ -63,7 +63,7 @@ public:
 
 	FVector DiveTargetLocation;
 
-	float AttackCooldown = 5.0f; // sekunder mellan attacker
+	float AttackCooldown = 10.0f; // sekunder mellan attacker
 	float CooldownTimer = 2.0f;
 	bool bCanAttack = true;
 	
@@ -72,11 +72,5 @@ public:
 	FVector OriginalCircleCenter;
 
 	float OriginalCircleRadius;
-
-
-private:
-
-	
-
 
 };

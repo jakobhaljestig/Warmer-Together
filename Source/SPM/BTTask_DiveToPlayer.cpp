@@ -12,15 +12,31 @@ UBTTask_DiveToPlayer::UBTTask_DiveToPlayer()
 	NodeName = "Dive to Player";
 }
 
+uint16 UBTTask_DiveToPlayer::GetInstanceMemorySize() const
+{
+	return sizeof(FDiveTaskMemory);
+}
+
+
 EBTNodeResult::Type UBTTask_DiveToPlayer::ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory)
 {
-	bReachedTarget = false;
+	FDiveTaskMemory* Memory = reinterpret_cast<FDiveTaskMemory*>(NodeMemory);
 	
+	if (const ABirdAi* Bird = Cast<ABirdAi>(OwnerComp.GetAIOwner()->GetPawn()))
+	{
+		Memory->StartLocation = Bird->GetActorLocation();
+	}
+	
+	Memory->ElapsedTime = 0.f;
+	Memory->TotalDiveDuration = 3.f;
+
 	return EBTNodeResult::InProgress;
 }
 
 void UBTTask_DiveToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds)
 {
+	FDiveTaskMemory* Memory = reinterpret_cast<FDiveTaskMemory*>(NodeMemory);
+	
 	ABirdAi* Bird = Cast<ABirdAi>(OwnerComp.GetAIOwner()->GetPawn());
 	UBlackboardComponent* BB = OwnerComp.GetBlackboardComponent();
 	AActor* Target = Cast<AActor>(BB->GetValueAsObject("TargetPlayer"));
@@ -32,25 +48,25 @@ void UBTTask_DiveToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 		return;
 	}
 	
-	// MJUK RÖRELSE
-	FVector CurrentLocation = Bird->GetActorLocation();
-	FVector NewLocation = FMath::VInterpTo(CurrentLocation, DiveTarget, DeltaSeconds, Bird->DiveSpeed);
+	Memory->ElapsedTime += DeltaSeconds;
+	float Alpha = FMath::Clamp(Memory->ElapsedTime / Memory->TotalDiveDuration, 0.f, 1.f);
+	float SmoothAlpha = FMath::InterpEaseInOut(0.f, 1.f, Alpha, 2.f); //justera för mer/mindre easing
+
+	FVector NewLocation = FMath::Lerp(Memory->StartLocation, DiveTarget, SmoothAlpha);
+	
 	Bird->SetActorLocation(NewLocation);
 
 	// MJUK ROTATION
-	FVector Direction = (DiveTarget - CurrentLocation).GetSafeNormal();
+	FVector Direction = (DiveTarget - NewLocation).GetSafeNormal();
 	if (!Direction.IsNearlyZero())
 	{
 		FRotator DesiredRotation = FRotationMatrix::MakeFromX(Direction).Rotator();
-		FRotator NewRotation = FMath::RInterpTo(Bird->GetActorRotation(), DesiredRotation, DeltaSeconds, 5.0f);
-		UE_LOG(LogTemp, Warning, TEXT("DeltaSeconds: %f"), DeltaSeconds);
+		FRotator NewRotation = FMath::RInterpTo(Bird->GetActorRotation(), DesiredRotation, DeltaSeconds, 3.0f);
 		Bird->SetActorRotation(NewRotation);
 	}
 
 	float Distance = FVector::Dist(NewLocation, DiveTarget);
-	UE_LOG(LogTemp, Warning, TEXT("Distance to DiveTarget: %f"), Distance);
-
-	if (Distance < DiveCompleteDistance)
+	if (Distance < DiveCompleteDistance || Alpha >= 1.0f)
 	{
 		UBodyTemperature* Temp = Target->FindComponentByClass<UBodyTemperature>();
 		if (Temp)
@@ -64,6 +80,7 @@ void UBTTask_DiveToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 				}
 			}
 		}
+
 
 		Bird->bCanAttack = false;
 		Bird->CooldownTimer = Bird->AttackCooldown;
