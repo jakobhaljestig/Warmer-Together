@@ -38,11 +38,17 @@ public:
 
 	void ResetTemp();
 
+	UFUNCTION(BlueprintCallable)
 	void ModifyTemperature(float DeltaTemperature);
 	void HandleFreeze();
 	void HandleDeath();
 
 	void ColdBuff(float CoolDownValue);
+
+	UPROPERTY(BlueprintReadWrite)
+	float TemperaturePrecent;
+
+	
 
 private:
 	
@@ -72,6 +78,10 @@ private:
 
 	bool bFrozen = false;
 	bool bDisplayFreezeEffect = false;
+
+	bool bIsHugging;
+
+	float HugHeatRate = 100.f;
 
 	FTimerHandle DeathTimerHandle;
 	bool bHasDied = false;

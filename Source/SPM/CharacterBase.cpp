@@ -318,7 +318,14 @@ void ACharacterBase::Throw (const FInputActionValue& Value)
 {
 	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
-		ThrowSnowballComponent->Throw();
+		if (!ThrowSnowballComponent->IsAiming())
+		{
+			ThrowSnowballComponent->Aim();
+		}else
+		{
+			ThrowSnowballComponent->Throw();
+		}
+		
 	}
 	
 }
@@ -375,7 +382,7 @@ void ACharacterBase::OnDeath()
 	bHasDied = true;
 	PushComponent->StopPushing();
 	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
-
+	
 	if (bHasCheckPointLocation)
 	{
 		GetWorldTimerManager().SetTimer(RespawnTimeHandle, this, &ACharacterBase::RespawnAtCheckpoint, RespawnTimeDuration, false);
@@ -413,11 +420,36 @@ void ACharacterBase::RespawnAtCheckpoint()
 	SetActorLocation(NewLocation);
 }
 
+void ACharacterBase::StartDelayedRespawn()
+{
+	GetMesh()->SetVisibility(false, true);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	DisableInput(nullptr);
+
+	GetCharacterMovement()->GravityScale = 0.f;
+	
+	// Vänta 0.7 sekunder innan respawn
+	GetWorldTimerManager().SetTimer(RespawnTimeHandle, this, &ACharacterBase::RespawnToLastSafeLocation, 0.7f, false);
+}
+
+
+
+
+
 void ACharacterBase::RespawnToLastSafeLocation()
 {
-	bHasDied = false;
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
+
+	GetMesh()->SetVisibility(true, true);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	EnableInput(nullptr);
+
+	GetCharacterMovement()->GravityScale = 1.75f;
+	
+	bHasDied = false;
 }
+
+
 
 
 void ACharacterBase::ResetPlayerState()

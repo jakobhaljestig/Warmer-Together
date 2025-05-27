@@ -25,8 +25,12 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-	UPROPERTY(BlueprintReadWrite)
-	float TemperaturePrecent;
+	/*UPROPERTY(BlueprintReadWrite)
+	float TemperaturePrecent;*/
+
+	UFUNCTION(BlueprintCallable, Category = "Weather")
+	void SetWeatherEffectScale(FVector NewScale);
+
 
 private:
 	
@@ -54,9 +58,6 @@ private:
 	UPROPERTY(EditAnywhere, Category="Niagara")
 	UNiagaraSystem* MistSystem;
 
-	UPROPERTY(EditAnywhere, Category="Weather VFX")
-	UMaterialParameterCollection* FreezeParam;
-
 	void SpawnWeatherEffects();
 	
 	void OnWeatherUpdateTick() ;
@@ -67,7 +68,7 @@ private:
 	
 	void UpdateWeatherEffectLocation() const;
 	
-	void AffectBodyTemperatures() const;
+	//void AffectBodyTemperatures() const;
 
 	float CurrentCoolRate = 1.5f;
 
