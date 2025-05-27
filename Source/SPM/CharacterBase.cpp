@@ -185,7 +185,7 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (bHasDied) return;
-	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug && !bIsDancing)
+	if (Controller != nullptr && !bSuccesfulHug && !bIsDancing)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
@@ -318,7 +318,14 @@ void ACharacterBase::Throw (const FInputActionValue& Value)
 {
 	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
-		ThrowSnowballComponent->Throw();
+		if (!ThrowSnowballComponent->IsAiming())
+		{
+			ThrowSnowballComponent->Aim();
+		}else
+		{
+			ThrowSnowballComponent->Throw();
+		}
+		
 	}
 	
 }
@@ -413,11 +420,36 @@ void ACharacterBase::RespawnAtCheckpoint()
 	SetActorLocation(NewLocation);
 }
 
+void ACharacterBase::StartDelayedRespawn()
+{
+	GetMesh()->SetVisibility(false, true);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	DisableInput(nullptr);
+
+	GetCharacterMovement()->GravityScale = 0.f;
+	
+	// Vänta 0.7 sekunder innan respawn
+	GetWorldTimerManager().SetTimer(RespawnTimeHandle, this, &ACharacterBase::RespawnToLastSafeLocation, 0.7f, false);
+}
+
+
+
+
+
 void ACharacterBase::RespawnToLastSafeLocation()
 {
-	bHasDied = false;
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
+
+	GetMesh()->SetVisibility(true, true);
+	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	EnableInput(nullptr);
+
+	GetCharacterMovement()->GravityScale = 1.75f;
+	
+	bHasDied = false;
 }
+
+
 
 
 void ACharacterBase::ResetPlayerState()

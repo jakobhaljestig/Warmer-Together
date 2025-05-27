@@ -45,6 +45,11 @@ public:
 
 	void ColdBuff(float CoolDownValue);
 
+	UPROPERTY(BlueprintReadWrite)
+	float TemperaturePrecent;
+
+	
+
 private:
 	
 	void HeatUp(float DeltaTime);
@@ -73,6 +78,10 @@ private:
 
 	bool bFrozen = false;
 	bool bDisplayFreezeEffect = false;
+
+	bool bIsHugging;
+
+	float HugHeatRate = 100.f;
 
 	FTimerHandle DeathTimerHandle;
 	bool bHasDied = false;
