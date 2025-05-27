@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "CharacterPlayerController.h"
 #include "MiniGame.h"
 #include "Components/ActorComponent.h"
 #include "Components/BoxComponent.h"
@@ -54,7 +55,7 @@ public:
 	AActor* MiniGameActor = nullptr;
 	
 	UPROPERTY(EditAnywhere)
-	APlayerController* Controller = nullptr;
+	ACharacterPlayerController* Controller = nullptr;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCompleted = false;
