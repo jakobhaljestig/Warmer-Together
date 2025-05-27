@@ -9,6 +9,14 @@
 /**
  * 
  */
+struct FRetreatTaskMemory
+{
+	FVector StartLocation;
+	FVector TargetLocation;
+	float ElapsedTime = 0.f;
+	float TotalRetreatDuration = 3.f; 
+};
+
 UCLASS()
 class SPM_API UBTTask_Retreating : public UBTTaskNode
 {
@@ -16,6 +24,7 @@ class SPM_API UBTTask_Retreating : public UBTTaskNode
 
 public:
 	UBTTask_Retreating();
+	uint16 GetInstanceMemorySize() const;
 
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
 

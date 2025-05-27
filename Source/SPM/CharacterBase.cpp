@@ -12,11 +12,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "PerformanceTracker.h"
 #include "PushComponent.h"
 #include "HugComponent.h"
 #include "SprintComponent.h"
-#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 

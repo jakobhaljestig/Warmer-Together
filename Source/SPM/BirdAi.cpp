@@ -16,7 +16,7 @@ ABirdAi::ABirdAi()
 
 	//MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
 	
-	CircleRadius = 500.f;
+	CircleRadius = 700.f;
 	CircleSpeed = 1.f;
 	CircleAngle = 0.f;
 	//CurrentState = EBirdState::Circling;
@@ -29,6 +29,11 @@ void ABirdAi::BeginPlay()
 	Super::BeginPlay();
 
 	CircleCenter = GetActorLocation(); //startlocation
+
+	OriginalCircleCenter = CircleCenter;
+
+	CircleRadius = 500.f; // eller det du vill ha som standard
+	OriginalCircleRadius = CircleRadius;
 }
 
 // Called every frame
@@ -72,10 +77,20 @@ void ABirdAi::UpdateCircling(float DeltaTime)
 	SetActorLocation(NewLocation);
 
 	FVector Direction = (NewLocation - PreviousLocation);
+	
 	if (!Direction.IsNearlyZero())
 	{
 		SetActorRotation(FRotationMatrix::MakeFromX(Direction.GetSafeNormal()).Rotator());
 	}
+
+	if (bFirstTickInCircling)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[Circling] First circling position: %s (angle: %f deg)"),
+			*NewLocation.ToString(), FMath::RadiansToDegrees(CircleAngle));
+		bFirstTickInCircling = false;
+	}
+
+
 
 	//UE_LOG(LogTemp, Warning, TEXT("Circling at angle: %f"), CircleAngle);
 }
