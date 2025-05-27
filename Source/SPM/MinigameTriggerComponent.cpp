@@ -83,9 +83,10 @@ void UMinigameTriggerComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComp
 
 void UMinigameTriggerComponent::ZoomIn(AActor* Actor)
 {
-	Controller = Cast<APlayerController>(ControllerOwner->GetController());
+	Controller = Cast<ACharacterPlayerController>(ControllerOwner->GetController());
 	if (ControllerOwner && Controller)
 	{
+		Controller->HideHUD(true);
 		TriggerBox->RemoveFromRoot();
 		bActive = true;
 		ControllerOwner->GetMovementComponent()->Velocity = FVector(0, 0, 0);

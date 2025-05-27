@@ -12,11 +12,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "PerformanceTracker.h"
 #include "PushComponent.h"
 #include "HugComponent.h"
 #include "SprintComponent.h"
-#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -186,7 +184,7 @@ void ACharacterBase::Move(const FInputActionValue& Value)
 	FVector2D MovementVector = Value.Get<FVector2D>();
 
 	if (bHasDied) return;
-	if (Controller != nullptr && !bIsHugging && !bSuccesfulHug && !bIsDancing)
+	if (Controller != nullptr && !bSuccesfulHug && !bIsDancing)
 	{
 		const FRotator Rotation = Controller->GetControlRotation();
 		const FRotator YawRotation(0, Rotation.Yaw, 0);
