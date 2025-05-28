@@ -422,6 +422,7 @@ void ACharacterBase::RespawnAtCheckpoint()
 	GetMesh()->SetVisibility(true, true);
 	EnableInput(nullptr);
 	GetCharacterMovement()->GravityScale = 1.75f;
+	ResetPlayerState();
 	
 	SetActorLocation(NewLocation);
 }
@@ -431,7 +432,6 @@ void ACharacterBase::StartDelayedRespawn()
 	if (bHasDied) return;
 	
 	GetMesh()->SetVisibility(false, true);
-	DisableInput(nullptr);
 	GetCharacterMovement()->GravityScale = 0.f;
 	
 	GetWorldTimerManager().SetTimer(RespawnTimeHandle, this, &ACharacterBase::RespawnToLastSafeLocation, 0.7f, false);
@@ -443,8 +443,8 @@ void ACharacterBase::RespawnToLastSafeLocation()
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 
 	GetMesh()->SetVisibility(true, true);
-	EnableInput(nullptr);
 	GetCharacterMovement()->GravityScale = 1.75f;
+	ResetPlayerState();
 	
 	bHasDied = false;
 }
