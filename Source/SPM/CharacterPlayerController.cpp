@@ -35,4 +35,15 @@ void ACharacterPlayerController::OnPossess(APawn* InPawn)
 	}
 }
 
+void ACharacterPlayerController::OnUnPossess()
+{
+	Super::OnUnPossess();
+
+	HUD->RemoveFromParent();
+	FreezeEffect->RemoveFromParent();
+
+	HUD = nullptr;
+	FreezeEffect = nullptr;
+}
+
 

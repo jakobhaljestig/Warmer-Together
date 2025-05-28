@@ -3,6 +3,7 @@
 #include "CharacterBase.h"
 
 #include "BodyTemperature.h"
+#include "ClimbComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -66,6 +67,7 @@ void ACharacterBase::BeginPlay()
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
 	CheckpointLocation = GetActorLocation();
+	UpdatePlayerLocation();
 
 	PushComponent = FindComponentByClass<UPushComponent>();
 	if (!PushComponent)
