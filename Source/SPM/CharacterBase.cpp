@@ -312,8 +312,8 @@ void ACharacterBase::Hug()
     	}
 }
 
-// --- Kasta Snöboll ---*/
 
+// --- Kasta Snöboll ---*/
 void ACharacterBase::Aim(const FInputActionValue& Value)
 {
 	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)

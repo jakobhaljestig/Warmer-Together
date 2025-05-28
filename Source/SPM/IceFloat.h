@@ -31,6 +31,15 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "IceFloat")
 	void BreakObject();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "IceFloat")
+	void RespawnEvent();
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IceFloat")
+	float BreakTime = 1.0f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "IceFloat")
+	float RespawnTime = 2.5f;
+
 private:
 
 	FTimerHandle BreakTimerHandle;
@@ -39,13 +48,5 @@ private:
 	void HandleBreak();
 	
 	void RespawnObject();
-
-	UPROPERTY(EditAnywhere)
-	float RespawnTime = 2.5f;
-
-	//Använd för att sätta som delay för timeline så isflaket inte åker upp innan despawn. 
-	UPROPERTY(EditAnywhere)
-	float BreakTime = 1.0f;
 	
-
 };

@@ -58,5 +58,6 @@ void AIceFloat::RespawnObject()
 	UE_LOG(LogTemp, Warning, TEXT("Respawning Object"));
 	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
+	RespawnEvent();
 }
 
