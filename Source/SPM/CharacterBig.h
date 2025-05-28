@@ -46,6 +46,8 @@ protected:
 
 	void ToggleGrab(const FInputActionValue& Value);
 
+	void BeginHug(const FInputActionValue& Value) override;
+	
 	void Climb(const FInputActionValue& Value);
 
 	bool IsH = false;

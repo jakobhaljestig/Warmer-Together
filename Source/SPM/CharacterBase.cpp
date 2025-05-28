@@ -3,6 +3,7 @@
 #include "CharacterBase.h"
 
 #include "BodyTemperature.h"
+#include "ClimbComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
