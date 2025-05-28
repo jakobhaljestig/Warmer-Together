@@ -234,9 +234,6 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ResetPlayerState();
-
-	UFUNCTION(BlueprintCallable)
-	bool IsOnSnow();
 	
 private:
 	
