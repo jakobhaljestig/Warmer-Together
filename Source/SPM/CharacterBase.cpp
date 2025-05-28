@@ -480,8 +480,6 @@ void ACharacterBase::UpdatePlayerLocation()
 	}
 }
 
-
-
 void ACharacterBase::Landed(const FHitResult& Hit)
 {
 	Super::Landed(Hit);

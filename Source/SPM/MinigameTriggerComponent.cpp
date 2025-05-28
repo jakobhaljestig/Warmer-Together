@@ -116,6 +116,10 @@ void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickTy
 	// ...
 
 	if (ControllerOwner && !bActive && Cast<ACharacterBase>(ControllerOwner)->bIsHugging){
+		if (Cast<ACharacterBig>(ControllerOwner) && Cast<ACharacterBig>(ControllerOwner)->bIsClimbing)
+		{
+			return;
+		}
 		ZoomIn(ControllerOwner);
 	}
 }
