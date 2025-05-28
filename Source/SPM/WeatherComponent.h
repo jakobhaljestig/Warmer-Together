@@ -7,6 +7,21 @@
 #include "NiagaraComponent.h"
 #include "WeatherComponent.generated.h"
 
+enum class EWeatherLevel : uint8
+{
+	None,
+	Light,
+	Medium,
+	Heavy
+};
+
+struct FPlayerSpatialInfo
+{
+	FVector Midpoint;
+	float AvgZ;
+	float MaxDistance;
+};
+
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPM_API UWeatherComponent : public UActorComponent
@@ -33,15 +48,14 @@ public:
 
 
 private:
-	
 	UPROPERTY(EditAnywhere, Category = "Weather VFX")
-	class UNiagaraComponent* SnowLevel3;
+	class UNiagaraComponent* SnowLevel1;
 
 	UPROPERTY(EditAnywhere, Category = "Weather VFX")
 	class UNiagaraComponent* SnowLevel2;
-
+	
 	UPROPERTY(EditAnywhere, Category = "Weather VFX")
-	class UNiagaraComponent* SnowLevel1;
+	class UNiagaraComponent* SnowLevel3;
 	
 	UPROPERTY(EditAnywhere, Category = "Weather VFX")
 	class UNiagaraComponent* MistParticleSystem;
@@ -59,10 +73,11 @@ private:
 	UNiagaraSystem* MistSystem;
 
 	void SpawnWeatherEffects();
+	UNiagaraComponent* SpawnEffectIfNeeded(UNiagaraSystem* System, UNiagaraComponent* ExistingComp, FVector Offset) const;
+
+	void OnWeatherUpdateTick(const TArray<AActor*>& PlayerCharacters) const;
 	
-	void OnWeatherUpdateTick() ;
-	
-	void UpdateWeatherFromTemperature(float TemperaturePercentage) ;
+	void UpdateWeatherFromTemperature(float TemperaturePercentage) const;
 	
 	FVector GetPlayersMidpoint() const;
 	
@@ -74,5 +89,6 @@ private:
 
 	bool bHasSpawnedWeather = false;
 
-
+	static FPlayerSpatialInfo AnalyzePlayerPositions(const TArray<AActor*>& Players);
+	
 };

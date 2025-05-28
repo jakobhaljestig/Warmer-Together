@@ -25,8 +25,7 @@ public:
 	ABirdAi();
 
 	UPROPERTY(EditAnywhere)
-	float CirclingHeight = 500.f;
-
+	float CirclingHeight;
 
 protected:
 	// Called when the game starts or when spawned
@@ -35,18 +34,24 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
-
-	void OnPlayerScaredBird();
-
+	
 	void UpdateCircling(float DeltaTime);
+
+	void MoveSmoothlyTo(const FVector& Start, const FVector& End, float Alpha);
+
+	void RotateSmoothlyTowards(const FVector& Direction, float DeltaSeconds, float RotationSpeed = 3.f);
+	
+	/*
 	void CheckForPlayers();
 	void StartDive(AActor* Player);
 	void UpdateDiving(float DeltaTime);
 	void UpdateRetreating(float DeltaTime);
+	void OnPlayerScaredBird();*/
 
 	//EBirdState CurrentState;
 
 	FVector CircleCenter;
+	
 	float CircleRadius;
 	float CircleSpeed;
 	float CircleAngle;
@@ -54,21 +59,22 @@ public:
 	AActor* TargetPlayer;
 
 	UPROPERTY(EditAnywhere)
-	float DetectionRadius = 1000.0f;
+	float DetectionRadius = 1500.0f;
 
 	UPROPERTY(EditAnywhere)
-	float DiveSpeed = 1000.0f;
+	float DiveSpeed = 3.0f;
 
 	FVector DiveTargetLocation;
 
-	float AttackCooldown = 5.0f; // sekunder mellan attacker
+	float AttackCooldown = 10.0f; // sekunder mellan attacker
 	float CooldownTimer = 2.0f;
+	
 	bool bCanAttack = true;
+	
+	bool bFirstTickInCircling = true;
 
-	UPROPERTY(VisibleAnywhere)
-	class UFloatingPawnMovement* MovementComponent;
+	FVector OriginalCircleCenter;
 
-
-private:
+	float OriginalCircleRadius;
 
 };

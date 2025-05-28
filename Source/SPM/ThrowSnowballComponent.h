@@ -19,11 +19,11 @@ public:
 	void Aim();
 	
 	void Throw();
-
-	bool IsAiming() const {return bIsAiming;}
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanThrow = true;
+
+	bool IsThrowAreaValid(){return bIsThrowAreaValid;}
 
 protected:
 	virtual void BeginPlay() override;
@@ -42,6 +42,8 @@ protected:
 	
 	void ResetThrow();
 
+
+
 	
 
 public:	
@@ -51,14 +53,20 @@ public:
 private:
 	bool bIsAiming = false;
 
-	AActor* GroundMarker;
+	FVector LastAimDirection;
 
-	FVector GetThrowVelocity() const;
+	FVector LastAimLocation;
+
+	AActor* GroundMarker;
 
 	FTimerHandle TimerHandle_ResetThrow;
 
 	float GetSnowballSpeed() const;
 
 	float GetSnowballGravity() const;
+
+	void PredictThrowTrajectory();
+
+	bool bIsThrowAreaValid; 
 };
 

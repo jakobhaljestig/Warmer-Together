@@ -16,7 +16,7 @@ ABirdAi::ABirdAi()
 
 	//MovementComponent = CreateDefaultSubobject<UFloatingPawnMovement>(TEXT("MovementComponent"));
 	
-	CircleRadius = 500.f;
+	CircleRadius = 700.f;
 	CircleSpeed = 1.f;
 	CircleAngle = 0.f;
 	//CurrentState = EBirdState::Circling;
@@ -29,6 +29,11 @@ void ABirdAi::BeginPlay()
 	Super::BeginPlay();
 
 	CircleCenter = GetActorLocation(); //startlocation
+
+	OriginalCircleCenter = CircleCenter;
+
+	CircleRadius = 500.f; // eller det du vill ha som standard
+	OriginalCircleRadius = CircleRadius;
 }
 
 // Called every frame
@@ -72,12 +77,35 @@ void ABirdAi::UpdateCircling(float DeltaTime)
 	SetActorLocation(NewLocation);
 
 	FVector Direction = (NewLocation - PreviousLocation);
+	
 	if (!Direction.IsNearlyZero())
 	{
 		SetActorRotation(FRotationMatrix::MakeFromX(Direction.GetSafeNormal()).Rotator());
 	}
 
-	//UE_LOG(LogTemp, Warning, TEXT("Circling at angle: %f"), CircleAngle);
+	if (bFirstTickInCircling)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("[Circling] First circling position: %s (angle: %f deg)"),
+			*NewLocation.ToString(), FMath::RadiansToDegrees(CircleAngle));
+		bFirstTickInCircling = false;
+	}
+}
+
+void ABirdAi::MoveSmoothlyTo(const FVector& Start, const FVector& End, float Alpha)
+{
+	const FVector NewLocation = FMath::Lerp(Start, End, Alpha);
+	SetActorLocation(NewLocation);
+}
+
+void ABirdAi::RotateSmoothlyTowards(const FVector& Direction, float DeltaSeconds, float RotationSpeed)
+{
+	if (!Direction.IsNearlyZero())
+	{
+		FRotator CurrentRotation = GetActorRotation();
+		const FRotator TargetRotation = Direction.Rotation();
+		const FRotator NewRotation = FMath::RInterpTo(CurrentRotation, TargetRotation, DeltaSeconds, RotationSpeed);
+		SetActorRotation(NewRotation);
+	}
 }
 
 /*
