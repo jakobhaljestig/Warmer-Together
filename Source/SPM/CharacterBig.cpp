@@ -89,7 +89,7 @@ void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 
 void ACharacterBig::BeginHug(const FInputActionValue& Value)
 {
-	if (!bIsClimbing)
+	if (!bIsClimbing && !bIsLifting && !bIsThrowing && !bIsSprinting && !bSuccesfulHug)
 		Super::BeginHug(Value);
 }
 
