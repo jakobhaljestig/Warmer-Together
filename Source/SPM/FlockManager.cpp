@@ -29,6 +29,7 @@ void AFlockManager::BeginPlay()
 		{
 			Agent->Initialize(this);
 			Agents.Add(Agent);
+			//UE_LOG(LogTemp, Warning, TEXT("Spawned %d agents out of %d"), Agents.Num(), NumAgents);
 		}
 	}
   
@@ -39,8 +40,6 @@ void AFlockManager::BeginPlay()
 void AFlockManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
 }
 
 

@@ -22,6 +22,12 @@ AFlockAgent::AFlockAgent(): FlockManager(nullptr), Velocity()
 void AFlockAgent::Initialize(AFlockManager* Manager)
 {
    FlockManager = Manager;
+
+   PersonalCohesionWeight = FMath::FRandRange(0.8f, 1.2f) * CohesionWeight;
+   PersonalSeparationWeight = FMath::FRandRange(0.8f, 1.2f) * SeparationWeight;
+   PersonalAlignmentWeight = FMath::FRandRange(0.8f, 1.2f) * AlignmentWeight;
+   PersonalMaxSpeed = FMath::FRandRange(0.8f, 1.2f) * MaxSpeed;
+   PersonalMaxForce = FMath::FRandRange(0.8f, 1.2f) * MaxForce;
 }
 
 
@@ -30,7 +36,9 @@ void AFlockAgent::BeginPlay()
 {
    Super::BeginPlay();
    Velocity = FVector::ForwardVector * MaxSpeed;
-  
+   
+   DynamicNeighbourRadius = NeighbourRadius * FMath::FRandRange(0.9f, 1.1f);
+   
 }
 
 
@@ -40,17 +48,17 @@ void AFlockAgent::Tick(float DeltaTime)
    Super::Tick(DeltaTime);
 
    ApplyFlocking(DeltaTime);
+   
+   FHitResult Hit;
+   AddActorWorldOffset(Velocity * DeltaTime, true, &Hit);
 
-   // Uppdatera position och rotation
-   FVector NewLocation = GetActorLocation() + Velocity * DeltaTime;
-   SetActorLocation(NewLocation, true);
-
-   // Justera rotationen i rörelseriktningen
-   if (!Velocity.IsNearlyZero())
+   if (Hit.IsValidBlockingHit())
    {
-      FRotator NewRotation = Velocity.Rotation();
-      SetActorRotation(NewRotation);
+      Velocity = FVector::ZeroVector;
    }
+
+   
+   SetActorRotation(Velocity.Rotation());
 }
 
 //varje boid flyger mot dem andra boidsen, de flyger inte direkt mot varandra, utan styr gradvis mot varandra. 
@@ -58,12 +66,12 @@ FVector AFlockAgent::Cohesion()
 {
    FVector Center = FVector::ZeroVector;
    int Count = 0;
-   for (AFlockAgent* Flock : FlockManager->GetNearbyAgents(this, NeighbourRadius))
+   for (AFlockAgent* Flock : FlockManager->GetNearbyAgents(this, DynamicNeighbourRadius))
    {
       Center += Flock->GetActorLocation();
       Count++;
    }
-   return Count > 0 ? ((Center / Count) - GetActorLocation()).GetSafeNormal() * MaxSpeed - Velocity : FVector::ZeroVector;
+   return Count > 0 ? ((Center / Count - GetActorLocation()).GetSafeNormal() * MaxSpeed - Velocity) : FVector::ZeroVector;
 }
 
 //boidsen försöker undvika att styra helt in i de andra boidsen, så om de är för nära väjer de undan. 
@@ -71,31 +79,80 @@ FVector AFlockAgent::Separation()
 {
    FVector Steer = FVector::ZeroVector;
    int Count = 0;
-   for (AFlockAgent* Flock : FlockManager->GetNearbyAgents(this, NeighbourRadius))
+   for (AFlockAgent* Flock : FlockManager->GetNearbyAgents(this, DynamicNeighbourRadius * 0.5f))
    {
       FVector Diff = GetActorLocation() - Flock->GetActorLocation();
-     Steer += Diff.GetSafeNormal() /FMath::Max(Diff.Size(), 1.0f);;
+     Steer += Diff /FMath::Max(Diff.SizeSquared(), 1.0f);;
       Count++;
    }
    return Count > 0 ? Steer.GetSafeNormal() * MaxSpeed - Velocity : FVector::ZeroVector;
 }
 
+//sista steget är att de försöker matcha de andra i flockens velocity. 
+FVector AFlockAgent::Alignment()
+{
+   FVector Avg = FVector::ZeroVector;
+   int Count = 0;
+   for (AFlockAgent* Flock : FlockManager->GetNearbyAgents(this, DynamicNeighbourRadius))
+   {
+      Avg += Flock->GetVelocity();
+      Count++;
+   }
+   return Count > 0 ? ((Avg / Count).GetSafeNormal() * MaxSpeed - Velocity) : FVector::ZeroVector;
+}
+
+
 FVector AFlockAgent::AvoidObstacles() const
 {
-   FHitResult Hit;
+   float TraceDistance = Velocity.Size() * 0.5f + 300.f; 
    FVector Start = GetActorLocation();
-   FVector End = Start + Velocity.GetSafeNormal() * 200.f;
+   FVector Forward = Velocity.GetSafeNormal();
+
+   // Skapa sidovektorer
+   FVector Right = FRotationMatrix(Forward.Rotation()).GetUnitAxis(EAxis::Y);
+   FVector Left = -Right;
+
+   // Lista med riktningar att testa
+   TArray Directions = {
+      Forward,                                // rakt fram
+      (Forward + Left * 0.5f).GetSafeNormal(),  // snett vänster
+      (Forward + Right * 0.5f).GetSafeNormal(), // snett höger
+      Left,                                   // rakt vänster (backup)
+      Right                                   // rakt höger (backup)
+  };
 
    FCollisionQueryParams Params;
    Params.AddIgnoredActor(this);
+   
+   float ClosestHitDistance = TraceDistance;
+   FVector AvoidForce = FVector::ZeroVector;
 
-   if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_WorldStatic, Params))
+   for (const FVector& Dir : Directions)
    {
-      return Hit.Normal * MaxForce; //knuffa bort från objekt
+      FVector End = Start + Dir * TraceDistance;
+
+      FHitResult Hit;
+      if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_WorldStatic, Params))
+      {
+         float HitDistance = (Hit.ImpactPoint - Start).Size();
+         if (HitDistance < ClosestHitDistance)
+         {
+            ClosestHitDistance = HitDistance;
+
+            FVector Projected = FVector::VectorPlaneProject(Dir, Hit.Normal).GetSafeNormal();
+            FVector NormalResponse = Hit.Normal * MaxForce;
+            AvoidForce = Projected * MaxForce + NormalResponse;
+
+            // imbormsning
+            float BrakeFactor = 1.0f - (HitDistance / TraceDistance);
+            AvoidForce -= Velocity * BrakeFactor * 0.5f; // motverka hastighet
+         }
+      }
    }
 
-   return FVector::ZeroVector;
+   return FVector::ZeroVector; // Inget hinder
 }
+
 
 FVector AFlockAgent::StayInBounds() const
 {
@@ -104,7 +161,7 @@ FVector AFlockAgent::StayInBounds() const
       return FVector::ZeroVector;
    }
 
-   FVector ToCenter = FlockManager->SpawnCenter - GetActorLocation();
+   //FVector ToCenter = FlockManager->SpawnCenter - GetActorLocation();
    FVector HalfBounds = FlockManager->SpawnBounds;
 
    //om utanför bounds styr tillbaka
@@ -146,44 +203,46 @@ FVector AFlockAgent::StayInBounds() const
    return Correction.GetSafeNormal() * MaxSpeed - Velocity;
 }
 
-//sista steget är att de försöker matcha de andra i flockens velocity. 
-FVector AFlockAgent::Alignment()
+FVector AFlockAgent::GetDynamicWander(float Time) const
 {
-   FVector Avg = FVector::ZeroVector;
-   int Count = 0;
-   for (AFlockAgent* Flock : FlockManager->GetNearbyAgents(this, NeighbourRadius))
-   {
-      Avg += Flock->GetVelocity();
-      Count++;
-   }
-   return Count > 0 ? (Avg / Count).GetSafeNormal() * MaxSpeed - Velocity : FVector::ZeroVector;
+   float Angle = FMath::PerlinNoise1D(Time + UniqueOffset) * 360.f;
+   FRotator WanderRot(0, Angle, 0);
+   FVector WanderDir = WanderRot.Vector();
+   return WanderDir * PersonalMaxSpeed * 0.3f;
 }
 
 void AFlockAgent::ApplyFlocking(float DeltaTime)
 {
-  FVector BoundsForce = StayInBounds();
+   if (!FlockManager) return;
+
+   float Time = GetWorld()->GetTimeSeconds();
+   float Oscillation = FMath::Sin(Time + UniqueOffset) * 0.5f + 1.0f;
+
+   float SpeedOsc = BaseSpeed * Oscillation;
+   float ForceOsc = BaseForce * Oscillation;
    
-   FVector Cohese = Cohesion();
-   FVector Separate = Separation();
-   FVector Align = Alignment();
-   
+   // Flockbeteenden
+   FVector BoundsForce = StayInBounds();
+   FVector Cohese = Cohesion() * PersonalCohesionWeight;
+   FVector Separate = Separation() * PersonalSeparationWeight;
+   FVector Align = Alignment() * PersonalAlignmentWeight;
+   FVector Wander = GetDynamicWander(Time);
    FVector Avoid = AvoidObstacles();
 
-   FVector Accel =  Cohese + Separate + Align + Avoid + BoundsForce * 2.0f;
-   Accel = Accel.GetClampedToMaxSize(MaxForce);
-   
+   FVector Accel = 
+       Cohese +
+       Separate +
+       Align +
+       Wander * RandomWeight +
+       BoundsForce * 2.0f +
+       Avoid;
+
+   Accel = Accel.GetClampedToMaxSize(ForceOsc);
    Velocity += Accel * DeltaTime;
-   Velocity = Velocity.GetClampedToMaxSize(MaxSpeed);
+   Velocity = Velocity.GetClampedToMaxSize(SpeedOsc);
 
-   FVector Center = FlockManager->GetActorLocation();
-   FVector OffsetToCenter = Center - GetActorLocation();
-
-   float DistanceFromCenter = OffsetToCenter.Size();
-   float MaxDistance = FlockManager->SpawnBounds.GetMax();
-
-   if (DistanceFromCenter > MaxDistance)
-   {
-      FVector Correction = OffsetToCenter.GetSafeNormal() * MaxForce;
-      Accel += Correction;
-   }
+   // Flytta och rotera
+   AddActorWorldOffset(Velocity * DeltaTime, true);
+   SetActorRotation(Velocity.Rotation());
 }
+

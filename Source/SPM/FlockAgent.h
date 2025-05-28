@@ -32,33 +32,59 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-
 	UPROPERTY(EditAnywhere)
 	AFlockManager* FlockManager;
 
 	UPROPERTY(EditAnywhere)
 	USkeletalMeshComponent* SkeletalMesh;
-
 	
+	// === Flocking ===
+	void ApplyFlocking(float DeltaTime);
+	FVector Cohesion();
+	FVector Separation();
+	FVector Alignment();
+	FVector StayInBounds() const;
+	FVector AvoidObstacles() const;
+	FVector GetDynamicWander(float Time) const;
+
+	// === Movement ===
 	FVector Velocity;
 
-	UPROPERTY(EditAnywhere)
-	float MaxSpeed = 600.f;
-	UPROPERTY(EditAnywhere)
-	float MaxForce = 200.f;
-	UPROPERTY(EditAnywhere)
-	float NeighbourRadius = 500.f;;
+	UPROPERTY(EditAnywhere, Category = "Flocking")
+	float MaxSpeed = 400.f;
 
-	FVector Alignment();
-  
-	FVector Cohesion();
-  
-	FVector Separation();
+	UPROPERTY(EditAnywhere, Category = "Flocking")
+	float MaxForce = 100.f;
 
-	FVector AvoidObstacles() const;
+	UPROPERTY(EditAnywhere, Category = "Flocking")
+	float NeighbourRadius = 500.f;
 
-	FVector StayInBounds() const;
-	
-	void ApplyFlocking(float DeltaTime);
+	UPROPERTY(EditAnywhere, Category = "Flocking|Weights")
+	float CohesionWeight = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Flocking|Weights")
+	float SeparationWeight = 1.5f;
+
+	UPROPERTY(EditAnywhere, Category = "Flocking|Weights")
+	float AlignmentWeight = 1.f;
+
+	UPROPERTY(EditAnywhere, Category = "Flocking|Weights")
+	float RandomWeight = 0.5f;
+
+	// === Per-agent variation ===
+	float UniqueOffset;
+
+	float PersonalMaxSpeed;
+	float PersonalMaxForce;
+	float PersonalCohesionWeight;
+	float PersonalSeparationWeight;
+	float PersonalAlignmentWeight;
+
+	float DynamicNeighbourRadius;
+
+
+	// === base värden ===
+	float BaseSpeed = MaxSpeed;
+	float BaseForce = MaxForce;
 	
 };

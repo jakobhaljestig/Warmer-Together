@@ -37,7 +37,7 @@ public:
 	TSubclassOf<AFlockAgent> AgentClass;
   
 	UPROPERTY(EditAnywhere)
-	int NumAgents = 50;
+	int NumAgents = 150;
   
 	UPROPERTY(EditAnywhere)
 	FVector SpawnBounds = FVector(1500, 1500, 1000);
