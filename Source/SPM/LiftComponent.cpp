@@ -55,7 +55,8 @@ void ULiftComponent::Drop(float Force, float VerticalForce)
 		PhysicsHandle->GetGrabbedComponent()->GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorEnableCollision(true);
 		Release();
-		
+
+		GetOwner()->Tags.Remove("IsLifting");
 	}
 
 }
@@ -93,7 +94,6 @@ void ULiftComponent::Throw()
 	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
 		Drop(ThrowingForce, VerticalThrowingForce);
-		GetOwner()->Tags.Remove("IsLifting");
 	}
 }
 
