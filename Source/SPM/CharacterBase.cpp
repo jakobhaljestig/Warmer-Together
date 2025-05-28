@@ -66,6 +66,7 @@ void ACharacterBase::BeginPlay()
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
 	CheckpointLocation = GetActorLocation();
+	UpdatePlayerLocation();
 
 	PushComponent = FindComponentByClass<UPushComponent>();
 	if (!PushComponent)
