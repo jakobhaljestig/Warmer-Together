@@ -474,7 +474,7 @@ void ACharacterBase::UpdatePlayerLocation()
 
 	const FString& Name = SurfaceMesh->GetName();
 	
-	if ((Name.Contains(TEXT("Cube"))) && FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
+	if ((Name.Contains(TEXT("Ground"))) && FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
 	{
 		LastSafeLocation = GetActorLocation();
 	}
