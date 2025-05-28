@@ -87,9 +87,15 @@ void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 	}
 }
 
+void ACharacterBig::BeginHug(const FInputActionValue& Value)
+{
+	if (!bIsClimbing)
+		Super::BeginHug(Value);
+}
+
 void ACharacterBig::Climb(const FInputActionValue& Value)
 {
-	if (PickupComponent -> HoldingSomething() == false)
+	if (PickupComponent -> HoldingSomething() == false && !bIsHugging)
 	{
 		ClimbingComponent->Climb();
 		bIsClimbing = ClimbingComponent->IsClimbing();
