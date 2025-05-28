@@ -22,10 +22,6 @@ public:
 protected:
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
-	
-	// Referens till vår performance-tracker
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
-	UPerformanceTracker* PerformanceTracker;
 
 public:	
 	// Called every frame

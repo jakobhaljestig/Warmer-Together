@@ -6,9 +6,13 @@
 #include "CharacterBase.h"
 #include "Kismet/GameplayStatics.h"
 
+
+
 // Sets default values for this component's properties
-UWeatherComponent::UWeatherComponent(): SnowLevel3(nullptr), SnowLevel2(nullptr), SnowLevel1(nullptr),
-                                        MistParticleSystem(nullptr)
+UWeatherComponent::UWeatherComponent(): SnowLevel1(nullptr), SnowLevel2(nullptr), SnowLevel3(nullptr),
+                                        MistParticleSystem(nullptr), SnowSystem1(nullptr), SnowSystem2(nullptr),
+                                        SnowSystem3(nullptr),
+                                        MistSystem(nullptr)
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
@@ -33,6 +37,7 @@ void UWeatherComponent::BeginPlay()
 		bHasSpawnedWeather = true;
 	}
 	
+	
 }
 
 
@@ -41,11 +46,14 @@ void UWeatherComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	OnWeatherUpdateTick();
+	TArray<AActor*> PlayerCharacters;
+    	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
 
+	OnWeatherUpdateTick(PlayerCharacters);
 	// ...
 }
 
+//kan användas i blueprint för att sätta skalan manuellt, ex i cutscenes. 
 void UWeatherComponent::SetWeatherEffectScale(FVector NewScale)
 {
 	if (SnowLevel1) SnowLevel1->SetWorldScale3D(NewScale);
@@ -55,75 +63,44 @@ void UWeatherComponent::SetWeatherEffectScale(FVector NewScale)
 }
 
 
+//spawnar effekterna genom bpn
 void UWeatherComponent::SpawnWeatherEffects()
 {
-	if (SnowSystem1 && !SnowLevel1)
-	{
-		SnowLevel1 = UNiagaraFunctionLibrary::SpawnSystemAttached(
-			SnowSystem1,
-			GetOwner()->GetRootComponent(),
-			NAME_None,
-			FVector::ZeroVector,
-			FRotator::ZeroRotator,
-			EAttachLocation::KeepRelativeOffset,
-			false
-		);
-	}
-
-	if (SnowSystem2 && !SnowLevel2)
-	{
-		SnowLevel2 = UNiagaraFunctionLibrary::SpawnSystemAttached(
-			SnowSystem2,
-			GetOwner()->GetRootComponent(),
-			NAME_None,
-			FVector::ZeroVector,
-			FRotator::ZeroRotator,
-			EAttachLocation::KeepRelativeOffset,
-			false
-		);
-	}
-
-	if (SnowSystem3 && !SnowLevel3)
-	{
-		SnowLevel3 = UNiagaraFunctionLibrary::SpawnSystemAttached(
-			SnowSystem3,
-			GetOwner()->GetRootComponent(),
-			NAME_None,
-			FVector::ZeroVector,
-			FRotator::ZeroRotator,
-			EAttachLocation::KeepRelativeOffset,
-			false
-		);
-	}
-
-	if (MistSystem && !MistParticleSystem)
-	{
-		MistParticleSystem = UNiagaraFunctionLibrary::SpawnSystemAttached(
-			MistSystem,
-			GetOwner()->GetRootComponent(),
-			NAME_None,
-			FVector::ZeroVector,
-			FRotator::ZeroRotator,
-			EAttachLocation::KeepRelativeOffset,
-			false
-		);
-	}
+	SnowLevel1 = SpawnEffectIfNeeded(SnowSystem1, SnowLevel1, FVector::ZeroVector);
+	SnowLevel2 = SpawnEffectIfNeeded(SnowSystem2, SnowLevel2, FVector::ZeroVector);
+	SnowLevel3 = SpawnEffectIfNeeded(SnowSystem3, SnowLevel3, FVector::ZeroVector);
+	MistParticleSystem = SpawnEffectIfNeeded(MistSystem, MistParticleSystem, FVector::ZeroVector);
 }
 
-	
 
-void UWeatherComponent::OnWeatherUpdateTick() 
+//om effekt inte finns, spawna
+UNiagaraComponent* UWeatherComponent::SpawnEffectIfNeeded(UNiagaraSystem* System, UNiagaraComponent* ExistingComp, FVector Offset) const
+{
+	if (System && !ExistingComp)
+	{
+		return UNiagaraFunctionLibrary::SpawnSystemAttached(
+			System,
+			GetOwner()->GetRootComponent(),
+			NAME_None,
+			Offset,
+			FRotator::ZeroRotator,
+			EAttachLocation::KeepRelativeOffset,
+			false
+		);
+	}
+	return ExistingComp;
+}
+
+
+void UWeatherComponent::OnWeatherUpdateTick(const TArray<AActor*>& PlayerCharacters) const
 {
 
 	UpdateWeatherEffectLocation();
 
-	// Hämta medeltemperaturen från spelarna
-	TArray<AActor*> PlayerCharacters;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
-
 	float TotalTemp = 0.f;
 	int32 Count = 0;
 
+	//hämtar tempen för antalet spelare
 	for (AActor* Actor : PlayerCharacters)
 	{
 		ACharacterBase* Character = Cast<ACharacterBase>(Actor);
@@ -137,6 +114,7 @@ void UWeatherComponent::OnWeatherUpdateTick()
 		}
 	}
 
+	//räknar ut average temp baserat på antal spelare och uppdaterar vädret därefter
 	if (Count > 0)
 	{
 		float AvgTemp = TotalTemp / Count;
@@ -145,34 +123,102 @@ void UWeatherComponent::OnWeatherUpdateTick()
 }
 
 
-void UWeatherComponent::UpdateWeatherFromTemperature(const float TemperaturePercentage) 
+void UWeatherComponent::UpdateWeatherFromTemperature(float Temp) const
 {
 	if (!SnowLevel1 || !SnowLevel2 || !SnowLevel3 || !MistParticleSystem) return;
-	
-	// Allt inaktivt först
-	SnowLevel1->Deactivate();
-	SnowLevel2->Deactivate();
-	SnowLevel3->Deactivate();
-	MistParticleSystem->Deactivate();
-	//TemperaturePrecent = 1-TemperaturePercentage;
-	if (TemperaturePercentage >= 0.75f)
+
+	// inaktivera allt
+	TArray Effects = { SnowLevel1, SnowLevel2, SnowLevel3, MistParticleSystem };
+	for (auto* Effect : Effects) if (Effect) Effect->Deactivate();
+
+	EWeatherLevel Level = EWeatherLevel::None;
+
+	//väljer en vädernivå baserat på temp, enum för att göra det mer lättläst och koncist
+	if (Temp >= 0.75f)
+		Level = EWeatherLevel::Light;
+	else if (Temp >= 0.5f)
+		Level = EWeatherLevel::Medium;
+	else if (Temp >= 0.25f)
+		Level = EWeatherLevel::Heavy;
+
+	//aktiverar rätt level
+	switch (Level)
 	{
+	case EWeatherLevel::Light:
 		SnowLevel1->Activate();
-		//UE_LOG(LogTemp, Warning, TEXT("Snow 1 Activated"));
-	}
-	else if (TemperaturePercentage >= 0.5f)
-	{
+		break;
+	case EWeatherLevel::Medium:
 		SnowLevel2->Activate();
-		//UE_LOG(LogTemp, Warning, TEXT("Snow 2 Activated"));
-	}
-	else if (TemperaturePercentage >= 0.25f)
-	{
+		break;
+	case EWeatherLevel::Heavy:
 		SnowLevel3->Activate();
 		MistParticleSystem->Activate();
-		//UE_LOG(LogTemp, Warning, TEXT("Mist + Snow 3 Activated"));
+		break;
+	default:
+		break;
 	}
 }
 
+
+void UWeatherComponent::UpdateWeatherEffectLocation() const
+{
+	TArray<AActor*> PlayerCharacters;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
+
+	FPlayerSpatialInfo Info = AnalyzePlayerPositions(PlayerCharacters);
+
+	const float ZOffset = 1000.f;
+	FVector EffectLocation = FVector(Info.Midpoint.X, Info.Midpoint.Y, Info.AvgZ + ZOffset);
+
+	if (SnowLevel1) SnowLevel1->SetWorldLocation(EffectLocation);
+	if (SnowLevel2) SnowLevel2->SetWorldLocation(EffectLocation);
+	if (SnowLevel3) SnowLevel3->SetWorldLocation(EffectLocation);
+	if (MistParticleSystem) MistParticleSystem->SetWorldLocation(EffectLocation);
+
+	//DrawDebugSphere(GetWorld(), EffectLocation, 50.f, 12, FColor::Green, false, 5.f);
+}
+
+
+//sparar värden i struct som hämtas av updateweathereffectlocaation, förut gjordes detta i både getplayersmidpoint och updateweathereffectlocation
+FPlayerSpatialInfo UWeatherComponent::AnalyzePlayerPositions(const TArray<AActor*>& Players)
+{
+	FPlayerSpatialInfo Result;
+	
+	if (Players.Num() == 0)
+	{
+		Result.Midpoint = FVector::ZeroVector;
+		Result.AvgZ = 0.f;
+		Result.MaxDistance = 0.f;
+		return Result;
+	}
+
+	FVector TotalLocation = FVector::ZeroVector;
+	float MaxDist = 0.f;
+	float TotalZ = 0.f;
+
+	//summerar spelarnas positioner och beräknar maxavståndet mellan dem.
+	for (int32 i = 0; i < Players.Num(); ++i)
+	{
+		const FVector& LocA = Players[i]->GetActorLocation();
+		TotalLocation += LocA;
+		TotalZ += LocA.Z;
+
+		for (int32 j = i + 1; j < Players.Num(); ++j)
+		{
+			const FVector& LocB = Players[j]->GetActorLocation();
+			MaxDist = FMath::Max(MaxDist, FVector::Dist(LocA, LocB));
+		}
+	}
+
+	int32 Count = Players.Num();
+	Result.Midpoint = TotalLocation / Count;
+	Result.AvgZ = TotalZ / Count;
+	Result.MaxDistance = MaxDist;
+
+	return Result;
+}
+
+/*
 FVector UWeatherComponent::GetPlayersMidpoint() const
 {
     TArray<AActor*> PlayerCharacters;
@@ -204,78 +250,7 @@ FVector UWeatherComponent::GetPlayersMidpoint() const
         //Midpoint.X, Midpoint.Y, Midpoint.Z, MaxDistance);
 
     return Midpoint;
-}
-
-void UWeatherComponent::UpdateWeatherEffectLocation() const
-{
-	const FVector Midpoint = GetPlayersMidpoint();
-	const float ZOffset = 1000.f;
-
-	// Beräkna avståndet mellan spelarna för att bestämma skalan
-	TArray<AActor*> PlayerCharacters;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
-
-	float MaxDistance = 0.0f;
-	for (int32 i = 0; i < PlayerCharacters.Num(); ++i)
-	{
-		for (int32 j = i + 1; j < PlayerCharacters.Num(); ++j)
-		{
-			AActor* ActorA = PlayerCharacters[i];
-			AActor* ActorB = PlayerCharacters[j];
-			float Dist = FVector::Dist(ActorA->GetActorLocation(), ActorB->GetActorLocation());
-			MaxDistance = FMath::Max(MaxDistance, Dist);
-		}
-	}
-
-	// Skala snöeffekterna baserat på avståndet
-	float ScaleFactor = FMath::GetMappedRangeValueClamped(FVector2D(0.f, 3000.f), FVector2D(1.0f, 2.0f), MaxDistance);
-	// Z-skalan fixeras
-	FVector ParticleScale = FVector(1.f, 1.f, ScaleFactor);
-
-	float AvgZ = 0.f;
-	for (AActor* Actor : PlayerCharacters)
-	{
-		AvgZ += Actor->GetActorLocation().Z;
-	}
-	AvgZ /= PlayerCharacters.Num();
-
-	FVector EffectLocation = FVector(Midpoint.X, Midpoint.Y, AvgZ + ZOffset);
-	
-		if (SnowLevel1) 
-		{
-			
-			SnowLevel1->SetWorldLocation(EffectLocation);
-			if (MaxDistance > 4800.f)
-			{
-				SnowLevel1->SetWorldScale3D(ParticleScale);
-				UE_LOG(LogTemp, Warning, TEXT("ScaleFactor: %.2f based on MaxDistance: %.1f"), ScaleFactor, MaxDistance);
-			}
-		}
-		if (SnowLevel2) 
-		{
-			SnowLevel2->SetWorldLocation(EffectLocation);
-			//SnowLevel2->SetWorldScale3D(ParticleScale);
-			if (MaxDistance > 4800.f)
-			{
-				SnowLevel2->SetWorldScale3D(ParticleScale);
-			}
-		}
-		if (SnowLevel3) 
-		{
-			SnowLevel3->SetWorldLocation(EffectLocation);
-			//SnowLevel3->SetWorldScale3D(ParticleScale);
-			//UE_LOG(LogTemp, Warning, TEXT("ScaleFactor: %.2f based on MaxDistance: %.1f"), ScaleFactor, MaxDistance);
-		}
-
-		if (MistParticleSystem)
-		{
-			MistParticleSystem->SetWorldLocation(EffectLocation);
-			//MistParticleSystem->SetWorldScale3D(ParticleScale);
-		}
-
-	DrawDebugSphere(GetWorld(), EffectLocation, 50.f, 12, FColor::Green, false, 5.f);
-
-	}
+}*/
 
 /*
 //påverkar bodytemp baserat på vädernivån, måste nog tweakas lite vart eftersom
