@@ -19,6 +19,8 @@ void AFlockManager::BeginPlay()
 	Super::BeginPlay();
 
 
+	SpawnCenter = GetActorLocation();
+
 	for (int i = 0; i < NumAgents; ++i)
 	{
 		FVector RandLoc = GetActorLocation() + UKismetMathLibrary::RandomPointInBoundingBox(FVector::ZeroVector, SpawnBounds);

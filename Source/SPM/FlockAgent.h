@@ -33,23 +33,31 @@ public:
 	virtual void Tick(float DeltaTime) override;
 
 
+	UPROPERTY(EditAnywhere)
 	AFlockManager* FlockManager;
 
+	UPROPERTY(EditAnywhere)
+	USkeletalMeshComponent* SkeletalMesh;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Components")
-	UStaticMeshComponent* Mesh;
-  
-	FVector Velocity;
 	
-	float MaxSpeed = 600.f;
-	float MaxForce = 200.f;
-	float NeighbourRadius = 500.f;
+	FVector Velocity;
 
-	FVector Alignement();
+	UPROPERTY(EditAnywhere)
+	float MaxSpeed = 600.f;
+	UPROPERTY(EditAnywhere)
+	float MaxForce = 200.f;
+	UPROPERTY(EditAnywhere)
+	float NeighbourRadius = 500.f;;
+
+	FVector Alignment();
   
 	FVector Cohesion();
   
 	FVector Separation();
+
+	FVector AvoidObstacles() const;
+
+	FVector StayInBounds() const;
 	
 	void ApplyFlocking(float DeltaTime);
 	
