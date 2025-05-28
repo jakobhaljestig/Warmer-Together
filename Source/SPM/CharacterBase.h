@@ -137,6 +137,8 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Snowball")
 	UThrowSnowballComponent* ThrowSnowballComponent;
 
+	void Aim(const FInputActionValue& Value);
+
 	void Throw(const FInputActionValue& Value);
 	
 	
@@ -193,10 +195,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
-	// Referens till vår performance-tracker
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category="Performance")
-	UPerformanceTracker* PerformanceTracker;
 
 	//RESPAWNING
 	

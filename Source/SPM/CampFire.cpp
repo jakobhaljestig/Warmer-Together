@@ -4,8 +4,6 @@
 #include "CharacterBase.h"
 #include "CharacterBig.h"
 #include "CharacterSmall.h"
-#include "NiagaraComponent.h"
-#include "PerformanceTracker.h"
 #include "Components/SphereComponent.h"
 #include "Components/StaticMeshComponent.h"
 #include "Components/PrimitiveComponent.h"

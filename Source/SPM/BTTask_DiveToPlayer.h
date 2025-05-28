@@ -3,6 +3,12 @@
 #include "CoreMinimal.h"
 #include "BehaviorTree/BTTaskNode.h"
 #include "BTTask_DiveToPlayer.generated.h"
+struct FDiveTaskMemory
+{
+	FVector StartLocation;
+	float ElapsedTime = 0.f;
+	float TotalDiveDuration = 2.f; 
+};
 
 UCLASS(BlueprintType)
 class SPM_API UBTTask_DiveToPlayer : public UBTTaskNode
@@ -11,6 +17,8 @@ class SPM_API UBTTask_DiveToPlayer : public UBTTaskNode
 
 public:
 	UBTTask_DiveToPlayer();
+	
+	virtual uint16 GetInstanceMemorySize() const override;
 
 protected:
 	virtual EBTNodeResult::Type ExecuteTask(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory) override;
@@ -19,4 +27,7 @@ protected:
 	virtual void OnGameplayTaskActivated(UGameplayTask& Task) override {}
 
 	bool bReachedTarget = false;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Bird|Behavior")
+	float DiveCompleteDistance = 100.f;
 };

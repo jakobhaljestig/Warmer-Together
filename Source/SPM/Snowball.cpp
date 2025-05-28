@@ -57,14 +57,13 @@ void ASnowball::Tick(float DeltaTime)
 
 }
 
-void ASnowball::ThrowInDirection(const FVector& ThrowDirection)
+void ASnowball::ThrowInDirection(const FVector& ThrowDirection) const
 {
 	if (MovementComp)
 	{
 		MovementComp->Velocity = ThrowDirection * MovementComp->InitialSpeed;
 	}
 }
-
 
 void ASnowball::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 					  UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit)
@@ -81,6 +80,8 @@ void ASnowball::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	UE_LOG(LogTemp, Warning, TEXT("Snöboll förstördes"));
 	Destroy();
 }
+
+
 
 
 

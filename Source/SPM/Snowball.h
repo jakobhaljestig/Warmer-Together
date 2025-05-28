@@ -6,6 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
+#include "Kismet/GameplayStatics.h"
 #include "Snowball.generated.h"
 
 UCLASS()
@@ -24,7 +25,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UProjectileMovementComponent* MovementComp;
 
-	void ThrowInDirection(const FVector& ThrowDirection);
+	void ThrowInDirection(const FVector& ThrowDirection) const;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float Speed = 1500.0f;
@@ -35,7 +36,6 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float MaxLifeTime = 5.0f;
 
-	
 
 protected:
 	virtual void BeginPlay() override;

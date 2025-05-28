@@ -12,11 +12,9 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "InputActionValue.h"
-#include "PerformanceTracker.h"
 #include "PushComponent.h"
 #include "HugComponent.h"
 #include "SprintComponent.h"
-#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -165,7 +163,8 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::BeginPush);
 		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::EndPush);
 
-		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Throw);
+		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Aim);
+		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Completed, this, &ACharacterBase::Throw);
 
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Started, this, &ACharacterBase::StartSprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &ACharacterBase::StopSprint);
@@ -314,18 +313,20 @@ void ACharacterBase::Hug()
 
 // --- Kasta Snöboll ---*/
 
+void ACharacterBase::Aim(const FInputActionValue& Value)
+{
+	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
+	{
+		//ThrowSnowballComponent->Aim();
+	}
+}
+
+
 void ACharacterBase::Throw (const FInputActionValue& Value)
 {
 	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
-		if (!ThrowSnowballComponent->IsAiming())
-		{
-			ThrowSnowballComponent->Aim();
-		}else
-		{
-			ThrowSnowballComponent->Throw();
-		}
-		
+		//ThrowSnowballComponent->Throw();
 	}
 	
 }
@@ -381,6 +382,8 @@ void ACharacterBase::OnDeath()
 
 	bHasDied = true;
 	PushComponent->StopPushing();
+
+	
 	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
 	
 	if (bHasCheckPointLocation)
@@ -414,26 +417,25 @@ void ACharacterBase::RespawnAtCheckpoint()
 {
 	FVector NewLocation = FVector(CheckpointLocation.X - 200, CheckpointLocation.Y, CheckpointLocation.Z + 46);
 	bHasDied = false;
-
 	ResetTemp();
+
+	GetMesh()->SetVisibility(true, true);
+	EnableInput(nullptr);
+	GetCharacterMovement()->GravityScale = 1.75f;
 	
 	SetActorLocation(NewLocation);
 }
 
 void ACharacterBase::StartDelayedRespawn()
 {
+	if (bHasDied) return;
+	
 	GetMesh()->SetVisibility(false, true);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 	DisableInput(nullptr);
-
 	GetCharacterMovement()->GravityScale = 0.f;
 	
-	// Vänta 0.7 sekunder innan respawn
 	GetWorldTimerManager().SetTimer(RespawnTimeHandle, this, &ACharacterBase::RespawnToLastSafeLocation, 0.7f, false);
 }
-
-
-
 
 
 void ACharacterBase::RespawnToLastSafeLocation()
@@ -441,15 +443,11 @@ void ACharacterBase::RespawnToLastSafeLocation()
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 
 	GetMesh()->SetVisibility(true, true);
-	GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	EnableInput(nullptr);
-
 	GetCharacterMovement()->GravityScale = 1.75f;
 	
 	bHasDied = false;
 }
-
-
 
 
 void ACharacterBase::ResetPlayerState()
