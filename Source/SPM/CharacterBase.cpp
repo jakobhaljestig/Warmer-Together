@@ -459,6 +459,22 @@ void ACharacterBase::ResetPlayerState()
 	bHasDied = false;
 }
 
+bool ACharacterBase::IsOnSnow()
+{
+	FHitResult HitResult;
+	FVector TraceStart = FVector(GetActorLocation());
+	FVector TraceEnd = FVector(GetActorLocation().X, GetActorLocation().Y,  -100.f);
+	FCollisionQueryParams TraceParams;
+	TraceParams.AddIgnoredActor(this);
+	
+	if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, TraceParams))
+	{
+		
+	}
+	
+	return false;
+}
+
 void ACharacterBase::UpdatePlayerLocation()
 {
 	if (!GetCharacterMovement()->IsMovingOnGround())
