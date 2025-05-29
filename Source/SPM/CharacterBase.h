@@ -236,7 +236,6 @@ public:
 	virtual void ResetPlayerState();
 	
 private:
-
 	
 	void UpdatePlayerLocation();
 
