@@ -23,7 +23,6 @@ ACampFire::ACampFire()
 	if (TriggerComp)
 	{
 		TriggerComp->SetupAttachment(RootComponent);
-		TriggerComp->InitSphereRadius(TriggerRadius);
 		TriggerComp->OnComponentBeginOverlap.AddDynamic(this, &ACampFire::OnBeginOverlap);
 		TriggerComp->OnComponentEndOverlap.AddDynamic(this, &ACampFire::OnEndOverlap);
 	}
