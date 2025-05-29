@@ -17,9 +17,16 @@
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Animation/ABP_Big.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animation/ABP_Big.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Animation/ABP_Small.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animation/ABP_Small.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Animation/BS_Big_Walk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animation/BS_Big_Walk.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigRunning.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigRunning.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Animation/BS_Small_Walk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animation/BS_Small_Walk.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigLand.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigLand.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigWalk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigWalk.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallJumpUp.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallJumpUp.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallLand.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallLand.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallRunning.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallRunning.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallWalk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallWalk.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Meshes/SM_SmallCharacter_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Meshes/SM_SmallCharacter_Skeleton.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/Robin/BalanceLogTest.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Robin/BalanceLogTest.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/5/OC/4LAFC1SFI60O1SELD290II.uasset" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
