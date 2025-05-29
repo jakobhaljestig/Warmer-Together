@@ -105,7 +105,7 @@ protected:
 	void StopSprint();
 	
 	//HUGGING
-	void BeginHug(const FInputActionValue& Value);
+	virtual void BeginHug(const FInputActionValue& Value);
 	void EndHug(const FInputActionValue& Value);
 	void Hug();
 
@@ -236,7 +236,6 @@ public:
 	virtual void ResetPlayerState();
 	
 private:
-
 	
 	void UpdatePlayerLocation();
 

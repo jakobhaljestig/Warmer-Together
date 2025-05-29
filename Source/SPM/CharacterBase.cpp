@@ -3,6 +3,7 @@
 #include "CharacterBase.h"
 
 #include "BodyTemperature.h"
+#include "ClimbComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -464,6 +465,23 @@ void ACharacterBase::UpdatePlayerLocation()
 	if (!GetCharacterMovement()->IsMovingOnGround())
 		return;
 
+	FHitResult HitResult;
+    FVector TraceStart = FVector(GetActorLocation());
+    FVector TraceEnd = FVector(GetActorLocation().X, GetActorLocation().Y,  -100.f);
+    FCollisionQueryParams TraceParams;
+    TraceParams.AddIgnoredActor(this);
+	TraceParams.bReturnPhysicalMaterial = true;
+    
+    if (GetWorld()->LineTraceSingleByChannel(HitResult, TraceStart, TraceEnd, ECC_Visibility, TraceParams))
+    {
+		EPhysicalSurface Surface = UGameplayStatics::GetSurfaceType(HitResult);
+    	if (Surface == SurfaceType1 || Surface == SurfaceType2 && FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
+        {
+        	LastSafeLocation = GetActorLocation();
+        }
+    }
+
+	/*
 	AActor* Ground = GetCharacterMovement()->CurrentFloor.HitResult.GetActor();
 	UStaticMeshComponent* MeshComp = Ground ? Ground->FindComponentByClass<UStaticMeshComponent>() : nullptr;
 	UStaticMesh* SurfaceMesh = MeshComp ? MeshComp->GetStaticMesh() : nullptr;
@@ -473,13 +491,12 @@ void ACharacterBase::UpdatePlayerLocation()
 
 	const FString& Name = SurfaceMesh->GetName();
 	
-	if ((Name.Contains(TEXT("Cube"))) && FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
+	if ((Name.Contains(TEXT("Ground"))) && FVector::Dist(LastSafeLocation, GetActorLocation()) > 150.0f)
 	{
 		LastSafeLocation = GetActorLocation();
 	}
+	*/
 }
-
-
 
 void ACharacterBase::Landed(const FHitResult& Hit)
 {
