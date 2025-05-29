@@ -19,6 +19,8 @@ void AFlockManager::BeginPlay()
 	Super::BeginPlay();
 
 
+	SpawnCenter = GetActorLocation();
+
 	for (int i = 0; i < NumAgents; ++i)
 	{
 		FVector RandLoc = GetActorLocation() + UKismetMathLibrary::RandomPointInBoundingBox(FVector::ZeroVector, SpawnBounds);
@@ -27,6 +29,7 @@ void AFlockManager::BeginPlay()
 		{
 			Agent->Initialize(this);
 			Agents.Add(Agent);
+			//UE_LOG(LogTemp, Warning, TEXT("Spawned %d agents out of %d"), Agents.Num(), NumAgents);
 		}
 	}
   
@@ -37,8 +40,6 @@ void AFlockManager::BeginPlay()
 void AFlockManager::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-
 }
 
 

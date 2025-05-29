@@ -37,10 +37,12 @@ public:
 	TSubclassOf<AFlockAgent> AgentClass;
   
 	UPROPERTY(EditAnywhere)
-	int NumAgents = 50;
+	int NumAgents = 150;
   
 	UPROPERTY(EditAnywhere)
-	FVector SpawnBounds = FVector(1000, 1000, 500);
+	FVector SpawnBounds = FVector(1500, 1500, 1000);
+
+	FVector SpawnCenter = FVector::ZeroVector;
   
 private:
 	TArray<AFlockAgent*> Agents;
