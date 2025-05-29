@@ -23,6 +23,7 @@ void AFlockAgent::Initialize(AFlockManager* Manager)
 {
    FlockManager = Manager;
 
+   //random vikter individuellt för varje boids så flygandet blir lite mer spännande
    PersonalCohesionWeight = FMath::FRandRange(0.8f, 1.2f) * CohesionWeight;
    PersonalSeparationWeight = FMath::FRandRange(0.8f, 1.2f) * SeparationWeight;
    PersonalAlignmentWeight = FMath::FRandRange(0.8f, 1.2f) * AlignmentWeight;
@@ -36,7 +37,8 @@ void AFlockAgent::BeginPlay()
 {
    Super::BeginPlay();
    Velocity = FVector::ForwardVector * MaxSpeed;
-   
+
+   //varierande radie för grannar vid start
    DynamicNeighbourRadius = NeighbourRadius * FMath::FRandRange(0.9f, 1.1f);
    
 }
@@ -82,6 +84,7 @@ FVector AFlockAgent::Separation()
    for (AFlockAgent* Flock : FlockManager->GetNearbyAgents(this, DynamicNeighbourRadius * 0.5f))
    {
       FVector Diff = GetActorLocation() - Flock->GetActorLocation();
+      //ju närmare desto mer seperation
      Steer += Diff /FMath::Max(Diff.SizeSquared(), 1.0f);;
       Count++;
    }
@@ -95,6 +98,7 @@ FVector AFlockAgent::Alignment()
    int Count = 0;
    for (AFlockAgent* Flock : FlockManager->GetNearbyAgents(this, DynamicNeighbourRadius))
    {
+      //matchar flockens velocity
       Avg += Flock->GetVelocity();
       Count++;
    }
@@ -150,7 +154,7 @@ FVector AFlockAgent::AvoidObstacles() const
       }
    }
 
-   return FVector::ZeroVector; // Inget hinder
+   return AvoidForce; // Inget hinder
 }
 
 
@@ -171,6 +175,7 @@ FVector AFlockAgent::StayInBounds() const
    FVector Min = FlockManager->SpawnBounds - HalfBounds;
    FVector Max = FlockManager->SpawnBounds + HalfBounds;
 
+   //om utanför gränserna styr mot mitten med krzft
    if (Pos.X < Min.X)
    {
       Correction.X = 1;
@@ -203,6 +208,7 @@ FVector AFlockAgent::StayInBounds() const
    return Correction.GetSafeNormal() * MaxSpeed - Velocity;
 }
 
+//mjukare rörelser för mer randomness i rörelsen 
 FVector AFlockAgent::GetDynamicWander(float Time) const
 {
    float Angle = FMath::PerlinNoise1D(Time + UniqueOffset) * 360.f;

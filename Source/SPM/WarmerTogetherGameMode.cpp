@@ -1,31 +1,28 @@
 // Copyright Epic Games, Inc. All Rights Reserved.
 
-#include "SPMGameMode.h"
-#include "CharacterBig.h"
-#include "CharacterSmall.h"
+#include "WarmerTogetherGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "UObject/ConstructorHelpers.h"
-#include "CharacterPlayerController.h"
 
-ASPMGameMode::ASPMGameMode()
+AWarmerTogetherGameMode::AWarmerTogetherGameMode()
 {
 	DefaultPawnClass = nullptr;
 }
 
-void ASPMGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
+void AWarmerTogetherGameMode::InitGame(const FString& MapName, const FString& Options, FString& ErrorMessage)
 {
 	Super::InitGame(MapName, Options, ErrorMessage);
 	
 }
 
 //SKAPA BUILDER KLASS?
-void ASPMGameMode::BeginPlay()
+void AWarmerTogetherGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 
 }
 
-void ASPMGameMode::SpawnPlayers()
+void AWarmerTogetherGameMode::SpawnPlayers()
 {
 	// Spawn Player 1
 	APlayerController* Player1Controller = UGameplayStatics::GetPlayerController(GetWorld(), 0);
