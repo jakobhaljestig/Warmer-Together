@@ -237,7 +237,7 @@ public:
 	
 private:
 	
-	void UpdatePlayerLocation();
+	void UpdateLastSafeLocation();
 
 	UPROPERTY(VisibleAnywhere, Category = "Respawn")
 	FVector CheckpointLocation;
