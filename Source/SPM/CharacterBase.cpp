@@ -67,7 +67,7 @@ void ACharacterBase::BeginPlay()
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
 	CheckpointLocation = GetActorLocation();
-	UpdatePlayerLocation();
+	UpdateLastSafeLocation();
 
 	PushComponent = FindComponentByClass<UPushComponent>();
 	if (!PushComponent)
@@ -104,7 +104,7 @@ void ACharacterBase::Tick(float DeltaTime)
 		LastGroundedZ = GetActorLocation().Z;
 	}
 	
-	UpdatePlayerLocation();
+	UpdateLastSafeLocation();
 
 	if (bSuccesfulHug)
 	{
@@ -460,7 +460,7 @@ void ACharacterBase::ResetPlayerState()
 	bHasDied = false;
 }
 
-void ACharacterBase::UpdatePlayerLocation()
+void ACharacterBase::UpdateLastSafeLocation()
 {
 	if (!GetCharacterMovement()->IsMovingOnGround())
 		return;
