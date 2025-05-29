@@ -15,20 +15,14 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BPI_Ladder.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GameMode.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Ladder.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Ladder.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameActor.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/NewGameMode.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/SM_WBLadder_Blueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/SM_WBLadder_Blueprint.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WBP_MainMenu.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WBP_Settings.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/UI/WBP_Settings.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WB_VictoryTemp.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/SPMGameInstance.cpp" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/SPMGameInstance.h" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/SPMGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/WarmerTogetherGameMode.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/SPMGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/WarmerTogetherGameMode.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_IceFloat.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_IceFloat.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MovingIceFloat.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_MovingIceFloat.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/IceFloat.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/IceFloat.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/IceFloat.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/IceFloat.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/IceFloatSpawner.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/IceFloatSpawner.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/IceFloatSpawner.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/IceFloatSpawner.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/MovingIceFloat.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/MovingIceFloat.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/SprintComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/SprintComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -54,6 +48,7 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
+    <setting file="cidr-memory-view://6" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/AIModule/Private/EnvironmentQuery/EQSTestingPawn.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Classes/GameFramework/CharacterMovementComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/Engine/Private/Components/CharacterMovementComponent.cpp" root0="FORCE_HIGHLIGHTING" />
@@ -84,22 +79,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;C/C++ Project.SPM.executor&quot;: &quot;Run&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;Jakob__Ny&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;SolutionBuilderGeneralOptionsPage&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "C/C++ Project.SPM.executor": "Debug",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "git-widget-placeholder": "Nora",
+    "ignore.virus.scanning.warn.message": "true",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "SolutionBuilderGeneralOptionsPage",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RunManager" selected="C/C++ Project.SPM">
     <configuration name="SPM" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">

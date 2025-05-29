@@ -59,9 +59,11 @@ void USprintComponent::StopSprint()
 	GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &USprintComponent::RegenerateStamina, 0.1f, true);
 }
 
+
 void USprintComponent::RegenerateStamina()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Stamina: %.2f"), Stamina));
+	
 	if (Stamina < MaxStamina)
 	{
 		Stamina += StaminaRegenRate * GetWorld()->GetDeltaSeconds();
@@ -73,6 +75,7 @@ void USprintComponent::RegenerateStamina()
 			GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle);
 		}
 	}
+	
 	if (Stamina > 0 && !bCanSprint) 
 	{
 		bCanSprint = true;

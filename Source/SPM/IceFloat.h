@@ -25,6 +25,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* IceMesh;
 
+
 public:	
 	virtual void Tick(float DeltaTime) override;
 	
@@ -41,10 +42,12 @@ public:
 	void RespawnObject();
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IceFloat")
-	float BreakTime = 1.0f;
+	float BreakTime = 0.0f;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "IceFloat")
-	float RespawnTime = 2.5f;
+	float RespawnTime = 0.0f;
+
+	
 
 private:
 
@@ -57,7 +60,5 @@ private:
 	void TriggerAnimationBreak();
 
 	void RespawnAnimation();
-	
-	
 	
 };

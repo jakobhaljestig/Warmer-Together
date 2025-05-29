@@ -18,7 +18,7 @@ AIceFloat::AIceFloat()
 	IceCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("IceCollider"));
 	IceCollider->SetupAttachment(RootComponent);
 	
-
+	
 }
 
 // Called when the game starts or when spawned
@@ -43,7 +43,7 @@ void AIceFloat::BreakObject()
 	UE_LOG(LogTemp, Warning, TEXT("BreakObject called – starting BreakTimer"));
 	bHasRespawn = false;
 
-	BreakTime = BreakTime - 0.2f;
+	BreakTime = BreakTime - 0.5f;
 
 	GetWorld()->GetTimerManager().SetTimer(IcefloatTimerHandle, this, &AIceFloat::TriggerAnimationBreak, BreakTime, false);
 }
@@ -57,7 +57,7 @@ void AIceFloat::TriggerAnimationBreak()
 		BreakEvent();
 	}
 	
-	GetWorld()->GetTimerManager().SetTimer(IcefloatTimerHandle, this, &AIceFloat::HandleBreak, 0.2f, false);
+	GetWorld()->GetTimerManager().SetTimer(IcefloatTimerHandle, this, &AIceFloat::HandleBreak, 0.5f, false);
 }
 
 void AIceFloat::HandleBreak()
@@ -84,5 +84,7 @@ void AIceFloat::RespawnObject()
 	SetActorEnableCollision(true);
 	bHasRespawn = true;
 }
+
+
 
 

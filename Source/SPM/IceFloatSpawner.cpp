@@ -54,6 +54,10 @@ void AIceFloatSpawner::SpawnIceFloat()
 		{
 			NewFloat->SetEndTarget(EndTarget->GetActorLocation());
 			NewFloat-> SetMovement(MovementSpeed);
+			
+			//För flaken ska gå sönder
+			NewFloat -> SetBreakTime(BreakTime);
+			NewFloat -> SetRespawnTime(RespawnTime);
 			NewFloat->OnReachedEnd.AddDynamic(this, &AIceFloatSpawner::HandleIceFloatReachedEnd);
 			ActiveIceFloats.Add(NewFloat);
 		}

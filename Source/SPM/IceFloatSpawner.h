@@ -24,10 +24,7 @@ protected:
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<AMovingIceFloat> MovingIceFloatClass;
-
 	
-
-
 	//Intervall av tid då isflak spawnas 
 	UPROPERTY(EditAnywhere)
 	float SpawnInterval = 1.0f;
@@ -36,10 +33,18 @@ protected:
 	float MovementSpeed = 1.0f;
 
 	UPROPERTY(EditAnywhere)
+	float BreakTime;
+
+	UPROPERTY(EditAnywhere)
+	float RespawnTime; 
+
+	UPROPERTY(EditAnywhere)
 	TArray <AMovingIceFloat*> ActiveIceFloats;
 
 	UPROPERTY(EditAnywhere)
 	TArray <AMovingIceFloat*> InactiveIceFloats;
+
+	
 
 public:	
 	// Called every frame

@@ -60,5 +60,11 @@ void AMovingIceFloat::SetMovement (float Speed)
 
 void AMovingIceFloat::SetBreakTime(float InBreakTime)
 {
-	
+	BreakTime = InBreakTime;
 }
+
+void AMovingIceFloat::SetRespawnTime(float InRespawnTime)
+{
+	RespawnTime = InRespawnTime;
+}
+
