@@ -76,9 +76,6 @@ private:
 	UPROPERTY()
 	UBodyTemperature* TempSmallPlayer;
 
-	bool bFrozen = false;
-	bool bDisplayFreezeEffect = false;
-
 	bool bIsHugging;
 
 	float HugHeatRate = 100.f;

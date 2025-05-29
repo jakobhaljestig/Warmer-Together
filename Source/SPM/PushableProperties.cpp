@@ -50,9 +50,9 @@ FVector UPushableProperties::GetPushPosition() const
 
 bool UPushableProperties::GrabbersHaveSameRotation() const
 {
-	if (NumberOfGrabbers > RequiredNumberOfGrabbers)
+	if (NumberOfGrabbers > 1)
 	{
-		float Yaw = 0;;
+		float Yaw = 0;
 		for (UPushComponent* PushComponent : Grabbers)
 		{
 			if (Yaw == 0)
