@@ -15,21 +15,18 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCubeHeavy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCubeHeavy.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube_Wide.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube_Wide.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigPushing.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigPushing.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/0/53/XFRFED5CUHOWS8AMAPWBFX.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/1/CS/6LIX6Z84BNLCH8R107SUBS.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/3/1X/2WVR2O1PZP6C6TR7D6GN6N.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/3/O2/JZLSN1UUWF4I7RRDSA752U.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/3/VN/M6I7TKCQ9Z1Z039YQYK2ER.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/3/VN/M6I7TKCQ9Z1Z039YQYK2ER.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/A/YO/HEW0IIGHVTI2KSA7SF5K1D.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/A/YO/HEW0IIGHVTI2KSA7SF5K1D.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/D/9O/6XMXXEYYGYV6EB7KILUKXU.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/E/UU/KTP37EQ982CIWSUQHCJE1M.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/PushComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/PushComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/PushableProperties.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/PushableProperties.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/PushableProperties.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/PushableProperties.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Animation/ABP_Big.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animation/ABP_Big.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Animation/ABP_Small.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animation/ABP_Small.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Animation/BS_Small_Walk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Animation/BS_Small_Walk.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigLand.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigLand.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigWalk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/BigCharacter/Animations/AS_BigWalk.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallJumpUp.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallJumpUp.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallLand.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallLand.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallRunning.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallRunning.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallWalk.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Animations/AS_SmallWalk.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Meshes/SM_SmallCharacter_Skeleton.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Meshes/SM_SmallCharacter_Skeleton.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/Robin/BalanceLogTest.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/Robin/BalanceLogTest.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/5/OC/4LAFC1SFI60O1SELD290II.uasset" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -85,22 +82,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "C/C++ Project.SPM.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "New__R",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "SolutionBuilderGeneralOptionsPage",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;C/C++ Project.SPM.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;New__R&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;SolutionBuilderGeneralOptionsPage&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="C/C++ Project.SPM">
     <configuration name="SPM" type="CppProject" factoryName="C++ Project">
       <configuration_1 setup="1">
