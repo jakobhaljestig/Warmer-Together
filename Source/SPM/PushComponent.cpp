@@ -3,6 +3,7 @@
 
 #include "PushComponent.h"
 
+#include "FallingTree.h"
 #include "PushableProperties.h"
 #include "VectorTypes.h"
 
@@ -24,8 +25,11 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 			StopPushing();
 		}
 		else if(!PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush()){
-			StopPushing();
-			StartPushing();
+			if (!Cast<AFallingTree>(PhysicsHandle->GetGrabbedComponent()->GetOwner()))
+			{
+				StopPushing();
+				StartPushing();
+			}
 			OwnerMovementComponent->MaxWalkSpeed = 0;
 		}
 		else if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
