@@ -15,6 +15,7 @@
 #include "InputActionValue.h"
 #include "PushComponent.h"
 #include "HugComponent.h"
+#include "MeshPassProcessor.h"
 #include "SprintComponent.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -267,7 +268,10 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint()
 {
-	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
+
+	FVector Movement = GetVelocity();
+	
+	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied && !Movement.IsZero())
 	{
 		SprintComponent->StartSprint();
 		bIsSprinting = true;

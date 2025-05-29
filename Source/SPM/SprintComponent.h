@@ -33,6 +33,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
 	float StaminaRegenRate = 2;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float StaminaDelay = 1;
 	
 
 public:	
@@ -41,6 +44,8 @@ public:
 private:
 	
 	void DrainStamina();
+
+	void BeginRegeneratingStamina();
 	
 	void RegenerateStamina();
 
@@ -50,5 +55,9 @@ private:
 
 	float Stamina;
 
+	float BaseSpeed; 
+
 	FTimerHandle StaminaCooldownTimerHandle;
+
+	FTimerHandle StaminaRegenDelayHandle;
 };

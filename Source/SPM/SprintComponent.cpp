@@ -13,7 +13,13 @@ USprintComponent::USprintComponent()
 void USprintComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
+	BaseSpeed = CharacterOwner->GetCharacterMovement()->MaxWalkSpeed;
+	
 	Stamina =  MaxStamina;
+	
+	
 }
 
 void USprintComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -53,9 +59,25 @@ void USprintComponent::DrainStamina()
 void USprintComponent::StopSprint()
 {
 	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
-	CharacterOwner->GetCharacterMovement()->MaxWalkSpeed = 500.f; 
+	CharacterOwner->GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 	GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle);
-	
+
+	if (Stamina <= 0)
+	{
+		if (!GetWorld()->GetTimerManager().IsTimerActive(StaminaRegenDelayHandle))
+		{
+			GetWorld()->GetTimerManager().SetTimer(StaminaRegenDelayHandle, this, &USprintComponent::BeginRegeneratingStamina, StaminaDelay, false);
+		}
+	}
+	else
+	{
+		GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &USprintComponent::RegenerateStamina, 0.1f, true);
+	}
+}
+
+void USprintComponent::BeginRegeneratingStamina()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Stamina: %.2f"), Stamina));
 	GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &USprintComponent::RegenerateStamina, 0.1f, true);
 }
 
