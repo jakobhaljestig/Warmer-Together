@@ -34,7 +34,7 @@ void UPushableProperties::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 bool UPushableProperties::CanPush() const
 {
-	return NumberOfGrabbers >= RequiredNumberOfGrabbers;
+	return NumberOfGrabbers >= RequiredNumberOfGrabbers && GrabbersHaveSameRotation();
 }
 
 FVector UPushableProperties::GetPushPosition() const
@@ -46,6 +46,28 @@ FVector UPushableProperties::GetPushPosition() const
 	}
 
 	return CombinedVectors / NumberOfGrabbers;
+}
+
+bool UPushableProperties::GrabbersHaveSameRotation() const
+{
+	float Yaw = 0;;
+	for (UPushComponent* PushComponent : Grabbers)
+	{
+		if (Yaw == 0)
+		{
+			Yaw = PushComponent->GetOwner()->GetActorRotation().Yaw;
+		}
+		else
+		{
+			Yaw -= PushComponent->GetOwner()->GetActorRotation().Yaw;
+		}
+	}
+
+	if (Yaw >= 20 || Yaw <= -20)
+	{
+		return false;
+	}
+	return true;
 }
 
 

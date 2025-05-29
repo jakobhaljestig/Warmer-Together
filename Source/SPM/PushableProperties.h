@@ -41,6 +41,8 @@ public:
 	bool CanPush() const;
 
 	FVector GetPushPosition() const;
+	
+	bool GrabbersHaveSameRotation() const;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsFalling = false;
