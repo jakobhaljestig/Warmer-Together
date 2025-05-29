@@ -3,6 +3,8 @@
 
 #include "PushableProperties.h"
 
+#include "PushComponent.h"
+
 // Sets default values for this component's properties
 UPushableProperties::UPushableProperties()
 {
@@ -33,6 +35,17 @@ void UPushableProperties::TickComponent(float DeltaTime, ELevelTick TickType, FA
 bool UPushableProperties::CanPush() const
 {
 	return NumberOfGrabbers >= RequiredNumberOfGrabbers;
+}
+
+FVector UPushableProperties::GetPushPosition() const
+{
+	FVector CombinedVectors;
+	for (UPushComponent* PushComponent : Grabbers)
+	{
+		CombinedVectors += PushComponent->GetOwner()->GetActorLocation();
+	}
+
+	return CombinedVectors / NumberOfGrabbers;
 }
 
 

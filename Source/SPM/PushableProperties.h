@@ -7,6 +7,8 @@
 #include "PushableProperties.generated.h"
 
 
+class UPushComponent;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPM_API UPushableProperties : public UActorComponent
 {
@@ -29,11 +31,16 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int RequiredNumberOfGrabbers = 0;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	TArray<UPushComponent*> Grabbers;
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int HoldDistance = 100;
 
 	bool CanPush() const;
+
+	FVector GetPushPosition() const;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsFalling = false;
