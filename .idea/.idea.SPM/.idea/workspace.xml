@@ -15,11 +15,20 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCube.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCubeHeavy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCubeHeavy.uasset" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/6/27/W52R3T8VNU427T1WYX8847.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/__ExternalActors__/Maps/Robin/MiniGame_TestMap/9/Z1/5IXD33S3Q76N6L4CWWCEUX.uasset" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/PushableProperties.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/PushableProperties.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Config/DefaultEngine.ini" beforeDir="false" afterPath="$PROJECT_DIR$/Config/DefaultEngine.ini" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BPI_Ladder.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GameMode.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GameMode.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_Ladder.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_Ladder.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameActor.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/NewGameMode.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/SM_WBLadder_Blueprint.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/SM_WBLadder_Blueprint.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WBP_MainMenu.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WBP_Settings.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/UI/WBP_Settings.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WB_VictoryTemp.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/SPMGameInstance.cpp" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/SPMGameInstance.h" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/SPMGameMode.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/WarmerTogetherGameMode.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/SPMGameMode.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/WarmerTogetherGameMode.h" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -80,7 +89,7 @@
     &quot;C/C++ Project.SPM.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;New__R&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;Jakob__Ny&quot;,
     &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
     &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
@@ -269,6 +278,7 @@
       <workItem from="1748363287062" duration="740000" />
       <workItem from="1748387384438" duration="2623000" />
       <workItem from="1748415010725" duration="782000" />
+      <workItem from="1748522538158" duration="2549000" />
     </task>
     <servers />
   </component>

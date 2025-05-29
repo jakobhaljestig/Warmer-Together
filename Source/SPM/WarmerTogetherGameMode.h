@@ -4,18 +4,18 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/GameModeBase.h"
-#include "SPMGameMode.generated.h"
+#include "WarmerTogetherGameMode.generated.h"
 
 class ACharacterBig;
 class ACharacterSmall;
 
 UCLASS(minimalapi)
-class ASPMGameMode : public AGameModeBase
+class AWarmerTogetherGameMode : public AGameModeBase
 {
 	GENERATED_BODY()
 
 public:
-	ASPMGameMode();
+	AWarmerTogetherGameMode();
 
 	UFUNCTION(BlueprintCallable)
 	void SpawnPlayers();
