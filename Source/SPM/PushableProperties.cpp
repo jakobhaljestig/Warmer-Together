@@ -50,22 +50,24 @@ FVector UPushableProperties::GetPushPosition() const
 
 bool UPushableProperties::GrabbersHaveSameRotation() const
 {
-	float Yaw = 0;;
-	for (UPushComponent* PushComponent : Grabbers)
+	if (NumberOfGrabbers > RequiredNumberOfGrabbers)
 	{
-		if (Yaw == 0)
+		float Yaw = 0;;
+		for (UPushComponent* PushComponent : Grabbers)
 		{
-			Yaw = PushComponent->GetOwner()->GetActorRotation().Yaw;
+			if (Yaw == 0)
+			{
+				Yaw = PushComponent->GetOwner()->GetActorRotation().Yaw;
+			}
+			else
+			{
+				Yaw -= PushComponent->GetOwner()->GetActorRotation().Yaw;
+			}
 		}
-		else
+		if (Yaw >= 20 || Yaw <= -20)
 		{
-			Yaw -= PushComponent->GetOwner()->GetActorRotation().Yaw;
+			return false;
 		}
-	}
-
-	if (Yaw >= 20 || Yaw <= -20)
-	{
-		return false;
 	}
 	return true;
 }
