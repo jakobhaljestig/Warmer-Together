@@ -50,9 +50,6 @@ private:
 	UPROPERTY(VisibleAnywhere, Category = "Components")
 	USphereComponent* TriggerComp;
 
-	UPROPERTY(EditAnywhere)
-	float TriggerRadius = 500;
-
 	bool bCheckpointActivatedCharacterBig = false;
 	bool bCheckpointActivatedCharacterSmall = false;
 

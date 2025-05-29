@@ -67,7 +67,7 @@ void ACharacterBase::BeginPlay()
 	
 	CurrentMovementSpeed = BaseMovementSpeed;
 	CheckpointLocation = GetActorLocation();
-	UpdatePlayerLocation();
+	UpdateLastSafeLocation();
 
 	PushComponent = FindComponentByClass<UPushComponent>();
 	if (!PushComponent)
@@ -104,7 +104,7 @@ void ACharacterBase::Tick(float DeltaTime)
 		LastGroundedZ = GetActorLocation().Z;
 	}
 	
-	UpdatePlayerLocation();
+	UpdateLastSafeLocation();
 
 	if (bSuccesfulHug)
 	{
@@ -205,8 +205,8 @@ void ACharacterBase::Look(const FInputActionValue& Value)
 	FVector2D LookAxisVector = Value.Get<FVector2D>();
 	if (Controller != nullptr)
 	{
-		AddControllerYawInput(LookAxisVector.X);
-		AddControllerPitchInput(LookAxisVector.Y);
+		AddControllerYawInput(LookAxisVector.X * CameraRotationRate * GetWorld()->GetDeltaSeconds());
+		AddControllerPitchInput(LookAxisVector.Y * CameraRotationRate * GetWorld()->GetDeltaSeconds());
 	}
 }
 
@@ -460,7 +460,7 @@ void ACharacterBase::ResetPlayerState()
 	bHasDied = false;
 }
 
-void ACharacterBase::UpdatePlayerLocation()
+void ACharacterBase::UpdateLastSafeLocation()
 {
 	if (!GetCharacterMovement()->IsMovingOnGround())
 		return;

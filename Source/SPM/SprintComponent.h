@@ -26,13 +26,16 @@ protected:
 	float SprintSpeed;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
-	float MaxStamina = 10;
+	float MaxStamina = 100;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
 	float StaminaDrainRate;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
-	float StaminaRegenRate = 2;
+	float StaminaRegenRate;
+
+	UFUNCTION(BlueprintCallable, Category = "Sprint")
+	float GetStamina() {return Stamina;}
 	
 
 public:	

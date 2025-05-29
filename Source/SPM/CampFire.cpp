@@ -23,7 +23,6 @@ ACampFire::ACampFire()
 	if (TriggerComp)
 	{
 		TriggerComp->SetupAttachment(RootComponent);
-		TriggerComp->InitSphereRadius(TriggerRadius);
 		TriggerComp->OnComponentBeginOverlap.AddDynamic(this, &ACampFire::OnBeginOverlap);
 		TriggerComp->OnComponentEndOverlap.AddDynamic(this, &ACampFire::OnEndOverlap);
 	}
@@ -42,25 +41,6 @@ void ACampFire::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
-
-/*
-// Exempel på trigger när spelaren går in/ut ur en värmezons område
-void ACampFire::OnPlayerEnterHeatZone(ACharacterBase* Player)
-{
-	// När spelaren går in i värmezonen
-	// Player->PerformanceTracker->SetIsNearHeat(true);
-	Player->GetComponentByClass<UBodyTemperature>()->IsNearHeat(true);
-
-	Player->SetCheckpointLocation(GetOwner()->GetActorLocation());
-}
-
-void ACampFire::OnPlayerExitHeatZone(ACharacterBase* Player)
-{
-	// När spelaren går ut ur värmezonen
-	// Player->PerformanceTracker->SetIsNearHeat(false);
-	Player->GetComponentByClass<UBodyTemperature>()->IsNearHeat(false);
-}
-*/
 
 void ACampFire::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,UPrimitiveComponent* OtherComp,
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)

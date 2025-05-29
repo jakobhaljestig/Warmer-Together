@@ -237,7 +237,7 @@ public:
 	
 private:
 	
-	void UpdatePlayerLocation();
+	void UpdateLastSafeLocation();
 
 	UPROPERTY(VisibleAnywhere, Category = "Respawn")
 	FVector CheckpointLocation;
@@ -262,6 +262,9 @@ private:
 	
 	UPROPERTY(EditAnywhere, Category = "Jump")
 	float CoyoteTimeDuration = 0.2f;
+
+	UPROPERTY(EditAnywhere, Category = "Camera")
+	float CameraRotationRate = 70.f;
 	
 	void EnableCoyoteTime();
 	

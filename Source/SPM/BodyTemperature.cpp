@@ -27,36 +27,13 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	
-	ACharacterPlayerController* Controller= Cast<ACharacterPlayerController>(Cast<APawn>(GetOwner())->GetController());
 	if (!bNearHeat)
     {
 		CoolDown(DeltaTime);
-		if (GetTempPercentage() < 0.3 && !bDisplayFreezeEffect && Controller)
-		{
-			bDisplayFreezeEffect = true;
-		}
-		if (GetTempPercentage() >= 0.3 && bDisplayFreezeEffect && Controller)
-		{
-			bDisplayFreezeEffect = false;
-		}
-		if (Temp <= 0.1)
-		{
-			if (!bFrozen)
-			{
-				bFrozen = true;
-				//HandleFreeze();
-			}
-		}
-
     }
 	if (bNearHeat && Temp < MaxTemp)
     {
         HeatUp(DeltaTime);
-		if (bFrozen)
-		{
-			bFrozen = false;
-			//GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
-		}
     }
 
 	if (bIsHugging)
@@ -121,12 +98,6 @@ void UBodyTemperature::HeatUp(float DeltaTime)
 
 void UBodyTemperature::ShareTemp()
 {
-	if (bFrozen)
-	{
-		bFrozen = false;
-		//GetOwner()->GetComponentByClass<UHealth>()->IsFrozen(bFrozen);
-	}
-
 	ACharacter* Char0 = UGameplayStatics::GetPlayerCharacter(this, 0);
 	ACharacter* Char1 = UGameplayStatics::GetPlayerCharacter(this, 1);
 
@@ -135,18 +106,6 @@ void UBodyTemperature::ShareTemp()
 
 	if (Temp0 && Temp1)
 	{
-		/*const float Mean = (Temp0->Temp + Temp1->Temp) / 2.0f;
-
-		if (const float HalfTemp = Temp0->MaxTemp * 0.5f; Mean < HalfTemp)
-		{
-			float NewTemp = HalfTemp; // höj båda upp till 50%
-			UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Hug boost to 50%% → %.2f"), NewTemp);
-			
-		}
-		
-		float NewTemp = MaxTemp;
-		Temp0->Temp = NewTemp;
-		Temp1->Temp = NewTemp;*/
 		Temp0->bIsHugging = true;
 		Temp1->bIsHugging = true;
 		UE_LOG(LogTemp, Warning, TEXT("[BodyTemp] Successfully shared temp!"));
@@ -163,7 +122,6 @@ void UBodyTemperature::ShareTemp()
 void UBodyTemperature::ResetTemp()
 {
 	Temp = MaxTemp;
-	bFrozen = false;
 }
 
 void UBodyTemperature::ModifyTemperature(float DeltaTemperature)
