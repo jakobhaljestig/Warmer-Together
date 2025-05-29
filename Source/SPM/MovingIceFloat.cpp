@@ -57,3 +57,8 @@ void AMovingIceFloat::SetMovement (float Speed)
 {
 	MovementSpeed = Speed;
 }
+
+void AMovingIceFloat::SetBreakTime(float InBreakTime)
+{
+	
+}

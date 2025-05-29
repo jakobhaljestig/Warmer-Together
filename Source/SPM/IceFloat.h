@@ -34,6 +34,12 @@ public:
 	UFUNCTION(BlueprintImplementableEvent, Category = "IceFloat")
 	void RespawnEvent();
 
+	UFUNCTION(BlueprintImplementableEvent, Category = "IceFloat")
+	void BreakEvent();
+
+	UFUNCTION(BlueprintCallable, Category = "IceFloat")
+	void RespawnObject();
+
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IceFloat")
 	float BreakTime = 1.0f;
 
@@ -42,11 +48,16 @@ public:
 
 private:
 
-	FTimerHandle BreakTimerHandle;
-	FTimerHandle RespawnTimerHandle;
+	FTimerHandle IcefloatTimerHandle;
+
+	bool bHasRespawn = true;
 
 	void HandleBreak();
+
+	void TriggerAnimationBreak();
+
+	void RespawnAnimation();
 	
-	void RespawnObject();
+	
 	
 };
