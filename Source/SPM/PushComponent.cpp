@@ -25,11 +25,6 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 			StopPushing();
 		}
 		else if(!PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush()){
-			if (!Cast<AFallingTree>(PhysicsHandle->GetGrabbedComponent()->GetOwner()))
-			{
-				StopPushing();
-				StartPushing();
-			}
 			OwnerMovementComponent->MaxWalkSpeed = 0;
 		}
 		else if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
