@@ -25,13 +25,9 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UProjectileMovementComponent* MovementComp;
 
-	void ThrowInDirection(const FVector& ThrowDirection) const;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	float Speed = 1500.0f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	float gravity = 1.0f;
+	void ThrowInDirection(const FVector& ThrowDirection, const float InSpeed, const float Gravity) const;
+	
+	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float MaxLifeTime = 5.0f;

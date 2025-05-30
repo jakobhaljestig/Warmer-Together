@@ -323,7 +323,7 @@ void ACharacterBase::Aim(const FInputActionValue& Value)
 {
 	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
-		//ThrowSnowballComponent->Aim();
+		ThrowSnowballComponent->Aim();
 	}
 }
 
@@ -332,7 +332,7 @@ void ACharacterBase::Throw (const FInputActionValue& Value)
 {
 	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
-		//ThrowSnowballComponent->Throw();
+		ThrowSnowballComponent->Throw();
 	}
 	
 }
