@@ -15,6 +15,12 @@ class SPM_API ACharacterPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintImplementableEvent, Category="CameraShake")
+	void StartFreezeShake(float Scale);
+
+	UFUNCTION(BlueprintImplementableEvent, Category="CameraShake")
+	void StopFreezeShake();
+	
 	UFUNCTION(BlueprintCallable)
 	void HideHUD(bool bShouldHide);
 

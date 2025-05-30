@@ -2,6 +2,7 @@
 
 
 #include "BodyTemperature.h"
+
 #include "CharacterPlayerController.h"
 #include "CharacterSmall.h"
 #include "Kismet/GameplayStatics.h"
@@ -14,12 +15,6 @@ UBodyTemperature::UBodyTemperature()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	Temp = MaxTemp;
-}
-
-// Called when the game starts
-void UBodyTemperature::BeginPlay()
-{
-	Super::BeginPlay();
 }
 
 // Called every frame
@@ -35,6 +30,55 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
     {
         HeatUp(DeltaTime);
     }
+
+	if (GetTempPercentage() <= 0.5f)
+	{
+		PlayerController->StartFreezeShake(1 - GetTempPercentage());
+	}
+	else
+	{
+		 PlayerController->StopFreezeShake();
+	}
+
+	/*
+	if (GetTempPercentage() <= 0.5 && GetTempPercentage() > 0.25)
+	{
+		if (bWeakCameraShakeActive)
+		{
+			bWeakCameraShakeActive = false;
+		}
+		if (!bStrongCameraShakeActive)
+		{
+			bStrongCameraShakeActive = true;
+            PlayerController->StartFreezeShake(2);
+		}
+	}
+	else if (GetTempPercentage() <= 0.25)
+	{
+		if (bStrongCameraShakeActive)
+		{
+			bStrongCameraShakeActive = false;
+		}
+		if (!bWeakCameraShakeActive)
+		{
+			bWeakCameraShakeActive = true;
+			PlayerController->StartFreezeShake(1);
+		}
+	}
+	else
+	{
+		if (bStrongCameraShakeActive)
+		{
+			bStrongCameraShakeActive = false;
+			PlayerController->StopFreezeShake();
+		}
+		if (bWeakCameraShakeActive)
+		{
+			bWeakCameraShakeActive = false;
+			PlayerController->StopFreezeShake();
+		}
+	}
+	*/
 
 	if (bIsHugging)
 	{
