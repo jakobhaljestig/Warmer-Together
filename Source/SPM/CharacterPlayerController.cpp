@@ -2,6 +2,9 @@
 
 
 #include "CharacterPlayerController.h"
+
+#include "BodyTemperature.h"
+#include "CharacterBase.h"
 #include "Blueprint/UserWidget.h"
 
 void ACharacterPlayerController::HideHUD(bool bShouldHide)
@@ -33,6 +36,8 @@ void ACharacterPlayerController::OnPossess(APawn* InPawn)
 	{
 		FreezeEffect->AddToPlayerScreen(1);
 	}
+
+	Cast<ACharacterBase>(InPawn)->GetBodyTemperature()->SetPlayerController(this);
 }
 
 void ACharacterPlayerController::OnUnPossess()

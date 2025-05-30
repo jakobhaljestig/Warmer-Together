@@ -2,6 +2,7 @@
 
 
 #include "BodyTemperature.h"
+
 #include "CharacterPlayerController.h"
 #include "CharacterSmall.h"
 #include "Kismet/GameplayStatics.h"
@@ -14,12 +15,6 @@ UBodyTemperature::UBodyTemperature()
 	PrimaryComponentTick.bCanEverTick = true;
 
 	Temp = MaxTemp;
-}
-
-// Called when the game starts
-void UBodyTemperature::BeginPlay()
-{
-	Super::BeginPlay();
 }
 
 // Called every frame
@@ -35,6 +30,15 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
     {
         HeatUp(DeltaTime);
     }
+
+	if (GetTempPercentage() <= 0.5f)
+	{
+		PlayerController->StartFreezeShake(1 - GetTempPercentage());
+	}
+	else
+	{
+		 PlayerController->StopFreezeShake();
+	}
 
 	if (bIsHugging)
 	{
