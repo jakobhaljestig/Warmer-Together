@@ -45,6 +45,7 @@ public:
 	FVector Alignment();
 	FVector StayInBounds() const;
 	FVector AvoidObstacles() const;
+	FVector JoinLargerFlockForce();
 	FVector GetDynamicWander(float Time) const;
 
 	// === Movement ===
