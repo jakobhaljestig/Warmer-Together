@@ -29,6 +29,7 @@ public:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Music")
 	AMusicManager* MusicManager;
-	
+
+	void SetTrack(USoundWave* NewTrack) { Track = NewTrack; };
 
 };
