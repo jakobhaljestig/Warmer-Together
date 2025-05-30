@@ -50,17 +50,6 @@ void AFlockAgent::Tick(float DeltaTime)
    Super::Tick(DeltaTime);
 
    ApplyFlocking(DeltaTime);
-   
-   FHitResult Hit;
-   AddActorWorldOffset(Velocity * DeltaTime, true, &Hit);
-
-   if (Hit.IsValidBlockingHit())
-   {
-      Velocity = FVector::ZeroVector;
-   }
-
-   
-   SetActorRotation(Velocity.Rotation());
 }
 
 //varje boid flyger mot dem andra boidsen, de flyger inte direkt mot varandra, utan styr gradvis mot varandra. 
@@ -108,102 +97,74 @@ FVector AFlockAgent::Alignment()
 
 FVector AFlockAgent::AvoidObstacles() const
 {
-   float TraceDistance = Velocity.Size() * 0.5f + 300.f; 
+   FHitResult Hit;
    FVector Start = GetActorLocation();
-   FVector Forward = Velocity.GetSafeNormal();
-
-   // Skapa sidovektorer
-   FVector Right = FRotationMatrix(Forward.Rotation()).GetUnitAxis(EAxis::Y);
-   FVector Left = -Right;
-
-   // Lista med riktningar att testa
-   TArray Directions = {
-      Forward,                                // rakt fram
-      (Forward + Left * 0.5f).GetSafeNormal(),  // snett vänster
-      (Forward + Right * 0.5f).GetSafeNormal(), // snett höger
-      Left,                                   // rakt vänster (backup)
-      Right                                   // rakt höger (backup)
-  };
+   FVector End = Start + Velocity.GetSafeNormal() * 200.f;
 
    FCollisionQueryParams Params;
    Params.AddIgnoredActor(this);
-   
-   float ClosestHitDistance = TraceDistance;
-   FVector AvoidForce = FVector::ZeroVector;
-
-   for (const FVector& Dir : Directions)
+   if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_WorldStatic, Params))
    {
-      FVector End = Start + Dir * TraceDistance;
+      return Hit.Normal * MaxForce; //knuffa bort från objekt
+   }
 
-      FHitResult Hit;
-      if (GetWorld()->LineTraceSingleByChannel(Hit, Start, End, ECC_WorldStatic, Params))
+   return FVector::ZeroVector;
+}
+
+
+
+FVector AFlockAgent::JoinLargerFlockForce()
+{
+   TArray<AFlockAgent*> Neighbours = FlockManager->GetNearbyAgents(this, DynamicNeighbourRadius);
+   int32 MyCount = Neighbours.Num();
+
+   FVector AvgPos = FVector::ZeroVector;
+   int32 LargerGroupCount = 0;
+
+   for (AFlockAgent* Other : Neighbours)
+   {
+      if (!Other || Other == this) continue;
+
+      int32 OtherCount = FlockManager->GetNearbyAgents(this, DynamicNeighbourRadius).Num();
+      if (OtherCount > MyCount + 2)
       {
-         float HitDistance = (Hit.ImpactPoint - Start).Size();
-         if (HitDistance < ClosestHitDistance)
-         {
-            ClosestHitDistance = HitDistance;
-
-            FVector Projected = FVector::VectorPlaneProject(Dir, Hit.Normal).GetSafeNormal();
-            FVector NormalResponse = Hit.Normal * MaxForce;
-            AvoidForce = Projected * MaxForce + NormalResponse;
-
-            // imbormsning
-            float BrakeFactor = 1.0f - (HitDistance / TraceDistance);
-            AvoidForce -= Velocity * BrakeFactor * 0.5f; // motverka hastighet
-         }
+         AvgPos += Other->GetActorLocation();
+         LargerGroupCount++;
       }
    }
 
-   return AvoidForce; // Inget hinder
+   if (LargerGroupCount > 0)
+   {
+      FVector Target = AvgPos / LargerGroupCount;
+      FVector Desired = (Target - GetActorLocation()).GetSafeNormal() * MaxSpeed;
+      return Desired - Velocity;
+   }
+
+   return FVector::ZeroVector;
 }
+
 
 
 FVector AFlockAgent::StayInBounds() const
 {
-   if (!FlockManager)
-   {
-      return FVector::ZeroVector;
-   }
+   if (!FlockManager) return FVector::ZeroVector;
 
-   //FVector ToCenter = FlockManager->SpawnCenter - GetActorLocation();
    FVector HalfBounds = FlockManager->SpawnBounds;
+   FVector Center = FlockManager->SpawnCenter;
+   FVector Min = Center - HalfBounds;
+   FVector Max = Center + HalfBounds;
 
-   //om utanför bounds styr tillbaka
    FVector Correction = FVector::ZeroVector;
-
    FVector Pos = GetActorLocation();
-   FVector Min = FlockManager->SpawnBounds - HalfBounds;
-   FVector Max = FlockManager->SpawnBounds + HalfBounds;
 
-   //om utanför gränserna styr mot mitten med krzft
-   if (Pos.X < Min.X)
-   {
-      Correction.X = 1;
-   }
-   else if (Pos.X > Max.X)
-   {
-      Correction.X = -1;
-   }
-   
-   if (Pos.Y < Min.Y)
-   {
-      Correction.Y = 1;
-   }
-   else if (Pos.Y > Max.Y)
-   {
-      Correction.Y = -1;
-   }
+   if (Pos.X < Min.X) Correction.X = 1;
+   else if (Pos.X > Max.X) Correction.X = -1;
 
-   if (Pos.Z < Min.Z)
-   {
-      Correction.Z = 1;
-   }
-   else if (Pos.Z > Max.Z)
-   {
-      Correction.Z = -1;
-   }
+   if (Pos.Y < Min.Y) Correction.Y = 1;
+   else if (Pos.Y > Max.Y) Correction.Y = -1;
 
-   
+   if (Pos.Z < Min.Z) Correction.Z = 1;
+   else if (Pos.Z > Max.Z) Correction.Z = -1;
 
    return Correction.GetSafeNormal() * MaxSpeed - Velocity;
 }
