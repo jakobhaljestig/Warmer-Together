@@ -1,4 +1,3 @@
-
 #include "SprintComponent.h"
 #include "CharacterBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -103,4 +102,5 @@ void USprintComponent::RegenerateStamina()
 		bCanSprint = true;
 	}
 }
+
 

@@ -36,13 +36,20 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
 	float StaminaRegenRate;
+	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float StaminaDelay = 1;
+
 
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	
+	
 	void DrainStamina();
+
+	void BeginRegeneratingStamina();
 	
 	void RegenerateStamina();
 
@@ -52,5 +59,10 @@ private:
 
 	float Stamina;
 
+	float BaseSpeed; 
+
 	FTimerHandle StaminaCooldownTimerHandle;
+
+	FTimerHandle StaminaRegenDelayHandle;
+
 };
