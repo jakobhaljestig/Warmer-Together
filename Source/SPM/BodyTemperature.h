@@ -7,8 +7,6 @@
 #include "Components/ActorComponent.h"
 #include "BodyTemperature.generated.h"
 
-class ACameraManager;
-class ACharacterPlayerController;
 
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPM_API UBodyTemperature : public UActorComponent
@@ -18,6 +16,10 @@ class SPM_API UBodyTemperature : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UBodyTemperature();
+
+protected:
+	// Called when the game starts
+	virtual void BeginPlay() override;
 
 public:	
 	// Called every frame
@@ -46,7 +48,7 @@ public:
 	UPROPERTY(BlueprintReadWrite)
 	float TemperaturePrecent;
 
-	void SetPlayerController(ACharacterPlayerController* NewPlayerController) { PlayerController = NewPlayerController; }
+	
 
 private:
 	
@@ -74,12 +76,6 @@ private:
 	UPROPERTY()
 	UBodyTemperature* TempSmallPlayer;
 
-	UPROPERTY()
-	ACharacterPlayerController* PlayerController;
-
-	bool bStrongCameraShakeActive = false;
-	bool bWeakCameraShakeActive = false;
-	
 	bool bIsHugging;
 
 	float HugHeatRate = 100.f;

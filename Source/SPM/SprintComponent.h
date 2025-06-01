@@ -18,9 +18,6 @@ public:
 	void StartSprint ();
 	
 	void StopSprint();
-	
-	UFUNCTION(BlueprintCallable, Category = "Sprint")
-	float GetStamina() const { return Stamina; }
 
 protected:
 	virtual void BeginPlay() override;
@@ -37,12 +34,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
 	float StaminaRegenRate;
 
+	UFUNCTION(BlueprintCallable, Category = "Sprint")
+	float GetStamina() {return Stamina;}
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Sprint")
+	float StaminaDelay = 1;
+	
+
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 private:
 	
 	void DrainStamina();
+
+	void BeginRegeneratingStamina();
 	
 	void RegenerateStamina();
 
@@ -52,5 +58,9 @@ private:
 
 	float Stamina;
 
+	float BaseSpeed; 
+
 	FTimerHandle StaminaCooldownTimerHandle;
+
+	FTimerHandle StaminaRegenDelayHandle;
 };

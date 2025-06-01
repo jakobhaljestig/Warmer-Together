@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "BodyTemperature.h"
 #include "InputActionValue.h"
 #include "WeatherComponent.h"
 #include "GameFramework/Character.h"
@@ -194,8 +195,6 @@ public:
 	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
-
-	UBodyTemperature* GetBodyTemperature() const { return BodyTempComponent; }
 
 	//RESPAWNING
 	

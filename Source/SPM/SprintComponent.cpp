@@ -40,7 +40,7 @@ void USprintComponent::StartSprint()
 
 void USprintComponent::DrainStamina()
 {
-	if (Stamina > 0 && (GetOwner()->GetVelocity().Y > 1 || GetOwner()->GetVelocity().X > 1))
+	if (Stamina > 0)
 	{
 		Stamina -= StaminaDrainRate * 0.1f; 
 		
