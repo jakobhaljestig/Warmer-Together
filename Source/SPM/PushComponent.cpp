@@ -2,10 +2,7 @@
 
 
 #include "PushComponent.h"
-
-#include "FallingTree.h"
 #include "PushableProperties.h"
-#include "VectorTypes.h"
 
 UPushComponent::UPushComponent()
 {
@@ -25,6 +22,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 			StopPushing();
 		}
 		else if(!PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush()){
+			UpdateGrabLocation();
 			OwnerMovementComponent->MaxWalkSpeed = 0;
 		}
 		else if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
@@ -85,8 +83,6 @@ void UPushComponent::StopPushing()
 
 void UPushComponent::Grab()
 {
-
-
 	if (PhysicsHandle == nullptr)
 	{
 		return;
@@ -106,10 +102,13 @@ void UPushComponent::Grab()
 		HitComponent->WakeAllRigidBodies();
 		HitActor->Tags.Add("Grabbed");
 		HitActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+		//Adjust rotation to face grabbed surface
 		FRotator NewRotation = HitResult.ImpactNormal.Rotation();
 		NewRotation.Pitch = 0.0f;
 		NewRotation.Yaw += 180.0f;
 		GetOwner()->SetActorRotation(NewRotation);
+		
 		GetGrabbableInReach(HitResult);
 		PhysicsHandle->GrabComponentAtLocation(
 			HitComponent,
@@ -121,7 +120,6 @@ void UPushComponent::Grab()
 
 }
 
-//Restricts player movement
 void UPushComponent::GrabEffect()
 {
 	OriginalMovementSpeed = OwnerMovementComponent->MaxWalkSpeed;
@@ -143,5 +141,14 @@ void UPushComponent::ReleaseEffect()
 	OwnerMovementComponent->RotationRate = OriginalRotationRate;
 	OwnerMovementComponent->SetJumpAllowed(true);
 	OwnerMovementComponent->SetPlaneConstraintEnabled(false);
+}
+
+void UPushComponent::UpdateGrabLocation()
+{
+	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent() != nullptr)
+	{
+		Release();
+		Grab();
+	}
 }
 
