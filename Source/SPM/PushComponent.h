@@ -19,9 +19,14 @@ class SPM_API UPushComponent : public UGrabComponent
 	public:
 	UPushComponent();
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
+
+	//Starts pushing object
 	virtual void StartPushing();
+
+	//Releases object
 	virtual void StopPushing();
-	void Grab() override;
+
+	virtual void Grab() override;
 
 	private:
 	virtual void GrabEffect() override;
@@ -33,6 +38,8 @@ class SPM_API UPushComponent : public UGrabComponent
 
 	UPROPERTY(EditAnywhere)
 	float MaxPushWeight = 250;
-	
+
+	//Update grab location to prevent grabbed object from snapping if other player releases it
+	void UpdateGrabLocation();
 	
 };
