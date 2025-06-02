@@ -38,14 +38,18 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	int HoldDistance = 100;
 
+	//Checks if object should be able to be pushed
 	bool CanPush() const;
 
+	//Gets location of all grabbers and centers the location to prevent janky behavior
 	FVector GetPushPosition() const;
-	
+
+	//Checks if all grabbers are facing a similiar direction
 	bool GrabbersHaveSameRotation() const;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bIsFalling = false;
+
 	
 
 		

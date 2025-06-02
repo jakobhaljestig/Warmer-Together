@@ -89,6 +89,7 @@ void UMinigameTriggerComponent::ZoomIn(AActor* Actor)
 		TriggerBox->RemoveFromRoot();
 		bActive = true;
 		ControllerOwner->GetMovementComponent()->Velocity = FVector(0, 0, 0);
+		Controller->HideHUD(true);
 		Controller->Possess(MiniGamePawn);
 		Controller->SetViewTarget(ControllerOwner);
 		Controller->SetViewTargetWithBlend(MiniGamePawn, 1, VTBlend_EaseIn, 5, true);

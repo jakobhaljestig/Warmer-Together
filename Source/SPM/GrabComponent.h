@@ -48,9 +48,6 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Grab")
 	float GrabRadius = 50.f;
 
-	UPROPERTY(EditAnywhere, Category = "Grab")
-	float HoldDistance = 200.f;
-
 	ECollisionChannel CollisionChannel;
 
 	UPROPERTY(VisibleAnywhere)

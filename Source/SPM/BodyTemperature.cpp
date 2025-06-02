@@ -31,7 +31,7 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
         HeatUp(DeltaTime);
     }
 
-	if (GetTempPercentage() <= 0.5f)
+	if (GetTempPercentage() <= CameraShakeStartPercent)
 	{
 		PlayerController->StartFreezeShake(1 - GetTempPercentage());
 	}
