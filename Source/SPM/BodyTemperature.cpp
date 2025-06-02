@@ -33,11 +33,11 @@ void UBodyTemperature::TickComponent(float DeltaTime, ELevelTick TickType, FActo
 
 	if (GetTempPercentage() <= CameraShakeStartPercent)
 	{
-		PlayerController->StartFreezeShake(1 - GetTempPercentage());
+		PlayerController->StartShiveringEffects(GetTempPercentage());
 	}
 	else
 	{
-		 PlayerController->StopFreezeShake();
+		 PlayerController->StopShiveringEffects();
 	}
 
 	if (bIsHugging)
