@@ -365,6 +365,8 @@ void ACharacterBase::EndPush(const FInputActionValue& Value)
 		bIsPushing = false;
 }
 
+
+//-- DANCE EMOTE --
 void ACharacterBase::StartDance(const FInputActionValue& Value)
 {
 	if (!bSuccesfulHug && !bHasDied && !bIsSprinting && !bIsPushing && !bHasJumped && !bIsCrouched && !bIsHugging)
