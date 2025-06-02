@@ -35,19 +35,6 @@ void ACharacterBig::BeginPlay()
 void ACharacterBig::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
-	if (bIsThrowing && !PickupComponent->Holding)
-	{
-		bIsThrowing = false;
-	}
-
-	if (!PickupComponent->Holding)
-	{
-		bIsLifting = false;
-		bIsThrowing = false;
-	}
-	
-	
 }
 
 void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
