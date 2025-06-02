@@ -24,7 +24,7 @@ void UGrabComponent::GrabAndRelease()
 		return;
 	}
 	
-	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+	if (GrabbedComponent != nullptr)
 	{
 		Release();
 	}
@@ -69,9 +69,9 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+	if (GrabbedComponent != nullptr)
 	{
-		PhysicsHandle->GetGrabbedComponent()->WakeRigidBody();
+		GrabbedComponent->WakeRigidBody();
 	}
 	// ...
 }
@@ -86,7 +86,7 @@ void UGrabComponent::Grab(){
 	FHitResult HitResult;
 	if (GetGrabbableInReach(HitResult))
 	{
-		if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+		if (GrabbedComponent != nullptr)
 		{
 			return;
 		}
@@ -104,22 +104,24 @@ void UGrabComponent::Grab(){
 			NAME_None,
 			HitResult.ImpactPoint);
 		GrabEffect();
+		GrabbedComponent = PhysicsHandle->GetGrabbedComponent();
 	}
 	
 }
 
 void UGrabComponent::Release()
 {
-	if (PhysicsHandle != nullptr && PhysicsHandle->GetGrabbedComponent() != nullptr)
+	if (PhysicsHandle != nullptr && GrabbedComponent != nullptr)
 	{
 		Holding = false;
-		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
+		AActor* GrabbedActor = GrabbedComponent->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
 		
 		
 		
 		PhysicsHandle->ReleaseComponent();
 		ReleaseEffect();
+		GrabbedComponent = nullptr;
 	}
 }
 
