@@ -15,8 +15,14 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/SprintComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/SprintComponent.cpp" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Source/SPM/SprintComponent.h" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/SprintComponent.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_MiniGameRadio.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WBP_MainMenuNew.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/UI/WBP_MainMenuNew.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/UI/WB_MiniGame.uasset" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Meshes/SM_SmallCharacter.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Characters/SmallCharacter/Meshes/SM_SmallCharacter.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/DistantMountain.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/DistantMountain.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/MainMenu.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/MainMenu.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Source/SPM/LiftComponent.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/Source/SPM/LiftComponent.cpp" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,14 +48,14 @@
   }
 }</component>
   <component name="HighlightingSettingsPerFile">
-    <setting file="cidr-memory-view://1" root0="FORCE_HIGHLIGHTING" />
-    <setting file="file://$PROJECT_DIR$/../../../../../../Program Files/Epic Games/UE_5.5/Engine/Source/Runtime/CoreUObject/Public/Templates/Casts.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterBase.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterPlayerController.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterPlayerController.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterSmall.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/CharacterSmall.h" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/SPM/CustomizeComponent.cpp" root0="FORCE_HIGHLIGHTING" />
+    <setting file="file://$PROJECT_DIR$/Source/SPM/CustomizeComponent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/FlockAgent.cpp" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/FlockAgent.h" root0="FORCE_HIGHLIGHTING" />
     <setting file="file://$PROJECT_DIR$/Source/SPM/FlockManager.cpp" root0="SKIP_HIGHLIGHTING" />
@@ -77,10 +83,10 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
-    "C/C++ Project.SPM.executor": "Debug",
+    "C/C++ Project.SPM.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "Nora",
+    "git-widget-placeholder": "New__R",
     "ignore.virus.scanning.warn.message": "true",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
