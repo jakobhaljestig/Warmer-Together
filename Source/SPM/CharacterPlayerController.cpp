@@ -24,28 +24,34 @@ void ACharacterPlayerController::HideHUD(bool bShouldHide)
 void ACharacterPlayerController::OnPossess(APawn* InPawn)
 {
 	Super::OnPossess(InPawn);
-	
-	HUD = CreateWidget(this, HUDClass);
-    if (HUD)
-    {
-    	HUD->AddToPlayerScreen(5);
-    }
 
-	FreezeEffect = CreateWidget(this, FreezeEffectClass);
-	if (FreezeEffect)
+	if (Cast<ACharacterBase>(InPawn))
 	{
-		FreezeEffect->AddToPlayerScreen(1);
-	}
+		HUD = CreateWidget(this, HUDClass);
+		if (HUD)
+		{
+			HUD->AddToPlayerScreen(5);
+		}
 
-	Cast<ACharacterBase>(InPawn)->GetBodyTemperature()->SetPlayerController(this);
+		FreezeEffect = CreateWidget(this, FreezeEffectClass);
+		if (FreezeEffect)
+		{
+			FreezeEffect->AddToPlayerScreen(1);
+		}
+	
+		Cast<ACharacterBase>(InPawn)->GetBodyTemperature()->SetPlayerController(this);
+	}
 }
 
 void ACharacterPlayerController::OnUnPossess()
 {
 	Super::OnUnPossess();
 
-	HUD->RemoveFromParent();
-	FreezeEffect->RemoveFromParent();
+	if (HUD != nullptr)
+		HUD->RemoveFromParent();
+
+	if (FreezeEffect != nullptr)
+		FreezeEffect->RemoveFromParent();
 
 	HUD = nullptr;
 	FreezeEffect = nullptr;
