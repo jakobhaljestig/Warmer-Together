@@ -105,6 +105,8 @@ void ACharacterBig::Move(const FInputActionValue& Value)
 			}
 			return;
 		}
+		//kanske en provisorisk lösning? eftersom climb inte triggas en andra gång nu 
+		bIsClimbing = ClimbingComponent->IsClimbing();
 		Super::Move(Value);
 	}
 }
