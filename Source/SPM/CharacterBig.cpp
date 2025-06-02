@@ -8,30 +8,19 @@
 #include "LiftComponent.h"
 #include "InputActionValue.h"
 
+ACharacterBig::ACharacterBig()
+{
+	LiftComponent = CreateDefaultSubobject<ULiftComponent>(TEXT("LiftComponent"));
+	ClimbComponent = CreateDefaultSubobject<UClimbComponent>(TEXT("ClimbingComponent"));
+}
+
 void ACharacterBig::ResetPlayerState()
 {
 	Super::ResetPlayerState();
 
-	PickupComponent->Drop(1, 1);
-	ClimbingComponent->StopClimb();
+	LiftComponent->Drop(1, 1);
+	ClimbComponent->StopClimb();
 }
-
-void ACharacterBig::BeginPlay()
-{
-	Super::BeginPlay();
-	PickupComponent = FindComponentByClass<ULiftComponent>();
-	if (!PickupComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("PickupComponent not valid"));
-	}
-
-	ClimbingComponent = FindComponentByClass<UClimbComponent>();
-	if (!ClimbingComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Climbing component not valid"));
-	}
-}
-
 void ACharacterBig::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
@@ -59,15 +48,15 @@ void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 	
 	if (!bIsClimbing && !bIsHugging && !bIsSprinting && !bSuccesfulHug && !bHasDied)
 	{
-		if (!PickupComponent->Holding && !PickupComponent->HoldingSomething())
+		if (!LiftComponent->Holding && !LiftComponent->HoldingSomething())
 		{
-			PickupComponent->Lift();
-			if (PickupComponent->Holding)
+			LiftComponent->Lift();
+			if (LiftComponent->Holding)
 				bIsLifting = true;
 		}
-		else if (PickupComponent->Holding)
+		else if (LiftComponent->Holding)
 		{
-			PickupComponent->StartThrow();
+			LiftComponent->StartThrow();
 			bIsThrowing = true;
 			bIsLifting = false;
 		}
@@ -82,10 +71,10 @@ void ACharacterBig::BeginHug(const FInputActionValue& Value)
 
 void ACharacterBig::Climb(const FInputActionValue& Value)
 {
-	if (PickupComponent -> HoldingSomething() == false && !bIsHugging)
+	if (LiftComponent -> HoldingSomething() == false && !bIsHugging)
 	{
-		ClimbingComponent->Climb();
-		bIsClimbing = ClimbingComponent->IsClimbing();
+		ClimbComponent->Climb();
+		bIsClimbing = ClimbComponent->IsClimbing();
 	}
 	
 }
@@ -96,23 +85,25 @@ void ACharacterBig::Move(const FInputActionValue& Value)
 
 	if (Controller != nullptr)
 	{
-		if (ClimbingComponent && ClimbingComponent->IsClimbing())
+		if (ClimbComponent && ClimbComponent->IsClimbing())
 		{
-			if (!ClimbingComponent->IsOnLedge() || MovementVector.Y < 0.f)
+			if (!ClimbComponent->IsOnLedge() || MovementVector.Y < 0.f)
 			{
 				FVector ClimbDirection = FVector::UpVector;
 				AddMovementInput(ClimbDirection, MovementVector.Y);
 			}
 			return;
 		}
+		//kanske en provisorisk lösning? eftersom climb inte triggas en andra gång nu 
+		bIsClimbing = ClimbComponent->IsClimbing();
 		Super::Move(Value);
 	}
 }
 
 void ACharacterBig::OnDeath()
 {
-	PickupComponent->Drop(0,0);
+	LiftComponent->Drop(0,0);
 	bIsLifting = false;
-	ClimbingComponent->StopClimb();
+	ClimbComponent->StopClimb();
 	Super::OnDeath();
 }

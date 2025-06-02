@@ -2,6 +2,8 @@
 
 
 #include "WeatherComponent.h"
+
+#include "BodyTemperature.h"
 #include "NiagaraFunctionLibrary.h"
 #include "CharacterBase.h"
 #include "Kismet/GameplayStatics.h"
