@@ -13,6 +13,7 @@
 
 class UPerformanceTracker;
 class UBodyTemperature;
+class UCustomizeComponent;
 class UAdaptiveWeatherSystem;
 class UBodyTemplate;
 class USpringArmComponent;
@@ -119,6 +120,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Push")
 	UPushComponent* PushComponent;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	UCustomizeComponent* CustomizeComponent;
+	
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsPushing = false;
 

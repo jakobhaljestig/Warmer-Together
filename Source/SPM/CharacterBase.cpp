@@ -4,6 +4,7 @@
 
 #include "BodyTemperature.h"
 #include "ClimbComponent.h"
+#include "CustomizeComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -56,7 +57,12 @@ ACharacterBase::ACharacterBase()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	BodyTempComponent = CreateDefaultSubobject<UBodyTemperature>(TEXT("BodyTemperature"));
-	HugComponent = CreateDefaultSubobject<UHugComponent>(TEXT("HugComponent")); 
+	HugComponent = CreateDefaultSubobject<UHugComponent>(TEXT("HugComponent"));
+	PushComponent = CreateDefaultSubobject<UPushComponent>(TEXT("PushComponent"));
+	SprintComponent = CreateDefaultSubobject<USprintComponent>(TEXT("SprintComponent"));
+	ThrowSnowballComponent = CreateDefaultSubobject<UThrowSnowballComponent>(TEXT("ThrowSnowballComponent"));
+	CustomizeComponent = CreateDefaultSubobject<UCustomizeComponent>(TEXT("CustomizeComponent"));
+	
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -69,30 +75,6 @@ void ACharacterBase::BeginPlay()
 	CurrentMovementSpeed = BaseMovementSpeed;
 	CheckpointLocation = GetActorLocation();
 	UpdateLastSafeLocation();
-
-	PushComponent = FindComponentByClass<UPushComponent>();
-	if (!PushComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("PushComponent not valid"));
-	}
-
-	HugComponent = FindComponentByClass<UHugComponent>();
-	if (!HugComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("HugComponent not valid"));
-	}
-
-	SprintComponent = FindComponentByClass<USprintComponent>();
-	if (!SprintComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("SprintComponent not valid"));
-	}
-
-	ThrowSnowballComponent = FindComponentByClass<UThrowSnowballComponent>();
-	if (!ThrowSnowballComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("ThrowSnowBallComponent not valid"));
-	}
 	
 }
 
