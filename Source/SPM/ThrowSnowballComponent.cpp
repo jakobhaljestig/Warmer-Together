@@ -69,11 +69,10 @@ void UThrowSnowballComponent::Throw()
 	{
 		FVector ThrowDirection = LastThrowDirection;
 		ThrowDirection.Normalize();
-		Snowball->ThrowInDirection(ThrowDirection, Speed, Gravity);
+		Snowball->ThrowInDirection(ThrowDirection, Speed);
 
 		bCanThrow = false;
 		bIsAiming = false;
-
 		
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ResetThrow, this, &UThrowSnowballComponent::ResetThrow, SnowballInterval, false);
 	}
@@ -86,11 +85,10 @@ void UThrowSnowballComponent::ResetThrow()
 }
 
 
-
 void UThrowSnowballComponent::PredictThrowTrajectory()
 {
 	
-	if (!SnowballClass || !bCanThrow)
+	if (!SnowballClass || !bCanThrow || !bIsAiming )
 	{
 		return;
 	}
@@ -109,6 +107,7 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 	if (AimAngleDegrees > 45)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Kastar inte – kameran tittar för långt från karaktärens riktning (vinkel: %.1f°)"), AimAngleDegrees);
+		GroundMarker->SetActorHiddenInGame(true);
 		return;
 	}
 
@@ -120,7 +119,7 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 	FPredictProjectilePathParams PredictParams;
 	PredictParams.StartLocation = LastAimLocation;
 	PredictParams.LaunchVelocity = LastThrowDirection * Speed;
-	PredictParams.OverrideGravityZ = Gravity;
+	//PredictParams.OverrideGravityZ = Gravity;
 	PredictParams.MaxSimTime = 2.0f;
 	PredictParams.DrawDebugTime = EDrawDebugTrace::ForDuration;
 	PredictParams.ActorsToIgnore.Add(CharacterOwner);
