@@ -22,7 +22,7 @@ void ULiftComponent::GrabAndRelease()
 		return;
 	}
 	
-	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
+	if (Holding && GrabbedComponent!= nullptr)
 	{
 		StartThrow();
 	}
@@ -43,17 +43,17 @@ void ULiftComponent::BeginPlay()
 void ULiftComponent::Drop(float Force, float VerticalForce)
 {
 
-	if (PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
+	if (PhysicsHandle && GrabbedComponent)
 	{
-		if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(PhysicsHandle->GetGrabbedComponent()->GetOwner())){
+		if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(GrabbedComponent->GetOwner())){
 			HeldPlayer->LaunchCharacter(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce, true, true);
 		}
 		else
 		{
-			PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce);	
+			GrabbedComponent->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce);	
 		}
-		PhysicsHandle->GetGrabbedComponent()->GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorEnableCollision(true);
+		GrabbedComponent->GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		GrabbedComponent->GetOwner()->SetActorEnableCollision(true);
 		Release();
 
 		GetOwner()->Tags.Remove("IsLifting");
@@ -82,6 +82,8 @@ void ULiftComponent::ReleaseEffect()
 	OwnerMovementComponent->SetMovementMode(MOVE_Walking);
 	OwnerMovementComponent->SetJumpAllowed(true);
 	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
+	Cast<ACharacterBig>(GetOwner())->bIsThrowing = false;
+	Cast<ACharacterBig>(GetOwner())->bIsLifting = false;
 }
 
 //Call drop with more force
@@ -91,9 +93,10 @@ void ULiftComponent::Throw()
 	{
 		return;
 	}
-	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
+	if (Holding && GrabbedComponent != nullptr)
 	{
 		Drop(ThrowingForce, VerticalThrowingForce);
+		bThrowing = false;
 	}
 }
 
@@ -102,12 +105,12 @@ void ULiftComponent::Lift()
 	if (OwnerMovementComponent && !OwnerMovementComponent->IsFalling())
 	{
 		Grab();
-		if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+		if (GrabbedComponent != nullptr)
 		{
 			GetOwner()->Tags.Add("IsLifting");
-			PhysicsHandle->GetGrabbedComponent()->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
-			PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorEnableCollision(false);
-			if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(PhysicsHandle->GetGrabbedComponent()->GetOwner()))
+			GrabbedComponent->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
+			GrabbedComponent->GetOwner()->SetActorEnableCollision(false);
+			if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(GrabbedComponent->GetOwner()))
 			{
 				HeldPlayer->ResetPlayerState();
 			}
@@ -119,15 +122,15 @@ void ULiftComponent::Lift()
 void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
+	if (Holding && PhysicsHandle && GrabbedComponent)
 	{
 		FVector TargetLocation1 = GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(FName("LiftHoldLocation"));
 		FVector TargetLocation2 = GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(FName("LiftHoldLocation2"));
 		FVector TargetLocation = (TargetLocation1 + TargetLocation2)/2;
-		PhysicsHandle->GetGrabbedComponent()->GetOwner()->SetActorLocation(TargetLocation);
-		PhysicsHandle->GetGrabbedComponent()->SetWorldRotation(GetOwner()->GetActorRotation());
+		GrabbedComponent->GetOwner()->SetActorLocation(TargetLocation);
+		GrabbedComponent->SetWorldRotation(GetOwner()->GetActorRotation());
 		
-		AActor* GrabbedActor = PhysicsHandle->GetGrabbedComponent()->GetOwner();
+		AActor* GrabbedActor = GrabbedComponent->GetOwner();
 		if (!GrabbedActor->Tags.Contains("Grabbed") || Cast<ACharacterSmall>(GrabbedActor) && Cast<ACharacterSmall>(GrabbedActor)->bHasDied)
 		{
 			Drop(DroppingForce, VerticalDroppingForce);
@@ -141,7 +144,6 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		{
 			ThrowTimer = 0;
 			Throw();
-			bThrowing = false;
 		}
 	}
 	

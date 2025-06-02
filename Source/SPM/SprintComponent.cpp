@@ -1,4 +1,3 @@
-
 #include "SprintComponent.h"
 #include "CharacterBase.h"
 #include "GameFramework/CharacterMovementComponent.h"
@@ -13,7 +12,13 @@ USprintComponent::USprintComponent()
 void USprintComponent::BeginPlay()
 {
 	Super::BeginPlay();
+
+	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
+	BaseSpeed = CharacterOwner->GetCharacterMovement()->MaxWalkSpeed;
+	
 	Stamina =  MaxStamina;
+	
+	
 }
 
 void USprintComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -34,7 +39,7 @@ void USprintComponent::StartSprint()
 
 void USprintComponent::DrainStamina()
 {
-	if (Stamina > 0 && (GetOwner()->GetVelocity().Y > 1 || GetOwner()->GetVelocity().X > 1))
+	if (Stamina > 0 && ((GetOwner()->GetVelocity() * FVector(1,1,0)).Length() > 0.1))
 	{
 		Stamina -= StaminaDrainRate * 0.1f; 
 		
@@ -53,15 +58,33 @@ void USprintComponent::DrainStamina()
 void USprintComponent::StopSprint()
 {
 	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
-	CharacterOwner->GetCharacterMovement()->MaxWalkSpeed = 500.f; 
+	CharacterOwner->GetCharacterMovement()->MaxWalkSpeed = BaseSpeed;
 	GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle);
-	
+
+	if (Stamina <= 0)
+	{
+		if (!GetWorld()->GetTimerManager().IsTimerActive(StaminaRegenDelayHandle))
+		{
+			GetWorld()->GetTimerManager().SetTimer(StaminaRegenDelayHandle, this, &USprintComponent::BeginRegeneratingStamina, StaminaDelay, false);
+		}
+	}
+	else
+	{
+		GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &USprintComponent::RegenerateStamina, 0.1f, true);
+	}
+}
+
+void USprintComponent::BeginRegeneratingStamina()
+{
+	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Stamina: %.2f"), Stamina));
 	GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &USprintComponent::RegenerateStamina, 0.1f, true);
 }
+
 
 void USprintComponent::RegenerateStamina()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Stamina: %.2f"), Stamina));
+	
 	if (Stamina < MaxStamina)
 	{
 		Stamina += StaminaRegenRate * GetWorld()->GetDeltaSeconds();
@@ -73,9 +96,11 @@ void USprintComponent::RegenerateStamina()
 			GetWorld()->GetTimerManager().ClearTimer(StaminaCooldownTimerHandle);
 		}
 	}
+	
 	if (Stamina > 0 && !bCanSprint) 
 	{
 		bCanSprint = true;
 	}
 }
+
 

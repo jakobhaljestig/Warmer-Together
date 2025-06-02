@@ -24,19 +24,25 @@ public:
 	virtual void GrabAndRelease();
 
 	//Grab object
+	UFUNCTION()
 	virtual void Grab();
 
 	//Release object
+	UFUNCTION()
 	virtual void Release();
 
 	//Looks through all instances of GrabComponent to see if one is holding something
+	UFUNCTION()
 	bool HoldingSomething() const;
 	
 protected:
 	// Called when the game starts
+	UFUNCTION()
 	virtual void BeginPlay() override;
 
+	UFUNCTION()
 	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
+	
 	bool GetGrabbableInReach(FHitResult& OutHitResult, float Distance) const;
 
 	UPROPERTY(VisibleAnywhere)
@@ -48,23 +54,26 @@ protected:
 	UPROPERTY(EditAnywhere, Category = "Grab")
 	float GrabRadius = 50.f;
 
-	UPROPERTY(EditAnywhere, Category = "Grab")
-	float HoldDistance = 200.f;
-
 	ECollisionChannel CollisionChannel;
 
 	UPROPERTY(VisibleAnywhere)
 	UCharacterMovementComponent* OwnerMovementComponent;
 
 	//Used to trigger different effects upon grabbing something
+	UFUNCTION()
 	virtual void GrabEffect();
 
 	//Used to trigger effects upon releasing something
+	UFUNCTION()
 	virtual void ReleaseEffect();
+
+	UPROPERTY(VisibleAnywhere)
+	UPrimitiveComponent* GrabbedComponent;
 
 private:
 	//Gets PhysicsHandleComponent
 	UPhysicsHandleComponent* GetPhysicsHandle() const;
+
 
 public:	
 	// Called every frame

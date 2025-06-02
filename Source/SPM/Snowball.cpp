@@ -26,11 +26,11 @@ ASnowball::ASnowball()
 	
 	MovementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("MovementComp"));
 	MovementComp -> SetUpdatedComponent(CollisionComp);
-	MovementComp-> InitialSpeed = Speed;
-	MovementComp-> MaxSpeed = Speed;
+	MovementComp-> InitialSpeed = 1500.0f;
+	MovementComp-> MaxSpeed = 1500.0f;
 	MovementComp -> bRotationFollowsVelocity = true;
 	MovementComp -> bShouldBounce = false;
-	MovementComp -> ProjectileGravityScale = gravity;
+	MovementComp -> ProjectileGravityScale = 1.0f;
 
 	CollisionComp->SetNotifyRigidBodyCollision(true);
 	CollisionComp->OnComponentHit.AddDynamic(this, &ASnowball::OnHit);
@@ -57,11 +57,12 @@ void ASnowball::Tick(float DeltaTime)
 
 }
 
-void ASnowball::ThrowInDirection(const FVector& ThrowDirection) const
+void ASnowball::ThrowInDirection(const FVector& ThrowDirection, const float InSpeed) const
 {
 	if (MovementComp)
 	{
-		MovementComp->Velocity = ThrowDirection * MovementComp->InitialSpeed;
+		MovementComp->InitialSpeed = InSpeed;
+		MovementComp->Velocity = ThrowDirection * InSpeed;
 	}
 }
 

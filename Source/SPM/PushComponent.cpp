@@ -2,10 +2,7 @@
 
 
 #include "PushComponent.h"
-
-#include "FallingTree.h"
 #include "PushableProperties.h"
-#include "VectorTypes.h"
 
 UPushComponent::UPushComponent()
 {
@@ -16,25 +13,26 @@ UPushComponent::UPushComponent()
 void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	if (Holding && PhysicsHandle && PhysicsHandle->GetGrabbedComponent())
+	if (Holding && PhysicsHandle && GrabbedComponent)
 	{
 		FHitResult Hit;
 
-		if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->bIsFalling || OwnerMovementComponent->IsFalling())
+		if (GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>()->bIsFalling || OwnerMovementComponent->IsFalling())
 		{
 			StopPushing();
 		}
-		else if(!PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush()){
+		else if(!GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush()){
+			UpdateGrabLocation();
 			OwnerMovementComponent->MaxWalkSpeed = 0;
 		}
-		else if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
+		else if (GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
 		{
 			OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed/4;
 			if (!GetGrabbableInReach(Hit, PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1))
 			{
 				//If player is too far away, try to move back into reach, otherwise stop pushing
 				int Attempts = 0;
-				while (!GetGrabbableInReach(Hit, PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1) && OwnerMovementComponent->Velocity.Length() > PhysicsHandle->GetGrabbedComponent()->GetComponentVelocity().Length())
+				while (!GetGrabbableInReach(Hit, GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1) && OwnerMovementComponent->Velocity.Length() > PhysicsHandle->GetGrabbedComponent()->GetComponentVelocity().Length())
 				{
 					Attempts++;
 					GetOwner()->SetActorLocation(GetOwner()->GetActorLocation() + OwnerMovementComponent->GetForwardVector());
@@ -46,9 +44,9 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 				}
 				
 			}
-			if (PhysicsHandle->GetGrabbedComponent() != nullptr && PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
+			if (GrabbedComponent != nullptr && GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
 			{
-				FVector TargetLocation =  PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->GetPushPosition() + GetOwner()->GetActorForwardVector() * PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
+				FVector TargetLocation =  GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>()->GetPushPosition() + GetOwner()->GetActorForwardVector() * GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>()->HoldDistance;
 				PhysicsHandle->SetTargetLocation(TargetLocation);
 			}
 		}
@@ -61,8 +59,8 @@ void UPushComponent::StartPushing()
 		Grab();
 		if (PhysicsHandle->GetGrabbedComponent() && PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>())
 		{
-			PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers += 1;
-			PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->Grabbers.Add(this); 
+			GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers += 1;
+			GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>()->Grabbers.Add(this); 
 		}
 		
 	}
@@ -71,13 +69,13 @@ void UPushComponent::StartPushing()
 }
 void UPushComponent::StopPushing()
 {
-	if (PhysicsHandle->GetGrabbedComponent() != nullptr && Holding)
+	if (GrabbedComponent != nullptr && Holding)
 	{
-		PhysicsHandle->GetGrabbedComponent()->SetPhysicsLinearVelocity(FVector(0, 0, 0));
-		if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>())
+		GrabbedComponent->SetPhysicsLinearVelocity(FVector(0, 0, 0));
+		if (GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>())
 		{
-			PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers -= 1;
-			PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->Grabbers.Remove(this); 
+			GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers -= 1;
+			GrabbedComponent->GetOwner()->GetComponentByClass<UPushableProperties>()->Grabbers.Remove(this); 
 		}
 		Release();	
 	}
@@ -85,8 +83,6 @@ void UPushComponent::StopPushing()
 
 void UPushComponent::Grab()
 {
-
-
 	if (PhysicsHandle == nullptr)
 	{
 		return;
@@ -95,7 +91,7 @@ void UPushComponent::Grab()
 	FHitResult HitResult;
 	if (GetGrabbableInReach(HitResult))
 	{
-		if (PhysicsHandle->GetGrabbedComponent() != nullptr)
+		if (GrabbedComponent != nullptr)
 		{
 			return;
 		}
@@ -106,10 +102,13 @@ void UPushComponent::Grab()
 		HitComponent->WakeAllRigidBodies();
 		HitActor->Tags.Add("Grabbed");
 		HitActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+
+		//Adjust rotation to face grabbed surface
 		FRotator NewRotation = HitResult.ImpactNormal.Rotation();
 		NewRotation.Pitch = 0.0f;
 		NewRotation.Yaw += 180.0f;
 		GetOwner()->SetActorRotation(NewRotation);
+		
 		GetGrabbableInReach(HitResult);
 		PhysicsHandle->GrabComponentAtLocation(
 			HitComponent,
@@ -121,7 +120,6 @@ void UPushComponent::Grab()
 
 }
 
-//Restricts player movement
 void UPushComponent::GrabEffect()
 {
 	OriginalMovementSpeed = OwnerMovementComponent->MaxWalkSpeed;
@@ -143,5 +141,14 @@ void UPushComponent::ReleaseEffect()
 	OwnerMovementComponent->RotationRate = OriginalRotationRate;
 	OwnerMovementComponent->SetJumpAllowed(true);
 	OwnerMovementComponent->SetPlaneConstraintEnabled(false);
+}
+
+void UPushComponent::UpdateGrabLocation()
+{
+	if (PhysicsHandle && GrabbedComponent != nullptr)
+	{
+		Release();
+		Grab();
+	}
 }
 

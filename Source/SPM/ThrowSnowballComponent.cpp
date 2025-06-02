@@ -43,34 +43,37 @@ void UThrowSnowballComponent::Aim()
 
 void UThrowSnowballComponent::Throw()
 {
-	if (!SnowballClass || !bCanThrow || !bIsThrowAreaValid)
+	if (!SnowballClass || !bCanThrow)
 	{
-		UE_LOG(LogTemplateCharacter, Error, TEXT("Throw cancelled"));
-		GroundMarker->SetActorHiddenInGame(true);
-		bIsAiming = false;
 		return;
 	}
 
+	if (GroundMarker)
+	{
+		GroundMarker->SetActorHiddenInGame(true);
+	}
+
 	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
-	if (!CharacterOwner) return;
 	
+	FVector CameraLocation;
+	FRotator CameraRotation;
+	CharacterOwner->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
 	
 	FActorSpawnParameters SpawnParams;
+	//Ignorerar spelaren som kastar
 	SpawnParams.Owner = GetOwner();
 
-	ASnowball* Snowball = GetWorld()->SpawnActor<ASnowball>(SnowballClass, LastAimLocation, LastAimDirection.Rotation(), SpawnParams);
+	ASnowball* Snowball = GetWorld()->SpawnActor<ASnowball>(SnowballClass, LastAimLocation, LastAimRotation, SpawnParams);
+
 	if (Snowball)
 	{
-		Snowball->ThrowInDirection(LastAimDirection);
+		FVector ThrowDirection = LastThrowDirection;
+		ThrowDirection.Normalize();
+		Snowball->ThrowInDirection(ThrowDirection, Speed);
 
 		bCanThrow = false;
 		bIsAiming = false;
-
-		if (GroundMarker)
-		{
-			GroundMarker->SetActorHiddenInGame(true);
-		}
-
+		
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ResetThrow, this, &UThrowSnowballComponent::ResetThrow, SnowballInterval, false);
 	}
 }
@@ -82,92 +85,110 @@ void UThrowSnowballComponent::ResetThrow()
 }
 
 
-
 void UThrowSnowballComponent::PredictThrowTrajectory()
 {
-	if (!bIsAiming || !SnowballClass) return;
-
+	
+	if (!SnowballClass || !bCanThrow || !bIsAiming )
+	{
+		return;
+	}
+	
 	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
-	if (!CharacterOwner || !CharacterOwner->GetController()) return;
-
+	
 	FVector CameraLocation;
 	FRotator CameraRotation;
 	CharacterOwner->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
-
 	FVector CameraForward = CameraRotation.Vector();
+
 	FVector CharacterForward = CharacterOwner->GetActorForwardVector();
+
 	float AimAngleDegrees = FMath::RadiansToDegrees(acosf(FVector::DotProduct(CameraForward.GetSafeNormal(), CharacterForward.GetSafeNormal())));
 
 	if (AimAngleDegrees > 45)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("Kastar inte – kameran tittar för långt från karaktärens riktning (vinkel: %.1f°)"), AimAngleDegrees);
 		GroundMarker->SetActorHiddenInGame(true);
-		bIsThrowAreaValid = false;
 		return;
 	}
 
-	FVector TraceStart = CameraLocation;
-	FVector TraceEnd = TraceStart + (CameraForward * 10000);
+	//TILL KASTET 
+	LastAimLocation = CharacterOwner -> GetMesh()->GetSocketLocation(HandSocketName);
+	LastAimRotation = (CameraRotation.Vector()).Rotation();
+	LastThrowDirection = CameraRotation.Vector();
+	
+	FPredictProjectilePathParams PredictParams;
+	PredictParams.StartLocation = LastAimLocation;
+	PredictParams.LaunchVelocity = LastThrowDirection * Speed;
+	//PredictParams.OverrideGravityZ = Gravity;
+	PredictParams.MaxSimTime = 2.0f;
+	PredictParams.DrawDebugTime = EDrawDebugTrace::ForDuration;
+	PredictParams.ActorsToIgnore.Add(CharacterOwner);
+	PredictParams.bTraceWithCollision = true;
+	PredictParams.bTraceComplex = false;
+	PredictParams.DrawDebugTime = 22.0f;
 
-	FHitResult Hit;
-	FCollisionQueryParams QueryParams;
-	QueryParams.AddIgnoredActor(CharacterOwner);
+	FPredictProjectilePathResult PredictResult;
 
-	bool bHit = GetWorld()->LineTraceSingleByChannel(Hit, TraceStart, TraceEnd, ECC_Visibility, QueryParams);
-	if (!bHit)
+	
+	bool bHit = UGameplayStatics::PredictProjectilePath(CharacterOwner, PredictParams, PredictResult);
+
+	if (bHit)
 	{
-		GroundMarker->SetActorHiddenInGame(true);
-		bIsThrowAreaValid = false;
+		if (GroundMarker)
+		{
+			FVector HitLocation = PredictResult.HitResult.Location;
+			GroundMarker->SetActorLocation(HitLocation);
+			GroundMarker->SetActorHiddenInGame(false);
+		}
+	}
+}
+
+
+
+//Gammal implementation av kast 
+/*void UThrowSnowballComponent::Throw()
+{
+	if (!SnowballClass || !bCanThrow)
+	{
 		return;
 	}
+	
+	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
+	
+	FVector CameraLocation;
+	FRotator CameraRotation;
+	CharacterOwner->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+	FVector CameraForward = CameraRotation.Vector();
 
-	// Vi utgår från handen och siktar i kamerans riktning
-	FVector StartLocation = CharacterOwner->GetMesh()->GetSocketLocation("RightHandSocket");
-	FVector ThrowDirection = CameraRotation.Vector();  // <-- här är fixen!
+	FVector CharacterForward = CharacterOwner->GetActorForwardVector();
 
-	FPredictProjectilePathParams PathParams;
-	PathParams.StartLocation = StartLocation;
-	PathParams.LaunchVelocity = ThrowDirection * GetSnowballSpeed();
-	PathParams.ProjectileRadius = 5.f;
-	PathParams.MaxSimTime = 2.f;
-	PathParams.bTraceWithCollision = true;
-	PathParams.SimFrequency = 15.f;
-	PathParams.OverrideGravityZ = GetSnowballGravity();
-	PathParams.ActorsToIgnore.Add(CharacterOwner);
-	// PathParams.DrawDebugType = EDrawDebugTrace::ForDuration; // för felsökning
+	float AimAngleDegrees = FMath::RadiansToDegrees(acosf(FVector::DotProduct(CameraForward.GetSafeNormal(), CharacterForward.GetSafeNormal())));
 
-	FPredictProjectilePathResult PathResult;
-
-	if (UGameplayStatics::PredictProjectilePath(GetWorld(), PathParams, PathResult))
+	if (AimAngleDegrees > 45)
 	{
-		GroundMarker->SetActorLocation(PathResult.HitResult.Location);
-		GroundMarker->SetActorHiddenInGame(false);
-		bIsThrowAreaValid = true;
-
-		LastAimDirection = ThrowDirection;
-		LastAimLocation = StartLocation;
+		UE_LOG(LogTemp, Warning, TEXT("Kastar inte – kameran tittar för långt från karaktärens riktning (vinkel: %.1f°)"), AimAngleDegrees);
+		return;
 	}
-	else
+	
+	FVector SpawnLocation = CharacterOwner -> GetMesh()->GetSocketLocation(HandSocketName);
+	FRotator SpawnRotation = (CameraRotation.Vector()).Rotation();
+
+	FActorSpawnParameters SpawnParams;
+	//Ignorerar spelaren som kastar
+	SpawnParams.Owner = GetOwner();
+
+	ASnowball* Snowball = GetWorld()->SpawnActor<ASnowball>(SnowballClass, SpawnLocation, SpawnRotation, SpawnParams);
+
+	if (Snowball)
 	{
-		GroundMarker->SetActorHiddenInGame(true);
-		bIsThrowAreaValid = false;
+		FVector ThrowDirection = CameraRotation.Vector() + FVector(0, 0, 0.7f); 
+		ThrowDirection.Normalize();
+		Snowball->ThrowInDirection(ThrowDirection);
+
+		bCanThrow = false;
+		bIsAiming = false;
+
+		
+		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ResetThrow, this, &UThrowSnowballComponent::ResetThrow, SnowballInterval, false);
 	}
-}
-
-
-
-
-float UThrowSnowballComponent::GetSnowballSpeed() const
-{
-	if (!SnowballClass) return 1000.0f;
-	const ASnowball* DefaultSnowball = Cast<ASnowball>(SnowballClass->GetDefaultObject());
-	return DefaultSnowball ? DefaultSnowball->Speed : 1000.0f;
-}
-
-
-float UThrowSnowballComponent::GetSnowballGravity() const
-{
-	if (!SnowballClass) return -980.0f;
-
-	const ASnowball* DefaultSnowball = Cast<ASnowball>(SnowballClass->GetDefaultObject());
-	return DefaultSnowball ? DefaultSnowball->gravity * -980.0f : -980.0f; // Unreal-gravitation gånger skalan
-}
+}*/

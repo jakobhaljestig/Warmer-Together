@@ -17,6 +17,8 @@ UCLASS()
 class SPM_API ACharacterBig : public ACharacterBase
 {
 	GENERATED_BODY()
+
+	ACharacterBig();
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* GrabAction;
@@ -36,9 +38,7 @@ public:
 protected:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Pickup", meta = (AllowPrivateAccess = "true"))
-	ULiftComponent* PickupComponent;
-
-	void BeginPlay() override;
+	ULiftComponent* LiftComponent;
 
 	void Tick(float DeltaTime) override;
 	
@@ -56,7 +56,7 @@ protected:
 
 	//Tror de inte behövs UPROPERTY tbh
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Climb")
-	UClimbComponent* ClimbingComponent;
+	UClimbComponent* ClimbComponent;
 
 private:
 	

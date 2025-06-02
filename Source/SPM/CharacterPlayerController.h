@@ -16,10 +16,10 @@ class SPM_API ACharacterPlayerController : public APlayerController
 
 public:
 	UFUNCTION(BlueprintImplementableEvent, Category="CameraShake")
-	void StartFreezeShake(float Scale);
+	void StartShiveringEffects(float TempPercentage);
 
 	UFUNCTION(BlueprintImplementableEvent, Category="CameraShake")
-	void StopFreezeShake();
+	void StopShiveringEffects();
 	
 	UFUNCTION(BlueprintCallable)
 	void HideHUD(bool bShouldHide);

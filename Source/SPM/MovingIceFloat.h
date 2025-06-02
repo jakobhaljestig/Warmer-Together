@@ -31,10 +31,12 @@ public:
 
 	void SetMovement (float Speed);
 
+	void SetBreakTime(float InBreakTime);
+
+	void SetRespawnTime(float InRespawnTime);
+
 protected:
 	virtual void BeginPlay() override;
-
-	
 
 
 private:

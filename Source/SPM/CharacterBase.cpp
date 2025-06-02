@@ -3,7 +3,7 @@
 #include "CharacterBase.h"
 
 #include "BodyTemperature.h"
-#include "ClimbComponent.h"
+#include "CustomizeComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
@@ -15,7 +15,9 @@
 #include "InputActionValue.h"
 #include "PushComponent.h"
 #include "HugComponent.h"
+#include "ThrowSnowballComponent.h"
 #include "SprintComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -55,7 +57,13 @@ ACharacterBase::ACharacterBase()
 	FollowCamera->bUsePawnControlRotation = false; // Camera does not rotate relative to arm
 
 	BodyTempComponent = CreateDefaultSubobject<UBodyTemperature>(TEXT("BodyTemperature"));
-	HugComponent = CreateDefaultSubobject<UHugComponent>(TEXT("HugComponent")); 
+	HugComponent = CreateDefaultSubobject<UHugComponent>(TEXT("HugComponent"));
+	PushComponent = CreateDefaultSubobject<UPushComponent>(TEXT("PushComponent"));
+	SprintComponent = CreateDefaultSubobject<USprintComponent>(TEXT("SprintComponent"));
+	ThrowSnowballComponent = CreateDefaultSubobject<UThrowSnowballComponent>(TEXT("ThrowSnowballComponent"));
+	CustomizeComponent = CreateDefaultSubobject<UCustomizeComponent>(TEXT("CustomizeComponent"));
+	PhysicsHandleComponent = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandleComponent"));
+	
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
 	// are set in the derived blueprint asset named ThirdPersonCharacter (to avoid direct content references in C++)
@@ -68,30 +76,6 @@ void ACharacterBase::BeginPlay()
 	CurrentMovementSpeed = BaseMovementSpeed;
 	CheckpointLocation = GetActorLocation();
 	UpdateLastSafeLocation();
-
-	PushComponent = FindComponentByClass<UPushComponent>();
-	if (!PushComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("PushComponent not valid"));
-	}
-
-	HugComponent = FindComponentByClass<UHugComponent>();
-	if (!HugComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("HugComponent not valid"));
-	}
-
-	SprintComponent = FindComponentByClass<USprintComponent>();
-	if (!SprintComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("SprintComponent not valid"));
-	}
-
-	ThrowSnowballComponent = FindComponentByClass<UThrowSnowballComponent>();
-	if (!ThrowSnowballComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("ThrowSnowBallComponent not valid"));
-	}
 	
 }
 
@@ -118,13 +102,7 @@ void ACharacterBase::Tick(float DeltaTime)
 		}
 	}
 
-	// Temperatur påverkar kroppstemperatur
-	// float TempFactor = FMath::Clamp(-CurrentWeather.Temperature / 30.0f, 0.0f, 1.0f);
-	// BodyTempComponent->CoolDown(DeltaTime * TempFactor * BaseCoolingRate);
-
-	// Snö påverkar sikt – detta kan styra t.ex. dimma, post-process etc
-	// UpdateVisibility(CurrentWeather.Visibility);
-	if (GetComponentByClass<UPhysicsHandleComponent>()->GetGrabbedComponent() == nullptr)
+	if (PhysicsHandleComponent->GetGrabbedComponent() == nullptr)
 	{
 		bIsPushing = false;
 	}
@@ -267,7 +245,10 @@ void ACharacterBase::DisableCoyoteTime()
 
 void ACharacterBase::StartSprint()
 {
-	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
+
+	FVector Movement = GetVelocity();
+	
+	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied && !Movement.IsZero())
 	{
 		SprintComponent->StartSprint();
 		bIsSprinting = true;
@@ -313,13 +294,13 @@ void ACharacterBase::Hug()
     	}
 }
 
-// --- Kasta Snöboll ---*/
 
+// --- Kasta Snöboll ---*/
 void ACharacterBase::Aim(const FInputActionValue& Value)
 {
 	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
-		//ThrowSnowballComponent->Aim();
+		ThrowSnowballComponent->Aim();
 	}
 }
 
@@ -328,7 +309,7 @@ void ACharacterBase::Throw (const FInputActionValue& Value)
 {
 	if (!bIsSprinting && !PushComponent->HoldingSomething() && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
-		//ThrowSnowballComponent->Throw();
+		ThrowSnowballComponent->Throw();
 	}
 	
 }
@@ -361,6 +342,8 @@ void ACharacterBase::EndPush(const FInputActionValue& Value)
 		bIsPushing = false;
 }
 
+
+//-- DANCE EMOTE --
 void ACharacterBase::StartDance(const FInputActionValue& Value)
 {
 	if (!bSuccesfulHug && !bHasDied && !bIsSprinting && !bIsPushing && !bHasJumped && !bIsCrouched && !bIsHugging)

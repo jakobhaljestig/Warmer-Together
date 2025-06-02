@@ -25,27 +25,40 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	UStaticMeshComponent* IceMesh;
 
+
 public:	
 	virtual void Tick(float DeltaTime) override;
 	
 	UFUNCTION(BlueprintCallable, Category = "IceFloat")
 	void BreakObject();
 
-private:
+	UFUNCTION(BlueprintImplementableEvent, Category = "IceFloat")
+	void RespawnEvent();
 
-	FTimerHandle BreakTimerHandle;
-	FTimerHandle RespawnTimerHandle;
+	UFUNCTION(BlueprintImplementableEvent, Category = "IceFloat")
+	void BreakEvent();
 
-	void HandleBreak();
-	
+	UFUNCTION(BlueprintCallable, Category = "IceFloat")
 	void RespawnObject();
 
-	UPROPERTY(EditAnywhere)
-	float RespawnTime = 2.5f;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "IceFloat")
+	float BreakTime = 0.0f;
 
-	//Använd för att sätta som delay för timeline så isflaket inte åker upp innan despawn. 
-	UPROPERTY(EditAnywhere)
-	float BreakTime = 1.0f;
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "IceFloat")
+	float RespawnTime = 0.0f;
+
 	
 
+private:
+
+	FTimerHandle IcefloatTimerHandle;
+
+	bool bHasRespawn = true;
+
+	void HandleBreak();
+
+	void TriggerAnimationBreak();
+
+	void RespawnAnimation();
+	
 };

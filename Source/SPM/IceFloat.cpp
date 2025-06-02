@@ -18,7 +18,7 @@ AIceFloat::AIceFloat()
 	IceCollider = CreateDefaultSubobject<UBoxComponent>(TEXT("IceCollider"));
 	IceCollider->SetupAttachment(RootComponent);
 	
-
+	
 }
 
 // Called when the game starts or when spawned
@@ -38,9 +38,26 @@ void AIceFloat::Tick(float DeltaTime)
 //Ska göra bättre hantering av breaking sen 
 void AIceFloat::BreakObject()
 {
-	UE_LOG(LogTemp, Warning, TEXT("BreakObject called – starting BreakTimer"));
+	if (!bHasRespawn) return;
 	
-	GetWorld()->GetTimerManager().SetTimer(BreakTimerHandle, this, &AIceFloat::HandleBreak, BreakTime, false);
+	UE_LOG(LogTemp, Warning, TEXT("BreakObject called – starting BreakTimer"));
+	bHasRespawn = false;
+
+	BreakTime = BreakTime - 0.5f;
+
+	GetWorld()->GetTimerManager().SetTimer(IcefloatTimerHandle, this, &AIceFloat::TriggerAnimationBreak, BreakTime, false);
+}
+
+void AIceFloat::TriggerAnimationBreak()
+{
+	UE_LOG(LogTemp, Warning, TEXT("TriggerAnimationBreak"));
+
+	if (BreakTime > 0.0f)
+	{
+		BreakEvent();
+	}
+	
+	GetWorld()->GetTimerManager().SetTimer(IcefloatTimerHandle, this, &AIceFloat::HandleBreak, 0.5f, false);
 }
 
 void AIceFloat::HandleBreak()
@@ -50,13 +67,24 @@ void AIceFloat::HandleBreak()
 	SetActorEnableCollision(false);
 	SetActorHiddenInGame(true);
 	
-	GetWorld()->GetTimerManager().SetTimer(RespawnTimerHandle, this, &AIceFloat::RespawnObject, RespawnTime, false);
+	GetWorld()->GetTimerManager().SetTimer(IcefloatTimerHandle, this, &AIceFloat::RespawnAnimation, RespawnTime, false);
 }
+
+void AIceFloat::RespawnAnimation()
+{
+	UE_LOG(LogTemp, Warning, TEXT("RespawnAnimation Triggered"));
+	SetActorHiddenInGame(false);
+	RespawnEvent();
+}
+
 
 void AIceFloat::RespawnObject()
 {
 	UE_LOG(LogTemp, Warning, TEXT("Respawning Object"));
-	SetActorHiddenInGame(false);
 	SetActorEnableCollision(true);
+	bHasRespawn = true;
 }
+
+
+
 

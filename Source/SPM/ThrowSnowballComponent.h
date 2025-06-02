@@ -42,9 +42,11 @@ protected:
 	
 	void ResetThrow();
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	float Speed = 1500.0f;
 
-
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
+	float Gravity = 1.0f;
 
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
@@ -53,9 +55,11 @@ public:
 private:
 	bool bIsAiming = false;
 
-	FVector LastAimDirection;
+	FRotator LastAimRotation;
 
 	FVector LastAimLocation;
+
+	FVector LastThrowDirection;
 
 	AActor* GroundMarker;
 
