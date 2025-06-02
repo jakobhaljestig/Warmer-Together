@@ -82,6 +82,8 @@ void ULiftComponent::ReleaseEffect()
 	OwnerMovementComponent->SetMovementMode(MOVE_Walking);
 	OwnerMovementComponent->SetJumpAllowed(true);
 	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
+	Cast<ACharacterBig>(GetOwner())->bIsThrowing = false;
+	Cast<ACharacterBig>(GetOwner())->bIsLifting = false;
 }
 
 //Call drop with more force
@@ -94,6 +96,7 @@ void ULiftComponent::Throw()
 	if (Holding && PhysicsHandle->GetGrabbedComponent() != nullptr)
 	{
 		Drop(ThrowingForce, VerticalThrowingForce);
+		bThrowing = false;
 	}
 }
 
@@ -141,7 +144,6 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		{
 			ThrowTimer = 0;
 			Throw();
-			bThrowing = false;
 		}
 	}
 	

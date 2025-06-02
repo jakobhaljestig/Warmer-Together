@@ -25,7 +25,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UProjectileMovementComponent* MovementComp;
 
-	void ThrowInDirection(const FVector& ThrowDirection, const float InSpeed, const float Gravity) const;
+	void ThrowInDirection(const FVector& ThrowDirection, const float InSpeed) const;
 	
 	
 
