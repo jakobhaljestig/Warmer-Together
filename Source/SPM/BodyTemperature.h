@@ -69,6 +69,9 @@ private:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature", meta = (AllowPrivateAccess = "true"))
 	float Temp;
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature", meta = (AllowPrivateAccess = "true"))
+	float CameraShakeStartPercent = 0.3f;
+	
 	UPROPERTY()
 	UBodyTemperature* TempBigPlayer;
 	UPROPERTY()
