@@ -25,6 +25,10 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 			StopPushing();
 		}
 		else if(!PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush()){
+			//Update grab location to prevent grabbed object from snapping if other player releases it
+			StopPushing();
+			StartPushing();
+			
 			OwnerMovementComponent->MaxWalkSpeed = 0;
 		}
 		else if (PhysicsHandle->GetGrabbedComponent()->GetOwner()->GetComponentByClass<UPushableProperties>()->CanPush())
