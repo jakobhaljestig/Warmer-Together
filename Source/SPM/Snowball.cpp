@@ -57,11 +57,10 @@ void ASnowball::Tick(float DeltaTime)
 
 }
 
-void ASnowball::ThrowInDirection(const FVector& ThrowDirection, const float InSpeed, const float Gravity) const
+void ASnowball::ThrowInDirection(const FVector& ThrowDirection, const float InSpeed) const
 {
 	if (MovementComp)
 	{
-		MovementComp->ProjectileGravityScale = Gravity;
 		MovementComp->InitialSpeed = InSpeed;
 		MovementComp->Velocity = ThrowDirection * InSpeed;
 	}
