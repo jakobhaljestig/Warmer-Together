@@ -25,13 +25,18 @@ public:
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Customize")
-	FSkeletalMaterial CurrentMaterial;
+	UMaterial* CurrentMaterial;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Customize")
-	TArray<FSkeletalMaterial> SkeletalMaterials;
+	TArray<UMaterial*> CharacterMaterials;
 
+	//Use next material in list
 	UFUNCTION(BlueprintCallable, Category = "Customize")
 	void NextMaterial();
+
+	//Choose material by index
+	UFUNCTION(BlueprintCallable, Category = "Customize")
+	void SetMaterialByIndex(int MaterialIndex);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Customize")
 	int MaterialID = 0;
