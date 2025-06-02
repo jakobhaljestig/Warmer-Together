@@ -18,22 +18,28 @@ class SPM_API UPushComponent : public UGrabComponent
 
 	public:
 	UPushComponent();
+	
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	//Starts pushing object
+	UFUNCTION()
 	virtual void StartPushing();
 
 	//Releases object
+	UFUNCTION()
 	virtual void StopPushing();
-
+	
 	virtual void Grab() override;
 
 	private:
-	virtual void GrabEffect() override;
-
-	virtual void ReleaseEffect() override;
 	
+	virtual void GrabEffect() override;
+	
+	virtual void ReleaseEffect() override;
+
+	UPROPERTY()
 	float OriginalMovementSpeed = 0;
+	UPROPERTY()
 	FRotator OriginalRotationRate = FRotator(0,0,0);
 
 	UPROPERTY(EditAnywhere)

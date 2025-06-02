@@ -47,7 +47,23 @@ void UCustomizeComponent::NextMaterial()
 	}
 
 	Cast<ACharacterBase>(GetOwner())->GetMesh()->SetMaterial(0, CharacterMaterials[MaterialID]);
+	CurrentMaterial = CharacterMaterials[MaterialID];
 	
+}
+
+void UCustomizeComponent::PreviousMaterial()
+{
+	if (MaterialID == -1)
+	{
+		MaterialID = CharacterMaterials.Num() - 1;
+	}
+	else
+	{
+		MaterialID--;
+	}
+
+	Cast<ACharacterBase>(GetOwner())->GetMesh()->SetMaterial(0, CharacterMaterials[MaterialID]);
+	CurrentMaterial = CharacterMaterials[MaterialID];
 }
 
 void UCustomizeComponent::SetMaterialByIndex(const int MaterialIndex)
@@ -58,5 +74,6 @@ void UCustomizeComponent::SetMaterialByIndex(const int MaterialIndex)
 	}
 	Cast<ACharacterBase>(GetOwner())->GetMesh()->SetMaterial(0, CharacterMaterials[MaterialIndex]);
 	MaterialID = MaterialIndex;
+	CurrentMaterial = CharacterMaterials[MaterialID];
 }
 

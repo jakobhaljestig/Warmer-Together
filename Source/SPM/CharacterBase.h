@@ -3,16 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "InputActionValue.h"
 #include "WeatherComponent.h"
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
-#include "ThrowSnowballComponent.h"
 #include "CharacterBase.generated.h"
 
 
+class UPhysicsHandleComponent;
 class UPerformanceTracker;
 class UBodyTemperature;
+class UThrowSnowballComponent;
+class UCustomizeComponent;
 class UAdaptiveWeatherSystem;
 class UBodyTemplate;
 class USpringArmComponent;
@@ -100,7 +101,7 @@ protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Sprint")
 	USprintComponent* SprintComponent;
 	
-	void StartSprint ();
+	void StartSprint();
 	void StopSprint();
 	
 	//HUGGING
@@ -118,6 +119,12 @@ protected:
 	//PUSH
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Push")
 	UPushComponent* PushComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Customize")
+	UCustomizeComponent* CustomizeComponent;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "PhysicsHandle")
+	UPhysicsHandleComponent* PhysicsHandleComponent;
 
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsPushing = false;
@@ -181,8 +188,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Weather")
 	class APostProcessVolume* PostProcessVolume;
 	
-	void UpdateVisibility(float VisibilityFactor);
-	
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -190,13 +195,15 @@ protected:
 public:
 
 	//CAMERA
-	/** Returns CameraBoom subobject **/
-	FORCEINLINE class USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
-	/** Returns FollowCamera subobject **/
-	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+	
+	USpringArmComponent* GetCameraBoom() const { return CameraBoom; }
+	
+	UCameraComponent* GetFollowCamera() const { return FollowCamera; }
 
 	UBodyTemperature* GetBodyTemperature() const { return BodyTempComponent; }
 
+	UPhysicsHandleComponent* GetPhysicsHandle() const { return PhysicsHandleComponent; }
+	
 	//RESPAWNING
 	
 	//Mini Respawning

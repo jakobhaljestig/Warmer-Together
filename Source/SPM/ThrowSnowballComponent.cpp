@@ -43,8 +43,10 @@ void UThrowSnowballComponent::Aim()
 
 void UThrowSnowballComponent::Throw()
 {
-	if (!SnowballClass || !bCanThrow)
+	if (!SnowballClass || !bCanThrow || !bIsThrowAreaValid)
 	{
+		bIsAiming = false;
+		GroundMarker->SetActorHiddenInGame(true);
 		return;
 	}
 
@@ -108,6 +110,7 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Kastar inte – kameran tittar för långt från karaktärens riktning (vinkel: %.1f°)"), AimAngleDegrees);
 		GroundMarker->SetActorHiddenInGame(true);
+		bIsThrowAreaValid = false;
 		return;
 	}
 
@@ -139,6 +142,7 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 			FVector HitLocation = PredictResult.HitResult.Location;
 			GroundMarker->SetActorLocation(HitLocation);
 			GroundMarker->SetActorHiddenInGame(false);
+			bIsThrowAreaValid = true;
 		}
 	}
 }
