@@ -29,11 +29,14 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
+	//Throw held object
 	UFUNCTION(BlueprintCallable)
 	void Throw();
 
+	//Lift object
 	virtual void Lift();
 
+	//Drop object
 	UFUNCTION(BlueprintCallable)
 	virtual void Drop(float Force, float VerticalForce);
 
@@ -45,6 +48,7 @@ public:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = "true"))
 	float ThrowTime = 2.f;
 
+	//Start throw timer
 	UFUNCTION()
 	void StartThrow();
 	
