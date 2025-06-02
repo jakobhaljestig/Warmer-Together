@@ -3,6 +3,7 @@
 
 #include "CustomizeComponent.h"
 
+#include "CharacterBase.h"
 #include "Rendering/RenderCommandPipes.h"
 
 // Sets default values for this component's properties
@@ -36,9 +37,16 @@ void UCustomizeComponent::TickComponent(float DeltaTime, ELevelTick TickType, FA
 
 void UCustomizeComponent::NextMaterial()
 {
-	if (MaterialID == SkeletalMaterials.GetTypeSize())
+	if (MaterialID == CharacterMaterials.Num() - 1)
 	{
 		MaterialID = 0;
 	}
+	else
+	{
+		MaterialID++;
+	}
+
+	Cast<ACharacterBase>(GetOwner())->GetMesh()->SetMaterial(0, CharacterMaterials[MaterialID]);
+	
 }
 
