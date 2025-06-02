@@ -39,11 +39,9 @@ void UClimbComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		FHitResult Hit;
 		if (!ClimbingInReach(Hit))
 		{
-			bIsOnLedge = true;
-		}else
-		{
-			bIsOnLedge = false;
+			FinishClimbUp();
 		}
+		
 	}
 
 	if (MovementComponent && bIsClimbing)
@@ -78,7 +76,7 @@ void UClimbComponent::StartClimb(FHitResult Hit)
 		//position
 		FVector WallDirection = -Arrow->GetForwardVector(); 
 		FVector BasePosition = Hit.ImpactPoint;
-		FVector AttachPosition = BasePosition + WallDirection * 10.0f;
+		FVector AttachPosition = BasePosition + WallDirection * 5.0f;
 		ClimbCharacter->SetActorLocation(AttachPosition);
 
 		//Gör så spelaren roteras åt samma håll som pilen
@@ -95,11 +93,11 @@ void UClimbComponent::StopClimb()
 {
 	if (bIsClimbing)
 	{
-		if (bIsOnLedge)
+		/*if (bIsOnLedge)
 		{
 			FinishClimbUp();
 			return;
-		}
+		}*/
 		
 		FVector NewLocation = ClimbCharacter->GetActorLocation() - ClimbCharacter->GetActorForwardVector() * 20.f;
 		ClimbCharacter->SetActorLocation(NewLocation);
