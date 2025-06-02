@@ -3,7 +3,6 @@
 #include "CharacterBase.h"
 
 #include "BodyTemperature.h"
-#include "ClimbComponent.h"
 #include "CustomizeComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
@@ -16,8 +15,9 @@
 #include "InputActionValue.h"
 #include "PushComponent.h"
 #include "HugComponent.h"
-#include "MeshPassProcessor.h"
+#include "ThrowSnowballComponent.h"
 #include "SprintComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
 
@@ -62,6 +62,7 @@ ACharacterBase::ACharacterBase()
 	SprintComponent = CreateDefaultSubobject<USprintComponent>(TEXT("SprintComponent"));
 	ThrowSnowballComponent = CreateDefaultSubobject<UThrowSnowballComponent>(TEXT("ThrowSnowballComponent"));
 	CustomizeComponent = CreateDefaultSubobject<UCustomizeComponent>(TEXT("CustomizeComponent"));
+	PhysicsHandleComponent = CreateDefaultSubobject<UPhysicsHandleComponent>(TEXT("PhysicsHandleComponent"));
 	
 
 	// Note: The skeletal mesh and anim blueprint references on the Mesh component (inherited from Character) 
@@ -101,13 +102,7 @@ void ACharacterBase::Tick(float DeltaTime)
 		}
 	}
 
-	// Temperatur påverkar kroppstemperatur
-	// float TempFactor = FMath::Clamp(-CurrentWeather.Temperature / 30.0f, 0.0f, 1.0f);
-	// BodyTempComponent->CoolDown(DeltaTime * TempFactor * BaseCoolingRate);
-
-	// Snö påverkar sikt – detta kan styra t.ex. dimma, post-process etc
-	// UpdateVisibility(CurrentWeather.Visibility);
-	if (GetComponentByClass<UPhysicsHandleComponent>()->GetGrabbedComponent() == nullptr)
+	if (PhysicsHandleComponent->GetGrabbedComponent() == nullptr)
 	{
 		bIsPushing = false;
 	}

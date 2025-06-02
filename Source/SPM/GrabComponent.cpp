@@ -162,7 +162,7 @@ void UGrabComponent::ReleaseEffect()
 
 UPhysicsHandleComponent* UGrabComponent::GetPhysicsHandle() const
 {
-	UPhysicsHandleComponent* Result = GetOwner()->FindComponentByClass<UPhysicsHandleComponent>();
+	UPhysicsHandleComponent* Result = Cast<ACharacterBase>(GetOwner())->GetPhysicsHandle();
 	if (Result == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("No PhysicsHandle found."));
