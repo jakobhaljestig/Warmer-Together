@@ -34,6 +34,10 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Customize")
 	void NextMaterial();
 
+	//Use next material in list
+	UFUNCTION(BlueprintCallable, Category = "Customize")
+	void PreviousMaterial();
+
 	//Choose material by index
 	UFUNCTION(BlueprintCallable, Category = "Customize")
 	void SetMaterialByIndex(int MaterialIndex);
