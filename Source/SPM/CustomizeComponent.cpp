@@ -50,3 +50,13 @@ void UCustomizeComponent::NextMaterial()
 	
 }
 
+void UCustomizeComponent::SetMaterialByIndex(const int MaterialIndex)
+{
+	if (MaterialIndex > CharacterMaterials.Num() - 1|| MaterialIndex <= -1)
+	{
+		return;
+	}
+	Cast<ACharacterBase>(GetOwner())->GetMesh()->SetMaterial(0, CharacterMaterials[MaterialIndex]);
+	MaterialID = MaterialIndex;
+}
+

@@ -30,8 +30,13 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Customize")
 	TArray<UMaterial*> CharacterMaterials;
 
+	//Use next material in list
 	UFUNCTION(BlueprintCallable, Category = "Customize")
 	void NextMaterial();
+
+	//Choose material by index
+	UFUNCTION(BlueprintCallable, Category = "Customize")
+	void SetMaterialByIndex(int MaterialIndex);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Customize")
 	int MaterialID = 0;
