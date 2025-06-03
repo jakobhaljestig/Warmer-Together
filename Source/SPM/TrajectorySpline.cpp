@@ -44,34 +44,37 @@ void ATrajectorySpline::SetTrajectory(const TArray<FVector>& Points)
 {
 	ClearSpline();
 
-	for (int32 i = 0; i < Points.Num(); i++)
+	for (const FVector& Point : Points)
 	{
-		SplineComponent->AddSplinePoint(Points[i], ESplineCoordinateSpace::World);
-		//UE_LOG(LogTemp, Warning, TEXT("Setting trajectory with %d points"), Points.Num());
-
+		SplineComponent->AddSplinePoint(Point, ESplineCoordinateSpace::World);
 	}
-
 	SplineComponent->UpdateSpline();
 
-	for (int32 i = 0; i < Points.Num() - 1; ++i)
+	const float Spacing = 50.0f;
+	float Distance = 0.0f;
+	const float MaxDistance = SplineComponent->GetSplineLength();
+
+	while (Distance < MaxDistance)
 	{
-		USplineMeshComponent* SplineMesh = NewObject<USplineMeshComponent>(this);
-		SplineMesh->SetMobility(EComponentMobility::Movable);
-		SplineMesh->AttachToComponent(SplineComponent, FAttachmentTransformRules::KeepRelativeTransform);
-		SplineMesh->SetForwardAxis(ESplineMeshAxis::Z); // eller Y, beroende på din mesh
-		SplineMesh->SetStaticMesh(SplineStaticMesh);
-		SplineMesh->SetMaterial(0, SplineMaterial);
+		FVector Location = SplineComponent->GetLocationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World);
+		FVector Tangent = SplineComponent->GetTangentAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World);
 		
-		FVector StartPos = SplineComponent->GetLocationAtSplinePoint(i, ESplineCoordinateSpace::World);
-		FVector StartTangent = SplineComponent->GetTangentAtSplinePoint(i, ESplineCoordinateSpace::World);
-		FVector EndPos = SplineComponent->GetLocationAtSplinePoint(i + 1, ESplineCoordinateSpace::World);
-		FVector EndTangent = SplineComponent->GetTangentAtSplinePoint(i + 1, ESplineCoordinateSpace::World);
+		FRotator Rotation = Tangent.Rotation();
 
+		UStaticMeshComponent* MeshComp = NewObject<UStaticMeshComponent>(this);
+		MeshComp->SetMobility(EComponentMobility::Movable);
+		MeshComp->AttachToComponent(RootComponent, FAttachmentTransformRules::KeepRelativeTransform);
 		
-		SplineMesh->SetStartAndEnd(StartPos, StartTangent, EndPos, EndTangent);
-		
-		SplineMesh->RegisterComponent();
+		MeshComp->SetStaticMesh(SplineStaticMesh);
+		MeshComp->SetMaterial(0, SplineMaterial);
 
-		SplineMeshes.Add(SplineMesh);
+		MeshComp->SetWorldLocation(Location);
+		MeshComp->SetWorldRotation(Rotation); 
+		MeshComp->RegisterComponent();
+
+		SplineMeshes.Add(MeshComp);
+
+		Distance += Spacing;
 	}
 }
+

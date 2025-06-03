@@ -94,8 +94,8 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 	FVector CameraLocation;
 	FRotator CameraRotation;
 	CharacterOwner->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+	
 	FVector CameraForward = CameraRotation.Vector();
-
 	FVector CharacterForward = CharacterOwner->GetActorForwardVector();
 
 	float AimAngleDegrees = FMath::RadiansToDegrees(acosf(FVector::DotProduct(CameraForward.GetSafeNormal(), CharacterForward.GetSafeNormal())));
@@ -108,10 +108,14 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 		return;
 	}
 
+	FVector AdjustedThrowDirection = CameraForward;
+	AdjustedThrowDirection.Z += 0.1f; 
+	AdjustedThrowDirection.Normalize();
+	
 	//TILL KASTET I THROW
-	LastAimLocation = CharacterOwner -> GetMesh()->GetSocketLocation(HandSocketName);
-	LastAimRotation = (CameraRotation.Vector()).Rotation();
-	LastThrowDirection = CameraRotation.Vector();
+	LastAimLocation = CharacterOwner -> GetMesh()->GetSocketLocation(SocketName);
+	LastAimRotation = AdjustedThrowDirection.Rotation();
+	LastThrowDirection = AdjustedThrowDirection;
 	
 	FPredictProjectilePathParams PredictParams;
 	PredictParams.StartLocation = LastAimLocation;

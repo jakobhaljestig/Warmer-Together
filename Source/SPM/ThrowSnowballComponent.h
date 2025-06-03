@@ -39,7 +39,7 @@ protected:
 	TSubclassOf<ASnowball> SnowballClass;
 
 	UPROPERTY(EditAnywhere, Category = "Snowball")
-	FName HandSocketName = "RightHandSocket";
+	FName SocketName = "SBThrowLocation";
 
 	UPROPERTY(EditAnywhere, Category = "Snowball")
 	float SnowballInterval = 1.0f;

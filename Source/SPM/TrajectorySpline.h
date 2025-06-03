@@ -35,6 +35,6 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	TArray<USplineMeshComponent*> SplineMeshes;
+	TArray<UStaticMeshComponent*> SplineMeshes;
 
 };
