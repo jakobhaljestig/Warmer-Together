@@ -318,11 +318,14 @@ void ACharacterBase::Throw (const FInputActionValue& Value)
 
 void ACharacterBase::ApplySnowballHit() const
 {
-	if (BodyTempComponent)
+	/*if (BodyTempComponent)
 	{
 		UE_LOG(LogTemp, Error, TEXT("Character was hit"));
 		BodyTempComponent->ColdBuff(5);
-	}
+	}*/
+
+	
+	
 }
 
 //--- Pushing ---

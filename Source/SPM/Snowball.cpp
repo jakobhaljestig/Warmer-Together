@@ -73,13 +73,11 @@ void ASnowball::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 
 	if (OtherActor == GetOwner()) return;
 
+	//Vad som händer om man träffar just en Player
 	if (ACharacterBase* HitCharacter = Cast<ACharacterBase>(OtherActor))
 	{
 		HitCharacter->ApplySnowballHit();
 	}
-	
-	UE_LOG(LogTemp, Warning, TEXT("Snöboll förstördes"));
-	Destroy();
 }
 
 
