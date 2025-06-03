@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "CharacterBase.h"
-#include "InputActionValue.h"
 #include "ClimbComponent.h"
 #include "LiftComponent.h"
 #include "CharacterBig.generated.h"
