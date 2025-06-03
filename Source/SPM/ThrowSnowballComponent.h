@@ -23,22 +23,19 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanThrow = true;
 
+	UPROPERTY(EditDefaultsOnly, Category = "Trajectory")
+	TSubclassOf<AActor> TrajectoryMeshClass;
+
 	//TIll ANIMATION
 	bool IsAiming() const {return bIsAiming;}
 
 	bool IsThrowing() const {return bIsThrowing;}
-	
-
-	bool IsThrowAreaValid(){return bIsThrowAreaValid;}
 
 protected:
 	virtual void BeginPlay() override;
 	
 	UPROPERTY(EditDefaultsOnly, Category = "Snowball")
 	TSubclassOf<ASnowball> SnowballClass;
-
-	UPROPERTY(EditAnywhere)
-	TSubclassOf<AActor> GroundMarkerClass;
 
 	UPROPERTY(EditAnywhere, Category = "Snowball")
 	FName HandSocketName = "RightHandSocket";
@@ -63,18 +60,22 @@ private:
 
 	bool bIsThrowing = false;
 	
+	bool bIsThrowAreaValid; 
+	
 	FRotator LastAimRotation;
 
 	FVector LastAimLocation;
 
 	FVector LastThrowDirection;
-
-	AActor* GroundMarker;
-
+	
 	FTimerHandle TimerHandle_ResetThrow;
 
 	void PredictThrowTrajectory();
 
-	bool bIsThrowAreaValid; 
+	void ClearTrajectoryPath();
+
+	TArray<AActor*> TrajectoryMeshes;
+
+	
 };
 
