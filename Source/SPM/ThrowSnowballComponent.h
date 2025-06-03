@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "Components/ActorComponent.h"
 #include "Snowball.h"
+#include "TrajectorySpline.h"
 #include "ThrowSnowballComponent.generated.h"
 
 
@@ -23,9 +24,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanThrow = true;
 
-	UPROPERTY(EditDefaultsOnly, Category = "Trajectory")
-	TSubclassOf<AActor> TrajectoryMeshClass;
-
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Trajectory")
+	TSubclassOf<ATrajectorySpline> TrajectorySplineActorClass;
+	
 	//TIll ANIMATION
 	bool IsAiming() const {return bIsAiming;}
 
@@ -73,8 +74,8 @@ private:
 	void PredictThrowTrajectory();
 
 	void ClearTrajectoryPath();
-
-	TArray<AActor*> TrajectoryMeshes;
+	
+	ATrajectorySpline* TrajectorySplineActor;
 
 	
 };
