@@ -15,14 +15,21 @@
   <component name="ChangeListManager">
     <list default="true" id="681ee5c6-fe58-4908-9da4-934fb2d3fb13" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/.idea.SPM/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Materials/MI_SparkleSnow.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Materials/MI_SparkleSnow.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Meshes/SM_StoneSmall.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Meshes/SM_StoneSmall.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Assets/Whitebox/SM_WBBolder.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Assets/Whitebox/SM_WBBolder.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GodRay_3_Prototype.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GodRay_3_Prototype.uasset" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCubeHeavy.uasset" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Blueprints/BP_GrabTestCubeHeavy.uasset" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Cave.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Cave.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Chasm.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Chasm.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorOne.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorOne.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorThree.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorThree.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorTwo.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CorridorTwo.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CrashSite.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/CrashSite.umap" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/DistantMountain.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/DistantMountain.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Lake.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Lake.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Mountain.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/Mountain.umap" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/NewMap.umap" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/River.umap" beforeDir="false" afterPath="$PROJECT_DIR$/Content/Maps/WhiteboxLevel/River.umap" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -270,7 +277,7 @@
       <workItem from="1748590441386" duration="1416000" />
       <workItem from="1748808096513" duration="654000" />
       <workItem from="1748848378510" duration="712000" />
-      <workItem from="1748934992891" duration="1370000" />
+      <workItem from="1748934992891" duration="2052000" />
     </task>
     <servers />
   </component>
