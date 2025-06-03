@@ -70,6 +70,12 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UPrimitiveComponent* GrabbedComponent;
 
+	UPROPERTY(VisibleAnywhere)
+	AActor* GrabbedActor;
+
+	UPROPERTY(VisibleAnywhere)
+	AActor* Owner;
+
 private:
 	//Gets PhysicsHandleComponent
 	UPhysicsHandleComponent* GetPhysicsHandle() const;

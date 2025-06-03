@@ -12,8 +12,6 @@ UGrabComponent::UGrabComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	// ...
 }
 
 //Determine if player grabs or drops an object
@@ -40,18 +38,18 @@ void UGrabComponent::GrabAndRelease()
 void UGrabComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	Owner = GetOwner();
+	OwnerMovementComponent = Owner->GetComponentByClass<UCharacterMovementComponent>();
 	PhysicsHandle = GetPhysicsHandle();
-	OwnerMovementComponent = Cast<UCharacterMovementComponent>(GetOwner()->GetComponentByClass(UCharacterMovementComponent::StaticClass()));
 	if (PhysicsHandle == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("No PhysicsHandle"));
 	}
 }
 
-
 bool UGrabComponent::HoldingSomething() const
 {
-	for (UActorComponent* ActorComponent : GetOwner()->GetComponents())
+	for (UActorComponent* ActorComponent : Owner->GetComponents())
 	{
 		if (Cast<UGrabComponent>(ActorComponent) != nullptr)
 		{
@@ -104,7 +102,8 @@ void UGrabComponent::Grab(){
 			NAME_None,
 			HitResult.ImpactPoint);
 		GrabEffect();
-		GrabbedComponent = PhysicsHandle->GetGrabbedComponent();
+		GrabbedComponent = HitComponent;
+		GrabbedActor = HitActor;
 	}
 	
 }
@@ -114,22 +113,20 @@ void UGrabComponent::Release()
 	if (PhysicsHandle != nullptr && GrabbedComponent != nullptr)
 	{
 		Holding = false;
-		AActor* GrabbedActor = GrabbedComponent->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
-		
-		
 		
 		PhysicsHandle->ReleaseComponent();
 		ReleaseEffect();
 		GrabbedComponent = nullptr;
+		GrabbedActor = nullptr;
 	}
 }
 
 //Check if an object is in reach
 bool UGrabComponent::GetGrabbableInReach(FHitResult& OutHitResult) const
 {
-	FVector Start = GetOwner()->GetActorLocation();
-	FVector End = Start + GetOwner()->GetActorForwardVector() * GrabDistance;
+	FVector Start = Owner->GetActorLocation();
+	FVector End = Start + Owner->GetActorForwardVector() * GrabDistance;
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(GrabRadius);
 	return GetWorld()->SweepSingleByChannel(
 		OutHitResult,
@@ -141,8 +138,8 @@ bool UGrabComponent::GetGrabbableInReach(FHitResult& OutHitResult) const
 }
 bool UGrabComponent::GetGrabbableInReach(FHitResult& OutHitResult, float Distance) const
 {
-	FVector Start = GetOwner()->GetActorLocation();
-	FVector End = Start + GetOwner()->GetActorForwardVector() * Distance;
+	FVector Start = Owner->GetActorLocation();
+	FVector End = Start + Owner->GetActorForwardVector() * Distance;
 	FCollisionShape Sphere = FCollisionShape::MakeSphere(GrabRadius);
 	return GetWorld()->SweepSingleByChannel(
 		OutHitResult,
@@ -164,7 +161,7 @@ void UGrabComponent::ReleaseEffect()
 
 UPhysicsHandleComponent* UGrabComponent::GetPhysicsHandle() const
 {
-	UPhysicsHandleComponent* Result = Cast<ACharacterBase>(GetOwner())->GetPhysicsHandle();
+	UPhysicsHandleComponent* Result = Cast<ACharacterBase>(Owner)->GetPhysicsHandle();
 	if (Result == nullptr)
 	{
 		UE_LOG(LogTemp, Error, TEXT("No PhysicsHandle found."));

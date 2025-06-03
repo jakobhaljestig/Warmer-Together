@@ -42,9 +42,6 @@ class SPM_API UPushComponent : public UGrabComponent
 	UPROPERTY()
 	FRotator OriginalRotationRate = FRotator(0,0,0);
 
-	UPROPERTY(EditAnywhere)
-	float MaxPushWeight = 250;
-
 	//Update grab location to prevent grabbed object from snapping if other player releases it
 	void UpdateGrabLocation();
 	

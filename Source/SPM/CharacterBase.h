@@ -240,6 +240,12 @@ public:
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsLifting = false;
 
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsAimingSB = false;
+
+	UPROPERTY(BlueprintReadOnly)
+	bool bIsThrowingSB = false;
+
 	UFUNCTION(BlueprintCallable)
 	virtual void ResetPlayerState();
 	
