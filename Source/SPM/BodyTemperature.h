@@ -18,8 +18,7 @@ class SPM_API UBodyTemperature : public UActorComponent
 public:	
 	// Sets default values for this component's properties
 	UBodyTemperature();
-
-public:	
+	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -48,6 +47,9 @@ public:
 
 	void SetPlayerController(ACharacterPlayerController* NewPlayerController) { PlayerController = NewPlayerController; }
 
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature", meta = (AllowPrivateAccess = "true"))
+	bool bNearHeat = false;
+
 private:
 	
 	void HeatUp(float DeltaTime);
@@ -62,9 +64,6 @@ private:
 
 	UPROPERTY(EditAnywhere, Category = "Temperature")
 	float HeatUpRate = 20.f;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature", meta = (AllowPrivateAccess = "true"))
-	bool bNearHeat = false;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Temperature", meta = (AllowPrivateAccess = "true"))
 	float Temp;
