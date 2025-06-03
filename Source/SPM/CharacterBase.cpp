@@ -324,7 +324,6 @@ void ACharacterBase::ApplySnowballHit() const
 }
 
 //--- Pushing ---
-
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 
 {
 	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
