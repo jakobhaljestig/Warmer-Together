@@ -1,6 +1,8 @@
 // Fill out your copyright notice in the Description page of Project Settings.
 
 #include "CampFire.h"
+
+#include "BodyTemperature.h"
 #include "CharacterBase.h"
 #include "CharacterBig.h"
 #include "CharacterSmall.h"
