@@ -6,12 +6,14 @@
 #include "CharacterSmall.h"
 #include "Kismet/BlueprintTypeConversions.h"
 #include "CharacterBig.h"
+#include "Engine/SkeletalMeshSocket.h"
 
 ULiftComponent::ULiftComponent()
 {
 
 	PrimaryComponentTick.bCanEverTick = true;
 	CollisionChannel = ECC_GameTraceChannel1;
+	
 }
 
 //Override standard behavior
@@ -37,7 +39,9 @@ void ULiftComponent::GrabAndRelease()
 void ULiftComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	Skeleton = Owner->GetComponentByClass<USkeletalMeshComponent>();
+	Hand1 = Skeleton->GetSocketByName(FName("LiftHoldLocation"));
+	Hand2 = Skeleton->GetSocketByName(FName("LiftHoldLocation2"));
 }
 //Drop object
 void ULiftComponent::Drop(float Force, float VerticalForce)
@@ -45,18 +49,18 @@ void ULiftComponent::Drop(float Force, float VerticalForce)
 
 	if (PhysicsHandle && GrabbedComponent)
 	{
-		if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(GrabbedComponent->GetOwner())){
-			HeldPlayer->LaunchCharacter(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce, true, true);
+		if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(GrabbedActor)){
+			HeldPlayer->LaunchCharacter(Owner->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce, true, true);
 		}
 		else
 		{
-			GrabbedComponent->SetPhysicsLinearVelocity(GetOwner()->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce);	
+			GrabbedComponent->SetPhysicsLinearVelocity(Owner->GetActorForwardVector() * Force + FVector(0,0, 1) * VerticalForce);	
 		}
-		GrabbedComponent->GetOwner()->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		GrabbedComponent->GetOwner()->SetActorEnableCollision(true);
+		GrabbedActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		GrabbedActor->SetActorEnableCollision(true);
 		Release();
 
-		GetOwner()->Tags.Remove("IsLifting");
+		Owner->Tags.Remove("IsLifting");
 	}
 
 }
@@ -82,8 +86,8 @@ void ULiftComponent::ReleaseEffect()
 	OwnerMovementComponent->SetMovementMode(MOVE_Walking);
 	OwnerMovementComponent->SetJumpAllowed(true);
 	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed;
-	Cast<ACharacterBig>(GetOwner())->bIsThrowing = false;
-	Cast<ACharacterBig>(GetOwner())->bIsLifting = false;
+	Cast<ACharacterBig>(Owner)->bIsThrowing = false;
+	Cast<ACharacterBig>(Owner)->bIsLifting = false;
 }
 
 //Call drop with more force
@@ -107,10 +111,10 @@ void ULiftComponent::Lift()
 		Grab();
 		if (GrabbedComponent != nullptr)
 		{
-			GetOwner()->Tags.Add("IsLifting");
-			GrabbedComponent->AttachToComponent(GetOwner()->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
-			GrabbedComponent->GetOwner()->SetActorEnableCollision(false);
-			if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(GrabbedComponent->GetOwner()))
+			Owner->Tags.Add("IsLifting");
+			GrabbedComponent->AttachToComponent(Owner->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
+			GrabbedActor->SetActorEnableCollision(false);
+			if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(GrabbedActor))
 			{
 				HeldPlayer->ResetPlayerState();
 			}
@@ -124,13 +128,10 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (Holding && PhysicsHandle && GrabbedComponent)
 	{
-		FVector TargetLocation1 = GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(FName("LiftHoldLocation"));
-		FVector TargetLocation2 = GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->GetSocketLocation(FName("LiftHoldLocation2"));
-		FVector TargetLocation = (TargetLocation1 + TargetLocation2)/2;
-		GrabbedComponent->GetOwner()->SetActorLocation(TargetLocation);
-		GrabbedComponent->SetWorldRotation(GetOwner()->GetActorRotation());
+		FVector TargetLocation = (Hand1->GetSocketLocation(Skeleton) + Hand2->GetSocketLocation(Skeleton))/2;
+		GrabbedActor->SetActorLocation(TargetLocation);
+		GrabbedComponent->SetWorldRotation(Owner->GetActorRotation());
 		
-		AActor* GrabbedActor = GrabbedComponent->GetOwner();
 		if (!GrabbedActor->Tags.Contains("Grabbed") || Cast<ACharacterSmall>(GrabbedActor) && Cast<ACharacterSmall>(GrabbedActor)->bHasDied)
 		{
 			Drop(DroppingForce, VerticalDroppingForce);

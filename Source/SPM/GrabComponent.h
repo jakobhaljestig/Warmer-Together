@@ -71,6 +71,9 @@ protected:
 	UPrimitiveComponent* GrabbedComponent;
 
 	UPROPERTY(VisibleAnywhere)
+	AActor* GrabbedActor;
+
+	UPROPERTY(VisibleAnywhere)
 	AActor* Owner;
 
 private:

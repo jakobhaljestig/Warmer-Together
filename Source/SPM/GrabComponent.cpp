@@ -12,14 +12,6 @@ UGrabComponent::UGrabComponent()
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
-
-	Owner = GetOwner();
-	OwnerMovementComponent = Owner->GetComponentByClass<UCharacterMovementComponent>();
-	PhysicsHandle = GetPhysicsHandle();
-	if (PhysicsHandle == nullptr)
-	{
-		UE_LOG(LogTemp, Error, TEXT("No PhysicsHandle"));
-	}
 }
 
 //Determine if player grabs or drops an object
@@ -46,6 +38,13 @@ void UGrabComponent::GrabAndRelease()
 void UGrabComponent::BeginPlay()
 {
 	Super::BeginPlay();
+	Owner = GetOwner();
+	OwnerMovementComponent = Owner->GetComponentByClass<UCharacterMovementComponent>();
+	PhysicsHandle = GetPhysicsHandle();
+	if (PhysicsHandle == nullptr)
+	{
+		UE_LOG(LogTemp, Error, TEXT("No PhysicsHandle"));
+	}
 }
 
 bool UGrabComponent::HoldingSomething() const
@@ -103,7 +102,8 @@ void UGrabComponent::Grab(){
 			NAME_None,
 			HitResult.ImpactPoint);
 		GrabEffect();
-		GrabbedComponent = PhysicsHandle->GetGrabbedComponent();
+		GrabbedComponent = HitComponent;
+		GrabbedActor = HitActor;
 	}
 	
 }
@@ -113,14 +113,12 @@ void UGrabComponent::Release()
 	if (PhysicsHandle != nullptr && GrabbedComponent != nullptr)
 	{
 		Holding = false;
-		AActor* GrabbedActor = GrabbedComponent->GetOwner();
 		GrabbedActor->Tags.Remove("Grabbed");
-		
-		
 		
 		PhysicsHandle->ReleaseComponent();
 		ReleaseEffect();
 		GrabbedComponent = nullptr;
+		GrabbedActor = nullptr;
 	}
 }
 
