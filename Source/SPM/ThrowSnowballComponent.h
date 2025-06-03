@@ -23,6 +23,12 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
 	bool bCanThrow = true;
 
+	//TIll ANIMATION
+	bool IsAiming() const {return bIsAiming;}
+
+	bool IsThrowing() const {return bIsThrowing;}
+	
+
 	bool IsThrowAreaValid(){return bIsThrowAreaValid;}
 
 protected:
@@ -55,6 +61,8 @@ public:
 private:
 	bool bIsAiming = false;
 
+	bool bIsThrowing = false;
+	
 	FRotator LastAimRotation;
 
 	FVector LastAimLocation;
@@ -64,10 +72,6 @@ private:
 	AActor* GroundMarker;
 
 	FTimerHandle TimerHandle_ResetThrow;
-
-	float GetSnowballSpeed() const;
-
-	float GetSnowballGravity() const;
 
 	void PredictThrowTrajectory();
 

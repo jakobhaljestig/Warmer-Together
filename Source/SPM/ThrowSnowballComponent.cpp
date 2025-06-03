@@ -50,6 +50,8 @@ void UThrowSnowballComponent::Throw()
 		return;
 	}
 
+	bIsThrowing = true;
+
 	if (GroundMarker)
 	{
 		GroundMarker->SetActorHiddenInGame(true);
@@ -75,6 +77,7 @@ void UThrowSnowballComponent::Throw()
 
 		bCanThrow = false;
 		bIsAiming = false;
+		bIsThrowing = false;
 		
 		GetWorld()->GetTimerManager().SetTimer(TimerHandle_ResetThrow, this, &UThrowSnowballComponent::ResetThrow, SnowballInterval, false);
 	}
@@ -89,7 +92,6 @@ void UThrowSnowballComponent::ResetThrow()
 
 void UThrowSnowballComponent::PredictThrowTrajectory()
 {
-	
 	if (!SnowballClass || !bCanThrow || !bIsAiming )
 	{
 		return;
@@ -122,13 +124,13 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 	FPredictProjectilePathParams PredictParams;
 	PredictParams.StartLocation = LastAimLocation;
 	PredictParams.LaunchVelocity = LastThrowDirection * Speed;
-	//PredictParams.OverrideGravityZ = Gravity;
 	PredictParams.MaxSimTime = 2.0f;
-	PredictParams.DrawDebugTime = EDrawDebugTrace::ForDuration;
+	PredictParams.DrawDebugType = EDrawDebugTrace::ForDuration; 
+	PredictParams.DrawDebugTime = 0.1f;
 	PredictParams.ActorsToIgnore.Add(CharacterOwner);
 	PredictParams.bTraceWithCollision = true;
 	PredictParams.bTraceComplex = false;
-	PredictParams.DrawDebugTime = 22.0f;
+
 
 	FPredictProjectilePathResult PredictResult;
 
