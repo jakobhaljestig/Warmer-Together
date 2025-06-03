@@ -3,6 +3,7 @@
 
 #include "LiftComponent.h"
 
+#include "BodyTemperature.h"
 #include "CharacterSmall.h"
 #include "Kismet/BlueprintTypeConversions.h"
 #include "CharacterBig.h"
@@ -136,6 +137,8 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		{
 			Drop(DroppingForce, VerticalDroppingForce);
 		}
+
+		Cast<ACharacterBase>(GrabbedActor)->GetBodyTemperature()->IsNearHeat(Cast<ACharacterBase>(Owner)->GetBodyTemperature()->bNearHeat);
 	}
 
 	if (bThrowing)
