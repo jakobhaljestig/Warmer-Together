@@ -71,7 +71,14 @@ private:
 
 	float OriginalMovementSpeed = 0;
 
-	
+	UPROPERTY()
+	class USkeletalMeshSocket const* Hand1;
+
+	UPROPERTY()
+	class USkeletalMeshSocket const* Hand2;
+
+	UPROPERTY()
+	USkeletalMeshComponent* Skeleton;
 };
 
 

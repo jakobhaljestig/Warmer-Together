@@ -39,11 +39,9 @@ void UClimbComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 		FHitResult Hit;
 		if (!ClimbingInReach(Hit))
 		{
-			bIsOnLedge = true;
-		}else
-		{
-			bIsOnLedge = false;
+			FinishClimbUp();
 		}
+		
 	}
 
 	if (MovementComponent && bIsClimbing)
@@ -78,7 +76,7 @@ void UClimbComponent::StartClimb(FHitResult Hit)
 		//position
 		FVector WallDirection = -Arrow->GetForwardVector(); 
 		FVector BasePosition = Hit.ImpactPoint;
-		FVector AttachPosition = BasePosition + WallDirection * 10.0f;
+		FVector AttachPosition = BasePosition + WallDirection * 40.0f;
 		ClimbCharacter->SetActorLocation(AttachPosition);
 
 		//Gör så spelaren roteras åt samma håll som pilen
@@ -95,11 +93,11 @@ void UClimbComponent::StopClimb()
 {
 	if (bIsClimbing)
 	{
-		if (bIsOnLedge)
+		/*if (bIsOnLedge)
 		{
 			FinishClimbUp();
 			return;
-		}
+		}*/
 		
 		FVector NewLocation = ClimbCharacter->GetActorLocation() - ClimbCharacter->GetActorForwardVector() * 20.f;
 		ClimbCharacter->SetActorLocation(NewLocation);
@@ -149,8 +147,6 @@ void UClimbComponent::FinishClimbUp()
 }
 
 
-
-
 bool UClimbComponent::ClimbingInReach(FHitResult& HitResult) const
 {
 	if (!ClimbCharacter) return false;
@@ -172,20 +168,26 @@ bool UClimbComponent::ClimbingInReach(FHitResult& HitResult) const
 
 	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1.5f, 0, 2.0f);
 
-	//UPrimitiveComponent* Component = HitResult.GetComponent();
+	
 
-	if (bHit && HitResult.GetActor()->ActorHasTag("Climbable"))
+	if (bHit)
 	{
-		TArray<UActorComponent*> Components = HitResult.GetActor()->GetComponentsByTag(UBoxComponent::StaticClass(), "ClimbZone");
-		for (UActorComponent* Comp : Components)
+		UPrimitiveComponent* Component = HitResult.GetComponent();
+		
+		if (Component && Component->ComponentHasTag("Climbable"))
 		{
-			UBoxComponent* Box = Cast<UBoxComponent>(Comp);
-			if (Box && Box->IsOverlappingActor(ClimbCharacter))
+			TArray<UActorComponent*> Components = HitResult.GetActor()->GetComponentsByTag(UBoxComponent::StaticClass(), "ClimbZone");
+			for (UActorComponent* Comp : Components)
 			{
-				return true;
+				UBoxComponent* Box = Cast<UBoxComponent>(Comp);
+				if (Box && Box->IsOverlappingActor(ClimbCharacter))
+				{
+					return true;
+				}
 			}
 		}
 	}
+	
 	return false;
 }
 
