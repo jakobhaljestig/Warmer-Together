@@ -23,10 +23,7 @@ protected:
 public:	
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
-
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Customize")
-	UMaterial* CurrentMaterial;
-
+	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Customize")
 	TArray<UMaterial*> CharacterMaterials;
 
