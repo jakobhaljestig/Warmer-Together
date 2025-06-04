@@ -26,6 +26,7 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Music")
 	USoundWave* CurrentTrack;
 
-	
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Music")
+	USoundWave* EmoteMusic;
 
 };
