@@ -100,7 +100,7 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 
 	float AimAngleDegrees = FMath::RadiansToDegrees(acosf(FVector::DotProduct(CameraForward.GetSafeNormal(), CharacterForward.GetSafeNormal())));
 
-	if (AimAngleDegrees > 45)
+	if (AimAngleDegrees > 90)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Kastar inte – kameran tittar för långt från karaktärens riktning (vinkel: %.1f°)"), AimAngleDegrees);
 		ClearTrajectoryPath();
@@ -109,7 +109,7 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 	}
 
 	FVector AdjustedThrowDirection = CameraForward;
-	AdjustedThrowDirection.Z += 0.1f; 
+	AdjustedThrowDirection.Z += 0.5f; 
 	AdjustedThrowDirection.Normalize();
 	
 	//TILL KASTET I THROW

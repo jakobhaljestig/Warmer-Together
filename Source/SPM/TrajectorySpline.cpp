@@ -48,9 +48,10 @@ void ATrajectorySpline::SetTrajectory(const TArray<FVector>& Points)
 	{
 		SplineComponent->AddSplinePoint(Point, ESplineCoordinateSpace::World);
 	}
+	
 	SplineComponent->UpdateSpline();
 
-	const float Spacing = 50.0f;
+	const float Spacing = 90.0f;
 	float Distance = 0.0f;
 	const float MaxDistance = SplineComponent->GetSplineLength();
 
@@ -58,8 +59,9 @@ void ATrajectorySpline::SetTrajectory(const TArray<FVector>& Points)
 	{
 		FVector Location = SplineComponent->GetLocationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World);
 		FVector Tangent = SplineComponent->GetTangentAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World);
+		Tangent.Normalize();
 		
-		FRotator Rotation = Tangent.Rotation();
+		FRotator Rotation = FRotationMatrix::MakeFromZ(Tangent).Rotator();
 
 		UStaticMeshComponent* MeshComp = NewObject<UStaticMeshComponent>(this);
 		MeshComp->SetMobility(EComponentMobility::Movable);
