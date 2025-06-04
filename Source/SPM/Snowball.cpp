@@ -76,9 +76,15 @@ void ASnowball::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	//Vad som händer om man träffar just en Player
 	if (ACharacterBase* HitCharacter = Cast<ACharacterBase>(OtherActor))
 	{
-		HitCharacter->ApplySnowballHit();
+
+		
+		FVector ImpactDir = GetVelocity().GetSafeNormal();
+		HitCharacter->ApplySnowballHit(Hit, ImpactDir);
 	}
+	
+	Destroy();
 }
+
 
 
 

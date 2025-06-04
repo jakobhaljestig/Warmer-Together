@@ -78,7 +78,7 @@ public:
 	
 	void Tick(float DeltaTime);
 
-	void ApplySnowballHit() const;
+	void ApplySnowballHit(const FHitResult& Hit, const FVector& ImpactDirection);
 
 protected:
 
@@ -263,9 +263,14 @@ private:
 
 	FVector SavedCameraLocation;
 	FRotator SavedCameraRotation;
+	
+	bool bHasCheckPointLocation = false;
 
+	void ResetTemp() const;
 
-
+	void RecoverFromRagdoll();
+	
+	bool bIsRagdoll = false; 
 	
 	// --- Coyote Time ---
 	FTimerHandle CoyoteTimeHandle;
@@ -292,9 +297,8 @@ private:
 	
 	virtual void Falling() override;
 
-	bool bHasCheckPointLocation = false;
+	FTimerHandle RecoverRagdollTimerHandle;
 
-	void ResetTemp() const;
 	
 };
 
