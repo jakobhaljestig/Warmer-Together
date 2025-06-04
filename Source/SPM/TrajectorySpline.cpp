@@ -60,7 +60,8 @@ void ATrajectorySpline::SetTrajectory(const TArray<FVector>& Points)
 		FVector Location = SplineComponent->GetLocationAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World);
 		FVector Tangent = SplineComponent->GetTangentAtDistanceAlongSpline(Distance, ESplineCoordinateSpace::World);
 		Tangent.Normalize();
-		
+
+		//Meshen rotation måste vara i Z 
 		FRotator Rotation = FRotationMatrix::MakeFromZ(Tangent).Rotator();
 
 		UStaticMeshComponent* MeshComp = NewObject<UStaticMeshComponent>(this);
