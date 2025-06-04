@@ -71,7 +71,7 @@ void UBTTask_DiveToPlayer::TickTask(UBehaviorTreeComponent& OwnerComp, uint8* No
 		UBodyTemperature* Temp = Target->FindComponentByClass<UBodyTemperature>();
 		if (Temp)
 		{
-			Temp->ColdBuff(20.f);
+			Temp->ColdBuff(10.f);
 			if (Temp->GetTempPercentage() <= 0.f)
 			{
 				if (ACharacterBase* PlayerChar = Cast<ACharacterBase>(Target))
