@@ -323,6 +323,7 @@ void ACharacterBase::ApplySnowballHit(const FHitResult& Hit, const FVector& Impa
 	
 }
 
+//RAGDOLL
 /*void ACharacterBase::ApplySnowballHit(const FHitResult& Hit, const FVector& ImpactDirection)
 {
 	if (bIsRagdoll) return;

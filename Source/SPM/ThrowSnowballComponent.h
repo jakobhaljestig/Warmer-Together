@@ -74,6 +74,8 @@ private:
 	void PredictThrowTrajectory();
 
 	void ClearTrajectoryPath();
+
+	float CalculateAdjustedPath(const FRotator& AimRotation) const;
 	
 	ATrajectorySpline* TrajectorySplineActor;
 
