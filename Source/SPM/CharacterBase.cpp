@@ -316,17 +316,40 @@ void ACharacterBase::Throw (const FInputActionValue& Value)
 	
 }
 
-void ACharacterBase::ApplySnowballHit() const
+void ACharacterBase::ApplySnowballHit(const FHitResult& Hit, const FVector& ImpactDirection)
 {
-	if (BodyTempComponent)
-	{
-		UE_LOG(LogTemp, Error, TEXT("Character was hit"));
-		BodyTempComponent->ColdBuff(5);
-	}
-
-	
+	const float KnockbackStrength = 1000.0f;
+	LaunchCharacter(ImpactDirection * KnockbackStrength, true, true);
 	
 }
+
+//RAGDOLL
+/*void ACharacterBase::ApplySnowballHit(const FHitResult& Hit, const FVector& ImpactDirection)
+{
+	if (bIsRagdoll) return;
+	
+	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+	SetActorEnableCollision(true);
+
+	GetMesh()->SetAllBodiesSimulatePhysics(true);
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->WakeAllRigidBodies();
+	GetMesh()->bBlendPhysics = true;
+
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->DisableMovement();
+	GetCharacterMovement()->SetComponentTickEnabled(false);
+
+	FName BoneName = Hit.BoneName != NAME_None ? Hit.BoneName : FName("spine_03");
+	FVector Impulse = ImpactDirection * 5000.0f;
+	GetMesh()->AddImpulseAtLocation(Impulse, Hit.ImpactPoint, BoneName);
+	
+	bIsRagdoll = true;
+	
+}*/
+
+
+
 
 //--- Pushing ---
 void ACharacterBase::BeginPush(const FInputActionValue& Value) 

@@ -46,8 +46,6 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Weather")
 	void SetWeatherEffectScale(FVector NewScale);
 
-
-private:
 	UPROPERTY(EditAnywhere, Category = "Weather VFX")
 	class UNiagaraComponent* SnowLevel1;
 
@@ -73,13 +71,17 @@ private:
 	UNiagaraSystem* MistSystem;
 
 	void SpawnWeatherEffects();
+
+
+
+private:
 	UNiagaraComponent* SpawnEffectIfNeeded(UNiagaraSystem* System, UNiagaraComponent* ExistingComp, FVector Offset) const;
 
 	void OnWeatherUpdateTick(const TArray<AActor*>& PlayerCharacters) const;
 	
 	void UpdateWeatherFromTemperature(float TemperaturePercentage) const;
 	
-	FVector GetPlayersMidpoint() const;
+	//FVector GetPlayersMidpoint() const;
 	
 	void UpdateWeatherEffectLocation() const;
 	
@@ -88,7 +90,6 @@ private:
 	float CurrentCoolRate = 1.5f;
 
 	bool bHasSpawnedWeather = false;
-
-	static FPlayerSpatialInfo AnalyzePlayerPositions(const TArray<AActor*>& Players);
 	
+	static FPlayerSpatialInfo AnalyzePlayerPositions(const TArray<AActor*>& Players);
 };

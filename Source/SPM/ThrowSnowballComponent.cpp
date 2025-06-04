@@ -59,11 +59,13 @@ void UThrowSnowballComponent::Throw()
 
 	ASnowball* Snowball = GetWorld()->SpawnActor<ASnowball>(SnowballClass, LastAimLocation, LastAimRotation, SpawnParams);
 
+	float AdjustedSpeed = CalculateAdjustedPath(LastAimRotation);
+
 	if (Snowball)
 	{
 		FVector ThrowDirection = LastThrowDirection;
 		ThrowDirection.Normalize();
-		Snowball->ThrowInDirection(ThrowDirection, Speed);
+		Snowball->ThrowInDirection(ThrowDirection, AdjustedSpeed);
 
 		bCanThrow = false;
 		bIsAiming = false;
@@ -116,10 +118,12 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 	LastAimLocation = CharacterOwner -> GetMesh()->GetSocketLocation(SocketName);
 	LastAimRotation = AdjustedThrowDirection.Rotation();
 	LastThrowDirection = AdjustedThrowDirection;
+
+	float AdjustedSpeed = CalculateAdjustedPath(LastAimRotation);
 	
 	FPredictProjectilePathParams PredictParams;
 	PredictParams.StartLocation = LastAimLocation;
-	PredictParams.LaunchVelocity = LastThrowDirection * Speed;
+	PredictParams.LaunchVelocity = LastThrowDirection * AdjustedSpeed;
 	PredictParams.MaxSimTime = 2.0f;
 	//FÖR DEBUG
 	//PredictParams.DrawDebugType = EDrawDebugTrace::ForDuration; 
@@ -153,6 +157,14 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 			bIsThrowAreaValid = true;
 		}
 	}
+}
+
+float UThrowSnowballComponent::CalculateAdjustedPath(const FRotator& AimRotation) const
+{
+	float Pitch = AimRotation.Pitch;
+	float NormalizedPitch = FMath::Clamp(Pitch/90.0f, 0.0f, 1.0f);
+	float SpeedModifier = FMath::Lerp(1.0F, 0.01f, NormalizedPitch);
+	return Speed * SpeedModifier;
 }
 
 
