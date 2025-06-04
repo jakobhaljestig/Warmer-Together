@@ -41,6 +41,10 @@
 		{
 			"Name": "CurveExpression",
 			"Enabled": true
+		},
+		{
+			"Name": "NiagaraFluids",
+			"Enabled": true
 		}
 	]
 }

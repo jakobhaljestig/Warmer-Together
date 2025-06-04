@@ -23,12 +23,7 @@ void AFlockAgent::Initialize(AFlockManager* Manager)
 {
    FlockManager = Manager;
 
-   //random vikter individuellt för varje boids så flygandet blir lite mer spännande
-   PersonalCohesionWeight = FMath::FRandRange(0.8f, 1.2f) * CohesionWeight;
-   PersonalSeparationWeight = FMath::FRandRange(0.8f, 1.2f) * SeparationWeight;
-   PersonalAlignmentWeight = FMath::FRandRange(0.8f, 1.2f) * AlignmentWeight;
-   PersonalMaxSpeed = FMath::FRandRange(0.8f, 1.2f) * MaxSpeed;
-   PersonalMaxForce = FMath::FRandRange(0.8f, 1.2f) * MaxForce;
+  
 }
 
 
@@ -39,7 +34,14 @@ void AFlockAgent::BeginPlay()
    Velocity = FVector::ForwardVector * MaxSpeed;
 
    //varierande radie för grannar vid start
-   DynamicNeighbourRadius = NeighbourRadius * FMath::FRandRange(0.9f, 1.1f);
+   DynamicNeighbourRadius = NeighbourRadius * FMath::FRandRange(1.5f, 2.f);
+
+   //random vikter individuellt för varje boids så flygandet blir lite mer spännande
+   PersonalCohesionWeight = FMath::FRandRange(1.f, 1.4f) * CohesionWeight;
+   PersonalSeparationWeight = FMath::FRandRange(0.8f, 1.2f) * SeparationWeight;
+   PersonalAlignmentWeight = FMath::FRandRange(1.1f, 1.5f) * AlignmentWeight;
+   PersonalMaxSpeed = FMath::FRandRange(0.8f, 1.2f) * MaxSpeed;
+   PersonalMaxForce = FMath::FRandRange(0.8f, 1.2f) * MaxForce;
    
 }
 
@@ -110,40 +112,6 @@ FVector AFlockAgent::AvoidObstacles() const
 
    return FVector::ZeroVector;
 }
-
-
-
-FVector AFlockAgent::JoinLargerFlockForce()
-{
-   TArray<AFlockAgent*> Neighbours = FlockManager->GetNearbyAgents(this, DynamicNeighbourRadius);
-   int32 MyCount = Neighbours.Num();
-
-   FVector AvgPos = FVector::ZeroVector;
-   int32 LargerGroupCount = 0;
-
-   for (AFlockAgent* Other : Neighbours)
-   {
-      if (!Other || Other == this) continue;
-
-      int32 OtherCount = FlockManager->GetNearbyAgents(this, DynamicNeighbourRadius).Num();
-      if (OtherCount > MyCount + 2)
-      {
-         AvgPos += Other->GetActorLocation();
-         LargerGroupCount++;
-      }
-   }
-
-   if (LargerGroupCount > 0)
-   {
-      FVector Target = AvgPos / LargerGroupCount;
-      FVector Desired = (Target - GetActorLocation()).GetSafeNormal() * MaxSpeed;
-      return Desired - Velocity;
-   }
-
-   return FVector::ZeroVector;
-}
-
-
 
 FVector AFlockAgent::StayInBounds() const
 {
