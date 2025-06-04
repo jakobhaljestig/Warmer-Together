@@ -4,10 +4,10 @@
 #include "Kismet/KismetSystemLibrary.h"
 #include "CharacterBase.h"
 
+
 UThrowSnowballComponent::UThrowSnowballComponent()
 {
 	PrimaryComponentTick.bCanEverTick = true;
-	
 }
 
 void UThrowSnowballComponent::BeginPlay()
@@ -25,8 +25,6 @@ void UThrowSnowballComponent::TickComponent(float DeltaTime, ELevelTick TickType
 	}
 }
 
-
-
 void UThrowSnowballComponent::Aim()
 {
 	bIsAiming = true;
@@ -39,7 +37,7 @@ void UThrowSnowballComponent::Throw()
 	{
 		bIsAiming = false;
 		//Pathen måste försvinna om man inte får kasta också
-		
+		ClearTrajectoryPath();
 		return;
 	}
 
@@ -96,13 +94,13 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 	FVector CameraLocation;
 	FRotator CameraRotation;
 	CharacterOwner->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
+	
 	FVector CameraForward = CameraRotation.Vector();
-
 	FVector CharacterForward = CharacterOwner->GetActorForwardVector();
 
 	float AimAngleDegrees = FMath::RadiansToDegrees(acosf(FVector::DotProduct(CameraForward.GetSafeNormal(), CharacterForward.GetSafeNormal())));
 
-	if (AimAngleDegrees > 45)
+	if (AimAngleDegrees > 90)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Kastar inte – kameran tittar för långt från karaktärens riktning (vinkel: %.1f°)"), AimAngleDegrees);
 		ClearTrajectoryPath();
@@ -110,10 +108,14 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 		return;
 	}
 
+	FVector AdjustedThrowDirection = CameraForward;
+	AdjustedThrowDirection.Z += 0.5f; 
+	AdjustedThrowDirection.Normalize();
+	
 	//TILL KASTET I THROW
-	LastAimLocation = CharacterOwner -> GetMesh()->GetSocketLocation(HandSocketName);
-	LastAimRotation = (CameraRotation.Vector()).Rotation();
-	LastThrowDirection = CameraRotation.Vector();
+	LastAimLocation = CharacterOwner -> GetMesh()->GetSocketLocation(SocketName);
+	LastAimRotation = AdjustedThrowDirection.Rotation();
+	LastThrowDirection = AdjustedThrowDirection;
 	
 	FPredictProjectilePathParams PredictParams;
 	PredictParams.StartLocation = LastAimLocation;
@@ -132,26 +134,33 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 
 	if (bHit)
 	{
-		if (TrajectoryMeshClass)
+		TArray<FVector> Points;
+		for (const FPredictProjectilePathPointData& Point : PredictResult.PathData)
 		{
-			for (const FPredictProjectilePathPointData& Point : PredictResult.PathData)
-			{
-				AActor* MeshPoint = GetWorld()->SpawnActor<AActor>(TrajectoryMeshClass, Point.Location, FRotator::ZeroRotator);
-				TrajectoryMeshes.Add(MeshPoint);
-			}
+			Points.Add(Point.Location);
+		}
+		
+		if (!TrajectorySplineActor && TrajectorySplineActorClass)
+		{
+			FActorSpawnParameters SpawnParams;
+			SpawnParams.Owner = GetOwner();
+			TrajectorySplineActor = GetWorld()->SpawnActor<ATrajectorySpline>(TrajectorySplineActorClass, FTransform::Identity, SpawnParams);
+		}
+		
+		if (TrajectorySplineActor)
+		{
+			TrajectorySplineActor->SetTrajectory(Points);
 			bIsThrowAreaValid = true;
 		}
 	}
 }
 
+
 void UThrowSnowballComponent::ClearTrajectoryPath()
 {
-	for (AActor* Mesh : TrajectoryMeshes)
+	if (TrajectorySplineActor)
 	{
-		if (Mesh)
-		{
-			Mesh->Destroy();
-		}
+		TrajectorySplineActor->Destroy();
+		TrajectorySplineActor = nullptr;
 	}
-	TrajectoryMeshes.Empty();
 }
