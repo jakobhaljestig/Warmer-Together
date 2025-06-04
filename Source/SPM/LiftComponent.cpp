@@ -137,8 +137,10 @@ void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 		{
 			Drop(DroppingForce, VerticalDroppingForce);
 		}
-
-		Cast<ACharacterBase>(GrabbedActor)->GetBodyTemperature()->IsNearHeat(Cast<ACharacterBase>(Owner)->GetBodyTemperature()->bNearHeat);
+		else
+		{
+			Cast<ACharacterBase>(GrabbedActor)->GetBodyTemperature()->IsNearHeat(Cast<ACharacterBase>(Owner)->GetBodyTemperature()->bNearHeat);
+		}	
 	}
 
 	if (bThrowing)
