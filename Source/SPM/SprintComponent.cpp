@@ -74,11 +74,13 @@ void USprintComponent::StopSprint()
 	}
 }
 
+
 void USprintComponent::BeginRegeneratingStamina()
 {
 	GEngine->AddOnScreenDebugMessage(-1, 0.1f, FColor::Red, FString::Printf(TEXT("Stamina: %.2f"), Stamina));
 	GetWorld()->GetTimerManager().SetTimer(StaminaCooldownTimerHandle, this, &USprintComponent::RegenerateStamina, 0.1f, true);
 }
+
 
 
 void USprintComponent::RegenerateStamina()

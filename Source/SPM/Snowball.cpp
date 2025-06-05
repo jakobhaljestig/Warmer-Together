@@ -76,14 +76,13 @@ void ASnowball::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	//Vad som händer om man träffar just en Player
 	if (ACharacterBase* HitCharacter = Cast<ACharacterBase>(OtherActor))
 	{
-		
 		FVector ImpactDirection = GetVelocity().GetSafeNormal();
-		//HitCharacter->ApplySnowballHit(Hit, ImpactDirection);
-
-		const float KnockbackStrength = 1000.0f;
-		HitCharacter->LaunchCharacter(ImpactDirection * KnockbackStrength, true, true);
+		HitCharacter->ApplySnowballHit(Hit,ImpactDirection);
+		
 	}
+
 	
+	//Sätt mesh invisible - trigga vfx
 	Destroy();
 }
 

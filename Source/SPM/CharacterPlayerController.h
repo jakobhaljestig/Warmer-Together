@@ -15,14 +15,20 @@ class SPM_API ACharacterPlayerController : public APlayerController
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintImplementableEvent, Category="CameraShake")
+	UFUNCTION(BlueprintImplementableEvent, Category="ShiveringEffects")
 	void StartShiveringEffects(float TempPercentage);
 
-	UFUNCTION(BlueprintImplementableEvent, Category="CameraShake")
+	UFUNCTION(BlueprintImplementableEvent, Category="ShiveringEffects")
 	void StopShiveringEffects();
+
+	UFUNCTION(BlueprintImplementableEvent, Category="ShiveringEffects")
+	void ColdBuffFeedBack();
 	
 	UFUNCTION(BlueprintCallable)
 	void HideHUD(bool bShouldHide);
+
+	UFUNCTION(BlueprintCallable)
+	void SetCanShiver(bool bShouldBeAbleToShiver) { bCanShiver = bShouldBeAbleToShiver; }
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> FreezeEffectClass;
@@ -42,8 +48,7 @@ private:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UUserWidget> HUDClass;
 	
-	
-
-	
+	UPROPERTY(BlueprintReadWrite, meta=(AllowPrivateAccess = true))
+	bool bCanShiver = true;
 	
 };
