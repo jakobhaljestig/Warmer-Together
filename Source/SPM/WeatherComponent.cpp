@@ -48,10 +48,22 @@ void UWeatherComponent::TickComponent(float DeltaTime, ELevelTick TickType, FAct
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	TArray<AActor*> PlayerCharacters;
-    	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
+	if (PlayerCharacters.IsEmpty())
+	{
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
+	}
 
-	OnWeatherUpdateTick(PlayerCharacters);
+	if (bVictory)
+	{
+		if (SnowLevel1) SnowLevel1->SetWorldLocation(VictoryEffectsLocation);
+		if (SnowLevel2) SnowLevel2->SetWorldLocation(VictoryEffectsLocation);
+		if (SnowLevel3) SnowLevel3->SetWorldLocation(VictoryEffectsLocation);
+		if (MistParticleSystem) MistParticleSystem->SetWorldLocation(VictoryEffectsLocation);
+		
+		return;
+	}
+	
+	OnWeatherUpdateTick();
 	// ...
 }
 
@@ -94,7 +106,7 @@ UNiagaraComponent* UWeatherComponent::SpawnEffectIfNeeded(UNiagaraSystem* System
 }
 
 
-void UWeatherComponent::OnWeatherUpdateTick(const TArray<AActor*>& PlayerCharacters) const
+void UWeatherComponent::OnWeatherUpdateTick() const
 {
 
 	UpdateWeatherEffectLocation();
@@ -164,9 +176,6 @@ void UWeatherComponent::UpdateWeatherFromTemperature(float Temp) const
 
 void UWeatherComponent::UpdateWeatherEffectLocation() const
 {
-	TArray<AActor*> PlayerCharacters;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ACharacterBase::StaticClass(), PlayerCharacters);
-
 	FPlayerSpatialInfo Info = AnalyzePlayerPositions(PlayerCharacters);
 
 	const float ZOffset = 1000.f;
