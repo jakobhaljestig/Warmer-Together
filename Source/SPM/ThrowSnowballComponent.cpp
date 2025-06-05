@@ -36,36 +36,22 @@ void UThrowSnowballComponent::Throw()
 	if (!SnowballClass || !bCanThrow || !bIsThrowAreaValid)
 	{
 		bIsAiming = false;
-		//Pathen måste försvinna om man inte får kasta också
 		ClearTrajectoryPath();
 		return;
 	}
 
 	bIsThrowing = true;
-
-	//KOM IHÅG despawna pathen när man väl kastar
-	/*if path då ta bort*/
 	ClearTrajectoryPath();
-
-	ACharacter* CharacterOwner = Cast<ACharacter>(GetOwner());
-	
-	FVector CameraLocation;
-	FRotator CameraRotation;
-	CharacterOwner->GetController()->GetPlayerViewPoint(CameraLocation, CameraRotation);
 	
 	FActorSpawnParameters SpawnParams;
 	//Ignorerar spelaren som kastar
 	SpawnParams.Owner = GetOwner();
 
 	ASnowball* Snowball = GetWorld()->SpawnActor<ASnowball>(SnowballClass, LastAimLocation, LastAimRotation, SpawnParams);
-
-	float AdjustedSpeed = CalculateAdjustedPath(LastAimRotation);
-
+	
 	if (Snowball)
 	{
-		FVector ThrowDirection = LastThrowDirection;
-		ThrowDirection.Normalize();
-		Snowball->ThrowInDirection(ThrowDirection, AdjustedSpeed);
+		Snowball->ThrowInDirection(LastThrowDirection, AdjustedSpeed);
 
 		bCanThrow = false;
 		bIsAiming = false;
@@ -119,7 +105,7 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 	LastAimRotation = AdjustedThrowDirection.Rotation();
 	LastThrowDirection = AdjustedThrowDirection;
 
-	float AdjustedSpeed = CalculateAdjustedPath(LastAimRotation);
+	AdjustedSpeed = CalculateAdjustedPath(LastAimRotation);
 	
 	FPredictProjectilePathParams PredictParams;
 	PredictParams.StartLocation = LastAimLocation;
@@ -156,14 +142,18 @@ void UThrowSnowballComponent::PredictThrowTrajectory()
 			TrajectorySplineActor->SetTrajectory(Points);
 			bIsThrowAreaValid = true;
 		}
+	}else
+	{
+		bIsThrowAreaValid = false;
 	}
+	
 }
 
 float UThrowSnowballComponent::CalculateAdjustedPath(const FRotator& AimRotation) const
 {
 	float Pitch = AimRotation.Pitch;
 	float NormalizedPitch = FMath::Clamp(Pitch/90.0f, 0.0f, 1.0f);
-	float SpeedModifier = FMath::Lerp(1.0F, 0.01f, NormalizedPitch);
+	float SpeedModifier = FMath::Lerp(1.0F, 0.1f, NormalizedPitch);
 	return Speed * SpeedModifier;
 }
 

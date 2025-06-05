@@ -3,6 +3,7 @@
 #include "CharacterBase.h"
 
 #include "BodyTemperature.h"
+#include "ClimbComponent.h"
 #include "CustomizeComponent.h"
 #include "Engine/LocalPlayer.h"
 #include "Camera/CameraComponent.h"
@@ -319,14 +320,16 @@ void ACharacterBase::Throw (const FInputActionValue& Value)
 
 void ACharacterBase::ApplySnowballHit(const FHitResult& Hit, const FVector& ImpactDirection)
 {
-	const float KnockbackStrength = 1000.0f;
-	LaunchCharacter(ImpactDirection * KnockbackStrength, true, true);
-
+	if (!bIsPushing || !IsClimbing())
+	{
+		const float KnockbackStrength = 1000.0f;
+		LaunchCharacter(ImpactDirection * KnockbackStrength, true, true);
+	}
+	
 	if (BodyTempComponent)
 	{
 		BodyTempComponent->ColdBuff(2.0f);
 	}
-	
 }
 
 //--- Pushing ---

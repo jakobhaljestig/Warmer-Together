@@ -49,9 +49,6 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float Speed = 1500.0f;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
-	float Gravity = 1.0f;
-
 public:	
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
@@ -74,6 +71,8 @@ private:
 	void PredictThrowTrajectory();
 
 	void ClearTrajectoryPath();
+
+	float AdjustedSpeed;
 
 	float CalculateAdjustedPath(const FRotator& AimRotation) const;
 	

@@ -79,7 +79,7 @@ void UClimbComponent::StartClimb(FHitResult Hit)
 		FVector AttachPosition = FVector(
 			ClimbingLocationPoint.X + Offset.X,
 			ClimbingLocationPoint.Y + Offset.Y,
-			ClimbCharacter->GetActorLocation().Z // behåll Z-positionen
+			ClimbCharacter->GetActorLocation().Z + 30 // behåll Z-positionen
 		);
 
 		ClimbCharacter->SetActorLocation(AttachPosition);
@@ -117,7 +117,7 @@ void UClimbComponent::FinishClimbUp()
 	
 	FVector Forward = ClimbCharacter->GetActorForwardVector();
 	FVector Start = ClimbCharacter->GetActorLocation() 
-				  + Forward * 150.f            // Lite framför
+				  + Forward * 100.f            // Lite framför
 				  + FVector(0.f, 0.f, 100.f); // Lite upp
 
 	// Raycast rakt ner

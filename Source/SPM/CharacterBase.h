@@ -192,6 +192,8 @@ protected:
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
+	virtual bool IsClimbing() const {return false;}
+
 public:
 
 	//CAMERA
