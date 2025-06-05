@@ -167,6 +167,7 @@ void UBodyTemperature::HandleDeath()
 void UBodyTemperature::ColdBuff(float CoolDownValue)
 {
 	Temp -= CoolDownValue;
+	PlayerController->ColdBuffFeedBack();
 }
 
 
