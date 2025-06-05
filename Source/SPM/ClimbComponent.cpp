@@ -117,7 +117,7 @@ void UClimbComponent::FinishClimbUp()
 	
 	FVector Forward = ClimbCharacter->GetActorForwardVector();
 	FVector Start = ClimbCharacter->GetActorLocation() 
-				  + Forward * 150.f            // Lite framför
+				  + Forward * 100.f            // Lite framför
 				  + FVector(0.f, 0.f, 100.f); // Lite upp
 
 	// Raycast rakt ner

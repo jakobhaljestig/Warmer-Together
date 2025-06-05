@@ -26,6 +26,9 @@ class SPM_API ACharacterBig : public ACharacterBase
 	UInputAction* ClimbAction;
 
 public:
+
+	bool IsClimbing(){return bIsClimbing;}
+	
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool bIsClimbing = false;
 
