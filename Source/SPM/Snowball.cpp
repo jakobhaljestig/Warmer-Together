@@ -76,17 +76,43 @@ void ASnowball::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	//Vad som händer om man träffar just en Player
 	if (ACharacterBase* HitCharacter = Cast<ACharacterBase>(OtherActor))
 	{
-
 		
-		FVector ImpactDir = GetVelocity().GetSafeNormal();
-		HitCharacter->ApplySnowballHit(Hit, ImpactDir);
+		FVector ImpactDirection = GetVelocity().GetSafeNormal();
+		//HitCharacter->ApplySnowballHit(Hit, ImpactDirection);
+
+		const float KnockbackStrength = 1000.0f;
+		HitCharacter->LaunchCharacter(ImpactDirection * KnockbackStrength, true, true);
 	}
 	
 	Destroy();
 }
 
 
+/*OM ragdoll någonsin implementeras*/
+//RAGDOLL
+/*void ACharacterBase::ApplySnowballHit(const FHitResult& Hit, const FVector& ImpactDirection)
+{
+	if (bIsRagdoll) return;
+	
+	GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+	SetActorEnableCollision(true);
 
+	GetMesh()->SetAllBodiesSimulatePhysics(true);
+	GetMesh()->SetSimulatePhysics(true);
+	GetMesh()->WakeAllRigidBodies();
+	GetMesh()->bBlendPhysics = true;
+
+	GetCharacterMovement()->StopMovementImmediately();
+	GetCharacterMovement()->DisableMovement();
+	GetCharacterMovement()->SetComponentTickEnabled(false);
+
+	FName BoneName = Hit.BoneName != NAME_None ? Hit.BoneName : FName("spine_03");
+	FVector Impulse = ImpactDirection * 5000.0f;
+	GetMesh()->AddImpulseAtLocation(Impulse, Hit.ImpactPoint, BoneName);
+	
+	bIsRagdoll = true;
+	
+}*/
 
 
 
