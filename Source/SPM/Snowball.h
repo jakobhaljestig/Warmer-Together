@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "Kismet/GameplayStatics.h"
+#include "NiagaraSystem.h"
 #include "Snowball.generated.h"
 
 UCLASS()
@@ -26,11 +26,12 @@ public:
 	UProjectileMovementComponent* MovementComp;
 
 	void ThrowInDirection(const FVector& ThrowDirection, const float InSpeed) const;
-	
-	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float MaxLifeTime = 5.0f;
+
+	UPROPERTY(EditAnywhere,  Category = "VFX")
+	UNiagaraSystem* SnowPoof;
 
 
 protected:

@@ -3,6 +3,7 @@
 
 #include "Snowball.h"
 #include "CharacterBase.h"
+#include "NiagaraFunctionLibrary.h"
 
 // Sets default values
 ASnowball::ASnowball()
@@ -76,14 +77,22 @@ void ASnowball::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 	//Vad som händer om man träffar just en Player
 	if (ACharacterBase* HitCharacter = Cast<ACharacterBase>(OtherActor))
 	{
-		
 		FVector ImpactDirection = GetVelocity().GetSafeNormal();
-		//HitCharacter->ApplySnowballHit(Hit, ImpactDirection);
-
-		const float KnockbackStrength = 1000.0f;
-		HitCharacter->LaunchCharacter(ImpactDirection * KnockbackStrength, true, true);
+		HitCharacter->ApplySnowballHit(Hit,ImpactDirection);
 	}
-	
+
+	//Allt som kan träffas av en snöboll Ska ha poof 
+	if (SnowPoof)
+	{
+		FRotator PoofRotation = Hit.ImpactNormal.Rotation(); 
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(
+			GetWorld(),
+			SnowPoof,
+			Hit.ImpactPoint,
+			PoofRotation
+		);
+
+	}
 	Destroy();
 }
 

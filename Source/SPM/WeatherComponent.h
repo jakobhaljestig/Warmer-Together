@@ -77,7 +77,7 @@ public:
 private:
 	UNiagaraComponent* SpawnEffectIfNeeded(UNiagaraSystem* System, UNiagaraComponent* ExistingComp, FVector Offset) const;
 
-	void OnWeatherUpdateTick(const TArray<AActor*>& PlayerCharacters) const;
+	void OnWeatherUpdateTick() const;
 	
 	void UpdateWeatherFromTemperature(float TemperaturePercentage) const;
 	
@@ -92,4 +92,13 @@ private:
 	bool bHasSpawnedWeather = false;
 	
 	static FPlayerSpatialInfo AnalyzePlayerPositions(const TArray<AActor*>& Players);
+
+	UPROPERTY()
+	TArray<AActor*> PlayerCharacters;
+
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	bool bVictory = false;
+
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = true))
+	FVector VictoryEffectsLocation;
 };

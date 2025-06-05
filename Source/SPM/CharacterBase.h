@@ -78,6 +78,8 @@ public:
 	
 	void Tick(float DeltaTime);
 
+	void ApplySnowballHit(const FHitResult& Hit, const FVector& ImpactDirection);
+
 protected:
 
 	virtual void BeginPlay() override;
