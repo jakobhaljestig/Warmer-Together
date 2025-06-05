@@ -40,6 +40,7 @@ public:
 	void HandleFreeze();
 	void HandleDeath();
 
+	UFUNCTION(BlueprintCallable)
 	void ColdBuff(float CoolDownValue);
 
 	UPROPERTY(BlueprintReadWrite)

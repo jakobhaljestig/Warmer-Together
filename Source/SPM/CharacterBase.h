@@ -78,6 +78,8 @@ public:
 	
 	void Tick(float DeltaTime);
 
+	void ApplySnowballHit(const FHitResult& Hit, const FVector& ImpactDirection);
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -189,6 +191,8 @@ protected:
 	virtual void NotifyControllerChanged() override;
 
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+
+	virtual bool IsClimbing() const {return false;}
 
 public:
 

@@ -3,6 +3,7 @@
 
 #include "MinigameTriggerComponent.h"
 
+#include "BodyTemperature.h"
 #include "CharacterBase.h"
 #include "CharacterBig.h"
 #include "CharacterSmall.h"
@@ -86,6 +87,8 @@ void UMinigameTriggerComponent::ZoomIn(AActor* Actor)
 	Controller = Cast<ACharacterPlayerController>(ControllerOwner->GetController());
 	if (ControllerOwner && Controller)
 	{
+		Cast<ACharacterBase>(ControllerOwner)->GetBodyTemperature()->SetCoolDownRate(0);
+		Controller->SetCanShiver(false);
 		TriggerBox->RemoveFromRoot();
 		bActive = true;
 		ControllerOwner->GetMovementComponent()->Velocity = FVector(0, 0, 0);
