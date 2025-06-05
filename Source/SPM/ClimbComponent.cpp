@@ -75,7 +75,7 @@ void UClimbComponent::StartClimb(FHitResult Hit)
 	{
 		//position
 		FVector WallDirection = -Arrow->GetForwardVector(); 
-		FVector Offset = WallDirection * 40.0f;
+		FVector Offset = WallDirection * 30.0f;
 		FVector AttachPosition = FVector(
 			ClimbingLocationPoint.X + Offset.X,
 			ClimbingLocationPoint.Y + Offset.Y,

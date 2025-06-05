@@ -26,11 +26,12 @@ public:
 	UProjectileMovementComponent* MovementComp;
 
 	void ThrowInDirection(const FVector& ThrowDirection, const float InSpeed) const;
-	
-	
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float MaxLifeTime = 5.0f;
+
+	UFUNCTION(BlueprintImplementableEvent, Category = "VFX")
+	void VfxEvent();
 
 
 protected:
