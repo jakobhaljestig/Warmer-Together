@@ -3,7 +3,7 @@
 
 #include "TrajectorySpline.h"
 
-// Sets default values
+
 ATrajectorySpline::ATrajectorySpline()
 {
 	PrimaryActorTick.bCanEverTick = true;
@@ -13,14 +13,12 @@ ATrajectorySpline::ATrajectorySpline()
 
 }
 
-// Called when the game starts or when spawned
 void ATrajectorySpline::BeginPlay()
 {
 	Super::BeginPlay();
-	
 }
 
-// Called every frame
+
 void ATrajectorySpline::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
