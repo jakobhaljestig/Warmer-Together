@@ -27,7 +27,7 @@ class SPM_API ACharacterBig : public ACharacterBase
 
 public:
 
-	bool IsClimbing(){return bIsClimbing;}
+	virtual bool IsClimbing() const override { return bIsClimbing; }
 	
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"))
 	bool bIsClimbing = false;
