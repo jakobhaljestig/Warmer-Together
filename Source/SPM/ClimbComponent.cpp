@@ -75,9 +75,15 @@ void UClimbComponent::StartClimb(FHitResult Hit)
 	{
 		//position
 		FVector WallDirection = -Arrow->GetForwardVector(); 
-		FVector BasePosition = Hit.ImpactPoint;
-		FVector AttachPosition = BasePosition + WallDirection * 40.0f;
+		FVector Offset = WallDirection * 40.0f;
+		FVector AttachPosition = FVector(
+			ClimbingLocationPoint.X + Offset.X,
+			ClimbingLocationPoint.Y + Offset.Y,
+			ClimbCharacter->GetActorLocation().Z // behåll Z-positionen
+		);
+
 		ClimbCharacter->SetActorLocation(AttachPosition);
+
 
 		//Gör så spelaren roteras åt samma håll som pilen
 		FRotator ArrowRotation = Arrow->GetComponentRotation();
@@ -147,7 +153,10 @@ void UClimbComponent::FinishClimbUp()
 }
 
 
-bool UClimbComponent::ClimbingInReach(FHitResult& HitResult) const
+/*Funktionen som kollar om objektet framför spelaren går att klättra på.
+Måste ha Collider med tagen climbable*/
+
+bool UClimbComponent::ClimbingInReach(FHitResult& HitResult) 
 {
 	if (!ClimbCharacter) return false;
 
@@ -167,15 +176,15 @@ bool UClimbComponent::ClimbingInReach(FHitResult& HitResult) const
 	);
 
 	DrawDebugLine(GetWorld(), Start, End, FColor::Green, false, 1.5f, 0, 2.0f);
-
 	
-
 	if (bHit)
 	{
 		UPrimitiveComponent* Component = HitResult.GetComponent();
 		
 		if (Component && Component->ComponentHasTag("Climbable"))
 		{
+			GetClimbingLocationPoint(Component);
+			
 			TArray<UActorComponent*> Components = HitResult.GetActor()->GetComponentsByTag(UBoxComponent::StaticClass(), "ClimbZone");
 			for (UActorComponent* Comp : Components)
 			{
@@ -187,9 +196,25 @@ bool UClimbComponent::ClimbingInReach(FHitResult& HitResult) const
 			}
 		}
 	}
-	
 	return false;
 }
+
+
+void UClimbComponent::GetClimbingLocationPoint(UPrimitiveComponent* Component) 
+{
+	UBoxComponent* Box = Cast<UBoxComponent>(Component);
+	
+	if (Box)
+	{
+		FVector Center = FVector::ZeroVector;
+		FVector CenterWorld = Box->GetComponentTransform().TransformPosition(Center);
+
+		ClimbingLocationPoint = CenterWorld;
+		//UE_LOG(LogTemp, Warning, TEXT("Climbable box center (world): %s"), *CenterWorld.ToString());
+	}
+}
+
+
 
 void UClimbComponent::SetClimbingMovement()
 {

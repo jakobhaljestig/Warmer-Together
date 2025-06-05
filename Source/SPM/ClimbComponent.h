@@ -52,9 +52,7 @@ private:
 
 	bool bIsOnLedge = false;
 	
-	bool ClimbingInReach (FHitResult& HitResult) const;
-
-	bool ClimbingDownInReach (FHitResult& HitResult) const;
+	bool ClimbingInReach (FHitResult& HitResult);
 
 	void SetWalking();
 
@@ -63,6 +61,9 @@ private:
 	bool ClimbTargetStillValid(FHitResult& HitResult) const;
 	
 
+	FVector ClimbingLocationPoint;
+	
+	void GetClimbingLocationPoint(UPrimitiveComponent* Component);
 	
 
 		

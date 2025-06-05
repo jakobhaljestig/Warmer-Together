@@ -78,8 +78,6 @@ public:
 	
 	void Tick(float DeltaTime);
 
-	void ApplySnowballHit(const FHitResult& Hit, const FVector& ImpactDirection);
-
 protected:
 
 	virtual void BeginPlay() override;
@@ -267,8 +265,6 @@ private:
 	bool bHasCheckPointLocation = false;
 
 	void ResetTemp() const;
-
-	void RecoverFromRagdoll();
 	
 	bool bIsRagdoll = false; 
 	
@@ -296,8 +292,7 @@ private:
 	virtual void OnJumped_Implementation() override;
 	
 	virtual void Falling() override;
-
-	FTimerHandle RecoverRagdollTimerHandle;
+	
 
 	
 };
