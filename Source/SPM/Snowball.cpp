@@ -93,9 +93,6 @@ void ASnowball::OnHit(UPrimitiveComponent* HitComp, AActor* OtherActor,
 		);
 
 	}
-
-	
-	//Sätt mesh invisible - trigga vfx
 	Destroy();
 }
 

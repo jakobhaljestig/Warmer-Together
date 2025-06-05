@@ -70,7 +70,13 @@ void ATrajectorySpline::SetTrajectory(const TArray<FVector>& Points)
 		MeshComp->SetMaterial(0, SplineMaterial);
 
 		MeshComp->SetWorldLocation(Location);
-		MeshComp->SetWorldRotation(Rotation); 
+		MeshComp->SetWorldRotation(Rotation);
+
+		//För att bara den karaktär som ska kasta kan se prediction line
+		MeshComp->SetOnlyOwnerSee(true);
+		MeshComp->bCastHiddenShadow = false;
+		MeshComp->SetVisibility(true);
+		
 		MeshComp->RegisterComponent();
 
 		SplineMeshes.Add(MeshComp);
