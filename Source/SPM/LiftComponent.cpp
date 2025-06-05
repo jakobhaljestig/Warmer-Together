@@ -5,7 +5,6 @@
 
 #include "BodyTemperature.h"
 #include "CharacterSmall.h"
-#include "Kismet/BlueprintTypeConversions.h"
 #include "CharacterBig.h"
 #include "Engine/SkeletalMeshSocket.h"
 
