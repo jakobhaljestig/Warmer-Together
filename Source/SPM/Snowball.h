@@ -6,7 +6,7 @@
 #include "GameFramework/Actor.h"
 #include "Components/SphereComponent.h"
 #include "GameFramework/ProjectileMovementComponent.h"
-#include "Kismet/GameplayStatics.h"
+#include "NiagaraSystem.h"
 #include "Snowball.generated.h"
 
 UCLASS()
@@ -30,8 +30,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Components")
 	float MaxLifeTime = 5.0f;
 
-	UFUNCTION(BlueprintImplementableEvent, Category = "VFX")
-	void VfxEvent();
+	UPROPERTY(EditAnywhere,  Category = "VFX")
+	UNiagaraSystem* SnowPoof;
 
 
 protected:

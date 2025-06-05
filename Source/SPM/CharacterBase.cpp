@@ -319,6 +319,7 @@ void ACharacterBase::Throw (const FInputActionValue& Value)
 
 void ACharacterBase::ApplySnowballHit(const FHitResult& Hit, const FVector& ImpactDirection)
 {
+	
 	const float KnockbackStrength = 1000.0f;
 	LaunchCharacter(ImpactDirection * KnockbackStrength, true, true);
 
