@@ -21,7 +21,7 @@ UCustomizeComponent::UCustomizeComponent()
 void UCustomizeComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	Cast<ACharacterBase>(GetOwner())->GetMesh()->SetMaterial(0, CharacterMaterials[MaterialID]);
+	SetMaterialByIndex(MaterialID);
 	// ...
 	
 }
