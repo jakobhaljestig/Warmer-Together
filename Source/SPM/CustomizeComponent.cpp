@@ -34,7 +34,7 @@ void UCustomizeComponent::NextMaterial()
 		MaterialID++;
 	}
 
-	Cast<ACharacterBase>(GetOwner())->GetMesh()->SetMaterial(0, CharacterMaterials[MaterialID]);
+	GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->SetMaterial(0, CharacterMaterials[MaterialID]);
 	
 }
 
@@ -49,7 +49,7 @@ void UCustomizeComponent::PreviousMaterial()
 		MaterialID--;
 	}
 
-	Cast<ACharacterBase>(GetOwner())->GetMesh()->SetMaterial(0, CharacterMaterials[MaterialID]);
+	GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->SetMaterial(0, CharacterMaterials[MaterialID]);
 }
 
 void UCustomizeComponent::SetMaterialByIndex(const int MaterialIndex)
@@ -58,7 +58,7 @@ void UCustomizeComponent::SetMaterialByIndex(const int MaterialIndex)
 	{
 		return;
 	}
-	Cast<ACharacterBase>(GetOwner())->GetMesh()->SetMaterial(0, CharacterMaterials[MaterialIndex]);
+	GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->SetMaterial(0, CharacterMaterials[MaterialID]);
 	MaterialID = MaterialIndex;
 }
 
