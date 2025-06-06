@@ -41,7 +41,11 @@ void AWarmerTogetherGameMode::SpawnPlayers()
 	}
 
 	// Spawn Player 2
-	APlayerController* Player2Controller = UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
+	APlayerController* Player2Controller = UGameplayStatics::GetPlayerController(GetWorld(), 1);
+	if (!Player2Controller)
+	{
+		Player2Controller = UGameplayStatics::CreatePlayer(GetWorld(), 1, true);
+	}
 	if (Player2Controller && Player2PawnClass)
 	{
 		AActor* PlayerStart = FindPlayerStart(Player2Controller, "Player2Start"); 
@@ -55,4 +59,6 @@ void AWarmerTogetherGameMode::SpawnPlayers()
 			UE_LOG(LogTemp, Warning, TEXT("Player 2 spawned and Possessed"));
 		}
 	}
+
+	
 }

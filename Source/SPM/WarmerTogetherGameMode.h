@@ -30,6 +30,7 @@ protected:
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Players")
 	TSubclassOf<APawn> Player2PawnClass;
+
 };
 
 
