@@ -4,7 +4,6 @@
 #include "CustomizeComponent.h"
 
 #include "CharacterBase.h"
-#include "Rendering/RenderCommandPipes.h"
 
 // Sets default values for this component's properties
 UCustomizeComponent::UCustomizeComponent()
