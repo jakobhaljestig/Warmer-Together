@@ -59,6 +59,5 @@ void AWarmerTogetherGameMode::SpawnPlayers()
 			UE_LOG(LogTemp, Warning, TEXT("Player 2 spawned and Possessed"));
 		}
 	}
-
 	
 }

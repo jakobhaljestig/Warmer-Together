@@ -56,7 +56,7 @@ void UCustomizeComponent::SetMaterialByIndex(const int MaterialIndex)
 	{
 		return;
 	}
-	GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->SetMaterial(0, CharacterMaterials[MaterialID]);
 	MaterialID = MaterialIndex;
+	GetOwner()->GetComponentByClass<USkeletalMeshComponent>()->SetMaterial(0, CharacterMaterials[MaterialID]);
 }
 
