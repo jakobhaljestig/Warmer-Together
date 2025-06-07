@@ -250,6 +250,9 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ResetPlayerState();
+
+	UFUNCTION(BlueprintCallable)
+	void SetCameraRotationRate(const float NewRate) { CameraRotationRate = NewRate; }
 	
 private:
 	
