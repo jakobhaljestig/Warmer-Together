@@ -57,7 +57,14 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 				}
 				else
 				{
-					TargetLocation =  GrabbedActor->GetComponentByClass<UPushableProperties>()->GetPushPosition() + Owner->GetActorForwardVector() * GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance;
+					if (GrabbedActor->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers > 1)
+					{
+						TargetLocation =  GrabbedActor->GetComponentByClass<UPushableProperties>()->GetPushPosition() + Owner->GetActorForwardVector() * GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance;
+					}
+					else
+					{
+						TargetLocation =  Owner->GetActorLocation() + Owner->GetActorForwardVector() * GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance;
+					}
 				}
 				PhysicsHandle->SetTargetLocation(TargetLocation);
 			}
