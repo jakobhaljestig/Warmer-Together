@@ -4,6 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "LiftComponent.h"
+#include "PhysicsEngine/PhysicsConstraintComponent.h"
 #include "PushComponent.generated.h"
 
 /**
@@ -44,5 +45,8 @@ class SPM_API UPushComponent : public UGrabComponent
 
 	//Update grab location to prevent grabbed object from snapping if other player releases it
 	void UpdateGrabLocation();
+
+protected:
+	virtual void BeginPlay() override;
 	
 };

@@ -5,6 +5,7 @@
 
 #include "FallingTree.h"
 #include "PushableProperties.h"
+#include "PhysicsEngine/PhysicsConstraintActor.h"
 
 UPushComponent::UPushComponent()
 {
@@ -62,6 +63,10 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 			}
 		}
 	}
+	else if (!HoldingSomething() and OwnerMovementComponent->MaxWalkSpeed != OriginalMovementSpeed)
+	{
+		ReleaseEffect();
+	}
 }
 void UPushComponent::StartPushing()
 {
@@ -114,13 +119,16 @@ void UPushComponent::Grab()
 		FRotator NewRotation = HitResult.ImpactNormal.Rotation();
 		NewRotation.Pitch = 0.0f;
 		NewRotation.Yaw += 180.0f;
+
 		Owner->SetActorRotation(NewRotation);
+
 		
 		GetGrabbableInReach(HitResult);
 		PhysicsHandle->GrabComponentAtLocation(
 			HitComponent,
 			NAME_None,
 			HitResult.ImpactPoint);
+		
 		GrabEffect();
 		GrabbedComponent = HitComponent;
 		GrabbedActor = HitActor;
@@ -131,8 +139,6 @@ void UPushComponent::Grab()
 
 void UPushComponent::GrabEffect()
 {
-	OriginalMovementSpeed = OwnerMovementComponent->MaxWalkSpeed;
-	OriginalRotationRate = OwnerMovementComponent->RotationRate;
 	OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed/4;
 	OwnerMovementComponent->MinAnalogWalkSpeed = 0;
 	OwnerMovementComponent->RotationRate = FRotator(0, 0, 0);
@@ -155,8 +161,15 @@ void UPushComponent::UpdateGrabLocation()
 {
 	if (PhysicsHandle && GrabbedComponent != nullptr)
 	{
-		Release();
-		Grab();
+		StopPushing();
+		StartPushing();
 	}
+}
+
+void UPushComponent::BeginPlay()
+{
+	Super::BeginPlay();
+	OriginalMovementSpeed = OwnerMovementComponent->MaxWalkSpeed;
+	OriginalRotationRate = OwnerMovementComponent->RotationRate;
 }
 
