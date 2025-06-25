@@ -43,7 +43,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 						if (Attempts >= 5) break;
 					}
 				}
-				if (!GetGrabbableInReach(Hit))
+				if (!GetGrabbableInReach(Hit, GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1))
 				{
 					StopPushing();
 				}
