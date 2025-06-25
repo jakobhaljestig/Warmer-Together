@@ -23,11 +23,11 @@ class SPM_API UPushComponent : public UGrabComponent
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
 	//Starts pushing object
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void StartPushing();
 
 	//Releases object
-	UFUNCTION()
+	UFUNCTION(BlueprintCallable)
 	virtual void StopPushing();
 	
 	virtual void Grab() override;

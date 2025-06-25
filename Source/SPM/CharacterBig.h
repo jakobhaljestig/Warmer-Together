@@ -45,12 +45,13 @@ protected:
 	void Tick(float DeltaTime) override;
 	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
+	
 	void ToggleGrab(const FInputActionValue& Value);
 
-	void BeginHug(const FInputActionValue& Value) override;
-	
-	void Climb(const FInputActionValue& Value);
+	void BeginHug() override;
+
+	UFUNCTION(BlueprintCallable)
+	void Climb();
 
 	bool IsH = false;
 

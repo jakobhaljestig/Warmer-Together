@@ -112,20 +112,23 @@ void UMinigameTriggerComponent::ZoomOut()
 	
 }
 
-
-// Called every frame
-void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+void UMinigameTriggerComponent::Start()
 {
-	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-	// ...
-
-	if (ControllerOwner && !bActive && Cast<ACharacterBase>(ControllerOwner)->bIsHugging){
+	if (ControllerOwner && !bActive){
 		if (Cast<ACharacterBig>(ControllerOwner) && Cast<ACharacterBig>(ControllerOwner)->bIsClimbing)
 		{
 			return;
 		}
 		ZoomIn(ControllerOwner);
 	}
+}
+
+
+// Called every frame
+void UMinigameTriggerComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
+{
+	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+	// ...
 }
 
 

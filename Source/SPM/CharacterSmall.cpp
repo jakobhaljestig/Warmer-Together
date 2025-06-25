@@ -61,10 +61,10 @@ void ACharacterSmall::StopCrawl(const FInputActionValue& Value)
 	}
 }
 
-void ACharacterSmall::BeginPush(const FInputActionValue& Value)
+void ACharacterSmall::BeginPush()
 {
 	if (!bIsCrawling)
-		Super::BeginPush(Value);
+		Super::BeginPush();
 }
 
 void ACharacterSmall::Tick(float DeltaTime)

@@ -72,6 +72,9 @@ class ACharacterBase : public ACharacter
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
 	UInputAction* DanceAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input, meta = (AllowPrivateAccess = "true"))
+	UInputAction* InteractAction;
+
 public:
 	
 	ACharacterBase();
@@ -105,8 +108,10 @@ protected:
 	void StopSprint();
 	
 	//HUGGING
-	virtual void BeginHug(const FInputActionValue& Value);
-	void EndHug(const FInputActionValue& Value);
+	UFUNCTION(BlueprintCallable)
+	virtual void BeginHug();
+	UFUNCTION(BlueprintCallable)
+	void EndHug();
 	void Hug();
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Push")
@@ -129,8 +134,10 @@ protected:
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsPushing = false;
 
-	virtual void BeginPush(const FInputActionValue& Value);
-	void EndPush(const FInputActionValue& Value);
+	UFUNCTION(BlueprintCallable)
+	virtual void BeginPush();
+	UFUNCTION(BlueprintCallable)
+	void EndPush();
 
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Dance")
@@ -138,7 +145,7 @@ protected:
 	
 	void StartDance(const FInputActionValue& Value);
 	void EndDance(const FInputActionValue& Value);
-
+	
 	//---Kasta Snöboll ---
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Snowball")
 	UThrowSnowballComponent* ThrowSnowballComponent;
@@ -189,7 +196,7 @@ protected:
 	class APostProcessVolume* PostProcessVolume;
 	
 	virtual void NotifyControllerChanged() override;
-
+	
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	virtual bool IsClimbing() const {return false;}

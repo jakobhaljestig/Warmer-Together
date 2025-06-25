@@ -80,4 +80,7 @@ public:
 
 	UFUNCTION(BlueprintCallable)
 	virtual void ZoomOut();
+
+	UFUNCTION(BlueprintCallable)
+	virtual void Start();
 };

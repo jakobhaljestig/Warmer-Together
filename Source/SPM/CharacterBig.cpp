@@ -33,9 +33,6 @@ void ACharacterBig::SetupPlayerInputComponent(UInputComponent* PlayerInputCompon
 	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(PlayerInputComponent)) {
 		
 		EnhancedInputComponent->BindAction(GrabAction, ETriggerEvent::Started, this, &ACharacterBig::ToggleGrab);
-
-		EnhancedInputComponent->BindAction(ClimbAction, ETriggerEvent::Started, this, &ACharacterBig::Climb);
-	
 	}
 	else
 	{
@@ -63,13 +60,13 @@ void ACharacterBig::ToggleGrab (const FInputActionValue& Value)
 	}
 }
 
-void ACharacterBig::BeginHug(const FInputActionValue& Value)
+void ACharacterBig::BeginHug()
 {
 	if (!bIsClimbing && !bIsLifting && !bIsThrowing && !bIsSprinting && !bSuccesfulHug)
-		Super::BeginHug(Value);
+		Super::BeginHug();
 }
 
-void ACharacterBig::Climb(const FInputActionValue& Value)
+void ACharacterBig::Climb()
 {
 	if (LiftComponent -> HoldingSomething() == false && !bIsHugging)
 	{

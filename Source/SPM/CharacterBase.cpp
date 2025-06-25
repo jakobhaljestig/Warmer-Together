@@ -137,12 +137,6 @@ void ACharacterBase::SetupPlayerInputComponent(UInputComponent* PlayerInputCompo
 		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ACharacterBase::Move);
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &ACharacterBase::Look);
-		
-		EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Started, this, &ACharacterBase::BeginHug);
-        EnhancedInputComponent->BindAction(HugAction, ETriggerEvent::Completed, this, &ACharacterBase::EndHug);
-
-		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Started, this, &ACharacterBase::BeginPush);
-		EnhancedInputComponent->BindAction(PushAction, ETriggerEvent::Completed, this, &ACharacterBase::EndPush);
 
 		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Started, this, &ACharacterBase::Aim);
 		EnhancedInputComponent->BindAction(ThrowSnowballAction, ETriggerEvent::Completed, this, &ACharacterBase::Throw);
@@ -266,14 +260,14 @@ void ACharacterBase::StopSprint()
 }
 
 //--- Hugging ---
-void ACharacterBase::BeginHug(const FInputActionValue& Value)
+void ACharacterBase::BeginHug()
 {
 	if (!bIsPushing && !bIsCrouched && !bIsHugging && !bSuccesfulHug && !bHasDied && !bIsLifting)
 		HugComponent -> TryHug();
 		bIsHugging = true;
 }
 
-void ACharacterBase::EndHug(const FInputActionValue& Value)
+void ACharacterBase::EndHug()
 {
 
 	bIsHugging = false;
@@ -333,7 +327,7 @@ void ACharacterBase::ApplySnowballHit(const FHitResult& Hit, const FVector& Impa
 }
 
 //--- Pushing ---
-void ACharacterBase::BeginPush(const FInputActionValue& Value) 
+void ACharacterBase::BeginPush() 
 {
 	if (!PushComponent->HoldingSomething() && !bIsSprinting && !bIsHugging && !bIsCrouched && !bSuccesfulHug && !bHasDied)
 	{
@@ -343,7 +337,7 @@ void ACharacterBase::BeginPush(const FInputActionValue& Value)
 	}
 }
 
-void ACharacterBase::EndPush(const FInputActionValue& Value) 
+void ACharacterBase::EndPush() 
 {
 		UE_LOG(LogTemplateCharacter, Display, TEXT("Push Stopped"));
 		PushComponent->StopPushing();
