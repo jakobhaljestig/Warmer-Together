@@ -18,7 +18,6 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 	if (Holding && PhysicsHandle && GrabbedComponent)
 	{
-		FHitResult Hit;
 		if (GrabbedActor->GetComponentByClass<UPushableProperties>()->bIsFalling || OwnerMovementComponent->IsFalling())
 		{
 			StopPushing();
@@ -30,44 +29,7 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		else if (GrabbedActor->GetComponentByClass<UPushableProperties>()->CanPush())
 		{
 			OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed/4;
-			if (!GetGrabbableInReach(Hit, GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1))
-			{
-				if (!Cast<AFallingTree>(GrabbedActor))
-				{
-					//If player is too far away, try to move back into reach, otherwise stop pushing
-					int Attempts = 0;
-					while (!GetGrabbableInReach(Hit, GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1) && OwnerMovementComponent->Velocity.Length() > GrabbedComponent->GetComponentVelocity().Length())
-					{
-						Attempts++;
-						Owner->SetActorLocation(Owner->GetActorLocation() + OwnerMovementComponent->GetForwardVector());
-						if (Attempts >= 5) break;
-					}
-				}
-				if (!GetGrabbableInReach(Hit, GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1))
-				{
-					StopPushing();
-				}
-			}
-			if (GrabbedComponent != nullptr && GrabbedActor->GetComponentByClass<UPushableProperties>()->CanPush())
-			{
-				FVector TargetLocation;
-				if (Cast<AFallingTree>(GrabbedActor))
-				{
-					TargetLocation = GrabbedComponent->GetComponentLocation() + GrabbedActor->GetActorForwardVector() * GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance;
-				}
-				else
-				{
-					if (GrabbedActor->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers > 1)
-					{
-						TargetLocation =  GrabbedActor->GetComponentByClass<UPushableProperties>()->GetPushPosition() + Owner->GetActorForwardVector() * GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance;
-					}
-					else
-					{
-						TargetLocation =  Owner->GetActorLocation() + Owner->GetActorForwardVector() * GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance;
-					}
-				}
-				PhysicsHandle->SetTargetLocation(TargetLocation);
-			}
+			MaintainRelativeLocation();
 		}
 	}
 	else if (!HoldingSomething() and OwnerMovementComponent->MaxWalkSpeed != OriginalMovementSpeed)
@@ -178,5 +140,53 @@ void UPushComponent::BeginPlay()
 	Super::BeginPlay();
 	OriginalMovementSpeed = OwnerMovementComponent->MaxWalkSpeed;
 	OriginalRotationRate = OwnerMovementComponent->RotationRate;
+}
+
+void UPushComponent::UpdateObjectLocation() const
+{
+	FVector TargetLocation;
+	if (Cast<AFallingTree>(GrabbedActor))
+	{
+		TargetLocation = GrabbedComponent->GetComponentLocation() + GrabbedActor->GetActorForwardVector() * GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance;
+	}
+	else
+	{
+		if (GrabbedActor->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers > 1)
+		{
+			TargetLocation =  GrabbedActor->GetComponentByClass<UPushableProperties>()->GetPushPosition() + Owner->GetActorForwardVector() * GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance;
+		}
+		else
+		{
+			TargetLocation =  Owner->GetActorLocation() + Owner->GetActorForwardVector() * GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance;
+		}
+	}
+	PhysicsHandle->SetTargetLocation(TargetLocation);
+}
+
+void UPushComponent::MaintainRelativeLocation()
+{
+	FHitResult Hit;
+	if (!GetGrabbableInReach(Hit, GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1))
+	{
+		if (!Cast<AFallingTree>(GrabbedActor))
+		{
+			//If player is too far away, try to move back into reach, otherwise stop pushing
+			int Attempts = 0;
+			while (!GetGrabbableInReach(Hit, GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1) && OwnerMovementComponent->Velocity.Length() > GrabbedComponent->GetComponentVelocity().Length())
+			{
+				Attempts++;
+				Owner->SetActorLocation(Owner->GetActorLocation() + OwnerMovementComponent->GetForwardVector());
+				if (Attempts >= 5) break;
+			}
+		}
+		if (!GetGrabbableInReach(Hit, GrabbedActor->GetComponentByClass<UPushableProperties>()->HoldDistance*1.1))
+		{
+			StopPushing();
+		}
+	}
+	if (GrabbedComponent != nullptr && GrabbedActor->GetComponentByClass<UPushableProperties>()->CanPush())
+	{
+		UpdateObjectLocation();
+	}
 }
 

@@ -48,5 +48,6 @@ class SPM_API UPushComponent : public UGrabComponent
 
 protected:
 	virtual void BeginPlay() override;
-	
+	void UpdateObjectLocation() const;
+	void MaintainRelativeLocation();
 };
