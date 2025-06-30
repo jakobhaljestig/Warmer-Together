@@ -43,7 +43,23 @@ void ULiftComponent::BeginPlay()
 	Hand1 = Skeleton->GetSocketByName(FName("LiftHoldLocation"));
 	Hand2 = Skeleton->GetSocketByName(FName("LiftHoldLocation2"));
 }
-//Drop object
+void ULiftComponent::Lift()
+{
+	if (OwnerMovementComponent && !OwnerMovementComponent->IsFalling())
+	{
+		Grab();
+		if (GrabbedComponent != nullptr)
+		{
+			Owner->Tags.Add("IsLifting");
+			GrabbedComponent->AttachToComponent(Owner->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
+			GrabbedActor->SetActorEnableCollision(false);
+			if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(GrabbedActor))
+			{
+				HeldPlayer->ResetPlayerState();
+			}
+		}
+	}
+}
 void ULiftComponent::Drop(float Force, float VerticalForce)
 {
 
@@ -59,10 +75,9 @@ void ULiftComponent::Drop(float Force, float VerticalForce)
 		GrabbedActor->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 		GrabbedActor->SetActorEnableCollision(true);
 		Release();
-
+		
 		Owner->Tags.Remove("IsLifting");
 	}
-
 }
 
 void ULiftComponent::StartThrow()
@@ -102,25 +117,6 @@ void ULiftComponent::Throw()
 		Drop(ThrowingForce, VerticalThrowingForce);
 		bThrowing = false;
 	}
-}
-
-void ULiftComponent::Lift()
-{
-	if (OwnerMovementComponent && !OwnerMovementComponent->IsFalling())
-	{
-		Grab();
-		if (GrabbedComponent != nullptr)
-		{
-			Owner->Tags.Add("IsLifting");
-			GrabbedComponent->AttachToComponent(Owner->GetParentComponent(), FAttachmentTransformRules::KeepWorldTransform);
-			GrabbedActor->SetActorEnableCollision(false);
-			if (ACharacterSmall* HeldPlayer = Cast<ACharacterSmall>(GrabbedActor))
-			{
-				HeldPlayer->ResetPlayerState();
-			}
-		}
-	}
-
 }
 // Called every frame
 void ULiftComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
