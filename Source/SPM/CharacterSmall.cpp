@@ -20,6 +20,7 @@ void ACharacterSmall::ResetPlayerState()
 	Super::ResetPlayerState();
 
 	UnCrouch();
+	bIsCrawling = false;
 }
 
 
