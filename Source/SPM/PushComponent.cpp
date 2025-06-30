@@ -30,6 +30,10 @@ void UPushComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FA
 		{
 			OwnerMovementComponent->MaxWalkSpeed = OriginalMovementSpeed/4;
 			MaintainRelativeLocation();
+			if (GrabbedComponent != nullptr && GrabbedActor->GetComponentByClass<UPushableProperties>()->CanPush())
+			{
+				UpdateObjectLocation();
+			}
 		}
 	}
 	else if (!HoldingSomething() and OwnerMovementComponent->MaxWalkSpeed != OriginalMovementSpeed)
@@ -183,10 +187,6 @@ void UPushComponent::MaintainRelativeLocation()
 		{
 			StopPushing();
 		}
-	}
-	if (GrabbedComponent != nullptr && GrabbedActor->GetComponentByClass<UPushableProperties>()->CanPush())
-	{
-		UpdateObjectLocation();
 	}
 }
 
