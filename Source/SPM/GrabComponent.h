@@ -40,9 +40,11 @@ protected:
 	UFUNCTION()
 	virtual void BeginPlay() override;
 
+	//Get object within reach
 	UFUNCTION()
 	bool GetGrabbableInReach(FHitResult& OutHitResult) const;
-	
+
+	//Get object within specified distance
 	bool GetGrabbableInReach(FHitResult& OutHitResult, float Distance) const;
 
 	UPROPERTY(VisibleAnywhere)

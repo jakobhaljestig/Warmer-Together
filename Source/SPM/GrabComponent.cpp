@@ -89,8 +89,6 @@ void UGrabComponent::Grab(){
 			return;
 		}
 
-		
-		
 		UPrimitiveComponent* HitComponent = HitResult.GetComponent();
 		Holding = true;
 		AActor* HitActor = HitResult.GetActor();
@@ -105,7 +103,6 @@ void UGrabComponent::Grab(){
 		GrabbedComponent = HitComponent;
 		GrabbedActor = HitActor;
 	}
-	
 }
 
 void UGrabComponent::Release()
