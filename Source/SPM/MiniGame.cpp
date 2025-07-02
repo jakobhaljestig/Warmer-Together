@@ -31,7 +31,6 @@ void UMiniGame::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	if (bPlaying)
 	{
-		//CurrentLoopTime += DeltaTime;
 		if (LastInput != 0)
 			TimeSinceLastPress += DeltaTime;
 
@@ -41,13 +40,7 @@ void UMiniGame::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 			TimeSinceLastPress = 0;
 			LastInput = 0;
 		}
-		/*
-		if (CurrentLoopTime > MaxLoopTime)
-		{
-			GameLoop();
-		}*/
 	}
-	// ...
 }
 
 void UMiniGame::GameLoop()
@@ -55,7 +48,6 @@ void UMiniGame::GameLoop()
 	RequestedInput = DecideInput();
 	LastInput = 0;
 	TimeSinceLastPress = 0;
-	//CurrentLoopTime = 0;
 	Correct = false;
 }
 

@@ -369,6 +369,8 @@ void ACharacterBase::OnDeath()
 
 	bHasDied = true;
 	PushComponent->StopPushing();
+	SetLockLocation(true);
+	SetActorEnableCollision(false);
 
 	
 	UE_LOG(LogTemp, Warning, TEXT("OnDeath triggered."));
@@ -410,7 +412,8 @@ void ACharacterBase::RespawnAtCheckpoint()
 	EnableInput(nullptr);
 	GetCharacterMovement()->GravityScale = 1.75f;
 	ResetPlayerState();
-	
+	SetLockLocation(false);
+	SetActorEnableCollision(true);
 	SetActorLocation(NewLocation);
 }
 
@@ -427,6 +430,8 @@ void ACharacterBase::StartDelayedRespawn()
 
 void ACharacterBase::RespawnToLastSafeLocation()
 {
+	SetLockLocation(false);
+	SetActorEnableCollision(true);
 	SetActorLocation(LastSafeLocation, false, nullptr, ETeleportType::TeleportPhysics);
 
 	GetMesh()->SetVisibility(true, true);
