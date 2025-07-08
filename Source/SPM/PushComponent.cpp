@@ -49,7 +49,12 @@ void UPushComponent::StartPushing()
 		if (GrabbedActor && GrabbedActor->GetComponentByClass<UPushableProperties>())
 		{
 			GrabbedActor->GetComponentByClass<UPushableProperties>()->NumberOfGrabbers += 1;
-			GrabbedActor->GetComponentByClass<UPushableProperties>()->Grabbers.Add(this); 
+			GrabbedActor->GetComponentByClass<UPushableProperties>()->Grabbers.Add(this);
+
+			if (Cast<AFallingTree>(GrabbedActor))
+			{
+				GrabbedComponent->SetSimulatePhysics(true);
+			}
 		}
 	}
 }
