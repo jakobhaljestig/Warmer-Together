@@ -106,10 +106,10 @@ void UMinigameTriggerComponent::ZoomOut()
 	if (ControllerOwner && Cast<APawn>(GetOwner())->GetController())
 	{
 		Controller->Possess(ControllerOwner);
-		Cast<ACharacterBase>(ControllerOwner)->bIsHugging = false;
+		Controller->SetViewTarget(MiniGamePawn);
+		Controller->SetViewTargetWithBlend(ControllerOwner, 1, VTBlend_EaseIn, 5, true);
 		ControllerOwner = nullptr;
 	}
-	
 }
 
 void UMinigameTriggerComponent::Start()

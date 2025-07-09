@@ -47,7 +47,5 @@ public:
 	
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	UMiniGame* Game2;
-	
-	
 
 };

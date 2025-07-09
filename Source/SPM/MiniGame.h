@@ -7,6 +7,8 @@
 #include "MiniGame.generated.h"
 
 
+class AMiniGameManager;
+
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPM_API UMiniGame : public UActorComponent
 {
@@ -105,4 +107,7 @@ public:
 
 	UPROPERTY()
 	bool bPlaying = false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	AMiniGameManager* MiniGameManager = nullptr;
 };

@@ -8,8 +8,6 @@
 #include "Components/ActorComponent.h"
 #include "Components/BoxComponent.h"
 #include "MinigameTriggerComponent.generated.h"
-
-
 UCLASS( ClassGroup=(Custom), meta=(BlueprintSpawnableComponent) )
 class SPM_API UMinigameTriggerComponent : public UActorComponent
 {
