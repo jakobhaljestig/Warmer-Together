@@ -26,60 +26,12 @@ UMinigameTriggerComponent::UMinigameTriggerComponent()
 void UMinigameTriggerComponent::BeginPlay()
 {
 	Super::BeginPlay();
-	TriggerBox = GetOwner()->GetComponentByClass<UBoxComponent>();
 
-	TriggerBox->OnComponentBeginOverlap.AddDynamic(this, &UMinigameTriggerComponent::OnBeginOverlap);
-	TriggerBox->OnComponentEndOverlap.AddDynamic(this, &UMinigameTriggerComponent::OnEndOverlap);
 	MiniGamePawn = Cast<APawn>(GetOwner());
 	
 	
 	// ...
 	
-}
-
-void UMinigameTriggerComponent::OnBeginOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,UPrimitiveComponent* OtherComp,
-		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
-{
-	if (TriggerBox && !bCompleted && !bActive)
-	{
-		if (ForBigPlayer)
-		{
-			if (ACharacterBase* Character = Cast<ACharacterBig>(OtherActor))
-			{
-				ControllerOwner = Character;
-			}
-		}
-		if (ForSmallPlayer)
-		{
-			if (ACharacterBase* Character = Cast<ACharacterSmall>(OtherActor))
-			{
-				ControllerOwner = Character;
-			}
-		}
-	}
-	
-}
-
-void UMinigameTriggerComponent::OnEndOverlap(UPrimitiveComponent* OverlappedComp, AActor* OtherActor,
-	UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
-{
-	if (!bCompleted && !bActive)
-	{
-		if (ForBigPlayer)
-		{
-			if (Cast<ACharacterBig>(OtherActor) && !Controller)
-			{
-				ControllerOwner = nullptr;
-			}
-		}
-		if (ForSmallPlayer)
-		{
-			if (Cast<ACharacterSmall>(OtherActor) && !Controller)
-			{
-				ControllerOwner = nullptr;
-			}
-		}
-	}
 }
 
 void UMinigameTriggerComponent::ZoomIn(AActor* Actor)
@@ -89,7 +41,6 @@ void UMinigameTriggerComponent::ZoomIn(AActor* Actor)
 	{
 		Cast<ACharacterBase>(ControllerOwner)->GetBodyTemperature()->SetCoolDownRate(0);
 		Controller->SetCanShiver(false);
-		TriggerBox->RemoveFromRoot();
 		bActive = true;
 		ControllerOwner->GetMovementComponent()->Velocity = FVector(0, 0, 0);
 		Controller->HideHUD(true);
@@ -103,7 +54,7 @@ void UMinigameTriggerComponent::ZoomOut()
 {
 	bActive = false;
 	bCompleted = true;
-	if (ControllerOwner && Cast<APawn>(GetOwner())->GetController())
+	if (ControllerOwner && Controller)
 	{
 		Controller->Possess(ControllerOwner);
 		Controller->SetViewTarget(MiniGamePawn);
@@ -112,8 +63,27 @@ void UMinigameTriggerComponent::ZoomOut()
 	}
 }
 
-void UMinigameTriggerComponent::Start()
+void UMinigameTriggerComponent::Start(ACharacterBase* Character)
 {
+	if (!bCompleted && !bActive)
+	{
+		if (ForBigPlayer)
+		{
+			if (!Cast<ACharacterBig>(Character) && !Controller)
+			{
+				return;
+			}
+		}
+		if (ForSmallPlayer)
+		{
+			if (!Cast<ACharacterSmall>(Character) && !Controller)
+			{
+				return;
+			}
+		}
+	}
+	
+	ControllerOwner = Cast<ACharacter>(Character);
 	if (ControllerOwner && !bActive){
 		if (Cast<ACharacterBig>(ControllerOwner) && Cast<ACharacterBig>(ControllerOwner)->bIsClimbing)
 		{

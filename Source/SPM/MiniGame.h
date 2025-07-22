@@ -34,7 +34,7 @@ protected:
 	UPROPERTY(EditAnywhere, meta = (AllowPrivateAccess = true))
 	float TimeSinceLastPress = 0;
 
-	UPROPERTY()
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = true))
 	int LastInput;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, meta = (AllowPrivateAccess = true))
